@@ -16,10 +16,7 @@ jobs:
         working-directory: app
       - run: yarn build
         working-directory: app
-      - run: aws s3 cp \
-          --recursive \
-          --region ap-northeast-2 \
-          build/ s3://coffee-hmm.inhibitor.com/
+      - run: aws s3 cp --recursive --region ap-northeast-2 build/ s3://coffee-hmm.inhibitor.com/
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_ACCESS_KEY_SECRET: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
