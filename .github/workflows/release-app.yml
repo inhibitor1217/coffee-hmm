@@ -19,5 +19,5 @@ jobs:
       - run: aws s3 cp --recursive --region ap-northeast-2 build/ s3://coffee-hmm.inhibitor.com/
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_ACCESS_KEY_SECRET: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
         working-directory: app
