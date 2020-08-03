@@ -9,12 +9,15 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@master
-      - uses: actions/npm@master
+      - uses: actions/setup-node@v1
         with:
-          args: install
+          node-version: '12'
+      - run: yarn install
+        working-directory: server
       - uses: serverless/github-action@master
         with:
           args: deploy
+        working-directory: server
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.SERVERLESS_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SERVERLESS_AWS_SECRET_ACCESS_KEY }}
