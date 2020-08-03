@@ -14,9 +14,7 @@ jobs:
           node-version: '12'
       - run: yarn install
         working-directory: server
-      - uses: serverless/github-action@master
-        with:
-          args: deploy
+      - run: npx serverless deploy
         working-directory: server
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.SERVERLESS_AWS_ACCESS_KEY_ID }}
