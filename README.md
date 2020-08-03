@@ -7,3 +7,4 @@
 **Builds**
 
 ![release-app](https://github.com/inhibitor1217/coffee-hmm/workflows/release-app/badge.svg)
+![release-server](https://github.com/inhibitor1217/coffee-hmm/release-server/badge.svg)
