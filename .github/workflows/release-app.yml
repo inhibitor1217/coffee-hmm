@@ -9,10 +9,9 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@master
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v1
         with:
           node-version: '12'
-          check-latest: true
       - run: yarn install
       - run: yarn build
       - run: ls build/
