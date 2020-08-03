@@ -13,5 +13,8 @@ jobs:
         with:
           node-version: '12'
       - run: yarn install
+        working-directory: app
       - run: yarn build
+        working-directory: app
       - run: ls build/
+        working-directory: app
