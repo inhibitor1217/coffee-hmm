@@ -1,4 +1,5 @@
 import React from "react";
+import Header from "./common/Header";
 
 interface PageTemplateProps {
   children: React.ReactNode;
@@ -7,7 +8,7 @@ interface PageTemplateProps {
 const PageTemplate = (props: PageTemplateProps) => {
   return (
     <>
-      <header></header>
+      <Header />
       <main>{props.children}</main>
       <footer></footer>
     </>
