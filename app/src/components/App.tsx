@@ -1,13 +1,21 @@
 import React from "react";
 import { isBrowser, isMobile } from "react-device-detect";
-import MaterialIcon from "./common/MaterialIcon";
+import { BrowserRouter } from "react-router-dom";
 import DesktopFallback from "./DesktopFallback";
+import PageTemplate from "./PageTemplate";
+import Router from "./Router";
 
 const App = () => {
   return (
     <>
       {isBrowser && <DesktopFallback />}
-      {isMobile && <MaterialIcon icon="face" />}
+      {isMobile && (
+        <BrowserRouter>
+          <PageTemplate>
+            <Router />
+          </PageTemplate>
+        </BrowserRouter>
+      )}
     </>
   );
 };
