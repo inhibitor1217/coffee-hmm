@@ -1,12 +1,14 @@
 import React from "react";
+import { isBrowser, isMobile } from "react-device-detect";
 import MaterialIcon from "./common/MaterialIcon";
+import DesktopFallback from "./DesktopFallback";
 
 const App = () => {
   return (
-    <div>
-      <span>Welcome to coffee-hmm app!</span>
-      <MaterialIcon icon="face" />
-    </div>
+    <>
+      {isBrowser && <DesktopFallback />}
+      {isMobile && <MaterialIcon icon="face" />}
+    </>
   );
 };
 
