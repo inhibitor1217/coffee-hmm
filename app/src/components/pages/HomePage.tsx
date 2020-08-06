@@ -1,15 +1,15 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, {useEffect} from "react";
+import Map from './Map';
+import MaterialIcon from "../common/MaterialIcon";
+
+
 
 const HomePage = () => {
   return (
-    <div>
-      Welcome to coffee-hmm!
-      <Link to="/cafe/1">
-        <button>link to page</button>
-      </Link>
-    </div>
-  );
+  <div>Welcome to coffee-hmm!
+    <Map />
+  </div>
+    );
 };
 
 export default HomePage;
