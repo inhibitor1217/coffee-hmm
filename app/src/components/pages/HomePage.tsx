@@ -1,13 +1,12 @@
-import React, {useEffect} from "react";
-import Map from './Map';
-import MaterialIcon from "../common/MaterialIcon";
+import React from "react";
+import Board from "./Board";
 
 
 
 const HomePage = () => {
   return (
-  <div>Welcome to coffee-hmm!
-    <Map />
+  <div>
+    <Board/>
   </div>
     );
 };
