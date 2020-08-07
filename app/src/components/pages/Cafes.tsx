@@ -9,13 +9,22 @@ type CafesProps = {
 }
 
 const Cafes = (props: CafesProps) =>{
+    const getInfo = () => {
+        
+    }
+
     return (
         <div >
             {
                 props.cafes.map((cafe) => 
-                    <div id='space' key={cafe.title}>{cafe.title}</div>
+                    <div id='space' style={{
+                        width: Math.random() * 40 + 60,
+                        // height: Math.random() * 30 + 40
+                    }} key={cafe.title}>{cafe.title}</div>
+                    
                 )
             }
+            <div id='infoArea'></div>
         </div>
     );
 }

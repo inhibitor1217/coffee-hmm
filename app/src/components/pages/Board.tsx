@@ -16,49 +16,49 @@ let cafeList = [
         isVisited: false
     },
     {
-        title: 'Water-White', 
+        title: 'Water-White1', 
         lat: 37.401251,
         lng: 127.110753,
         isVisited: true
     },
     {
-        title: 'Water-White', 
+        title: 'Water-White2', 
         lat: 37.401251,
         lng: 127.110753,
         isVisited: true
     },
     {
-        title: 'Water-White', 
+        title: 'Water-White3', 
         lat: 37.401251,
         lng: 127.110753,
         isVisited: true
     },
     {
-        title: 'Water-White', 
+        title: 'Water-White4', 
         lat: 37.401251,
         lng: 127.110753,
         isVisited: true
     },
     {
-        title: 'Water-White', 
+        title: 'Water-White5', 
         lat: 37.401251,
         lng: 127.110753,
         isVisited: true
     },
     {
-        title: 'Water-White', 
+        title: 'Water-White6', 
         lat: 37.401251,
         lng: 127.110753,
         isVisited: true
     },
     {
-        title: 'Water-White', 
+        title: 'Water-White7', 
         lat: 37.401251,
         lng: 127.110753,
         isVisited: true
     },
     {
-        title: 'Water-White', 
+        title: 'Water-White8', 
         lat: 37.401251,
         lng: 127.110753,
         isVisited: true
