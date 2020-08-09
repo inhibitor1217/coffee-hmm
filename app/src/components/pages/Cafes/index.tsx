@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./index.css";
 
 export type Cafe = {
@@ -13,21 +13,25 @@ type CafesProps = {
   filter: ((cafe: Cafe) => boolean) | null;
 };
 
-interface CafeProps_Info {
-  message: string;
-  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-}
-
 const Cafes = (props: CafesProps) => {
+  const [widths, setWidths] = useState<number[]>([]);
+
+  useEffect(() => {
+    const widths = [];
+    for (let i = 0; i < props.cafes.length; i++) {
+      widths.push(Math.random() * 40 + 60);
+    }
+    setWidths(widths);
+  }, [props.cafes.length]);
+
   return (
     <div>
-      {props.cafes.map((cafe) => {
+      {props.cafes.map((cafe, idx) => {
         return (
           <div
             id="space"
             style={{
-              width: Math.random() * 40 + 60,
-              // height: Math.random() * 30 + 40
+              width: widths[idx],
               backgroundColor:
                 props.filter !== null
                   ? props.filter(cafe)
