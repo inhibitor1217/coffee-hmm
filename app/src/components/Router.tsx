@@ -1,13 +1,17 @@
 import React from "react";
-import { useLocation } from "react-router";
 import { Switch, Route, Redirect } from "react-router-dom";
 import HomePage from "./pages/HomePage";
+import CafeDetailPage from "./pages/CafeDetailPage";
 
-const Router = () => {
-  const location = useLocation();
+interface RouterProps {
+  location?: any;
+}
+
+const Router = (props: RouterProps) => {
   return (
-    <Switch location={location}>
+    <Switch location={props.location}>
       <Route path="/" exact render={() => <HomePage />} />
+      <Route path="/cafe/:cafeId" render={() => <CafeDetailPage />} />
       <Redirect to="/" />
     </Switch>
   );
