@@ -1,0 +1,11 @@
+#footer{
+    position: absolute;
+    bottom: 20px;
+    right: 10px;
+}
+
+.filters{
+    width: 100px; 
+    height: 40px;
+    margin: 5px;
+}

@@ -1,27 +1,36 @@
 import React from 'react';
-import './Board.css';
+import './Map.css';
+
+export type Cafe = {
+    title: string;
+    lat: number;
+    avgPrice: number;
+};
 
 type CafesProps = {
-    cafes: {
-        title: string;
-        lat: number;
-    }[];
+    cafes: Cafe[];
+    filter: ((cafe: Cafe) => boolean) | null;
+}
+
+interface CafeProps_Info{
+    message: string;
+    onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const Cafes = (props: CafesProps) =>{
-    const getInfo = () => {
-        
-    }
 
     return (
         <div >
             {
-                props.cafes.map((cafe) => 
-                    <div id='space' style={{
+                props.cafes.map((cafe) => {
+                    return <div id='space' style={{
                         width: Math.random() * 40 + 60,
                         // height: Math.random() * 30 + 40
+                        backgroundColor: props.filter !== null
+                            ? props.filter(cafe) ? 'beige' : '#EDE7F6'
+                            : 'beige'
                     }} key={cafe.title}>{cafe.title}</div>
-                    
+                }
                 )
             }
             <div id='infoArea'></div>
