@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router";
 import { Switch, Route, Redirect } from "react-router-dom";
-import HomePage from "./pages/HomePage";
+import HomePage from "./pages/Hompage";
 
 const Router = () => {
   const location = useLocation();
