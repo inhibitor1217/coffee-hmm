@@ -1,5 +1,5 @@
 import React from "react";
-import Cafes, { Cafe } from "../Cafes";
+import Cafes, { CafeInfo } from "../Cafes";
 import "./index.css";
 
 let cafeList = [
@@ -76,7 +76,7 @@ let cafeList = [
 ];
 
 type MapProps = {
-  filter: ((cafe: Cafe) => boolean) | null;
+  filter: ((cafe: CafeInfo) => boolean) | null;
 };
 
 const Map = ({ filter }: MapProps) => {
