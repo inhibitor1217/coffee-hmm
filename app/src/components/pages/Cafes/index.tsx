@@ -1,51 +1,43 @@
 import React, { useState, useEffect } from "react";
 import "./index.css";
+import Cafe from "../Cafe";
 
-export type Cafe = {
+export type CafeInfo = {
   title: string;
   lat: number;
   avgPrice: number;
   isVisited: boolean;
 };
 
-type CafesProps = {
-  cafes: Cafe[];
-  filter: ((cafe: Cafe) => boolean) | null;
+export type CafesProps = {
+  cafes: CafeInfo[];
+  filter: ((cafe: CafeInfo) => boolean) | null;
 };
 
 const Cafes = (props: CafesProps) => {
   const [widths, setWidths] = useState<number[]>([]);
 
   useEffect(() => {
-    const widths = [];
+    const tempWidths = [];
     for (let i = 0; i < props.cafes.length; i++) {
-      widths.push(Math.random() * 40 + 60);
+      tempWidths.push(Math.random() * 40 + 60);
     }
-    setWidths(widths);
+    setWidths(tempWidths);
   }, [props.cafes.length]);
 
   return (
     <div>
       {props.cafes.map((cafe, idx) => {
         return (
-          <div
-            id="space"
-            style={{
-              width: widths[idx],
-              backgroundColor:
-                props.filter !== null
-                  ? props.filter(cafe)
-                    ? "beige"
-                    : "#EDE7F6"
-                  : "beige",
-            }}
+          <Cafe
+            cafe={cafe}
+            widths={widths}
+            idx={idx}
+            props={props}
             key={cafe.title}
-          >
-            {cafe.title}
-          </div>
+          />
         );
       })}
-      <div id="infoArea"></div>
     </div>
   );
 };
