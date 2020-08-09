@@ -1,9 +1,9 @@
 import React from "react";
 import "./index.css";
-import { Cafe } from "../Cafes";
+import { CafeInfo } from "../Cafes";
 
 interface FilterProps {
-  setFilter(filter: () => (cafe: Cafe) => boolean): void;
+  setFilter(filter: () => (cafe: CafeInfo) => boolean): void;
 }
 
 const Filter = (props: FilterProps) => {
