@@ -10,7 +10,6 @@ const PageTemplate = (props: PageTemplateProps) => {
     <>
       <Header />
       <main>{props.children}</main>
-      <footer></footer>
     </>
   );
 };
