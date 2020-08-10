@@ -14,15 +14,42 @@ export type CafesProps = {
   filter: ((cafe: CafeInfo) => boolean) | null;
 };
 
+const getRandomColor = () => {
+  let min = Math.ceil(0);
+  let max = Math.floor(10);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+let colorsList = [
+  "#FFEBEE",
+  "#E8EAF6",
+  "#E3F2FD",
+  "#E1F5FE",
+  "#E0F2F1",
+  "#E8F5E9",
+  "#F9FBE7",
+  "#FFF8E1",
+  "#FBE9E7",
+  "#F0F4C3",
+  "#FFF9C4",
+  "#FFE0B2",
+];
+
 const Cafes = (props: CafesProps) => {
   const [widths, setWidths] = useState<number[]>([]);
+  const [colors, setColors] = useState<string[]>([]);
 
   useEffect(() => {
     const tempWidths = [];
+    const tempColors = [];
+
     for (let i = 0; i < props.cafes.length; i++) {
       tempWidths.push(Math.random() * 40 + 60);
+      tempColors.push(colorsList[getRandomColor()]);
+      //TODO: set random color
     }
     setWidths(tempWidths);
+    setColors(tempColors);
   }, [props.cafes.length]);
 
   return (
@@ -34,6 +61,7 @@ const Cafes = (props: CafesProps) => {
             widths={widths}
             idx={idx}
             props={props}
+            colors={colors}
             key={cafe.title}
           />
         );
