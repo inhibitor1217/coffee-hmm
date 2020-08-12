@@ -1,6 +1,7 @@
 import React from "react";
 import { CafeInfo, CafesProps } from "../Cafes";
 import CafeDetail from "../CafeDetail/CafeDetail";
+import "./index.css";
 
 type Cafeprops = {
   cafe: CafeInfo;
@@ -22,24 +23,25 @@ const Cafe = ({
   toggleVisible,
 }: Cafeprops) => {
   return (
-    <div>
+    <div id="space">
       <div
-        id="space"
+        id="border"
         style={{
           width: widths[idx],
-          backgroundColor:
+          borderColor:
             props.filter !== null
               ? props.filter(cafe)
                 ? colors[idx]
                 : "#EDE7F6"
               : colors[idx],
         }}
+        onClick={toggleVisible}
       >
-        <div id="title" onClick={toggleVisible}>
-          {cafe.title}
-        </div>
+        {cafe.title}
       </div>
-      <CafeDetail hidden={hidden} />
+      <div id="detail">
+        <CafeDetail hidden={hidden} />
+      </div>
     </div>
   );
 };
