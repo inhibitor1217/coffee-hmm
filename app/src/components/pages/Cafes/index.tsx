@@ -38,21 +38,18 @@ let colorsList = [
 const Cafes = (props: CafesProps) => {
   const [widths, setWidths] = useState<number[]>([]);
   const [colors, setColors] = useState<string[]>([]);
-  const [hidden, setHidden] = useState<("hidden" | "visible")[]>([]);
+  const [visibleCafeIndex, setVisibleCafeIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const tempWidths = [];
     const tempColors = [];
-    const tempHiddens: ("visible" | "hidden")[] = [];
 
     for (let i = 0; i < props.cafes.length; i++) {
       tempWidths.push(Math.random() * 40 + 60);
       tempColors.push(colorsList[getRandomColor()]);
-      tempHiddens.push("hidden");
     }
     setWidths(tempWidths);
     setColors(tempColors);
-    setHidden(tempHiddens);
   }, [props.cafes.length]);
 
   return (
@@ -65,9 +62,14 @@ const Cafes = (props: CafesProps) => {
             idx={idx}
             props={props}
             colors={colors}
-            hidden={hidden[idx]}
-            hiddenList={hidden}
-            setHidden={setHidden}
+            hidden={visibleCafeIndex === idx ? "visible" : "hidden"}
+            toggleVisible={() => {
+              if (visibleCafeIndex === idx) {
+                setVisibleCafeIndex(null);
+              } else {
+                setVisibleCafeIndex(idx);
+              }
+            }}
             key={cafe.title}
           />
         );

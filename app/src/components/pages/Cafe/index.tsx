@@ -9,8 +9,7 @@ type Cafeprops = {
   idx: number;
   props: CafesProps;
   hidden: "visible" | "hidden";
-  hiddenList: ("visible" | "hidden")[];
-  setHidden(hidden: ("visible" | "hidden")[]): void;
+  toggleVisible(): void;
 };
 
 const Cafe = ({
@@ -20,20 +19,8 @@ const Cafe = ({
   idx,
   props,
   hidden,
-  hiddenList,
-  setHidden,
+  toggleVisible,
 }: Cafeprops) => {
-  const getInfo = () => {
-    const newHiddenList = [...hiddenList];
-    if (hidden === "hidden") {
-      newHiddenList[idx] = "visible";
-      setHidden(newHiddenList);
-    } else {
-      newHiddenList[idx] = "hidden";
-      setHidden(hiddenList);
-    }
-  };
-
   return (
     <div>
       <div
@@ -48,7 +35,7 @@ const Cafe = ({
               : colors[idx],
         }}
       >
-        <div id="title" onClick={getInfo}>
+        <div id="title" onClick={toggleVisible}>
           {cafe.title}
         </div>
       </div>
