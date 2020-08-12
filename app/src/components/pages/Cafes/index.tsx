@@ -53,7 +53,7 @@ const Cafes = (props: CafesProps) => {
   }, [props.cafes.length]);
 
   return (
-    <div>
+    <div id="map">
       {props.cafes.map((cafe, idx) => {
         return (
           <Cafe

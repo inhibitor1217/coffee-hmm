@@ -1,0 +1,19 @@
+#space {
+  margin-left: 10px;
+  margin-bottom: 2px;
+  margin-top: 2px;
+  position: relative;
+}
+
+#border {
+  height: 60px;
+  border-style: solid;
+}
+
+#detail {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: 0px;
+  left: 130px;
+}
