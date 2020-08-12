@@ -7,7 +7,6 @@ type CafeDetailProps = {
 const CafeDetail = ({ hidden }: CafeDetailProps) => {
   return (
     <div
-      id="tooltip"
       style={{
         visibility: hidden,
       }}
