@@ -10,18 +10,21 @@ const Filter = (props: FilterProps) => {
   return (
     <div id="footer">
       <button
-        className="filters"
+        className="btn"
         onClick={() => props.setFilter(() => (cafe) => cafe.avgPrice >= 3000)}
       >
-        PRICE
+        <a href="#" className="filter_btn">
+          price
+        </a>
       </button>
       <button
-        className="filters"
+        className="btn"
         onClick={() => props.setFilter(() => (cafe) => cafe.isVisited)}
       >
-        VISITED
+        <a href="#" className="filter_btn">
+          history
+        </a>
       </button>
-      <button className="filters">filter 3</button>
     </div>
   );
 };

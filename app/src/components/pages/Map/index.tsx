@@ -4,7 +4,7 @@ import "./index.css";
 
 let cafeList = [
   {
-    title: "Water-White",
+    title: "워터 화이트",
     lat: 37.401251,
     lng: 127.110753,
     isVisited: true,
