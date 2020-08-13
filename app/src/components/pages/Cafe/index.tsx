@@ -1,6 +1,6 @@
 import React from "react";
 import { CafeInfo, CafesProps } from "../Cafes";
-import CafeDetail from "../CafeDetail/CafeDetail";
+import CafeDetail from "../CafeDetail";
 import "./index.css";
 
 type Cafeprops = {
@@ -37,7 +37,7 @@ const Cafe = ({
         }}
         onClick={toggleVisible}
       >
-        {cafe.title}
+        <div id="title">{cafe.title}</div>
       </div>
       <div id="detail">
         <CafeDetail hidden={hidden} />
