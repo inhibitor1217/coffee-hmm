@@ -1,3 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Sunflower:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gaegu&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poor+Story&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pangolin&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Just+Me+Again+Down+Here&display=swap');
+
+/*
+'Sunflower', sans-serif
+'Gaegu', cursive
+'Poor Story', cursive;
+'Pangolin', cursive
+'Just Me Again Down Here', cursive
+*/
 #space {
   margin-left: 10px;
   margin-bottom: 2px;
@@ -13,11 +26,13 @@
 #detail {
   position: absolute;
   top: 0px;
-  left: 200px;
+  left: 160px;
 
 }
 
 #title {
+  margin-top: 10px;
+  margin-left: 3px;
   font-size: 12px;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-family: 'Pangolin', cursive;
 }
