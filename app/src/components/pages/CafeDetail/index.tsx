@@ -1,4 +1,5 @@
 import React from "react";
+import "./index.css";
 
 type CafeDetailProps = {
   hidden: "visible" | "hidden";
@@ -11,7 +12,8 @@ const CafeDetail = ({ hidden }: CafeDetailProps) => {
         visibility: hidden,
       }}
     >
-      tooltip msg
+      <div id="small"></div>
+      <div id="info"></div>
     </div>
   );
 };
