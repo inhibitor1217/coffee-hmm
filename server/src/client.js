@@ -42,6 +42,23 @@ function scanCafes(client) {
   });
 }
 
+function getCafeItem(client, id) {
+  const params = {
+    TableName: CAFES_TABLE,
+    Key: {
+      id: id
+    }
+  };
+
+  client.get(params, function(err, data) {
+    if (err) {
+      console.error(JSON.stringify(err, null, 2));
+    } else {
+      console.log(JSON.stringify(data, null, 2));
+    }
+  });
+}
+
 // createCafe(documentClient, {
 //   id: uuid.v4(),
 //   name: "Kaldi",
@@ -55,4 +72,5 @@ function scanCafes(client) {
 //     `${RESOURCE_BUCKET_URI}/IMG_2469.jpg`,
 //   ]
 // });
-scanCafes(documentClient);
+// scanCafes(documentClient);
+getCafeItem(documentClient, '3b71a51f-5e14-4860-80bc-7226c33d9c4b');

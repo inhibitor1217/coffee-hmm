@@ -2,7 +2,8 @@
   "name": "coffee-hmm-server",
   "version": "0.1.0",
   "scripts": {
-    "client": "node src/client.js"
+    "client": "node src/client.js",
+    "deploy": "npx serverless deploy"
   },
   "license": "MIT",
   "dependencies": {

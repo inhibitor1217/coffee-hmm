@@ -26,6 +26,20 @@ functions:
           path: /
           method: get
           cors: true
+  cafeList:
+    handler: src/cafe.cafeListHandler
+    events:
+      - http:
+          path: /cafe
+          method: get
+          cors: true
+  cafe:
+    handler: src/cafe.cafeHandler
+    events:
+      - http:
+          path: /cafe/{cafe_id}
+          method: get
+          cors: true
 
 resources:
   Resources:
