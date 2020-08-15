@@ -1,4 +1,12 @@
-.box {
-    /* background-image: url(../Cafes/paper2.png);
-    background-repeat: repeat; */
+.pbox {
+    width: 100%;
+    display: flex;
+}
+
+.box1 {
+    width: 25%;
+}
+
+.box2 {
+    width: 75%;
 }
