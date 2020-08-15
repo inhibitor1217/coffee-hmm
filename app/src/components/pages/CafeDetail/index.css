@@ -1,31 +1,21 @@
 .info {
-  width: 80px;
-  height: 60px;
-  white-space: nowrap;
-  word-wrap: no-wrap;
-  border-radius: 5px;
-  box-shadow: 1px 1px 5px rgb(221, 218, 218);
-  background-color: rgb(250, 250, 242);
-  top: 40px;
-  left: 50%;
-  transform: translate(-50%);
-  transform-style: preserve-3d;
-  z-index: 200;
   position: absolute;
-  top: 0px;
-  left: 0px;
+  width: 100px;
+  height: 100px;
+  bottom: 20px;
+  margin-bottom: -200px;
+  background: transparent;
+  background-size: 100px 100px;
+  animation-duration: 1.5s;
+  animation-name: slidedown;
 }
 
-.small {
-  width: 10px;
-  height: 10px;
-  transform-origin: 50% 50%;
-  transform: rotate(45deg) translateX(-50%);
-  background-color: rgb(250, 250, 242);
-  left: 50%;
-  top: -1px;
-  z-index: 400;
-  position: absolute;
-  top: 20px;
-  left: -42px;
+@keyframes slidedown {
+  from {
+    bottom: 80px;
+  }
+
+  to {
+    bottom: 20px
+  }
 }

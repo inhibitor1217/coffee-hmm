@@ -3,17 +3,30 @@ import "./index.css";
 
 type CafeDetailProps = {
   hidden: "visible" | "hidden";
+  lineImg: string | undefined;
 };
 
-const CafeDetail = ({ hidden }: CafeDetailProps) => {
+const CafeDetail = ({ hidden, lineImg }: CafeDetailProps) => {
   return (
     <div
       style={{
         visibility: hidden,
       }}
     >
-      <div className="small"></div>
-      <div className="info"></div>
+      {(function () {
+        if (hidden === "visible") {
+          return (
+            <div
+              className="info"
+              style={{
+                backgroundImage: lineImg,
+              }}
+            >
+              <div>cafe information</div>
+            </div>
+          );
+        }
+      })()}
     </div>
   );
 };
