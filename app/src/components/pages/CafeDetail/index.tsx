@@ -22,7 +22,7 @@ const CafeDetail = ({ hidden, lineImg }: CafeDetailProps) => {
                 backgroundImage: lineImg,
               }}
             >
-              <div>cafe information</div>
+              <div className="content">cafe information</div>
             </div>
           );
         }

@@ -1,9 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Gaegu&display=swap');
+
 .info {
-  position: absolute;
+  position: fixed;
   width: 200px;
   height: 200px;
-  bottom: 120px;
-  margin-bottom: -400px;
+  bottom: 100px;
+  margin-bottom: 20px;
   background: transparent;
   background-size: 150px 150px;
   background-repeat: no-repeat;
@@ -17,6 +19,11 @@
   }
 
   to {
-    bottom: 120px
+    bottom: 100px
   }
+}
+
+.content {
+  font-size: 15px;
+  font-family: 'Gaegu', cursive;
 }
