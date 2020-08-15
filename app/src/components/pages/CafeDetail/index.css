@@ -1,21 +1,22 @@
 .info {
   position: absolute;
-  width: 100px;
-  height: 100px;
-  bottom: 20px;
-  margin-bottom: -200px;
+  width: 200px;
+  height: 200px;
+  bottom: 120px;
+  margin-bottom: -400px;
   background: transparent;
-  background-size: 100px 100px;
+  background-size: 150px 150px;
+  background-repeat: no-repeat;
   animation-duration: 1.5s;
   animation-name: slidedown;
 }
 
 @keyframes slidedown {
   from {
-    bottom: 80px;
+    bottom: 180px;
   }
 
   to {
-    bottom: 20px
+    bottom: 120px
   }
 }
