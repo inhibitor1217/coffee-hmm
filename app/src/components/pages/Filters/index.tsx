@@ -13,17 +13,19 @@ const Filter = (props: FilterProps) => {
         className="btn"
         onClick={() => props.setFilter(() => (cafe) => cafe.avgPrice >= 3000)}
       >
-        <a href="#" className="filter_btn">
+        {/* <a href="#" className="filter_btn">
           price
-        </a>
+        </a> */}
+        price
       </button>
       <button
         className="btn"
         onClick={() => props.setFilter(() => (cafe) => cafe.isVisited)}
       >
-        <a href="#" className="filter_btn">
+        {/* <a href="#" className="filter_btn">
           history
-        </a>
+        </a> */}
+        history
       </button>
     </div>
   );

@@ -85,7 +85,7 @@ const Map = ({ filter }: MapProps) => {
   });
 
   return (
-    <div id="box">
+    <div className="box">
       <Cafes cafes={cafeList} filter={filter} />
     </div>
   );

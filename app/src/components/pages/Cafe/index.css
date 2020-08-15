@@ -5,33 +5,34 @@
 @import url('https://fonts.googleapis.com/css2?family=Just+Me+Again+Down+Here&display=swap');
 
 /*
+[font list]
 'Sunflower', sans-serif
 'Gaegu', cursive
 'Poor Story', cursive;
 'Pangolin', cursive
 'Just Me Again Down Here', cursive
 */
-#space {
+
+.space {
   margin-left: 10px;
-  margin-bottom: 2px;
-  margin-top: 2px;
   position: relative;
 }
 
-#border {
+.border {
   height: 60px;
-  border-style: solid;
+  background: transparent;
+  background-size: 80px;
+  margin-bottom: 5px;
 }
 
-#detail {
+.detail {
   position: absolute;
   top: 0px;
   left: 160px;
 
 }
 
-#title {
-  margin-top: 10px;
+.title {
   margin-left: 3px;
   font-size: 12px;
   font-family: 'Pangolin', cursive;

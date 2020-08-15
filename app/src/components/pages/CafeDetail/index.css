@@ -1,4 +1,4 @@
-#info {
+.info {
   width: 80px;
   height: 60px;
   white-space: nowrap;
@@ -16,9 +16,9 @@
   left: 0px;
 }
 
-#small {
-  width: 13px;
-  height: 13px;
+.small {
+  width: 10px;
+  height: 10px;
   transform-origin: 50% 50%;
   transform: rotate(45deg) translateX(-50%);
   background-color: rgb(250, 250, 242);

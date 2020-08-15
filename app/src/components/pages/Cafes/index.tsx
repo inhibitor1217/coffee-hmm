@@ -14,54 +14,50 @@ export type CafesProps = {
   filter: ((cafe: CafeInfo) => boolean) | null;
 };
 
-const getRandomColor = () => {
-  let min = Math.ceil(0);
-  let max = Math.floor(11);
+const getRanNum = (min: number, max: number) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-let colorsList = [
-  "#FFEBEE",
-  "#E8EAF6",
-  "#E3F2FD",
-  "#E1F5FE",
-  "#E0F2F1",
-  "#E8F5E9",
-  "#F9FBE7",
-  "#FFF8E1",
-  "#FBE9E7",
-  "#F0F4C3",
-  "#FFF9C4",
-  "#FFE0B2",
-];
+// let colorsList = [
+//   "#FFEBEE",
+//   "#E8EAF6",
+//   "#E3F2FD",
+//   "#E1F5FE",
+//   "#E0F2F1",
+//   "#E8F5E9",
+//   "#F9FBE7",
+//   "#FFF8E1",
+//   "#FBE9E7",
+//   "#F0F4C3",
+//   "#FFF9C4",
+//   "#FFE0B2",
+// ];
+
+let pencilBoxList = ["sq1", "sq2", "sq3", "sq4"];
 
 const Cafes = (props: CafesProps) => {
-  const [widths, setWidths] = useState<number[]>([]);
-  const [colors, setColors] = useState<string[]>([]);
   const [visibleCafeIndex, setVisibleCafeIndex] = useState<number | null>(null);
+  const [boxes, setBoxes] = useState<string[]>([]);
 
   useEffect(() => {
-    const tempWidths = [];
-    const tempColors = [];
-
+    const tempBoxes = [];
     for (let i = 0; i < props.cafes.length; i++) {
-      tempWidths.push(Math.random() * 40 + 60);
-      tempColors.push(colorsList[getRandomColor()]);
+      tempBoxes.push(pencilBoxList[getRanNum(0, 3)]);
     }
-    setWidths(tempWidths);
-    setColors(tempColors);
+    setBoxes(tempBoxes);
   }, [props.cafes.length]);
 
   return (
-    <div id="map">
+    <div className="map">
       {props.cafes.map((cafe, idx) => {
         return (
           <Cafe
             cafe={cafe}
-            widths={widths}
             idx={idx}
             props={props}
-            colors={colors}
+            boxes={boxes}
             hidden={visibleCafeIndex === idx ? "visible" : "hidden"}
             toggleVisible={() => {
               if (visibleCafeIndex === idx) {
