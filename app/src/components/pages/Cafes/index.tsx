@@ -37,21 +37,33 @@ const getRanNum = (min: number, max: number) => {
 // ];
 
 let pencilBoxList = ["sq1", "sq2", "sq3", "sq4"];
+let lineImageList = [
+  "line1",
+  "line2",
+  "line3",
+  "line4",
+  "line5",
+  "line6",
+  "line7",
+];
 
 const Cafes = (props: CafesProps) => {
   const [visibleCafeIndex, setVisibleCafeIndex] = useState<number | null>(null);
   const [boxes, setBoxes] = useState<string[]>([]);
+  const [lineImages, setLineImages] = useState<string[]>([]);
 
   useEffect(() => {
     const tempBoxes = [];
+    const tempImages = [];
     for (let i = 0; i < props.cafes.length; i++) {
       tempBoxes.push(pencilBoxList[getRanNum(0, 3)]);
+      tempImages.push(lineImageList[getRanNum(0, 6)]);
     }
     setBoxes(tempBoxes);
+    setLineImages(tempImages);
   }, [props.cafes.length]);
 
   const imageUri = props.cafes ? `url(/images/red_line.png)` : undefined;
-
   return (
     <div className="pbox">
       <div className="cafes">
@@ -62,6 +74,7 @@ const Cafes = (props: CafesProps) => {
               idx={idx}
               props={props}
               boxes={boxes}
+              lineImages={lineImages}
               hidden={visibleCafeIndex === idx ? "visible" : "hidden"}
               toggleVisible={() => {
                 if (visibleCafeIndex === idx) {

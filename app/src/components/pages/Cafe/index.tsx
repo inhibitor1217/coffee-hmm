@@ -6,6 +6,7 @@ import "./index.css";
 type Cafeprops = {
   cafe: CafeInfo;
   boxes: string[];
+  lineImages: string[];
   idx: number;
   props: CafesProps;
   hidden: "visible" | "hidden";
@@ -15,13 +16,16 @@ type Cafeprops = {
 const Cafe = ({
   cafe,
   boxes,
+  lineImages,
   idx,
   props,
   hidden,
   toggleVisible,
 }: Cafeprops) => {
   const imageUri = boxes[idx] ? `url(/images/${boxes[idx]}.png)` : undefined;
-
+  const lineImageUri = boxes[idx]
+    ? `url(/images/${lineImages[idx]}.png)`
+    : undefined;
   return (
     <div className="cafe-space">
       <div
@@ -41,7 +45,7 @@ const Cafe = ({
         <div className="cafe-title">{cafe.title}</div>
       </div>
       <div className="cafe-detail">
-        <CafeDetail hidden={hidden} />
+        <CafeDetail hidden={hidden} lineImg={lineImageUri} />
       </div>
     </div>
   );
