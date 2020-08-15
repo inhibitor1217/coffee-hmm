@@ -3,8 +3,8 @@ import "./index.css";
 
 const Street = () => {
   return (
-    <div className="street">
-      <span className="road-name">testing</span>
+    <div className="street-section">
+      <span className="road-name">판교역로</span>
     </div>
   );
 };

@@ -81,7 +81,14 @@ const Cafes = (props: CafesProps) => {
           backgroundImage: imageUri,
         }}
       >
-        <Street />
+        {(function () {
+          let rows = [];
+          for (let i = 0; i < props.cafes.length / 6 - 1; i++) {
+            rows.push(<Street key={i} />);
+            // temporary Key
+          }
+          return rows;
+        })()}
       </div>
     </div>
   );
