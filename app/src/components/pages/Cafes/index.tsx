@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./index.css";
 import Cafe from "../Cafe";
+import Street from "../Street";
 
 export type CafeInfo = {
   title: string;
@@ -49,27 +50,39 @@ const Cafes = (props: CafesProps) => {
     setBoxes(tempBoxes);
   }, [props.cafes.length]);
 
+  const imageUri = props.cafes ? `url(/images/red_line.png)` : undefined;
+
   return (
-    <div className="map">
-      {props.cafes.map((cafe, idx) => {
-        return (
-          <Cafe
-            cafe={cafe}
-            idx={idx}
-            props={props}
-            boxes={boxes}
-            hidden={visibleCafeIndex === idx ? "visible" : "hidden"}
-            toggleVisible={() => {
-              if (visibleCafeIndex === idx) {
-                setVisibleCafeIndex(null);
-              } else {
-                setVisibleCafeIndex(idx);
-              }
-            }}
-            key={cafe.title}
-          />
-        );
-      })}
+    <div className="pbox">
+      <div className="cafes">
+        {props.cafes.map((cafe, idx) => {
+          return (
+            <Cafe
+              cafe={cafe}
+              idx={idx}
+              props={props}
+              boxes={boxes}
+              hidden={visibleCafeIndex === idx ? "visible" : "hidden"}
+              toggleVisible={() => {
+                if (visibleCafeIndex === idx) {
+                  setVisibleCafeIndex(null);
+                } else {
+                  setVisibleCafeIndex(idx);
+                }
+              }}
+              key={cafe.title}
+            />
+          );
+        })}
+      </div>
+      <div
+        className="street"
+        style={{
+          backgroundImage: imageUri,
+        }}
+      >
+        <Street />
+      </div>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React from "react";
 import Cafes, { CafeInfo } from "../Cafes";
 import "./index.css";
+import Street from "../Street";
 
 let cafeList = [
   {
@@ -85,7 +86,7 @@ const Map = ({ filter }: MapProps) => {
   });
 
   return (
-    <div className="box">
+    <div>
       <Cafes cafes={cafeList} filter={filter} />
     </div>
   );
