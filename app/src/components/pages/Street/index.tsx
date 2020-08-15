@@ -1,9 +1,12 @@
 import React from "react";
 import "./index.css";
-import { CafeInfo } from "../Cafes";
 
 const Street = () => {
-  return <div className="street"></div>;
+  return (
+    <div className="street">
+      <span className="road-name">testing</span>
+    </div>
+  );
 };
 
 export default Street;

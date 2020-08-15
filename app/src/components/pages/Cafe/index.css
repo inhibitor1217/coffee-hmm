@@ -13,27 +13,27 @@
 'Just Me Again Down Here', cursive
 */
 
-.space {
+.cafe-space {
   background: transparent;
   margin-left: 3px;
   position: relative;
 }
 
-.border {
+.cafe-border {
   height: 65px;
   background: transparent;
   background-size: 80px;
   padding: 3px;
 }
 
-.detail {
+.cafe-detail {
   position: absolute;
   top: 0px;
   left: 160px;
 
 }
 
-.title {
+.cafe-title {
   background: transparent;
   margin-left: 3px;
   font-size: 12px;
