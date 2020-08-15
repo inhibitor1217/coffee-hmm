@@ -21,7 +21,7 @@ const Cafe = ({
   toggleVisible,
 }: Cafeprops) => {
   const imageUri = boxes[idx] ? `url(/images/${boxes[idx]}.png)` : undefined;
-  console.log(imageUri);
+
   return (
     <div className="space">
       <div
