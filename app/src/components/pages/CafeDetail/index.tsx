@@ -12,8 +12,8 @@ const CafeDetail = ({ hidden }: CafeDetailProps) => {
         visibility: hidden,
       }}
     >
-      <div id="small"></div>
-      <div id="info"></div>
+      <div className="small"></div>
+      <div className="info"></div>
     </div>
   );
 };

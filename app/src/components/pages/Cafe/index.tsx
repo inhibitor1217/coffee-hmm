@@ -5,8 +5,7 @@ import "./index.css";
 
 type Cafeprops = {
   cafe: CafeInfo;
-  widths: number[];
-  colors: string[];
+  boxes: string[];
   idx: number;
   props: CafesProps;
   hidden: "visible" | "hidden";
@@ -15,31 +14,33 @@ type Cafeprops = {
 
 const Cafe = ({
   cafe,
-  widths,
-  colors,
+  boxes,
   idx,
   props,
   hidden,
   toggleVisible,
 }: Cafeprops) => {
+  const imageUri = boxes[idx] ? `url(/images/${boxes[idx]}.png)` : undefined;
+  console.log(imageUri);
   return (
-    <div id="space">
+    <div className="space">
       <div
-        id="border"
+        className="border"
         style={{
-          width: widths[idx],
-          borderColor:
-            props.filter !== null
-              ? props.filter(cafe)
-                ? colors[idx]
-                : "#EDE7F6"
-              : colors[idx],
+          backgroundImage: imageUri,
+          backgroundRepeat: "no-repeat",
+          // borderColor:
+          //   props.filter !== null
+          //     ? props.filter(cafe)
+          //       ? colors[idx]
+          //       : "#EDE7F6"
+          //     : colors[idx],
         }}
         onClick={toggleVisible}
       >
-        <div id="title">{cafe.title}</div>
+        <div className="title">{cafe.title}</div>
       </div>
-      <div id="detail">
+      <div className="detail">
         <CafeDetail hidden={hidden} />
       </div>
     </div>
