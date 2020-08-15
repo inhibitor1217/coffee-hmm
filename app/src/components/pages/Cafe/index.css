@@ -17,25 +17,28 @@
   background: transparent;
   margin-left: 3px;
   position: relative;
+  z-index: 101;
 }
 
 .cafe-border {
   height: 65px;
-  background: transparent;
   background-size: 80px;
   padding: 3px;
+  z-index: 102;
 }
 
 .cafe-detail {
   position: absolute;
   top: 0px;
   left: 160px;
-
+  z-index: 103;
 }
 
 .cafe-title {
   background: transparent;
   margin-left: 3px;
-  font-size: 12px;
-  font-family: 'Pangolin', cursive;
+  margin-top: 5px;
+  font-size: 13px;
+  text-align: center;
+  font-family: 'Gaegu', cursive;
 }
