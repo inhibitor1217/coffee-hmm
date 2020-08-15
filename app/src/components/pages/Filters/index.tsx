@@ -8,7 +8,7 @@ interface FilterProps {
 
 const Filter = (props: FilterProps) => {
   return (
-    <div id="footer">
+    <div id="filters">
       <button
         className="btn"
         onClick={() => props.setFilter(() => (cafe) => cafe.avgPrice >= 3000)}
