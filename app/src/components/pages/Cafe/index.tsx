@@ -23,9 +23,9 @@ const Cafe = ({
   const imageUri = boxes[idx] ? `url(/images/${boxes[idx]}.png)` : undefined;
 
   return (
-    <div className="space">
+    <div className="cafe-space">
       <div
-        className="border"
+        className="cafe-border"
         style={{
           backgroundImage: imageUri,
           backgroundRepeat: "no-repeat",
@@ -38,9 +38,9 @@ const Cafe = ({
         }}
         onClick={toggleVisible}
       >
-        <div className="title">{cafe.title}</div>
+        <div className="cafe-title">{cafe.title}</div>
       </div>
-      <div className="detail">
+      <div className="cafe-detail">
         <CafeDetail hidden={hidden} />
       </div>
     </div>
