@@ -7,25 +7,29 @@ interface FilterProps {
 }
 
 const Filter = (props: FilterProps) => {
-  const btnUri = props ? `url(images/green.png)` : undefined;
+  const btnUri1 = props ? `url(images/green.png)` : undefined;
+  const btnUri2 = props ? `url(images/gray.png)` : undefined;
   return (
     <div id="filters">
       <button
-        className="btn btn-price"
+        className="btn"
         style={{
-          backgroundImage: btnUri,
+          backgroundImage: btnUri1,
         }}
         onClick={() =>
           props.setFilter(() => (cafe) => cafe.americanoPrice >= 3000)
         }
       >
-        price
+        저렴한곳
       </button>
       <button
         className="btn"
+        style={{
+          backgroundImage: btnUri2,
+        }}
         onClick={() => props.setFilter(() => (cafe) => cafe.isVisited)}
       >
-        history
+        다녀온곳
       </button>
     </div>
   );
