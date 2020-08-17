@@ -36,9 +36,14 @@
 
 .cafe-title {
   background: transparent;
-  margin-left: 3px;
-  margin-top: 5px;
+  margin-left: 1px;
+  margin-top: 8px;
   font-size: 13px;
   text-align: center;
   font-family: 'Gaegu', cursive;
+}
+
+.cafe-filter-icon {
+  margin-left: 4px;
+  margin-top: 8px;
 }
