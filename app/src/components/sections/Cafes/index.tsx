@@ -6,8 +6,12 @@ import Street from "../Street";
 export type CafeInfo = {
   title: string;
   lat: number;
-  avgPrice: number;
+  americanoPrice: number;
   isVisited: boolean;
+  floor: number;
+  specialMenu: string;
+  specialMenuPrice: number;
+  logo: boolean;
 };
 
 export type CafesProps = {
