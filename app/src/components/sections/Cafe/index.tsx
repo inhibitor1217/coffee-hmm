@@ -33,16 +33,25 @@ const Cafe = ({
         style={{
           backgroundImage: imageUri,
           backgroundRepeat: "no-repeat",
-          // borderColor:
-          //   props.filter !== null
-          //     ? props.filter(cafe)
-          //       ? colors[idx]
-          //       : "#EDE7F6"
-          //     : colors[idx],
         }}
         onClick={toggleVisible}
       >
-        <div className="cafe-title">{cafe.title}</div>
+        <span
+          className="material-icons cafe-filter-icon"
+          style={{
+            visibility:
+              props.filter !== null
+                ? props.filter(cafe)
+                  ? "hidden"
+                  : "visible"
+                : "hidden",
+            color: "#CE93D8",
+            fontSize: "10px",
+          }}
+        >
+          fiber_manual_record
+        </span>
+        <span className="cafe-title">{cafe.title}</span>
       </div>
       <div className="cafe-detail">
         <CafeDetail cafe={cafe} hidden={hidden} lineImg={lineImageUri} />
