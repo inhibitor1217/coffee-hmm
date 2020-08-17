@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Pangolin&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gaegu&display=swap');
 
 #filters {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
+    bottom: 20px;
+    right: 20px;
     z-index: 199;
 }
 
@@ -11,10 +11,9 @@
     width: 80px;
     border: none;
     background-color: transparent;
-}
-
-.btn-price {
     background-size: 60px 20px;
     background-repeat: no-repeat;
     background-position: center;
+    font-family: 'Gaegu', cursive;
+    font-size: 15px;
 }
