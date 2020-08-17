@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Pangolin&display=swap');
+
+#filters {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 199;
+}
+
+.btn {
+    width: 80px;
+    border: none;
+    background-color: transparent;
+}
+
+.btn-price {
+    background-size: 60px 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
