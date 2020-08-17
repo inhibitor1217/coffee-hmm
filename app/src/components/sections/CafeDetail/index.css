@@ -16,10 +16,12 @@
 @keyframes slidedown {
   from {
     bottom: 180px;
+    opacity: 0;
   }
 
   to {
-    bottom: 100px
+    bottom: 100px;
+    opacity: 1;
   }
 }
 
