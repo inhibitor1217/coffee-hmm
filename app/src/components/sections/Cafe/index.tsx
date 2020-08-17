@@ -45,7 +45,7 @@ const Cafe = ({
         <div className="cafe-title">{cafe.title}</div>
       </div>
       <div className="cafe-detail">
-        <CafeDetail hidden={hidden} lineImg={lineImageUri} />
+        <CafeDetail cafe={cafe} hidden={hidden} lineImg={lineImageUri} />
       </div>
     </div>
   );

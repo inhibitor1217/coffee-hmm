@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { CafeInfo } from "../Cafes";
-import Filter from "../Filters";
-import Map from "../Map";
+import { CafeInfo } from "../../sections/Cafes";
+import Filter from "../../sections/Filters";
+import Map from "../../sections/Map";
 
 const HomePage = () => {
   const [filter, setFilter] = useState<((cafe: CafeInfo) => boolean) | null>(
