@@ -15,7 +15,9 @@ const Filter = (props: FilterProps) => {
         style={{
           backgroundImage: btnUri,
         }}
-        onClick={() => props.setFilter(() => (cafe) => cafe.avgPrice >= 3000)}
+        onClick={() =>
+          props.setFilter(() => (cafe) => cafe.americanoPrice >= 3000)
+        }
       >
         price
       </button>
