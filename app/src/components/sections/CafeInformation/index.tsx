@@ -1,7 +1,18 @@
 import React from "react";
+import "./index.css";
+import { withRouter } from "react-router-dom";
+import CafeMenu from "../CafeMenu";
 
 const CafeInformation = () => {
-  return <div>testing...</div>;
+  return (
+    <div>
+      <button className="back-btn">back</button>
+      <div className="cafe-image-box">
+        <div className="cafe-image"></div>
+      </div>
+      <CafeMenu />
+    </div>
+  );
 };
 
-export default CafeInformation;
+export default withRouter(CafeInformation);
