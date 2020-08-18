@@ -1,6 +1,7 @@
 import React from "react";
 import "./index.css";
 import { CafeInfo } from "../Cafes";
+import { Link } from "react-router-dom";
 
 type CafeDetailProps = {
   cafe: CafeInfo;
@@ -29,26 +30,29 @@ const CafeDetail = ({ cafe, hidden, lineImg }: CafeDetailProps) => {
                 backgroundImage: lineImg,
               }}
             >
-              <div className="content">
-                <span
-                  className="cafe-logo"
-                  style={{
-                    backgroundImage: cafe.logo === true ? cafeIconUri : "none",
-                  }}
-                ></span>
-                <h3>
-                  {cafe.title} {cafe.floor}F
-                </h3>
-                아메리카노 {cafe.americanoPrice}원<br />
-                <span
-                  className="star-icon"
-                  style={{
-                    backgroundImage: starIconUri,
-                  }}
-                ></span>
-                {cafe.specialMenu} {cafe.specialMenuPrice}원 <br />
-              </div>
-              <div className="more">더보기</div>
+              <Link to="/cafe">
+                <div className="content">
+                  <span
+                    className="cafe-logo"
+                    style={{
+                      backgroundImage:
+                        cafe.logo === true ? cafeIconUri : "none",
+                    }}
+                  ></span>
+                  <h3>
+                    {cafe.title} {cafe.floor}F
+                  </h3>
+                  아메리카노 {cafe.americanoPrice}원<br />
+                  <span
+                    className="star-icon"
+                    style={{
+                      backgroundImage: starIconUri,
+                    }}
+                  ></span>
+                  {cafe.specialMenu} {cafe.specialMenuPrice}원 <br />
+                </div>
+                <div className="more">더보기</div>
+              </Link>
             </div>
           );
         }
