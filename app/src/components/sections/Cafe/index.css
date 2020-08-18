@@ -46,6 +46,7 @@
 .cafe-filter-icon {
   margin-left: 4px;
   margin-top: 8px;
+  text-shadow: 1px 1px #cfcfcf;
   animation: movingDot 1s infinite;
 }
 
