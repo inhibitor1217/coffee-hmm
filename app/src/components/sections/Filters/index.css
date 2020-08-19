@@ -2,9 +2,10 @@
 
 #filters {
     position: absolute;
-    bottom: 20px;
+    top: 560px;
     right: 20px;
-    z-index: 199;
+    z-index: 999;
+
 }
 
 .btn {

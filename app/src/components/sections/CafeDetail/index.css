@@ -4,7 +4,7 @@
   position: fixed;
   width: 150px;
   height: 150px;
-  bottom: 180px;
+  top: 230px;
   margin-bottom: 20px;
   background: transparent;
   background-size: 150px 150px;
@@ -19,12 +19,12 @@
 
 @keyframes slidedown {
   from {
-    bottom: 250px;
+    top: 300px;
     opacity: 0;
   }
 
   to {
-    bottom: 180px;
+    top: 230px;
     opacity: 1;
   }
 }

@@ -6,7 +6,6 @@ import CafeMenu from "../CafeMenu";
 const CafeInformation = () => {
   return (
     <div>
-      <button className="back-btn">back</button>
       <div className="cafe-image-box">
         <div className="cafe-image"></div>
       </div>

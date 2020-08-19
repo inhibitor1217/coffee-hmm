@@ -30,7 +30,7 @@ const CafeDetail = ({ cafe, hidden, lineImg }: CafeDetailProps) => {
                 backgroundImage: lineImg,
               }}
             >
-              <Link to="/cafe">
+              <Link to="/cafe/1">
                 <div className="content">
                   <span
                     className="cafe-logo"
