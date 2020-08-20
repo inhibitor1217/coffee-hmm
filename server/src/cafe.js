@@ -17,6 +17,10 @@ module.exports.cafeListHandler = (event, context, callback) => {
       if (err) {
         const response = {
           statusCode: 500,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': true,
+          },
           body: JSON.stringify(err)
         };
         console.error(err, null, 2);
@@ -24,6 +28,10 @@ module.exports.cafeListHandler = (event, context, callback) => {
       } else {
         const response = {
           statusCode: 200,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': true,
+          },
           body: JSON.stringify(data)
         };
         callback(null, response);
@@ -45,6 +53,10 @@ module.exports.cafeHandler = (event, context, callback) => {
     if (err) {
       const response = {
         statusCode: 500,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+        },
         body: JSON.stringify(err)
       };
       console.error(JSON.stringify(err, null, 2));
@@ -52,6 +64,10 @@ module.exports.cafeHandler = (event, context, callback) => {
     } else {
       const response = {
         statusCode: 200,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+        },
         body: JSON.stringify(data)
       };
       callback(null, response);
