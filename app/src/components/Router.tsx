@@ -11,7 +11,7 @@ const Router = (props: RouterProps) => {
   return (
     <Switch location={props.location}>
       <Route path="/" exact render={() => <HomePage />} />
-      <Route path="/cafe/:cafeId" render={() => <CafeDetailPage />} />
+      <Route path="/cafe/:cafeId" render={() => <CafeDetailPage  />} />
       <Redirect to="/" />
     </Switch>
   );
