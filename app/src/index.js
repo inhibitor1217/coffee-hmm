@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./components/App";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
+=======
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './components/App';
+import './index.css';
+import * as serviceWorker from './serviceWorker';
+>>>>>>> change map api
 
 ReactDOM.render(
   <React.StrictMode>
