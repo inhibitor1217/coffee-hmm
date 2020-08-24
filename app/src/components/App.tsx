@@ -3,7 +3,6 @@ import { isBrowser, isMobile } from "react-device-detect";
 import { BrowserRouter } from "react-router-dom";
 import DesktopFallback from "./DesktopFallback";
 import PageTemplate from "./PageTemplate";
-import Router from "./Router";
 
 const App = () => {
   return (
@@ -11,9 +10,7 @@ const App = () => {
       {isBrowser && <DesktopFallback />}
       {isMobile && (
         <BrowserRouter>
-          <PageTemplate>
-            <Router />
-          </PageTemplate>
+          <PageTemplate />
         </BrowserRouter>
       )}
     </>
