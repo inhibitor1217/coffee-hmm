@@ -5,60 +5,59 @@ import { Link } from "react-router-dom";
 
 type CafeDetailProps = {
   cafe: CafeInfo;
-  hidden: "visible" | "hidden";
+  hidden: boolean;
   lineImg: string | undefined;
 };
 
-const CafeDetail = ({ cafe, hidden, lineImg }: CafeDetailProps) => {
-  return (
-    <div
-      style={{
-        visibility: hidden,
-      }}
-    >
-      {(function () {
-        if (hidden === "visible") {
-          const starIconUri = cafe ? `url(/images/star.png)` : undefined;
-          const cafeIconUri = cafe
-            ? `url(/images/cafe_logo/${cafe.title}.png)`
-            : undefined;
+const cafePreview = (
+  cafe: CafeInfo,
+  hidden: boolean,
+  lineImg: string | undefined
+) => {
+  if (!hidden) {
+    const starIconUri = cafe ? `url(/images/star.png)` : undefined;
+    const cafeIconUri = cafe
+      ? `url(/images/cafe_logo/${cafe.name}.png)`
+      : undefined;
 
-          return (
-            <div
-              className="info"
+    return (
+      <div
+        className="info"
+        style={{
+          backgroundImage: lineImg,
+          visibility: "visible",
+        }}
+      >
+        <Link to="/cafe/1">
+          <div className="content">
+            <span
+              className="cafe-logo"
               style={{
-                backgroundImage: lineImg,
+                backgroundImage: cafe.logo === true ? cafeIconUri : "none",
               }}
-            >
-              <Link to="/cafe/1">
-                <div className="content">
-                  <span
-                    className="cafe-logo"
-                    style={{
-                      backgroundImage:
-                        cafe.logo === true ? cafeIconUri : "none",
-                    }}
-                  ></span>
-                  <h3>
-                    {cafe.title} {cafe.floor}F
-                  </h3>
-                  아메리카노 {cafe.americanoPrice}원<br />
-                  <span
-                    className="star-icon"
-                    style={{
-                      backgroundImage: starIconUri,
-                    }}
-                  ></span>
-                  {cafe.specialMenu} {cafe.specialMenuPrice}원 <br />
-                </div>
-                <div className="more">더보기</div>
-              </Link>
-            </div>
-          );
-        }
-      })()}
-    </div>
-  );
+            ></span>
+            <h3>
+              {cafe.name} {cafe.floor}F
+            </h3>
+            아메리카노 {cafe.americanoPrice}원<br />
+            <span
+              className="star-icon"
+              style={{
+                backgroundImage: starIconUri,
+              }}
+            ></span>
+            {cafe.specialMenu} {cafe.specialMenuPrice}원 <br />
+          </div>
+          <div className="more">더보기</div>
+        </Link>
+      </div>
+    );
+  }
+};
+
+const CafeDetail = ({ cafe, hidden, lineImg }: CafeDetailProps) => {
+  const preview = cafePreview(cafe, hidden, lineImg);
+  return <div>{preview}</div>;
 };
 
 export default CafeDetail;

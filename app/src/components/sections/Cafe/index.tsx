@@ -9,7 +9,7 @@ type Cafeprops = {
   lineImages: string[];
   idx: number;
   props: CafesProps;
-  hidden: "visible" | "hidden";
+  hidden: boolean;
   toggleVisible(): void;
 };
 
@@ -51,7 +51,7 @@ const Cafe = ({
         >
           fiber_manual_record
         </span>
-        <span className="cafe-title">{cafe.title}</span>
+        <span className="cafe-title">{cafe.name}</span>
       </div>
       <div className="cafe-detail">
         <CafeDetail cafe={cafe} hidden={hidden} lineImg={lineImageUri} />

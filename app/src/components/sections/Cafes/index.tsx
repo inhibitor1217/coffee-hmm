@@ -4,8 +4,9 @@ import Cafe from "../Cafe";
 import Street from "../Street";
 
 export type CafeInfo = {
-  title: string;
+  name: string;
   lat: number;
+  lng: number;
   americanoPrice: number;
   isVisited: boolean;
   floor: number;
@@ -24,21 +25,6 @@ const getRanNum = (min: number, max: number) => {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
-
-// let colorsList = [
-//   "#FFEBEE",
-//   "#E8EAF6",
-//   "#E3F2FD",
-//   "#E1F5FE",
-//   "#E0F2F1",
-//   "#E8F5E9",
-//   "#F9FBE7",
-//   "#FFF8E1",
-//   "#FBE9E7",
-//   "#F0F4C3",
-//   "#FFF9C4",
-//   "#FFE0B2",
-// ];
 
 let pencilBoxList = ["sq1", "sq2", "sq3", "sq4"];
 let lineImageList = [
@@ -79,7 +65,7 @@ const Cafes = (props: CafesProps) => {
               props={props}
               boxes={boxes}
               lineImages={lineImages}
-              hidden={visibleCafeIndex === idx ? "visible" : "hidden"}
+              hidden={visibleCafeIndex === idx ? false : true}
               toggleVisible={() => {
                 if (visibleCafeIndex === idx) {
                   setVisibleCafeIndex(null);
@@ -87,7 +73,7 @@ const Cafes = (props: CafesProps) => {
                   setVisibleCafeIndex(idx);
                 }
               }}
-              key={cafe.title}
+              key={cafe.name}
             />
           );
         })}

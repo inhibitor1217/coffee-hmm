@@ -1,10 +1,11 @@
 import React from "react";
 import Cafes, { CafeInfo } from "../Cafes";
 import "./index.css";
+import { CafeList } from "../../pages/Homepage";
 
 let cafeList = [
   {
-    title: "워터 화이트",
+    name: "워터 화이트",
     lat: 37.401251,
     lng: 127.110753,
     isVisited: true,
@@ -15,7 +16,7 @@ let cafeList = [
     logo: false,
   },
   {
-    title: "카페 무아르",
+    name: "카페 무아르",
     lat: 37.401399,
     lng: 127.110903,
     isVisited: false,
@@ -26,7 +27,7 @@ let cafeList = [
     logo: false,
   },
   {
-    title: "파브리끄",
+    name: "파브리끄",
     lat: 37.401251,
     lng: 127.110753,
     isVisited: false,
@@ -37,7 +38,7 @@ let cafeList = [
     logo: false,
   },
   {
-    title: "칼디 커피",
+    name: "칼디 커피",
     lat: 37.401251,
     lng: 127.110753,
     isVisited: false,
@@ -48,7 +49,7 @@ let cafeList = [
     logo: false,
   },
   {
-    title: "스타벅스",
+    name: "스타벅스",
     lat: 37.401251,
     lng: 127.110753,
     isVisited: true,
@@ -59,7 +60,7 @@ let cafeList = [
     logo: true,
   },
   {
-    title: "빈바이빈",
+    name: "빈바이빈",
     lat: 37.401251,
     lng: 127.110753,
     isVisited: true,
@@ -70,7 +71,7 @@ let cafeList = [
     logo: false,
   },
   {
-    title: "알레그리아",
+    name: "알레그리아",
     lat: 37.401251,
     lng: 127.110753,
     isVisited: true,
@@ -81,7 +82,7 @@ let cafeList = [
     logo: false,
   },
   {
-    title: "Water-White6",
+    name: "Water-White6",
     lat: 37.401251,
     lng: 127.110753,
     isVisited: true,
@@ -92,7 +93,7 @@ let cafeList = [
     logo: false,
   },
   {
-    title: "Water-White7",
+    name: "Water-White7",
     lat: 37.401251,
     lng: 127.110753,
     isVisited: true,
@@ -103,7 +104,7 @@ let cafeList = [
     logo: false,
   },
   {
-    title: "Water-White8",
+    name: "Water-White8",
     lat: 37.401251,
     lng: 127.110753,
     isVisited: true,
@@ -114,7 +115,7 @@ let cafeList = [
     logo: false,
   },
   {
-    title: "Water-White9",
+    name: "Water-White9",
     lat: 37.401251,
     lng: 127.110753,
     isVisited: true,
@@ -125,7 +126,7 @@ let cafeList = [
     logo: false,
   },
   {
-    title: "Water-White10",
+    name: "Water-White10",
     lat: 37.401251,
     lng: 127.110753,
     isVisited: true,
@@ -136,7 +137,7 @@ let cafeList = [
     logo: false,
   },
   {
-    title: "Water-White11",
+    name: "Water-White11",
     lat: 37.401251,
     lng: 127.110753,
     isVisited: true,
@@ -150,9 +151,10 @@ let cafeList = [
 
 type MapProps = {
   filter: ((cafe: CafeInfo) => boolean) | null;
+  cafes: CafeList | undefined;
 };
 
-const Map = ({ filter }: MapProps) => {
+const Map = ({ filter, cafes }: MapProps) => {
   cafeList.sort(function (a, b) {
     return a.lat < b.lat ? -1 : a.lat > b.lat ? 1 : 0;
   });
