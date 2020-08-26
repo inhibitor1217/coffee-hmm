@@ -22,8 +22,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-<<<<<<< HEAD
+
 .lock
-=======
-.env
->>>>>>> change map api
+

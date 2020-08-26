@@ -3,10 +3,6 @@ import "./index.css";
 import Cafe, { CafeInfo } from "../Cafe";
 import Street from "../Street";
 
-// export type CafeList = {
-//   cafes?: CafeInfo[];
-// };
-
 export type CafesProps = {
   cafes: CafeInfo[] | null;
   filter: ((cafe: CafeInfo) => boolean) | null;
