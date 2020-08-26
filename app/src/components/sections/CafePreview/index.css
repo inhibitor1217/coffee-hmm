@@ -1,10 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Gaegu&display=swap');
 
-.info {
+.cafe-preview {
   position: fixed;
-  width: 150px;
+  width: 200px;
   height: 150px;
   top: 230px;
+  left: 150px;
   margin-bottom: 20px;
   background: transparent;
   background-size: 150px 150px;
@@ -13,7 +14,7 @@
   animation-name: slidedown;
 }
 
-.info a {
+.cafe-preview a {
   color: inherit;
 }
 
@@ -44,7 +45,7 @@
 
 .more {
   position: absolute;
-  right: 0px;
+  right: 30px;
   margin-top: 15px;
   font-size: 13px;
   font-family: 'Gaegu', cursive;

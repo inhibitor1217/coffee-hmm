@@ -1,7 +1,7 @@
 import React from "react";
 import { CafesProps } from "../Cafes";
-import CafeDetail from "../CafeDetail";
 import "./index.css";
+import CafePreview from "../CafePreview";
 
 export type CafeInfo = {
   id: string;
@@ -68,7 +68,7 @@ const Cafe = ({
         <span className="cafe-title">{cafe.name}</span>
       </div>
       <div className="cafe-detail">
-        <CafeDetail cafe={cafe} hidden={hidden} lineImg={lineImageUri} />
+        <CafePreview cafe={cafe} hidden={hidden} lineImg={lineImageUri} />
       </div>
     </div>
   );

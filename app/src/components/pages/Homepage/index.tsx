@@ -4,7 +4,7 @@ import Map from "../../sections/Map";
 import "./index.css";
 import { CafeInfo } from "../../sections/Cafe";
 
-export const URL =
+export const cafeApiURL =
   "https://ird14dr4ze.execute-api.ap-northeast-2.amazonaws.com/production/cafe";
 
 const HomePage = () => {
@@ -15,7 +15,7 @@ const HomePage = () => {
 
   useEffect(() => {
     async function fetchData() {
-      await fetch(URL)
+      await fetch(cafeApiURL)
         .then((response) => response.json())
         .then((jsonData) => JSON.stringify(jsonData))
         .then((jsonStr) => setCafeApi(JSON.parse(jsonStr).Items))

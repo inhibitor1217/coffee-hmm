@@ -3,7 +3,7 @@ import "./index.css";
 import { Link } from "react-router-dom";
 import { CafeInfo } from "../Cafe";
 
-type CafeDetailProps = {
+type CafePreviewProps = {
   cafe: CafeInfo;
   hidden: boolean;
   lineImg: string | undefined;
@@ -22,13 +22,13 @@ const cafePreview = (
 
     return (
       <div
-        className="info"
+        className="cafe-preview"
         style={{
           backgroundImage: lineImg,
           visibility: "visible",
         }}
       >
-        <Link to="/cafe/1">
+        <Link to={`/cafe/${cafe.id}`}>
           <div className="content">
             <span
               className="cafe-logo"
@@ -55,9 +55,9 @@ const cafePreview = (
   }
 };
 
-const CafeDetail = ({ cafe, hidden, lineImg }: CafeDetailProps) => {
+const CafePreview = ({ cafe, hidden, lineImg }: CafePreviewProps) => {
   const preview = cafePreview(cafe, hidden, lineImg);
   return <div>{preview}</div>;
 };
 
-export default CafeDetail;
+export default CafePreview;
