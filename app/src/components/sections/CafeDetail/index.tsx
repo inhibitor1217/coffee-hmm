@@ -1,7 +1,7 @@
 import React from "react";
 import "./index.css";
-import { CafeInfo } from "../Cafes";
 import { Link } from "react-router-dom";
+import { CafeInfo } from "../Cafe";
 
 type CafeDetailProps = {
   cafe: CafeInfo;

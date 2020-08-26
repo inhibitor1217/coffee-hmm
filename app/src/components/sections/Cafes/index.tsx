@@ -1,22 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./index.css";
-import Cafe from "../Cafe";
+import Cafe, { CafeInfo } from "../Cafe";
 import Street from "../Street";
 
-export type CafeInfo = {
-  name: string;
-  lat: number;
-  lng: number;
-  americanoPrice: number;
-  isVisited: boolean;
-  floor: number;
-  specialMenu: string;
-  specialMenuPrice: number;
-  logo: boolean;
-};
+// export type CafeList = {
+//   cafes?: CafeInfo[];
+// };
 
 export type CafesProps = {
-  cafes: CafeInfo[];
+  cafes: CafeInfo[] | null;
   filter: ((cafe: CafeInfo) => boolean) | null;
 };
 
@@ -43,21 +35,23 @@ const Cafes = (props: CafesProps) => {
   const [lineImages, setLineImages] = useState<string[]>([]);
 
   useEffect(() => {
-    const tempBoxes = [];
-    const tempImages = [];
-    for (let i = 0; i < props.cafes.length; i++) {
+    const tempBoxes: string[] = [];
+    const tempImages: string[] = [];
+
+    props.cafes?.map(() => {
       tempBoxes.push(pencilBoxList[getRanNum(0, 3)]);
       tempImages.push(lineImageList[getRanNum(0, 6)]);
-    }
+    });
+
     setBoxes(tempBoxes);
     setLineImages(tempImages);
-  }, [props.cafes.length]);
+  }, [props.cafes]);
 
   const imageUri = props.cafes ? `url(/images/red_line.png)` : undefined;
   return (
     <div className="pbox">
       <div className="cafes">
-        {props.cafes.map((cafe, idx) => {
+        {props.cafes?.map((cafe, idx) => {
           return (
             <Cafe
               cafe={cafe}
@@ -86,7 +80,13 @@ const Cafes = (props: CafesProps) => {
       >
         {(function () {
           let rows = [];
-          for (let i = 0; i < props.cafes.length / 6 - 1; i++) {
+          let length: number;
+          if (props.cafes != null) {
+            length = props.cafes.length;
+          } else {
+            length = 0;
+          }
+          for (let i = 0; i < length / 6 - 1; i++) {
             rows.push(<Street key={i} />);
             // temporary Key
           }
