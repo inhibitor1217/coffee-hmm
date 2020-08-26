@@ -1,15 +1,29 @@
 import React from "react";
-import { CafeInfo, CafesProps } from "../Cafes";
-import CafeDetail from "../CafeDetail";
+import { CafesProps } from "../Cafes";
 import "./index.css";
+import CafePreview from "../CafePreview";
 
-type Cafeprops = {
+export type CafeInfo = {
+  id: string;
+  name: string;
+  imageUris: string[];
+  mainImageUri: string;
+  lat: number;
+  lng: number;
+  americanoPrice: number;
+  floor: number;
+  specialMenu: string;
+  specialMenuPrice: number;
+  logo: boolean;
+};
+
+type CafePreviewProps = {
   cafe: CafeInfo;
   boxes: string[];
   lineImages: string[];
   idx: number;
   props: CafesProps;
-  hidden: "visible" | "hidden";
+  hidden: boolean;
   toggleVisible(): void;
 };
 
@@ -21,7 +35,7 @@ const Cafe = ({
   props,
   hidden,
   toggleVisible,
-}: Cafeprops) => {
+}: CafePreviewProps) => {
   const imageUri = boxes[idx] ? `url(/images/${boxes[idx]}.png)` : undefined;
   const lineImageUri = boxes[idx]
     ? `url(/images/${lineImages[idx]}.png)`
@@ -51,10 +65,10 @@ const Cafe = ({
         >
           fiber_manual_record
         </span>
-        <span className="cafe-title">{cafe.title}</span>
+        <span className="cafe-title">{cafe.name}</span>
       </div>
       <div className="cafe-detail">
-        <CafeDetail cafe={cafe} hidden={hidden} lineImg={lineImageUri} />
+        <CafePreview cafe={cafe} hidden={hidden} lineImg={lineImageUri} />
       </div>
     </div>
   );

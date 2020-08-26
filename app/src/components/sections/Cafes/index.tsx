@@ -1,21 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./index.css";
-import Cafe from "../Cafe";
+import Cafe, { CafeInfo } from "../Cafe";
 import Street from "../Street";
 
-export type CafeInfo = {
-  title: string;
-  lat: number;
-  americanoPrice: number;
-  isVisited: boolean;
-  floor: number;
-  specialMenu: string;
-  specialMenuPrice: number;
-  logo: boolean;
-};
-
 export type CafesProps = {
-  cafes: CafeInfo[];
+  cafes: CafeInfo[] | null;
   filter: ((cafe: CafeInfo) => boolean) | null;
 };
 
@@ -24,21 +13,6 @@ const getRanNum = (min: number, max: number) => {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
-
-// let colorsList = [
-//   "#FFEBEE",
-//   "#E8EAF6",
-//   "#E3F2FD",
-//   "#E1F5FE",
-//   "#E0F2F1",
-//   "#E8F5E9",
-//   "#F9FBE7",
-//   "#FFF8E1",
-//   "#FBE9E7",
-//   "#F0F4C3",
-//   "#FFF9C4",
-//   "#FFE0B2",
-// ];
 
 let pencilBoxList = ["sq1", "sq2", "sq3", "sq4"];
 let lineImageList = [
@@ -57,21 +31,23 @@ const Cafes = (props: CafesProps) => {
   const [lineImages, setLineImages] = useState<string[]>([]);
 
   useEffect(() => {
-    const tempBoxes = [];
-    const tempImages = [];
-    for (let i = 0; i < props.cafes.length; i++) {
+    const tempBoxes: string[] = [];
+    const tempImages: string[] = [];
+
+    props.cafes?.map(() => {
       tempBoxes.push(pencilBoxList[getRanNum(0, 3)]);
       tempImages.push(lineImageList[getRanNum(0, 6)]);
-    }
+    });
+
     setBoxes(tempBoxes);
     setLineImages(tempImages);
-  }, [props.cafes.length]);
+  }, [props.cafes]);
 
   const imageUri = props.cafes ? `url(/images/red_line.png)` : undefined;
   return (
     <div className="pbox">
       <div className="cafes">
-        {props.cafes.map((cafe, idx) => {
+        {props.cafes?.map((cafe, idx) => {
           return (
             <Cafe
               cafe={cafe}
@@ -79,7 +55,7 @@ const Cafes = (props: CafesProps) => {
               props={props}
               boxes={boxes}
               lineImages={lineImages}
-              hidden={visibleCafeIndex === idx ? "visible" : "hidden"}
+              hidden={visibleCafeIndex === idx ? false : true}
               toggleVisible={() => {
                 if (visibleCafeIndex === idx) {
                   setVisibleCafeIndex(null);
@@ -87,7 +63,7 @@ const Cafes = (props: CafesProps) => {
                   setVisibleCafeIndex(idx);
                 }
               }}
-              key={cafe.title}
+              key={cafe.name}
             />
           );
         })}
@@ -100,7 +76,13 @@ const Cafes = (props: CafesProps) => {
       >
         {(function () {
           let rows = [];
-          for (let i = 0; i < props.cafes.length / 6 - 1; i++) {
+          let length: number;
+          if (props.cafes != null) {
+            length = props.cafes.length;
+          } else {
+            length = 0;
+          }
+          for (let i = 0; i < length / 6 - 1; i++) {
             rows.push(<Street key={i} />);
             // temporary Key
           }
