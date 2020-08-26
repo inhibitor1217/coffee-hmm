@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Gaegu&display=swap');
+
+.cafe-preview {
+  position: fixed;
+  width: 200px;
+  height: 150px;
+  top: 230px;
+  left: 150px;
+  margin-bottom: 20px;
+  background: transparent;
+  background-size: 150px 150px;
+  background-repeat: no-repeat;
+  animation-duration: 1.5s;
+  animation-name: slidedown;
+}
+
+.cafe-preview a {
+  color: inherit;
+}
+
+@keyframes slidedown {
+  from {
+    top: 300px;
+    opacity: 0;
+  }
+
+  to {
+    top: 230px;
+    opacity: 1;
+  }
+}
+
+.content {
+  position: absolute;
+  top: -70px;
+  left: 10px;
+  font-size: 15px;
+  font-family: 'Gaegu', cursive;
+  text-align: center;
+}
+
+.content h3 {
+  margin: 4px;
+}
+
+.more {
+  position: absolute;
+  right: 30px;
+  margin-top: 15px;
+  font-size: 13px;
+  font-family: 'Gaegu', cursive;
+}
+
+.star-icon {
+  position: absolute;
+  left: -20px;
+  background: transparent;
+  background-repeat: no-repeat;
+  width: 18px;
+  height: 18px;
+  background-size: 15px 15px;
+}
+
+.cafe-logo {
+  position: absolute;
+  top: -3px;
+  left: -15px;
+  background: transparent;
+  background-repeat: no-repeat;
+  width: 35px;
+  height: 35px;
+  background-size: 30px 30px;
+  opacity: 0.5;
+  z-index: -99;
+}

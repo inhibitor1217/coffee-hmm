@@ -1,0 +1,15 @@
+.pbox {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.cafes {
+  width: 25%;
+}
+
+.street {
+  width: 270px;
+  margin-left: -75px;
+  background-size: 270px 450px;
+}

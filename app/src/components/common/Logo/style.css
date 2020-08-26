@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap');
+
 .logo {
-  font-family: "Arima Madurai", cursive;
-  font-weight: 400;
-  font-size: 24px;
+  font-family: 'Major Mono Display', monospace;
+  font-weight: 500;
+  font-size: 28px;
   line-height: 32px;
   letter-spacing: 0.05em;
 
