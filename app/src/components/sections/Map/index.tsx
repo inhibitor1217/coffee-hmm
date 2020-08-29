@@ -1,6 +1,5 @@
 import React from "react";
 import Cafes from "../Cafes";
-import "./index.css";
 import { CafeInfo } from "../Cafe";
 
 type MapProps = {

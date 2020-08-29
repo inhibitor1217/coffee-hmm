@@ -1,46 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Gaegu&display=swap');
-
-.cafe-image-box {
-  width: 300px;
-  height: 300px;
-  background-image: url(/images/square.png);
-  background-size: 350px 320px;
-  background-repeat: no-repeat;
-  background-position-x: -10px;
-  margin: auto;
+.detail-mainbox {
+  width: 100vw;
+  height: 90vh;
   position: relative;
 }
 
 .cafe-image {
-  width: 200px;
-  height: 200px;
-  margin: auto;
-  background-color: lavender;
+  width: 360px;
+  height: 360px;
+  border: 1px solid #F2F2F2;
+  box-shadow: 0px 1px 9px 1px rgba(199, 198, 198, 0.75);
   position: absolute;
-  top: 55px;
-  left: 50px;
+  top: 140px;
+  text-align: center;
 }
 
-.cafe-detail {
-  position: relative;
+.cafe-basicinfo {
+  width: 250px;
+  height: 100px;
   left: 10px;
-}
-
-.cafe-detail-list {
-  list-style: none;
-  margin: 0px;
-  padding: 0px;
-  max-width: 250px;
-  width: 100%;
-}
-
-.cafe-detail-list li {
-  cursor: pointer;
-  padding-left: 10px;
-  font-size: 18px;
-  font-family: 'Gaegu', cursive;
-}
-
-li span {
-  font-weight: bold;
 }

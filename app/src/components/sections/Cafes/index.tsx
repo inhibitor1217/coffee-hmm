@@ -45,7 +45,7 @@ const Cafes = (props: CafesProps) => {
 
   const imageUri = props.cafes ? `url(/images/red_line.png)` : undefined;
   return (
-    <div className="pbox">
+    <div className="home-mainbox">
       <div className="cafes">
         {props.cafes?.map((cafe, idx) => {
           return (
