@@ -1,0 +1,16 @@
+.category-wrapper {
+  list-style: none;
+  padding-inline-start: 0px;
+  margin-block-start: 0.6em;
+  margin-block-end: 0.2em;
+}
+
+.category {
+  font-weight: bold;
+  float: left;
+}
+
+.categoryname {
+  font-size: 12px;
+  margin-bottom: 6px;
+}

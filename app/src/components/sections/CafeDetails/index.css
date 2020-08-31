@@ -9,13 +9,11 @@
   height: 360px;
   border: 1px solid #F2F2F2;
   box-shadow: 0px 1px 9px 1px rgba(199, 198, 198, 0.75);
-  position: absolute;
-  top: 140px;
   text-align: center;
 }
 
 .cafe-basicinfo {
-  width: 250px;
-  height: 100px;
-  left: 10px;
+  width: 300px;
+  height: 200px;
+  margin: 10px auto;
 }

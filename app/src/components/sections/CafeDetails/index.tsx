@@ -11,12 +11,11 @@ type CafeDetailProps = {
 const CafeDetails = ({ cafe }: CafeDetailProps) => {
   return (
     <div className="detail-mainbox">
-      <div className="cafe-basicinfo">
-        <CafeDetailsText cafe={cafe} />
-      </div>
-
       <div className="cafe-image">
         <CafeImageSlide cafe={cafe} />
+      </div>
+      <div className="cafe-basicinfo">
+        <CafeDetailsText cafe={cafe} />
       </div>
     </div>
   );

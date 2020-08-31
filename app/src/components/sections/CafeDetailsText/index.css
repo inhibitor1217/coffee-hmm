@@ -1,34 +1,24 @@
 @import url("https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&family=Waiting+for+the+Sunrise&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Lora&display=swap');
 
-.top-text {
-  width: 300px;
-  height: 140px;
-  position: relative;
-}
 
-.goto {
-  font-size: 25px;
-  font-weight: 500;
-  font-family: "Waiting for the Sunrise", cursive;
-  transform: rotate(350deg);
-  position: absolute;
-  top: 20px;
-  left: 20px;
-}
-
-.goto-name {
+.cafe-name {
   font-size: 14px;
   font-family: "Noto Serif KR", serif;
-  position: absolute;
-  left: 40px;
-  bottom: 2px;
 }
 
-.bottom-text {
-  width: 100%;
-  padding-left: 30px;
-  margin-top: 10px;
-  position: absolute;
-  top: 500px;
+.menuboard {
+  width: 300px;
+  height: 180px;
+  font-size: 12px;
+  font-family: 'Lora', serif;
+  overflow: hidden;
+}
+
+.menuboard h4 {
+  font-size: 14px;
+  margin-block-start: 0.5em;
+  margin-block-end: 0.2em;
+  border-bottom: 1px solid #E8BF7E;
 }

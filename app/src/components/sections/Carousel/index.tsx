@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
+import "./index.css";
 
 const ScrouselWrapper = styled.div`
   display: flex;
@@ -61,8 +62,14 @@ const Carousel = ({ children }: IProps) => {
         </SCarouselSlides>
       </ScrouselWrapper>
 
-      <button onClick={slideLeft}>Left</button>
-      <button onClick={slideRight}>Right</button>
+      <button
+        className="slide-button slide-button-left"
+        onTouchStart={slideLeft}
+      />
+      <button
+        className="slide-button slide-button-right"
+        onTouchStart={slideRight}
+      />
     </div>
   );
 };

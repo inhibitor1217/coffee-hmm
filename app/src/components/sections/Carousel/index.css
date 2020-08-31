@@ -1,0 +1,23 @@
+.slide-button {
+  width: 160px;
+  height: 350px;
+  z-index: 9999;
+  background-color: transparent;
+  border: none;
+}
+
+.slide-button:focus {
+  outline: transparent;
+}
+
+.slide-button-left {
+  position: absolute;
+  top: 4px;
+  left: 0px;
+}
+
+.slide-button-right {
+  position: absolute;
+  top: 4px;
+  right: 0px;
+}
