@@ -1,7 +1,7 @@
 import React from "react";
 import { CafeInfo } from "../Cafe";
 import SlideOne from "../SlideOne";
-import Carousel from "../Carousel";
+import ImageCarousel from "../ImageCarousel";
 
 type CafeImageSlideProps = {
   cafe: CafeInfo | null;
@@ -13,11 +13,11 @@ const CafeImageSlide = ({ cafe }: CafeImageSlideProps) => {
 
   return (
     <div>
-      <Carousel>
+      <ImageCarousel>
         {cafeImageUris?.map((uri) => {
           return <SlideOne imageUri={"http://" + uri} key={uri} />;
         })}
-      </Carousel>
+      </ImageCarousel>
     </div>
   );
 };

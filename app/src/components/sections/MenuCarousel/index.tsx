@@ -12,7 +12,6 @@ interface ICarouselSlide {
 
 const SCarouselSlide = styled.div<ICarouselSlide>`
   flex: 0 0 auto;
-  opacity: ${(props) => (props.active ? 1 : 0)};
   transition: all 1s ease;
   widht: 100%;
 `;
@@ -26,16 +25,17 @@ const SCarouselSlides = styled.div<ICarouselProps>`
   ${(props) =>
     props.currentSlide &&
     css`
-      transform: translateX(-${props.currentSlide * 360}px);
+      transform: translateX(-${props.currentSlide * 320}px);
     `};
   transition: all 1s ease;
 `;
 
 interface IProps {
   children: JSX.Element[] | undefined;
+  totalSubCategory: number;
 }
 
-const Carousel = ({ children }: IProps) => {
+const MenuCarousel = ({ children, totalSubCategory }: IProps) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   let activeSlide = children?.map((slide, index) => (
@@ -46,12 +46,11 @@ const Carousel = ({ children }: IProps) => {
 
   function slideLeft() {
     setCurrentSlide(
-      (currentSlide - 1 + (activeSlide || []).length) %
-        (activeSlide || []).length
+      (currentSlide - 1 + totalSubCategory) % (totalSubCategory / 2)
     );
   }
   function slideRight() {
-    setCurrentSlide((currentSlide + 1) % (activeSlide || []).length);
+    setCurrentSlide((currentSlide + 1) % (totalSubCategory / 2));
   }
 
   return (
@@ -63,15 +62,15 @@ const Carousel = ({ children }: IProps) => {
       </ScrouselWrapper>
 
       <button
-        className="slide-button slide-button-left"
+        className="Mslide-button Mslide-button-left"
         onTouchStart={slideLeft}
       />
       <button
-        className="slide-button slide-button-right"
+        className="Mslide-button Mslide-button-right"
         onTouchStart={slideRight}
       />
     </div>
   );
 };
 
-export default Carousel;
+export default MenuCarousel;

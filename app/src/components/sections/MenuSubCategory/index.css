@@ -5,13 +5,12 @@
   height: 120px;
   margin-right: 40px;
   float: left;
-  overflow: hidden;
 }
 
 .subcategory-one {
   font-size: 10px;
   font-family: "Noto Serif KR", serif;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   margin-top: 2px;
   position: relative;
 }

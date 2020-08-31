@@ -14,3 +14,20 @@
   font-size: 12px;
   margin-bottom: 6px;
 }
+
+.menu-button {
+  width: 100px;
+  height: 120px;
+}
+
+.menu-button-left {
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+}
+
+.menu-button-right {
+  position: absolute;
+  left: 100px;
+  bottom: 0px;
+}

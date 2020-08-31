@@ -1,6 +1,7 @@
 import React from "react";
 import "./index.css";
 import MenuSubCategory from "../MenuSubCategory";
+import MenuCarousel from "../MenuCarousel";
 
 export type Menus = {
   categories: MenuCategory[];
@@ -23,7 +24,7 @@ type MenuCategoryProps = {
 
 const MenuCategory = ({ menus }: MenuCategoryProps) => {
   let totalWidth = calWidth({ menus });
-  let menuWidth = totalWidth * 180;
+  let menuWidth = totalWidth * 160;
 
   return (
     <div
@@ -33,25 +34,29 @@ const MenuCategory = ({ menus }: MenuCategoryProps) => {
       }}
     >
       <ul className="category-wrapper">
-        {menus.categories.map((category, index) => {
-          let categoryWidth = Math.floor(category.categoryMenu.length / 5) + 1;
-
-          return (
-            <div key={index}>
-              <div className="categoryname">{category.categoryName}</div>
-              <li
-                className="category"
-                key={index}
-                style={{
-                  width: categoryWidth * 160,
-                  height: "120px",
-                }}
-              >
-                {addMenuSection(category, categoryWidth)}
-              </li>
-            </div>
-          );
-        })}
+        <MenuCarousel totalSubCategory={totalWidth}>
+          {menus.categories.map((category, index) => {
+            let categoryWidth = Math.floor(category.categoryMenu.length / 6);
+            return (
+              <div key={index}>
+                <div className="categoryname">{category.categoryName}</div>
+                <li
+                  className="category"
+                  key={index}
+                  style={{
+                    width: (categoryWidth < 1 ? 1 : categoryWidth) * 160,
+                    height: "120px",
+                  }}
+                >
+                  {addMenuSection(
+                    category,
+                    categoryWidth < 1 ? 1 : categoryWidth
+                  )}
+                </li>
+              </div>
+            );
+          })}
+        </MenuCarousel>
       </ul>
     </div>
   );
@@ -60,7 +65,7 @@ const MenuCategory = ({ menus }: MenuCategoryProps) => {
 const calWidth = ({ menus }: MenuCategoryProps) => {
   let totalWidth = 0;
   menus.categories.forEach((category) => {
-    const len = Math.floor(category.categoryMenu.length / 5) + 1;
+    const len = Math.floor(category.categoryMenu.length / 6);
     if (len < 1) {
       totalWidth += 1;
     } else {
