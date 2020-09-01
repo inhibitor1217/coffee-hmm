@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import MainFeed, { CafeInfo } from "../../sections/MainFeed";
 import styled from "styled-components";
 
-const HomeScale = styled.div`
+export const HomeScale = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: 90vh;
   background-color: rgba(var(--b3f, 250, 250, 250), 1);
 `;
 

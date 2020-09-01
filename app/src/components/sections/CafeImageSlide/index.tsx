@@ -20,7 +20,7 @@ const CafeImageSlide = ({ cafe }: CafeImageSlideProps) => {
       <div>
         <ImageCarousel>
           {cafeImageUris?.map((uri) => {
-            return <SlideOne imageUri={"http://" + uri} key={uri} />;
+            return <SlideOne imageUri={"https://" + uri} key={uri} />;
           })}
         </ImageCarousel>
       </div>
