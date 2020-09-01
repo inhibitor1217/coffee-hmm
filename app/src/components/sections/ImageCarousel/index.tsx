@@ -3,6 +3,8 @@ import styled, { css } from "styled-components";
 import "./index.css";
 
 const ScrouselWrapper = styled.div`
+  width: 360px;
+  height: 360px;
   display: flex;
 `;
 
@@ -44,13 +46,13 @@ const ImageCarousel = ({ children }: IProps) => {
     </SCarouselSlide>
   ));
 
-  function MslideLeft() {
+  function slideLeft() {
     setCurrentSlide(
       (currentSlide - 1 + (activeSlide || []).length) %
         (activeSlide || []).length
     );
   }
-  function MslideRight() {
+  function slideRight() {
     setCurrentSlide((currentSlide + 1) % (activeSlide || []).length);
   }
 
@@ -64,11 +66,11 @@ const ImageCarousel = ({ children }: IProps) => {
 
       <button
         className="slide-button slide-button-left"
-        onTouchStart={MslideLeft}
+        onTouchStart={slideLeft}
       />
       <button
         className="slide-button slide-button-right"
-        onTouchStart={MslideRight}
+        onTouchStart={slideRight}
       />
     </div>
   );

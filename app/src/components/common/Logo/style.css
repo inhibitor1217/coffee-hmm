@@ -1,11 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital@1&display=swap');
 
 .logo {
-  font-family: 'Major Mono Display', monospace;
-  font-weight: 500;
-  font-size: 28px;
+  font-family: 'Merriweather', serif;
+  font-weight: 600;
+  font-size: 20px;
   line-height: 32px;
   letter-spacing: 0.05em;
 
-  color: #5d4037;
+  color: #261308;
 }

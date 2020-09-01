@@ -1,7 +1,7 @@
 import React from "react";
-import { CafeInfo } from "../Cafe";
 import "./index.css";
 import MenuCategory from "../MenuCategory";
+import { CafeInfo } from "../MainFeed";
 
 type CafeDetailsProps = {
   cafe: CafeInfo | null;
@@ -98,7 +98,6 @@ let menus = {
 const CafeDetailsText = ({ cafe }: CafeDetailsProps) => {
   return (
     <div>
-      <div className="cafe-name">{cafe?.name}</div>
       <div className="menuboard">
         <h4>Cafe Menu</h4>
         <MenuCategory menus={menus} />

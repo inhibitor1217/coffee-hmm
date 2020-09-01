@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
-import Filter from "../../sections/Filters";
-import Map from "../../sections/Map";
-import "./index.css";
-import { CafeInfo } from "../../sections/Cafe";
+import React, { useEffect, useState } from "react";
+import MainFeed, { CafeInfo } from "../../sections/MainFeed";
+import styled from "styled-components";
+
+const HomeScale = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(var(--b3f, 250, 250, 250), 1);
+`;
 
 export const cafeApiURL =
   "https://ird14dr4ze.execute-api.ap-northeast-2.amazonaws.com/production/cafe";
 
-const HomePage = () => {
-  const [filter, setFilter] = useState<((cafe: CafeInfo) => boolean) | null>(
-    null
-  );
+const MainPage = () => {
   const [cafeApi, setCafeApi] = useState<CafeInfo[] | null>(null);
 
   useEffect(() => {
@@ -25,11 +26,10 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="home-page">
-      <Map cafeList={cafeApi} filter={filter} />
-      <Filter setFilter={setFilter} />
-    </div>
+    <HomeScale>
+      <MainFeed mainCafeList={cafeApi} />
+    </HomeScale>
   );
 };
 
-export default HomePage;
+export default MainPage;

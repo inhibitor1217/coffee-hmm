@@ -44,12 +44,12 @@ const MenuCarousel = ({ children, totalSubCategory }: IProps) => {
     </SCarouselSlide>
   ));
 
-  function slideLeft() {
+  function MslideLeft() {
     setCurrentSlide(
       (currentSlide - 1 + totalSubCategory) % (totalSubCategory / 2)
     );
   }
-  function slideRight() {
+  function MslideRight() {
     setCurrentSlide((currentSlide + 1) % (totalSubCategory / 2));
   }
 
@@ -63,11 +63,11 @@ const MenuCarousel = ({ children, totalSubCategory }: IProps) => {
 
       <button
         className="Mslide-button Mslide-button-left"
-        onTouchStart={slideLeft}
+        onTouchStart={MslideLeft}
       />
       <button
         className="Mslide-button Mslide-button-right"
-        onTouchStart={slideRight}
+        onTouchStart={MslideRight}
       />
     </div>
   );

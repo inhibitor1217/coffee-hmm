@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import HomePage from "./pages/Homepage";
-import CafeDetailPage from "./pages/CafeDetailPage";
+import MainPage from "./pages/Main";
+import DetailPage from "./pages/Detail";
 
 interface RouterProps {
   location?: any;
@@ -10,8 +10,8 @@ interface RouterProps {
 const Router = (props: RouterProps) => {
   return (
     <Switch location={props.location}>
-      <Route path="/" exact render={() => <HomePage />} />
-      <Route path="/cafe/:cafeId" render={() => <CafeDetailPage  />} />
+      <Route path="/" exact render={() => <MainPage />} />
+      <Route path="/cafe/:cafeId" render={() => <DetailPage />} />
       <Redirect to="/" />
     </Switch>
   );
