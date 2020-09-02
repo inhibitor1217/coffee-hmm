@@ -1,0 +1,23 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap");
+
+.subcategory {
+  width: 120px;
+  height: 120px;
+  margin-right: 40px;
+  float: left;
+}
+
+.subcategory-one {
+  font-size: 10px;
+  font-family: "Noto Serif KR", serif;
+  margin-bottom: 4px;
+  margin-top: 2px;
+  position: relative;
+}
+
+
+.menu-price {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}

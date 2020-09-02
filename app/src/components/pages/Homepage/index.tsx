@@ -25,7 +25,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="home">
+    <div className="home-page">
       <Map cafeList={cafeApi} filter={filter} />
       <Filter setFilter={setFilter} />
     </div>
