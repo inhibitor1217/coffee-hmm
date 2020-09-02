@@ -5,8 +5,8 @@ const PreviewWrapper = styled.div`
   height: 100px;
 `;
 
-const PlacePreview = () => {
+const PlacePreviewList = () => {
   return <PreviewWrapper>TODO: add place preview</PreviewWrapper>;
 };
 
-export default PlacePreview;
+export default PlacePreviewList;

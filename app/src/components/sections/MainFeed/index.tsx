@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Post from "../Post";
-import PlacePreview from "../PlacePreview";
+import PlacePreviewList from "../PlacePreviewList";
 
 const MContainer = styled.div`
   display: flex;
@@ -46,7 +46,7 @@ const MainFeed = ({ mainCafeList }: MainFeedProps) => {
   return (
     <MContainer>
       <FeedTop>
-        <PlacePreview />
+        <PlacePreviewList />
       </FeedTop>
 
       {mainCafeList?.map((cafe) => {

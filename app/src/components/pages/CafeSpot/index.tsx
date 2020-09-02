@@ -18,7 +18,7 @@ const CafeSpotPage = () => {
   }, []);
   return (
     <HomeScale>
-      <CafeSpotFeed searchedCafeList={cafeApi} />
+      <CafeSpotFeed searchedCafeList={cafeApi} spotName="판교" />
     </HomeScale>
   );
 };

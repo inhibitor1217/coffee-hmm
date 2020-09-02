@@ -20,7 +20,7 @@ const Header = (props: HeaderProps) => {
       <Link to="/cafe">
         <button>search</button>
       </Link>
-      {props.location.pathname !== ("/" && "/cafe") && (
+      {props.location.pathname !== "/" && props.location.pathname !== "/cafe" && (
         <button className="leading" onClick={() => history.goBack()}>
           <MaterialIcon icon="arrow_back" />
         </button>

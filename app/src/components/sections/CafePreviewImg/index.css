@@ -1,0 +1,13 @@
+.cafe-preview-name {
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.cafe-preview-img {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #BF6D4E;
+  border-radius: 50%;
+  overflow: hidden;
+  display: inline-block;
+}

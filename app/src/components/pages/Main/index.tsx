@@ -5,7 +5,6 @@ import styled from "styled-components";
 export const HomeScale = styled.div`
   width: 100vw;
   height: 90vh;
-  background-color: rgba(var(--b3f, 250, 250, 250), 1);
 `;
 
 export const cafeApiURL =
