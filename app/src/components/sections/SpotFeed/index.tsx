@@ -25,14 +25,15 @@ const SWrapper = styled.div`
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-  align-content: space-around;
+  justify-content: flex-start;
 `;
 
 const SquareBox = styled.span`
   min-width: 118px;
   min-height: 118px;
   border: 1px solid #ffffff;
+  text-align: center;
+  margin: auto;
 `;
 
 type CafeSpotFeedProps = {

@@ -9,13 +9,12 @@ const PreviewWrapper = styled.div`
   padding-bottom: 20px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-  align-content: space-around;
+  justify-content: flex-start;
   background-color: rgba(var(--b3f, 250, 250, 250), 1);
 `;
 
 const PreviewBox = styled.span`
-  min-width: 66px;
+  min-width: 70px;
   min-height: 80px;
   margin-bottom: 12px;
 `;

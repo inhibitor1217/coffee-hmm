@@ -51,7 +51,7 @@ type MainFeedProps = {
   mainCafeList: CafeInfo[] | null;
 };
 
-const handleSubmit = (event: React.SyntheticEvent) => {
+export const handleSubmit = (event: React.SyntheticEvent) => {
   event.preventDefault();
 };
 
@@ -80,7 +80,7 @@ const MainFeed = ({ mainCafeList }: MainFeedProps) => {
         </form>
       </SearchBox>
       <FeedTop>
-        <PlacePreviewList />
+        <PlacePreviewList currentSpot={currentSpot} />
       </FeedTop>
 
       {mainCafeList?.map((cafe) => {

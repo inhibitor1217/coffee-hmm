@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { CafeInfo } from "../../sections/MainFeed";
 import { cafeApiURL, HomeScale } from "../Main";
-import CafeSpotFeed from "../../sections/CafeSpotFeed";
+import CafeSpotFeed from "../../sections/SpotFeed";
 
 const CafeSpotPage = () => {
   const [cafeApi, setCafeApi] = useState<CafeInfo[] | null>(null);
