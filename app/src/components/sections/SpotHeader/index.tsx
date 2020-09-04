@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import "./index.css";
+import MaterialIcon from "../../common/MaterialIcon";
 
 const SpotHeaderWrapper = styled.div`
   min-height: 90px;
@@ -25,9 +26,14 @@ const SpotHeader = ({ spotName }: SpotHeaderProps) => {
           />
         </span>
       </div>
-      <div className="spot-header-name">{spotName}&nbsp;카페 </div>
+      <div className="spot-header-name">
+        {spotName}&nbsp;카페
+        <span className="new-icon">
+          <MaterialIcon icon="fiber_new" />
+        </span>
+      </div>
       <div className="spot-header-button">
-        <button>map</button>
+        <button>거리보기</button>
       </div>
     </SpotHeaderWrapper>
   );

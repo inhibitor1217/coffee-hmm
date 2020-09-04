@@ -1,18 +1,10 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
 import PostContents from "../PostContents";
 import { CafeInfo } from "../MainFeed";
 import { cafeApiURL } from "../../pages/Main";
 
-const ArticleContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  overflow: hidden;
-`;
-
 type PostProps = {
-  cafeId: string;
+  cafeId: string | undefined;
 };
 
 const Post = ({ cafeId }: PostProps) => {
@@ -29,9 +21,9 @@ const Post = ({ cafeId }: PostProps) => {
   }, [cafeId]);
 
   return (
-    <ArticleContainer>
+    <div>
       <PostContents cafe={cafeDetails} />
-    </ArticleContainer>
+    </div>
   );
 };
 

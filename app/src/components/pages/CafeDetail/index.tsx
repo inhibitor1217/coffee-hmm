@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { CafeInfo } from "../../sections/MainFeed";
-import { cafeApiURL } from "../Main";
+import { cafeApiURL, HomeScale } from "../Main";
 import CafeDetailInfo from "../../sections/CafeDetailInfo";
 
 const CafeDetailPage = () => {
@@ -18,9 +18,9 @@ const CafeDetailPage = () => {
     fetchData();
   }, [cafeId]);
   return (
-    <div>
+    <HomeScale>
       <CafeDetailInfo cafe={cafeApi} />
-    </div>
+    </HomeScale>
   );
 };
 

@@ -6,7 +6,7 @@ const PreviewWrapper = styled.div`
 `;
 
 const PlacePreviewList = () => {
-  return <PreviewWrapper>TODO: add place preview</PreviewWrapper>;
+  return <PreviewWrapper></PreviewWrapper>;
 };
 
 export default PlacePreviewList;

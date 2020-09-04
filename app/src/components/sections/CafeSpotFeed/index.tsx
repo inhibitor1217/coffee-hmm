@@ -71,7 +71,7 @@ const CafeSpotFeed = ({ searchedCafeList, spotName }: CafeSpotFeedProps) => {
             )}
           </button>
         </div>
-        <SpotStats />
+        <SpotStats cafes={searchedCafeList} />
       </SpotFeedTop>
       <SWrapper>
         {searchedCafeList?.map((cafe) => {

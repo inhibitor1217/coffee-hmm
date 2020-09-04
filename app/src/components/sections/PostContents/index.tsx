@@ -6,19 +6,29 @@ import PostHeader from "../PostHeader";
 import { CafeInfo } from "../MainFeed";
 import PostIcon from "../PostIcon";
 
-const ImageWrapper = styled.div`
+const ArticleContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  overflow: hidden;
+`;
+
+export const ImageWrapper = styled.div`
+  max-width: 360px;
   box-shadow: 0px 1px 9px 1px rgba(199, 198, 198, 0.75);
   position: relative;
 `;
 
-const TextWrapper = styled.div`
+export const TextWrapper = styled.div`
+  max-width: 360px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
 `;
 
-const IconWrapper = styled.div`
+export const IconWrapper = styled.div`
+  max-width: 360px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -31,8 +41,8 @@ type PostContentsProps = {
 
 const PostContents = ({ cafe }: PostContentsProps) => {
   return (
-    <div>
-      <PostHeader cafeName={cafe?.name} />
+    <ArticleContainer>
+      <PostHeader cafeId={cafe?.id} cafeName={cafe?.name} />
       <ImageWrapper>
         <CafeImageSlide cafe={cafe} />
       </ImageWrapper>
@@ -42,7 +52,7 @@ const PostContents = ({ cafe }: PostContentsProps) => {
       <TextWrapper>
         <CafeDetailsText cafe={cafe} />
       </TextWrapper>
-    </div>
+    </ArticleContainer>
   );
 };
 
