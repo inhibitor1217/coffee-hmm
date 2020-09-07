@@ -5,7 +5,7 @@ const uuid = require('uuid');
 dotenv.config('.env');
 
 const CAFES_TABLE = 'coffee-hmm-server-cafes-production';
-const RESOURCE_BUCKET_URI = 'resource.coffee-hmm.inhibitor.com.s3.amazonaws.com';
+const RESOURCE_BUCKET_URI = 'coffee-hmm-resource.inhibitor.io';
 
 AWS.config.update({
   region: 'ap-northeast-2'
@@ -30,6 +30,10 @@ function createCafe(client, cafe) {
 
 function scanCafes(client) {
   const params = {
+    ExpressionAttributeValues: {
+      ':place': '성수동'
+    },
+    FilterExpression: `place = :place`,
     TableName: CAFES_TABLE
   };
 
@@ -59,18 +63,21 @@ function getCafeItem(client, id) {
   });
 }
 
-// createCafe(documentClient, {
-//   id: uuid.v4(),
-//   name: "Kaldi",
-//   mainImageUri: `${RESOURCE_BUCKET_URI}/IMG_2466.jpg`,
-//   imageUris: [
-//     `${RESOURCE_BUCKET_URI}/IMG_2461.jpg`,
-//     `${RESOURCE_BUCKET_URI}/IMG_2462.jpg`,
-//     `${RESOURCE_BUCKET_URI}/IMG_2463.jpg`,
-//     `${RESOURCE_BUCKET_URI}/IMG_2464.jpg`,
-//     `${RESOURCE_BUCKET_URI}/IMG_2466.jpg`,
-//     `${RESOURCE_BUCKET_URI}/IMG_2469.jpg`,
-//   ]
-// });
-// scanCafes(documentClient);
-getCafeItem(documentClient, '3b71a51f-5e14-4860-80bc-7226c33d9c4b');
+function deleteItem(client, id) {
+  const params = {
+    TableName: CAFES_TABLE,
+    Key: {
+      id: id
+    }
+  };
+
+  client.delete(params, function(err, data) {
+    if (err) {
+      console.error(JSON.stringify(err, null, 2));
+    } else {
+      console.log(JSON.stringify(data, null, 2));
+    }
+  });
+}
+
+scanCafes(documentClient);

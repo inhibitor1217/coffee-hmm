@@ -7,9 +7,19 @@ const documentClient = new AWS.DynamoDB.DocumentClient();
 const CAFES_TABLE = 'coffee-hmm-server-cafes-production';
 
 module.exports.cafeListHandler = (event, context, callback) => {
-  const params = {
+  const { place = null } = event.queryStringParameters || {};
+
+  const params = place ? {
+    TableName: CAFES_TABLE,
+    ExpressionAttributeValues: {
+      ':place': place
+    },
+    FilterExpression: 'place = :place'
+  } : {
     TableName: CAFES_TABLE
   };
+
+  console.log(params);
 
   documentClient.scan(
     params,
