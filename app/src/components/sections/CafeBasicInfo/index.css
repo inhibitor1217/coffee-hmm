@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital@1&family=Noto+Sans+KR&display=swap');
+
+
+.binfo-cafe-name {
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+  padding-top: 4px;
+  display: inline;
+  position: absolute;
+  top: 4px;
+
+}
+
+.binfo-cafe-intro {
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'Noto Sans KR', sans-serif;
+  padding: 4px 10px;
+  display: inline-block;
+  position: absolute;
+  top: 4px;
+  left: 80px;
+}

@@ -20,7 +20,6 @@ const SlideOne = ({ imageUri }: SlideOneProps) => {
         style={{
           width: "360px",
           height: "360px",
-          textAlign: "center",
         }}
       />
     </SContainer>

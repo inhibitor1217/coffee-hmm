@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
-import { CafeInfo } from "../../sections/Cafe";
-import { cafeApiURL } from "../Homepage";
-import CafeDetails from "../../sections/CafeDetails";
+import { CafeInfo } from "../../sections/MainFeed";
+import { cafeApiURL } from "../Main";
+import CafeDetailInfo from "../../sections/CafeDetailInfo";
 
 const CafeDetailPage = () => {
   const { cafeId }: { cafeId: string } = useParams();
   const [cafeApi, setCafeApi] = useState<CafeInfo | null>(null);
+
   useEffect(() => {
     async function fetchData() {
       await fetch(cafeApiURL + `/${cafeId}`)
@@ -18,7 +19,7 @@ const CafeDetailPage = () => {
   }, [cafeId]);
   return (
     <div>
-      <CafeDetails cafe={cafeApi} />
+      <CafeDetailInfo cafe={cafeApi} />
     </div>
   );
 };
