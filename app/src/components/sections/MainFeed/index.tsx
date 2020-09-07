@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import Post from "../Post";
 import PlacePreviewList from "../PlacePreviewList";
 import { Menus } from "../MenuCategory";
+import Post from "../PostContents";
 
 const MContainer = styled.div`
   display: flex;
@@ -34,6 +34,7 @@ export type PlaceInfo = {
 export type CafeInfo = {
   id: string;
   name: string;
+  place: string;
   imageUris: string[];
   mainImageUri: string;
   americanoPrice: number;
@@ -42,37 +43,34 @@ export type CafeInfo = {
 };
 
 type MainFeedProps = {
-  mainCafeList: CafeInfo[] | null;
+  cafeList: CafeInfo[] | null;
 };
 
-const MainFeed = ({ mainCafeList }: MainFeedProps) => {
+const getPlaceCategories = (cafeList: CafeInfo[] | null) => {
+  const placeSet = new Set<string>();
+  cafeList?.forEach((cafe) => {
+    placeSet.add(cafe.place);
+  });
+  const placeArray = [...placeSet];
+  return placeArray;
+};
+
+const MainFeed = ({ cafeList }: MainFeedProps) => {
   return (
     <MContainer>
       <FeedTop>
-        <PlacePreviewList placeCategories={popularPlaces} />
+        <PlacePreviewList places={getPlaceCategories(cafeList)} />
       </FeedTop>
 
-      {mainCafeList?.map((cafe) => {
+      {cafeList?.map((cafe) => {
         return (
           <FeedBox key={cafe.id}>
-            <Post cafeId={cafe.id} />
+            <Post cafe={cafe} />
           </FeedBox>
         );
       })}
     </MContainer>
   );
 };
-
-let popularPlaces = [
-  "한남",
-  "연남",
-  "성수",
-  "건대입구",
-  "강남",
-  "잠실",
-  "남양주",
-  "샤로수길",
-  "판교",
-];
 
 export default MainFeed;

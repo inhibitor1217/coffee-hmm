@@ -1,46 +1,35 @@
-import React from "react";
-import { HomeScale } from "../Main";
+import React, { useState, useEffect } from "react";
+import { HomeScale, cafeApiURL } from "../Main";
 import PlaceGuide from "../../sections/PlaceGuide";
+import { CafeInfo } from "../../sections/MainFeed";
 
 const PlaceListPage = () => {
+  const [cafeApi, setCafeApi] = useState<CafeInfo[] | null>(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      await fetch(cafeApiURL)
+        .then((response) => response.json())
+        .then((jsonData) => JSON.stringify(jsonData))
+        .then((jsonStr) => setCafeApi(JSON.parse(jsonStr)))
+        .catch((error) => console.log("Error: ", error));
+    }
+    fetchData();
+  }, []);
+
+  const placeSet = new Set<string>();
+
+  cafeApi?.forEach((cafe) => {
+    placeSet.add(cafe.place);
+  });
+
+  const placeCategories = [...placeSet];
+
   return (
     <HomeScale>
-      <PlaceGuide placeCategories={popularPlaces} />
+      <PlaceGuide placeCategories={placeCategories} />
     </HomeScale>
   );
 };
-
-export let popularPlaces = [
-  "한남",
-  "연남",
-  "성수",
-  "건대입구",
-  "강남",
-  "잠실",
-  "남양주",
-  "샤로수길",
-  "판교",
-  "한남",
-  "연남",
-  "성수",
-  "건대입구",
-  "강남",
-  "잠실",
-  "남양주",
-  "샤로수길",
-  "판교",
-  "한남",
-  "연남",
-  "성수",
-  "건대입구",
-  "강남",
-  "잠실",
-  "남양주",
-  "샤로수길",
-  "판교",
-  "한남",
-  "연남",
-  "성수",
-];
 
 export default PlaceListPage;

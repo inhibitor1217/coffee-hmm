@@ -2,24 +2,24 @@ import React, { useState } from "react";
 import { CafeInfo } from "../MainFeed";
 import SquareArrange from "../SquareArrange";
 import styled from "styled-components";
-import SpotHeader from "../SpotHeader";
+import PlaceHeader from "../PlaceHeader";
 import CafePreviewList from "../CafePreviewList";
-import SpotStats from "../SpotStats";
+import PlaceStats from "../PlaceStats";
 import MaterialIcon from "../../common/MaterialIcon";
 import "./index.css";
 
-const SContainer = styled.div`
+const PContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
 `;
 
-const SpotFeedTop = styled.div`
+const PlaceFeedTop = styled.div`
   width: 360px;
   margin: 0 auto;
 `;
 
-const SWrapper = styled.div`
+const PWrapper = styled.div`
   width: 360px;
   border: 1px solid #dbdbdb;
   margin: 0 auto;
@@ -35,18 +35,18 @@ const SquareBox = styled.span`
   text-align: center;
 `;
 
-type CafeSpotFeedProps = {
+type PlaceFeedProps = {
   searchedCafeList: CafeInfo[] | null;
   spotName: string;
 };
 
-const CafeSpotFeed = ({ searchedCafeList, spotName }: CafeSpotFeedProps) => {
+const PlaceFeed = ({ searchedCafeList, spotName }: PlaceFeedProps) => {
   const [isToggleOn, setToggle] = useState<boolean>(true);
 
   return (
-    <SContainer>
-      <SpotFeedTop>
-        <SpotHeader spotName={spotName} />
+    <PContainer>
+      <PlaceFeedTop>
+        <PlaceHeader spotName={spotName} />
         <div
           className="preview-box"
           style={{
@@ -71,9 +71,9 @@ const CafeSpotFeed = ({ searchedCafeList, spotName }: CafeSpotFeedProps) => {
             )}
           </button>
         </div>
-        <SpotStats cafes={searchedCafeList} />
-      </SpotFeedTop>
-      <SWrapper>
+        <PlaceStats cafes={searchedCafeList} />
+      </PlaceFeedTop>
+      <PWrapper>
         {searchedCafeList?.map((cafe) => {
           return (
             <SquareBox key={cafe.id}>
@@ -81,9 +81,9 @@ const CafeSpotFeed = ({ searchedCafeList, spotName }: CafeSpotFeedProps) => {
             </SquareBox>
           );
         })}
-      </SWrapper>
-    </SContainer>
+      </PWrapper>
+    </PContainer>
   );
 };
 
-export default CafeSpotFeed;
+export default PlaceFeed;

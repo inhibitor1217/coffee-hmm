@@ -25,10 +25,10 @@ export const handleSubmit = (event: React.SyntheticEvent) => {
 const Header = (props: HeaderProps) => {
   const history = useHistory();
 
-  const [currentSpot, setCurrentSpot] = useState<string | undefined>("");
+  const [currentPlace, setCurrentPlace] = useState<string | undefined>("");
 
   const handleChange = (event: React.SyntheticEvent) => {
-    setCurrentSpot((event.target as HTMLTextAreaElement).value);
+    setCurrentPlace((event.target as HTMLTextAreaElement).value);
   };
 
   return (
@@ -41,11 +41,11 @@ const Header = (props: HeaderProps) => {
           <input
             type="text"
             placeholder="search"
-            value={currentSpot}
+            value={currentPlace}
             onChange={handleChange}
             className="search-box"
           />
-          <Link to={`/${currentSpot}`}>
+          <Link to={`/place=${currentPlace}`}>
             <button type="submit" className="search-button"></button>
           </Link>
         </form>

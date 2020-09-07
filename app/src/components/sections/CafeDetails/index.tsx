@@ -18,7 +18,7 @@ type CafeDetailInfoProps = {
   cafe: CafeInfo | null;
 };
 
-const CafeDetailInfo = ({ cafe }: CafeDetailInfoProps) => {
+const CafeDetails = ({ cafe }: CafeDetailInfoProps) => {
   return (
     <DetailContainer>
       <PostHeader cafeId={cafe?.id} cafeName={cafe?.name} />
@@ -37,4 +37,4 @@ const CafeDetailInfo = ({ cafe }: CafeDetailInfoProps) => {
   );
 };
 
-export default CafeDetailInfo;
+export default CafeDetails;

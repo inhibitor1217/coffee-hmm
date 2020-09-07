@@ -23,10 +23,10 @@ const TextBox = styled.span`
 `;
 
 type PlacePreviewListProps = {
-  placeCategories: string[];
+  places: string[];
 };
 
-const PlacePreviewList = ({ placeCategories }: PlacePreviewListProps) => {
+const PlacePreviewList = ({ places }: PlacePreviewListProps) => {
   return (
     <PreviewWrapper>
       <div className="place-preview-header">
@@ -36,11 +36,11 @@ const PlacePreviewList = ({ placeCategories }: PlacePreviewListProps) => {
         </Link>
       </div>
       <TextWrapper>
-        {placeCategories.map((spot) => {
+        {places?.map((place) => {
           return (
-            <TextBox key={spot}>
-              <Link to={`/${spot}`} className="place-preview-text">
-                # {spot}카페
+            <TextBox key={place}>
+              <Link to={`/place=${place}`} className="place-preview-text">
+                # {place}카페
               </Link>
             </TextBox>
           );

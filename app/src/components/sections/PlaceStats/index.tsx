@@ -20,13 +20,13 @@ type SpotStatsProps = {
 const calAvgAmericanoPrice = (cafes: CafeInfo[] | null) => {
   let sum = 0;
   cafes?.map((cafe) => {
-    sum += cafe.americanoPrice;
+    sum += Number(cafe.americanoPrice);
   });
 
   return ((sum / (cafes?.length || 1)) * 0.001).toFixed(1);
 };
 
-const SpotStats = ({ cafes }: SpotStatsProps) => {
+const PlaceStats = ({ cafes }: SpotStatsProps) => {
   return (
     <SpotStatsWrapper>
       <div className="spot-stat">
@@ -42,4 +42,4 @@ const SpotStats = ({ cafes }: SpotStatsProps) => {
   );
 };
 
-export default SpotStats;
+export default PlaceStats;

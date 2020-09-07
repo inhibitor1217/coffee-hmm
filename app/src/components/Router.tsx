@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import MainPage from "./pages/Main";
-import CafeSpotPage from "./pages/CafeSpot";
+import CafeSpotPage from "./pages/Place";
 import CafeDetailPage from "./pages/CafeDetail";
 import PlaceListPage from "./pages/PlaceList";
 
@@ -14,7 +14,7 @@ const Router = (props: RouterProps) => {
     <Switch location={props.location}>
       <Route path="/" exact render={() => <MainPage />} />
       <Route path="/cafe/:cafeId" render={() => <CafeDetailPage />} />
-      <Route path="/cafe" render={() => <CafeSpotPage />} />
+      <Route path="/place=:place" render={() => <CafeSpotPage />} />
       <Route path="/places" render={() => <PlaceListPage />} />
 
       <Redirect to="/" />

@@ -39,7 +39,7 @@ type PostContentsProps = {
   cafe: CafeInfo | null;
 };
 
-const PostContents = ({ cafe }: PostContentsProps) => {
+const Post = ({ cafe }: PostContentsProps) => {
   return (
     <ArticleContainer>
       <PostHeader cafeId={cafe?.id} cafeName={cafe?.name} />
@@ -56,4 +56,4 @@ const PostContents = ({ cafe }: PostContentsProps) => {
   );
 };
 
-export default PostContents;
+export default Post;

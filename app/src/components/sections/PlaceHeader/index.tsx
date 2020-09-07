@@ -13,7 +13,7 @@ type SpotHeaderProps = {
   spotName: string;
 };
 
-const SpotHeader = ({ spotName }: SpotHeaderProps) => {
+const PlaceHeader = ({ spotName }: SpotHeaderProps) => {
   return (
     <SpotHeaderWrapper>
       <div>
@@ -39,4 +39,4 @@ const SpotHeader = ({ spotName }: SpotHeaderProps) => {
   );
 };
 
-export default SpotHeader;
+export default PlaceHeader;
