@@ -1,17 +1,11 @@
-.favorite-icon {
-  width: 24px;
-  height: 24px;
-  color: rgba(0, 0, 0, 0.56);
+.favorite {
   margin: 2px;
   position: absolute;
   top: 6px;
   left: 5px;
 }
 
-.chat-icon {
-  width: 24px;
-  height: 24px;
-  color: rgba(0, 0, 0, 0.56);
+.chat {
   margin: 2px;
   position: absolute;
   top: 7px;

@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import "./index.css";
+import MaterialIcon from "../../common/MaterialIcon";
 
 const IconsContainer = styled.div`
   width: 360px;
@@ -10,8 +11,20 @@ const IconsContainer = styled.div`
 const PostIcon = () => {
   return (
     <IconsContainer>
-      <span className="material-icons favorite-icon">favorite_border</span>
-      <span className="material-icons chat-icon">chat_bubble_outline</span>
+      <span className="favorite">
+        <MaterialIcon
+          icon="favorite_border"
+          size={24}
+          color="rgba(0, 0, 0, 0.56)"
+        />
+      </span>
+      <span className="chat">
+        <MaterialIcon
+          icon="chat_bubble_outline"
+          size={24}
+          color="rgba(0, 0, 0, 0.56)"
+        />
+      </span>
     </IconsContainer>
   );
 };

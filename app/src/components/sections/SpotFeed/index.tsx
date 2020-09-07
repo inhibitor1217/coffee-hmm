@@ -33,7 +33,6 @@ const SquareBox = styled.span`
   min-height: 118px;
   border: 1px solid #ffffff;
   text-align: center;
-  margin: auto;
 `;
 
 type CafeSpotFeedProps = {

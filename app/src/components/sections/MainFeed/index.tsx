@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import Post from "../Post";
 import PlacePreviewList from "../PlacePreviewList";
-import { Link } from "react-router-dom";
-import "./index.css";
+import { Menus } from "../MenuCategory";
 
 const MContainer = styled.div`
   display: flex;
@@ -11,6 +10,7 @@ const MContainer = styled.div`
   justify-content: center;
   flex-direction: column;
 `;
+
 const FeedTop = styled.div`
   width: 360px;
   border: 1px solid #dbdbdb;
@@ -26,61 +26,30 @@ const FeedBox = styled.div`
   flex: 0 0 360px;
 `;
 
-const SearchBox = styled.div`
-  z-index: 9999;
-  position: absolute;
-  top: 12px;
-  left: 35%;
-`;
+export type PlaceInfo = {
+  placeCategory: string;
+  cafes: CafeInfo[];
+};
 
 export type CafeInfo = {
   id: string;
   name: string;
   imageUris: string[];
   mainImageUri: string;
-  lat: number;
-  lng: number;
   americanoPrice: number;
   floor: number;
-  specialMenu: string;
-  specialMenuPrice: number;
-  logo: boolean;
+  menus: Menus;
 };
 
 type MainFeedProps = {
   mainCafeList: CafeInfo[] | null;
 };
 
-export const handleSubmit = (event: React.SyntheticEvent) => {
-  event.preventDefault();
-};
-
 const MainFeed = ({ mainCafeList }: MainFeedProps) => {
-  const [currentSpot, setCurrentSpot] = useState<string | undefined>();
-
-  const searchSpot = (event: React.SyntheticEvent) => {
-    setCurrentSpot((event.target as HTMLTextAreaElement).value);
-  };
-
   return (
     <MContainer>
-      <SearchBox>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="search"
-            value={currentSpot}
-            onChange={searchSpot}
-            onKeyPress={searchSpot}
-            className="search-box"
-          />
-          <Link to={`/${currentSpot}`}>
-            <button type="submit" className="search-button"></button>
-          </Link>
-        </form>
-      </SearchBox>
       <FeedTop>
-        <PlacePreviewList currentSpot={currentSpot} />
+        <PlacePreviewList placeCategories={popularPlaces} />
       </FeedTop>
 
       {mainCafeList?.map((cafe) => {
@@ -93,5 +62,17 @@ const MainFeed = ({ mainCafeList }: MainFeedProps) => {
     </MContainer>
   );
 };
+
+let popularPlaces = [
+  "한남",
+  "연남",
+  "성수",
+  "건대입구",
+  "강남",
+  "잠실",
+  "남양주",
+  "샤로수길",
+  "판교",
+];
 
 export default MainFeed;

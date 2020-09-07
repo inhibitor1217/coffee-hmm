@@ -31,3 +31,13 @@ header button.leading {
   width: 32px;
   height: 32px;
 }
+
+.search-box {
+  border: 1px solid #dbdbdb;
+  text-align: center;
+}
+
+.search-button {
+  background-color: transparent;
+  border-color: transparent;
+}

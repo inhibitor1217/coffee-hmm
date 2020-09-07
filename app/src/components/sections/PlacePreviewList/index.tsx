@@ -23,17 +23,22 @@ const TextBox = styled.span`
 `;
 
 type PlacePreviewListProps = {
-  currentSpot: string | undefined;
+  placeCategories: string[];
 };
 
-const PlacePreviewList = ({ currentSpot }: PlacePreviewListProps) => {
+const PlacePreviewList = ({ placeCategories }: PlacePreviewListProps) => {
   return (
     <PreviewWrapper>
-      <div className="place-preview-header">Suggested for you..</div>
+      <div className="place-preview-header">
+        Suggested for you..
+        <Link to="/places">
+          <span className="place-preview-more">more</span>
+        </Link>
+      </div>
       <TextWrapper>
-        {popularPlaces.map((spot) => {
+        {placeCategories.map((spot) => {
           return (
-            <TextBox>
+            <TextBox key={spot}>
               <Link to={`/${spot}`} className="place-preview-text">
                 # {spot}카페
               </Link>
@@ -44,17 +49,5 @@ const PlacePreviewList = ({ currentSpot }: PlacePreviewListProps) => {
     </PreviewWrapper>
   );
 };
-
-let popularPlaces = [
-  "한남",
-  "연남",
-  "성수",
-  "건대입구",
-  "강남",
-  "잠실",
-  "남양주",
-  "샤로수길",
-  "판교",
-];
 
 export default PlacePreviewList;
