@@ -33,7 +33,7 @@ const PlaceStats = ({ cafes }: SpotStatsProps) => {
         Cafe <br /> {cafes?.length}
       </div>
       <div className="spot-stat">
-        Photo <br /> 100
+        New <br /> 2
       </div>
       <div className="spot-stat">
         Americano <br /> {calAvgAmericanoPrice(cafes)}

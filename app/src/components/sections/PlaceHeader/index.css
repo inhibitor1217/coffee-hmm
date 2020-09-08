@@ -4,21 +4,9 @@
   font-size: 24px;
   font-weight: 500;
   font-family: 'Noto Sans KR', sans-serif;
-  display: inline;
-  position: absolute;
-  top: 16px;
-  left: 120px;
-}
-
-.spot-header-icon {
-  width: 70px;
-  height: 70px;
-  border: 4px solid rgba(var(--b3f, 250, 250, 250), 1);
-  border-radius: 50%;
-  overflow: hidden;
-  display: inline-block;
-  margin: 4px;
-  margin-right: 28px;
+  text-align: center;
+  padding-top: 12px;
+  padding-right: 14px;
 }
 
 .spot-header-icon img {
@@ -33,22 +21,24 @@
 }
 
 .spot-header-button button {
-  font-size: 14px;
+  font-size: 12px;
   font-family: 'Noto Sans KR', sans-serif;
   height: 26px;
   padding: 0 10px;
   margin-left: 4px;
   background-color: #fafafa;
   border-radius: 4px;
-  border: 1px solid rgb(170, 170, 170);
-  box-shadow: 0px 0px 2px 0px rgba(143, 137, 143, 1);
+  border: 1px solid #dbdbdb;
+  box-shadow: 0px 0px 1px 0px rgba(143, 137, 143, 1);
 }
 
 .spot-header-button button:focus {
   outline: transparent;
 }
 
-.new-icon {
-  margin-left: 4px;
+.place-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 12px;
   color: #C8D265;
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import "./index.css";
-import MenuSubCategory from "../MenuSubCategory";
+import MenuSubCategory, { menusPerSubcategory } from "../MenuSubCategory";
 import MenuCarousel from "../MenuCarousel";
 
 export type Menus = {
@@ -22,36 +22,38 @@ type MenuCategoryProps = {
   menus: Menus | undefined;
 };
 
+const fixedSubcategoryAreaWidth = 160;
+const fixedSubcategoryAreaHeight = 120;
+const fixedMenuAreaHeight = 140;
+
 const MenuCategory = ({ menus }: MenuCategoryProps) => {
-  let totalWidth = calWidth({ menus });
-  let menuWidth = totalWidth * 160;
+  let totalSubcategoryNum = getTotalSubcategoryNum({ menus });
+  let neededMenuWidth = totalSubcategoryNum * fixedSubcategoryAreaWidth;
 
   return (
     <div
       style={{
-        width: menuWidth,
-        height: "140px",
+        width: neededMenuWidth,
+        height: fixedMenuAreaHeight,
       }}
     >
       <ul className="category-wrapper">
-        <MenuCarousel totalSubCategory={totalWidth}>
+        <MenuCarousel totalSubCategory={totalSubcategoryNum}>
           {menus?.categories?.map((category, index) => {
-            let categoryWidth = Math.floor(category.categoryMenu.length / 6);
+            const subPerCategory = getSubPerCategory(category);
+
             return (
               <div key={index}>
                 <div className="categoryname">{category.categoryName}</div>
                 <li
-                  className="category"
+                  className="category-one"
                   key={index}
                   style={{
-                    width: (categoryWidth < 1 ? 1 : categoryWidth) * 160,
-                    height: "120px",
+                    width: subPerCategory * fixedSubcategoryAreaWidth,
+                    height: fixedSubcategoryAreaHeight,
                   }}
                 >
-                  {addMenuSection(
-                    category,
-                    categoryWidth < 1 ? 1 : categoryWidth
-                  )}
+                  {OneCategoryArea(category, subPerCategory)}
                 </li>
               </div>
             );
@@ -62,31 +64,40 @@ const MenuCategory = ({ menus }: MenuCategoryProps) => {
   );
 };
 
-const calWidth = ({ menus }: MenuCategoryProps) => {
-  let totalWidth = 0;
-  menus?.categories?.forEach((category) => {
-    const len = Math.floor(category.categoryMenu.length / 6);
-    if (len < 1) {
-      totalWidth += 1;
-    } else {
-      totalWidth += len;
-    }
-  });
-  return totalWidth;
+const getSubPerCategory = (category: MenuCategory) => {
+  const menusPerCategory = category.categoryMenu.length;
+
+  const subsPerCategory = Math.floor(menusPerCategory / menusPerSubcategory);
+
+  if (subsPerCategory < 1) {
+    return 1;
+  } else {
+    return subsPerCategory;
+  }
 };
 
-const addMenuSection = (c: MenuCategory, w: number) => {
-  let menuArray = [];
-  for (let index = 0; index < w; index++) {
-    menuArray.push(
+const getTotalSubcategoryNum = ({ menus }: MenuCategoryProps) => {
+  let totalSubcategoryNum = 0;
+
+  menus?.categories?.forEach((category) => {
+    totalSubcategoryNum += getSubPerCategory(category);
+  });
+
+  return totalSubcategoryNum;
+};
+
+const OneCategoryArea = (category: MenuCategory, subcategoryNum: number) => {
+  let totalMenusPerCategory = [];
+  for (let index = 0; index < subcategoryNum; index++) {
+    totalMenusPerCategory.push(
       <MenuSubCategory
-        categoryMenu={c.categoryMenu}
+        categoryMenu={category.categoryMenu}
         index={index}
         key={index}
       />
     );
   }
-  return menuArray;
+  return totalMenusPerCategory;
 };
 
 export default MenuCategory;
