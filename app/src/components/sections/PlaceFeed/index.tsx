@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { CafeInfo } from "../MainFeed";
-import SquareArrange from "../SquareArrange";
 import styled from "styled-components";
 import PlaceHeader from "../PlaceHeader";
 import CafePreviewList from "../CafePreviewList";
 import PlaceStats from "../PlaceStats";
 import MaterialIcon from "../../common/MaterialIcon";
 import "./index.css";
+import SquareArrange from "../SquareArrange";
+import NoresultForm from "../NoresultForm";
 
 const PContainer = styled.div`
   display: flex;
@@ -37,16 +38,18 @@ const SquareBox = styled.span`
 
 type PlaceFeedProps = {
   searchedCafeList: CafeInfo[] | null;
-  spotName: string;
+  placeName: string;
 };
 
-const PlaceFeed = ({ searchedCafeList, spotName }: PlaceFeedProps) => {
+const PlaceFeed = ({ searchedCafeList, placeName }: PlaceFeedProps) => {
   const [isToggleOn, setToggle] = useState<boolean>(true);
-
+  if (searchedCafeList === null) {
+    return <NoresultForm data={placeName} />;
+  }
   return (
     <PContainer>
       <PlaceFeedTop>
-        <PlaceHeader spotName={spotName} />
+        <PlaceHeader placeName={placeName} />
         <div
           className="preview-box"
           style={{
@@ -74,7 +77,7 @@ const PlaceFeed = ({ searchedCafeList, spotName }: PlaceFeedProps) => {
         <PlaceStats cafes={searchedCafeList} />
       </PlaceFeedTop>
       <PWrapper>
-        {searchedCafeList?.map((cafe) => {
+        {searchedCafeList.map((cafe) => {
           return (
             <SquareBox key={cafe.id}>
               <SquareArrange cafeId={cafe.id} cafeImg={cafe.mainImageUri} />

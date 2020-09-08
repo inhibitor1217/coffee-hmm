@@ -21,7 +21,7 @@ const CafeSpotPage = () => {
 
   return (
     <HomeScale>
-      <PlaceFeed searchedCafeList={cafeApi} spotName={place} />
+      <PlaceFeed searchedCafeList={cafeApi} placeName={place} />
     </HomeScale>
   );
 };

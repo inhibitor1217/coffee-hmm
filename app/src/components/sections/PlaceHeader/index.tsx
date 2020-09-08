@@ -2,27 +2,27 @@ import React from "react";
 import styled from "styled-components";
 import "./index.css";
 
-const SpotHeaderWrapper = styled.div`
+const PlaceHeaderWrapper = styled.div`
   min-height: 80px;
   margin: 30px 16px;
   position: relative;
 `;
 
-type SpotHeaderProps = {
-  spotName: string;
+type PlaceHeaderProps = {
+  placeName: string;
 };
 
-const PlaceHeader = ({ spotName }: SpotHeaderProps) => {
+const PlaceHeader = ({ placeName }: PlaceHeaderProps) => {
   return (
-    <SpotHeaderWrapper>
+    <PlaceHeaderWrapper>
       <div className="spot-header-name">
         <span className="material-icons-outlined place-icon">place</span>
-        {spotName}
+        {placeName}
       </div>
       <div className="spot-header-button">
         <button>거리보기</button>
       </div>
-    </SpotHeaderWrapper>
+    </PlaceHeaderWrapper>
   );
 };
 
