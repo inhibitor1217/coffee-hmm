@@ -2,8 +2,8 @@
 
 
 .binfo-cafe-name {
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 600;
   font-family: 'Noto Sans KR', sans-serif;
   padding-top: 4px;
   display: inline;
@@ -13,8 +13,7 @@
 }
 
 .binfo-cafe-intro {
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 13px;
   font-family: 'Noto Sans KR', sans-serif;
   padding: 4px 10px;
   display: inline-block;

@@ -8,14 +8,14 @@ import styled from "styled-components";
 const InfoContainer = styled.div`
   width: 300px;
   height: 40px;
-  padding-bottom: 10px;
+  padding-bottom: 24px;
 `;
 
 const MenuContainer = styled.div`
   width: 300px;
-  height: 200px;
-  margin-bottom: 10px;
+  height: 180px;
   overflow: hidden;
+  padding-bottom: 20px;
 `;
 
 type CafeDetailsProps = {
@@ -29,7 +29,7 @@ const CafeDetailsText = ({ cafe }: CafeDetailsProps) => {
         <CafeBasicInfo cafe={cafe} />
       </InfoContainer>
       <MenuContainer className="menu-container">
-        <h4 className="menu-header">Cafe Menu</h4>
+        <h4 className="menu-header">카페 메뉴</h4>
         <MenuCategory menus={cafe?.menus} />
       </MenuContainer>
     </div>

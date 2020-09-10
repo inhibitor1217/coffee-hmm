@@ -14,13 +14,15 @@ const ArticleContainer = styled.div`
 `;
 
 export const ImageWrapper = styled.div`
-  max-width: 360px;
+  width: 360px;
+  margin: auto;
   box-shadow: 0px 1px 9px 1px rgba(199, 198, 198, 0.75);
   position: relative;
 `;
 
 export const TextWrapper = styled.div`
-  max-width: 360px;
+  width: 360px;
+  margin: auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,7 +30,8 @@ export const TextWrapper = styled.div`
 `;
 
 export const IconWrapper = styled.div`
-  max-width: 360px;
+  width: 360px;
+  margin: auto;
   display: flex;
   align-items: center;
   justify-content: center;

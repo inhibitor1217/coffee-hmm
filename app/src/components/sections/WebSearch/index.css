@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital@1&family=Noto+Sans+KR&display=swap');
+
+.web-search-text {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-block-start: 0.5em;
+  margin-block-end: 0.2em;
+}
+
+.web-button button {
+  width: 100px;
+  height: 46px;
+  margin: 8px auto;
+  background-color: #fafafa;
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+}
+
+img {
+  text-align: center;
+  margin: auto;
+  padding: auto;
+}

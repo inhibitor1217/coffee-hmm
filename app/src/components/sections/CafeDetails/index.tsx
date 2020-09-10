@@ -6,12 +6,18 @@ import CafeImageSlide from "../CafeImageSlide";
 import PostIcon from "../PostIcon";
 import CafeDetailsText from "../CafeDetailsText";
 import { ImageWrapper, IconWrapper, TextWrapper } from "../PostContents";
+import WebSearch from "../WebSearch";
 
 const DetailContainer = styled.div`
   display: flex;
   align-items: stretch;
   justify-content: center;
   flex-direction: column;
+`;
+
+const WebSearchWrapper = styled.div`
+  width: 300px;
+  margin: 0 auto;
 `;
 
 type CafeDetailInfoProps = {
@@ -31,8 +37,9 @@ const CafeDetails = ({ cafe }: CafeDetailInfoProps) => {
       <TextWrapper>
         <CafeDetailsText cafe={cafe} />
       </TextWrapper>
-      <div>내용 추가</div>
-      <div>내용 추가</div>
+      <WebSearchWrapper>
+        <WebSearch cafe={cafe} />
+      </WebSearchWrapper>
     </DetailContainer>
   );
 };
