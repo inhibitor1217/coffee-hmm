@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import "./index.css";
 import { Link } from "react-router-dom";
+import MainPopupContent from "../MainPopupContents";
+import { CafeInfo } from "../MainFeed";
+import DetailPopupContent from "../DetailPopupContents";
 
 const HeaderWrapper = styled.div`
   height: 54px;
@@ -9,27 +12,61 @@ const HeaderWrapper = styled.div`
 `;
 
 type PostHeaderProps = {
-  cafeId: string | undefined;
-  cafeName: string | undefined;
+  cafe: CafeInfo | null;
+  fromDetail: boolean;
 };
 
-const PostHeader = ({ cafeId, cafeName }: PostHeaderProps) => {
+const PostHeader = ({ cafe, fromDetail }: PostHeaderProps) => {
+  const [popupActive, setPopupActive] = useState<boolean>(false);
+  const showPopup = () => {
+    setPopupActive(true);
+  };
+  const closePopup = () => {
+    setPopupActive(false);
+  };
+
   return (
     <HeaderWrapper>
       <div className="cafe-header-icon-box">
         <span className="cafe-header-icon">
           <img
-            src="/images/coffee-hmm-192x192.png"
-            alt={cafeName}
+            src={"https://" + cafe?.mainImageUri}
+            alt={cafe?.name}
             width="32px"
             height="32px"
           />
         </span>
       </div>
-      <Link to={`/cafe/${cafeId}`}>
-        <div className="cafe-header-name">{cafeName}</div>
+      <Link to={`/cafe/${cafe?.id}`}>
+        <div className="cafe-header-name">{cafe?.name}</div>
       </Link>
-      <span className="material-icons cafe-header-menu">more_horiz</span>
+      <span
+        className="material-icons cafe-header-menu click-here"
+        onClick={showPopup}
+      >
+        more_horiz
+      </span>
+      <div
+        className={
+          popupActive ? "pop-up-container container-open" : "pop-up-container"
+        }
+      >
+        <div className="pop-up-wrap">
+          <div className="close-btn" onClick={closePopup}>
+            close
+          </div>
+          <div className="pop-up-box">
+            <div className="pop-up-content-wrap">
+              {fromDetail ? (
+                <DetailPopupContent cafe={cafe} />
+              ) : (
+                <MainPopupContent cafe={cafe} />
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="bg-overlay" onClick={closePopup}></div>
+      </div>
     </HeaderWrapper>
   );
 };

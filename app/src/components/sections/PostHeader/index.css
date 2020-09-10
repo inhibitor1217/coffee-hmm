@@ -37,3 +37,120 @@
   right: 12px;
   bottom: 14px;
 }
+
+.click-here {
+  cursor: pointer;
+}
+
+.pop-up-container {
+  text-align: center;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  -webkit-overflow-scrolling: touch;
+  outline: 0;
+  opacity: 0;
+  -webkit-transition: opacity 0.15s linear, z-index 0.15;
+  -o-transition: opacity 0.15s linear, z-index 0.15;
+  transition: opacity 0.15s linear, z-index 0.15;
+  z-index: -1;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.container-open {
+  z-index: 99999;
+  opacity: 1;
+  overflow: hidden;
+}
+
+.pop-up-wrap {
+  -webkit-transform: translate(0, -25%);
+  -ms-transform: translate(0, -25%);
+  transform: translate(0, -25%);
+  -webkit-transition: -webkit-transform 0.3s ease-out;
+  -o-transition: -o-transform 0.3s ease-out;
+  transition: -webkit-transform 0.3s ease-out;
+  -o-transition: transform 0.3s ease-out;
+  transition: transform 0.3s ease-out;
+  transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
+  display: inline-block;
+  vertical-align: middle;
+  width: 260px;
+  margin: 30px auto;
+  max-width: 97%;
+}
+
+.pop-up-box {
+  display: block;
+  width: 100%;
+  margin-top: 120px;
+  background-color: #fafafa;
+  position: relative;
+  border-radius: 12px;
+  -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  background-clip: padding-box;
+  outline: 0;
+  text-align: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  max-height: calc(100vh - 70px);
+  overflow-y: auto;
+}
+
+.container-open .pop-up-wrap {
+  -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  transform: translate(0, 0);
+  position: relative;
+  z-index: 999;
+}
+
+.container-open .bg-overlay {
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 99;
+}
+
+.bg-overlay {
+  background: rgba(0, 0, 0, 0);
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+}
+
+.close-btn {
+  position: absolute;
+  right: 10px;
+  top: 100px;
+  cursor: pointer;
+  z-index: 99;
+  font-size: 14px;
+  color: #fafafa;
+}
+
+@media screen and (min-width:800px) {
+  .pop-up-container:before {
+    content: "";
+    display: inline-block;
+    height: auto;
+    vertical-align: middle;
+    margin-right: -0px;
+    height: 100%;
+  }
+}
+
+@media screen and (max-width:799px) {
+  .pop-up-wrap {
+    margin-top: 45px;
+  }
+}

@@ -9,14 +9,6 @@ const InfoContainer = styled.div`
   width: 300px;
   min-height: 40px;
   padding-bottom: 14px;
-  display: flex;
-  align-items: stretch;
-  flex-direction: column;
-`;
-
-export const BasicInfoBox = styled.div`
-  display: flex;
-  padding-bottom: 8px;
 `;
 
 const MenuContainer = styled.div`
@@ -26,19 +18,15 @@ const MenuContainer = styled.div`
   padding-bottom: 14px;
 `;
 
-type CafeDetailsProps = {
+type PostTextProps = {
   cafe: CafeInfo | null;
 };
 
-const CafeDetailsText = ({ cafe }: CafeDetailsProps) => {
+const PostText = ({ cafe }: PostTextProps) => {
   return (
     <div>
       <InfoContainer>
         <CafeBasicInfo cafe={cafe} />
-        <BasicInfoBox>
-          <span className="binfo-time">OPEN</span>
-          <span className="binfo-value"> 8:00 ~ 19:00</span>
-        </BasicInfoBox>
       </InfoContainer>
       <MenuContainer className="menu-container">
         <h4 className="menu-header">카페 메뉴</h4>
@@ -48,4 +36,4 @@ const CafeDetailsText = ({ cafe }: CafeDetailsProps) => {
   );
 };
 
-export default CafeDetailsText;
+export default PostText;

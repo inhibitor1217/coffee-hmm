@@ -1,12 +1,12 @@
 import React from "react";
 import { CafeInfo } from "../MainFeed";
 import styled from "styled-components";
-import PostHeader from "../PostHeader";
 import CafeImageSlide from "../CafeImageSlide";
 import PostIcon from "../PostIcon";
 import CafeDetailsText from "../CafeDetailsText";
 import { ImageWrapper, IconWrapper, TextWrapper } from "../PostContents";
 import WebSearch from "../WebSearch";
+import PostHeader from "../PostHeader";
 
 const DetailContainer = styled.div`
   display: flex;
@@ -27,7 +27,7 @@ type CafeDetailInfoProps = {
 const CafeDetails = ({ cafe }: CafeDetailInfoProps) => {
   return (
     <DetailContainer>
-      <PostHeader cafeId={cafe?.id} cafeName={cafe?.name} />
+      <PostHeader cafe={cafe} fromDetail={true} />
       <ImageWrapper>
         <CafeImageSlide cafe={cafe} />
       </ImageWrapper>

@@ -1,10 +1,10 @@
 import React from "react";
 import CafeImageSlide from "../CafeImageSlide";
-import CafeDetailsText from "../CafeDetailsText";
 import styled from "styled-components";
 import PostHeader from "../PostHeader";
 import { CafeInfo } from "../MainFeed";
 import PostIcon from "../PostIcon";
+import PostText from "../PostText";
 
 const ArticleContainer = styled.div`
   display: flex;
@@ -45,7 +45,7 @@ type PostContentsProps = {
 const Post = ({ cafe }: PostContentsProps) => {
   return (
     <ArticleContainer>
-      <PostHeader cafeId={cafe?.id} cafeName={cafe?.name} />
+      <PostHeader cafe={cafe} fromDetail={false} />
       <ImageWrapper>
         <CafeImageSlide cafe={cafe} />
       </ImageWrapper>
@@ -53,7 +53,7 @@ const Post = ({ cafe }: PostContentsProps) => {
         <PostIcon />
       </IconWrapper>
       <TextWrapper>
-        <CafeDetailsText cafe={cafe} />
+        <PostText cafe={cafe} />
       </TextWrapper>
     </ArticleContainer>
   );
