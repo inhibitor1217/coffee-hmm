@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import PlacePreviewList from "../PlacePreviewList";
 import { Menus } from "../MenuCategory";
-import Post from "../PostContents";
+import Post from "../MainPostContents";
 
 const MContainer = styled.div`
   display: flex;

@@ -18,13 +18,6 @@ const PostIcon = () => {
           color="rgba(0, 0, 0, 0.56)"
         />
       </span>
-      <span className="chat">
-        <MaterialIcon
-          icon="chat_bubble_outline"
-          size={24}
-          color="rgba(0, 0, 0, 0.56)"
-        />
-      </span>
     </IconsContainer>
   );
 };

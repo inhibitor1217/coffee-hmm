@@ -12,12 +12,12 @@
 
 .Mslide-button-left {
   position: absolute;
-  bottom: 24px;
+  bottom: 0px;
   left: 0px;
 }
 
 .Mslide-button-right {
   position: absolute;
-  bottom: 24px;
+  bottom: 0px;
   right: 0px;
 }

@@ -2,7 +2,7 @@ import React from "react";
 import { CafeInfo } from "../MainFeed";
 import "./index.css";
 import styled from "styled-components";
-import { BasicInfoBox } from "../CafeDetailsText";
+import { InfoRow } from "../CafeDetails";
 
 const BasicInfoWrapper = styled.div`
   display: flex;
@@ -17,7 +17,7 @@ type CafeBasicInfoProps = {
 const CafeBasicInfo = ({ cafe }: CafeBasicInfoProps) => {
   return (
     <BasicInfoWrapper>
-      <BasicInfoBox>
+      <InfoRow>
         <span className="binfo-name">{cafe?.name}</span>
         <span className="binfo-value">
           오늘도 정상영업 합니다:) <br />
@@ -25,7 +25,7 @@ const CafeBasicInfo = ({ cafe }: CafeBasicInfoProps) => {
           오늘도 정상영업 합니다:) <br />
           오늘도 정상영업 합니다:)
         </span>
-      </BasicInfoBox>
+      </InfoRow>
     </BasicInfoWrapper>
   );
 };

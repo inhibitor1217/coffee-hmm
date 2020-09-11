@@ -1,5 +1,5 @@
 import React from "react";
-import SlideOne from "../SlideOne";
+import SlideOne from "../ImageSlideOne";
 import ImageCarousel from "../ImageCarousel";
 import { CafeInfo } from "../MainFeed";
 
