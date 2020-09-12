@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import "./index.css";
+import { Link } from "react-router-dom";
 
 const HeaderWrapper = styled.div`
   height: 54px;
@@ -8,10 +9,11 @@ const HeaderWrapper = styled.div`
 `;
 
 type PostHeaderProps = {
+  cafeId: string | undefined;
   cafeName: string | undefined;
 };
 
-const PostHeader = ({ cafeName }: PostHeaderProps) => {
+const PostHeader = ({ cafeId, cafeName }: PostHeaderProps) => {
   return (
     <HeaderWrapper>
       <div className="cafe-header-icon-box">
@@ -24,7 +26,9 @@ const PostHeader = ({ cafeName }: PostHeaderProps) => {
           />
         </span>
       </div>
-      <div className="cafe-header-name">{cafeName}</div>
+      <Link to={`/cafe/${cafeId}`}>
+        <div className="cafe-header-name">{cafeName}</div>
+      </Link>
       <span className="material-icons cafe-header-menu">more_horiz</span>
     </HeaderWrapper>
   );

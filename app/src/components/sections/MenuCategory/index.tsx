@@ -4,7 +4,7 @@ import MenuSubCategory from "../MenuSubCategory";
 import MenuCarousel from "../MenuCarousel";
 
 export type Menus = {
-  categories: MenuCategory[];
+  categories: MenuCategory[] | null;
 };
 
 export type MenuCategory = {
@@ -19,7 +19,7 @@ export type MenuPrice = {
 };
 
 type MenuCategoryProps = {
-  menus: Menus;
+  menus: Menus | undefined;
 };
 
 const MenuCategory = ({ menus }: MenuCategoryProps) => {
@@ -35,7 +35,7 @@ const MenuCategory = ({ menus }: MenuCategoryProps) => {
     >
       <ul className="category-wrapper">
         <MenuCarousel totalSubCategory={totalWidth}>
-          {menus.categories.map((category, index) => {
+          {menus?.categories?.map((category, index) => {
             let categoryWidth = Math.floor(category.categoryMenu.length / 6);
             return (
               <div key={index}>
@@ -64,7 +64,7 @@ const MenuCategory = ({ menus }: MenuCategoryProps) => {
 
 const calWidth = ({ menus }: MenuCategoryProps) => {
   let totalWidth = 0;
-  menus.categories.forEach((category) => {
+  menus?.categories?.forEach((category) => {
     const len = Math.floor(category.categoryMenu.length / 6);
     if (len < 1) {
       totalWidth += 1;

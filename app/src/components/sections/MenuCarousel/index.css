@@ -1,5 +1,5 @@
 .Mslide-button {
-  width: 120px;
+  width: 50px;
   height: 150px;
   z-index: 9999;
   background-color: transparent;
@@ -12,12 +12,12 @@
 
 .Mslide-button-left {
   position: absolute;
-  bottom: 4px;
+  bottom: 24px;
   left: 0px;
 }
 
 .Mslide-button-right {
   position: absolute;
-  bottom: 4px;
+  bottom: 24px;
   right: 0px;
 }

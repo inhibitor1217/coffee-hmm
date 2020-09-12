@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { HomeScale, cafeApiURL } from "../Main";
+import PlaceGuide from "../../sections/PlaceGuide";
 import { CafeInfo } from "../../sections/MainFeed";
-import { cafeApiURL, HomeScale } from "../Main";
-import CafeSpotFeed from "../../sections/CafeSpotFeed";
 
-const CafeSpotPage = () => {
+const PlaceListPage = () => {
   const [cafeApi, setCafeApi] = useState<CafeInfo[] | null>(null);
 
   useEffect(() => {
@@ -11,16 +11,25 @@ const CafeSpotPage = () => {
       await fetch(cafeApiURL)
         .then((response) => response.json())
         .then((jsonData) => JSON.stringify(jsonData))
-        .then((jsonStr) => setCafeApi(JSON.parse(jsonStr).Items))
+        .then((jsonStr) => setCafeApi(JSON.parse(jsonStr)))
         .catch((error) => console.log("Error: ", error));
     }
     fetchData();
   }, []);
+
+  const placeSet = new Set<string>();
+
+  cafeApi?.forEach((cafe) => {
+    placeSet.add(cafe.place);
+  });
+
+  const placeCategories = [...placeSet];
+
   return (
     <HomeScale>
-      <CafeSpotFeed searchedCafeList={cafeApi} />
+      <PlaceGuide placeCategories={placeCategories} />
     </HomeScale>
   );
 };
 
-export default CafeSpotPage;
+export default PlaceListPage;

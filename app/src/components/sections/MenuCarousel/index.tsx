@@ -44,13 +44,15 @@ const MenuCarousel = ({ children, totalSubCategory }: IProps) => {
     </SCarouselSlide>
   ));
 
+  const subInOneSlide = 2;
+
   function MslideLeft() {
     setCurrentSlide(
-      (currentSlide - 1 + totalSubCategory) % (totalSubCategory / 2)
+      (currentSlide - 1 + totalSubCategory) % (totalSubCategory / subInOneSlide)
     );
   }
   function MslideRight() {
-    setCurrentSlide((currentSlide + 1) % (totalSubCategory / 2));
+    setCurrentSlide((currentSlide + 1) % (totalSubCategory / subInOneSlide));
   }
 
   return (

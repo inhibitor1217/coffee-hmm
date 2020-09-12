@@ -5,7 +5,6 @@ import styled from "styled-components";
 export const HomeScale = styled.div`
   width: 100vw;
   height: 90vh;
-  background-color: rgba(var(--b3f, 250, 250, 250), 1);
 `;
 
 export const cafeApiURL =
@@ -19,7 +18,7 @@ const MainPage = () => {
       await fetch(cafeApiURL)
         .then((response) => response.json())
         .then((jsonData) => JSON.stringify(jsonData))
-        .then((jsonStr) => setCafeApi(JSON.parse(jsonStr).Items))
+        .then((jsonStr) => setCafeApi(JSON.parse(jsonStr)))
         .catch((error) => console.log("Error: ", error));
     }
     fetchData();
@@ -27,7 +26,7 @@ const MainPage = () => {
 
   return (
     <HomeScale>
-      <MainFeed mainCafeList={cafeApi} />
+      <MainFeed cafeList={cafeApi} />
     </HomeScale>
   );
 };

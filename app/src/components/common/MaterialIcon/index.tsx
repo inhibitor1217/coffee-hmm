@@ -4,6 +4,7 @@ import "./style.css";
 interface MaterialIconProps {
   icon: string;
   size?: number;
+  color?: string;
 }
 
 const MaterialIcon = (props: MaterialIconProps) => {
