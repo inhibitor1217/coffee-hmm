@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import "./index.css";
 import { CafeInfo } from "../MainFeed";
-import { openNaverApp } from "../WebSearch";
+import { openSearch } from "../WebSearch";
 import { Link } from "react-router-dom";
 
 export const PopupWrapper = styled.div`
@@ -30,7 +30,9 @@ const MainPopup = ({ cafe }: MainPopupProps) => {
       >
         링크 복사
       </button>
-      <button onClick={() => openNaverApp(cafe?.name + " " + cafe?.place)}>
+      <button
+        onClick={() => openSearch(cafe?.name + " " + cafe?.place, "Naver")}
+      >
         네이버 검색
       </button>
       <button>인스타그램 검색</button>

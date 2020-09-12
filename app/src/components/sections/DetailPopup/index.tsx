@@ -1,7 +1,7 @@
 import React from "react";
 import "./index.css";
 import { CafeInfo } from "../MainFeed";
-import { openNaverApp } from "../WebSearch";
+import { openSearch } from "../WebSearch";
 import { Link } from "react-router-dom";
 import { PopupWrapper, linkCopied } from "../MainPopup";
 
@@ -23,7 +23,9 @@ const DetailPopup = ({ cafe }: DetailPopupProps) => {
       >
         링크 복사
       </button>
-      <button onClick={() => openNaverApp(cafe?.name + " " + cafe?.place)}>
+      <button
+        onClick={() => openSearch(cafe?.name + " " + cafe?.place, "Naver")}
+      >
         네이버 검색
       </button>
       <button>인스타그램 검색</button>

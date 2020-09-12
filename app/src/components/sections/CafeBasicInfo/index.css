@@ -12,3 +12,9 @@
   font-family: 'Noto Sans KR', sans-serif;
   margin-right: 8px;
 }
+
+.binfo-name-a a {
+  max-height: 14px;
+  text-decoration: none;
+  color: #000000;
+}

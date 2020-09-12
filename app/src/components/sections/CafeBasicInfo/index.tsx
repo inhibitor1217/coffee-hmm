@@ -3,6 +3,7 @@ import { CafeInfo } from "../MainFeed";
 import "./index.css";
 import styled from "styled-components";
 import { InfoRow } from "../CafeDetails";
+import { Link } from "react-router-dom";
 
 const BasicInfoWrapper = styled.div`
   display: flex;
@@ -17,8 +18,10 @@ type CafeBasicInfoProps = {
 const CafeBasicInfo = ({ cafe }: CafeBasicInfoProps) => {
   return (
     <BasicInfoWrapper>
-      <InfoRow>
-        <span className="binfo-name">{cafe?.name}</span>
+      <InfoRow className="binfo-name-a">
+        <Link to={`/cafe/${cafe?.id}`}>
+          <span className="binfo-name">{cafe?.name}</span>
+        </Link>
         <span className="binfo-value">
           오늘도 정상영업 합니다:) <br />
           오늘도 정상영업 합니다:) <br />
