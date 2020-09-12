@@ -47,12 +47,9 @@ type MainFeedProps = {
 };
 
 const getPlaceCategories = (cafeList: CafeInfo[] | null) => {
-  const placeSet = new Set<string>();
-  cafeList?.forEach((cafe) => {
-    placeSet.add(cafe.place);
-  });
-  const placeArray = [...placeSet];
-  return placeArray;
+  const placeArray = cafeList?.map((cafe) => cafe.place);
+  const placeSet = new Set<string>(placeArray);
+  return [...placeSet];
 };
 
 const MainFeed = ({ cafeList }: MainFeedProps) => {

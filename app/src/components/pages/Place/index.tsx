@@ -4,7 +4,7 @@ import { cafeApiURL, HomeScale } from "../Main";
 import { useParams } from "react-router";
 import PlaceFeed from "../../sections/PlaceFeed";
 
-const CafeSpotPage = () => {
+const CafePlacePage = () => {
   const { place }: { place: string } = useParams();
   const [cafeApi, setCafeApi] = useState<CafeInfo[] | null>(null);
 
@@ -26,4 +26,4 @@ const CafeSpotPage = () => {
   );
 };
 
-export default CafeSpotPage;
+export default CafePlacePage;

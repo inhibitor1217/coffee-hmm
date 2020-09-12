@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import "./index.css";
 import MaterialIcon from "../../common/MaterialIcon";
+import { Link } from "react-router-dom";
 
 const PContainer = styled.div`
   display: flex;
@@ -42,7 +43,7 @@ const PlaceGuide = ({ placeCategories }: PlaceGuideProps) => {
         {placeCategories.map((place, index) => {
           return (
             <PlaceBox className="place-guide-text" key={index}>
-              #{place}카페
+              <Link to={`place/${place}`}>#{place}카페</Link>
             </PlaceBox>
           );
         })}

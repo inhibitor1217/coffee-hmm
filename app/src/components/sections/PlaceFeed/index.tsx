@@ -60,11 +60,7 @@ const PlaceFeed = ({ searchedCafeList, placeName }: PlaceFeedProps) => {
           <button
             className="toggle-button"
             onClick={() => {
-              if (isToggleOn) {
-                setToggle(false);
-              } else {
-                setToggle(true);
-              }
+              setToggle((isToggleOn) => !isToggleOn);
             }}
           >
             {isToggleOn ? (

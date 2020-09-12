@@ -27,8 +27,8 @@ const Header = (props: HeaderProps) => {
 
   const [currentPlace, setCurrentPlace] = useState<string | undefined>("");
 
-  const handleChange = (event: React.SyntheticEvent) => {
-    setCurrentPlace((event.target as HTMLTextAreaElement).value);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCurrentPlace(event.currentTarget.value);
   };
 
   return (
@@ -45,7 +45,7 @@ const Header = (props: HeaderProps) => {
             onChange={handleChange}
             className="search-box"
           />
-          <Link to={`/place=${currentPlace}`}>
+          <Link to={`/place/${currentPlace}`}>
             <button type="submit" className="search-button"></button>
           </Link>
         </form>
