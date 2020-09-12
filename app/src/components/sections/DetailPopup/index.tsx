@@ -3,13 +3,13 @@ import "./index.css";
 import { CafeInfo } from "../MainFeed";
 import { openNaverApp } from "../WebSearch";
 import { Link } from "react-router-dom";
-import { PopupWrapper, linkCopied } from "../MainPopupContents";
+import { PopupWrapper, linkCopied } from "../MainPopup";
 
-type DetailPopupContentProps = {
+type DetailPopupProps = {
   cafe: CafeInfo | null;
 };
 
-const DetailPopupContent = ({ cafe }: DetailPopupContentProps) => {
+const DetailPopup = ({ cafe }: DetailPopupProps) => {
   return (
     <PopupWrapper className="pu-content-wrap">
       <button className="into-place">
@@ -31,4 +31,4 @@ const DetailPopupContent = ({ cafe }: DetailPopupContentProps) => {
   );
 };
 
-export default DetailPopupContent;
+export default DetailPopup;

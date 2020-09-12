@@ -12,11 +12,11 @@ export const PopupWrapper = styled.div`
   flex-direction: column;
 `;
 
-type MainPopupContentProps = {
+type MainPopupProps = {
   cafe: CafeInfo | null;
 };
 
-const MainPopupContent = ({ cafe }: MainPopupContentProps) => {
+const MainPopup = ({ cafe }: MainPopupProps) => {
   return (
     <PopupWrapper className="pu-content-wrap">
       <button className="into-cafe">
@@ -42,4 +42,4 @@ export const linkCopied = (currentLink: string) => {
   window.confirm(currentLink + "\n 링크 복사");
 };
 
-export default MainPopupContent;
+export default MainPopup;

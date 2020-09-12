@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import "./index.css";
 import { Link } from "react-router-dom";
-import MainPopupContent from "../MainPopupContents";
+import MainPopup from "../MainPopup";
 import { CafeInfo } from "../MainFeed";
-import DetailPopupContent from "../DetailPopupContents";
+import DetailPopup from "../DetailPopup";
 
 const HeaderWrapper = styled.div`
   height: 54px;
@@ -58,9 +58,9 @@ const PostHeader = ({ cafe, fromDetail }: PostHeaderProps) => {
           <div className="pop-up-box">
             <div className="pop-up-content-wrap">
               {fromDetail ? (
-                <DetailPopupContent cafe={cafe} />
+                <DetailPopup cafe={cafe} />
               ) : (
-                <MainPopupContent cafe={cafe} />
+                <MainPopup cafe={cafe} />
               )}
             </div>
           </div>

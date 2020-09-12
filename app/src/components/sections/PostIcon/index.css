@@ -1,13 +1,36 @@
-.favorite {
+.favorite-icon {
   margin: 2px;
   position: absolute;
   top: 6px;
   left: 5px;
 }
 
-.chat {
+.save-icon {
+  width: 22px;
+  height: 20px;
+  color: rgba(0, 0, 0, 0.56);
   margin: 2px;
   position: absolute;
-  top: 7px;
+  top: 6px;
   left: 40px;
+}
+
+.save-pop-up-box {
+  background-color: #fafafa;
+  border-radius: 0px;
+  margin-top: 0px;
+}
+
+.save-pop-up-wrap {
+  width: 360px;
+}
+
+.save-close-btn {
+  position: absolute;
+  right: 2px;
+  top: -20px;
+  cursor: pointer;
+  z-index: 99;
+  font-size: 14px;
+  color: #fafafa;
 }

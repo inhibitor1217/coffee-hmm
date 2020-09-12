@@ -13,11 +13,11 @@ import {
 import CafeBasicInfo from "../CafeBasicInfo";
 import MenuCategory from "../MenuCategory";
 
-type PostContentsProps = {
+type MainPostProps = {
   cafe: CafeInfo | null;
 };
 
-const Post = ({ cafe }: PostContentsProps) => {
+const MainPost = ({ cafe }: MainPostProps) => {
   return (
     <DetailContainer>
       <PostHeader cafe={cafe} fromDetail={false} />
@@ -25,7 +25,7 @@ const Post = ({ cafe }: PostContentsProps) => {
         <CafeImageSlide cafe={cafe} />
       </ImageWrapper>
       <IconWrapper>
-        <PostIcon />
+        <PostIcon cafe={cafe} />
       </IconWrapper>
       <CafeInfoWrapper>
         <CafeBasicInfo cafe={cafe} />
@@ -38,4 +38,4 @@ const Post = ({ cafe }: PostContentsProps) => {
   );
 };
 
-export default Post;
+export default MainPost;

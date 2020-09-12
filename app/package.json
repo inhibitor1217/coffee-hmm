@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@types/styled-components": "^5.1.2",
+    "html2canvas": "^1.0.0-rc.7",
     "react": "^16.13.1",
     "react-device-detect": "^1.13.1",
     "react-dom": "^16.13.1",

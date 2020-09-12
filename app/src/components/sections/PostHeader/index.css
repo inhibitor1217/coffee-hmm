@@ -130,7 +130,7 @@
 
 .close-btn {
   position: absolute;
-  right: 10px;
+  right: 2px;
   top: 100px;
   cursor: pointer;
   z-index: 99;

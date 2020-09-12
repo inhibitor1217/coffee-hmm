@@ -33,7 +33,7 @@ export const IconWrapper = styled.div`
 `;
 
 export const CafeInfoWrapper = styled.div`
-  width: 300px;
+  width: 320px;
   margin: 0 auto;
   padding-bottom: 14px;
   display: flex;
@@ -47,7 +47,7 @@ export const InfoRow = styled.div`
 `;
 
 export const MenuContainer = styled.div`
-  width: 300px;
+  width: 320px;
   min-height: 180px;
   overflow: hidden;
   padding-bottom: 14px;
@@ -66,7 +66,7 @@ const CafeDetails = ({ cafe }: CafeDetailInfoProps) => {
         <CafeImageSlide cafe={cafe} />
       </ImageWrapper>
       <IconWrapper>
-        <PostIcon />
+        <PostIcon cafe={cafe} />
       </IconWrapper>
       <CafeInfoWrapper>
         <CafeBasicInfo cafe={cafe} />

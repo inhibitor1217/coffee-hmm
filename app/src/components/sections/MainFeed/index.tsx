@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import PlacePreviewList from "../PlacePreviewList";
 import { Menus } from "../MenuCategory";
-import Post from "../MainPostContents";
+import MainPost from "../MainPost";
 
 const MContainer = styled.div`
   display: flex;
@@ -65,7 +65,7 @@ const MainFeed = ({ cafeList }: MainFeedProps) => {
       {cafeList?.map((cafe) => {
         return (
           <FeedBox key={cafe.id}>
-            <Post cafe={cafe} />
+            <MainPost cafe={cafe} />
           </FeedBox>
         );
       })}

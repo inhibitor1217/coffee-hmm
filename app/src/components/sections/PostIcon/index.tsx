@@ -1,23 +1,57 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import "./index.css";
 import MaterialIcon from "../../common/MaterialIcon";
+import ImageSavePopup from "../ImageSavePopup";
+import { CafeInfo } from "../MainFeed";
 
 const IconsContainer = styled.div`
   width: 360px;
   height: 40px;
 `;
 
-const PostIcon = () => {
+type PostIconProps = {
+  cafe: CafeInfo | null;
+};
+
+const PostIcon = ({ cafe }: PostIconProps) => {
+  const [popupActive, setPopupActive] = useState<boolean>(false);
+  const showPopup = () => {
+    setPopupActive(true);
+  };
+  const closePopup = () => {
+    setPopupActive(false);
+  };
+
   return (
     <IconsContainer>
-      <span className="favorite">
+      <span className="favorite-icon">
         <MaterialIcon
           icon="favorite_border"
           size={24}
           color="rgba(0, 0, 0, 0.56)"
         />
       </span>
+      <span className="material-icons-outlined save-icon" onClick={showPopup}>
+        perm_media
+      </span>
+      <div
+        className={
+          popupActive ? "pop-up-container container-open" : "pop-up-container"
+        }
+      >
+        <div className="pop-up-wrap save-pop-up-wrap">
+          <div className="save-close-btn" onClick={closePopup}>
+            close
+          </div>
+          <div className="pop-up-box save-pop-up-box">
+            <div className="pop-up-content-wrap">
+              <ImageSavePopup cafe={cafe} />
+            </div>
+          </div>
+        </div>
+        <div className="bg-overlay" onClick={closePopup}></div>
+      </div>
     </IconsContainer>
   );
 };
