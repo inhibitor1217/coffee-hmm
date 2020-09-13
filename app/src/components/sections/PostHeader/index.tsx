@@ -71,4 +71,8 @@ const PostHeader = ({ cafe, fromDetail }: PostHeaderProps) => {
   );
 };
 
+export const copiedLink = (cafeName: string | undefined) => {
+  window.confirm(cafeName + "\nHmm link copied!");
+};
+
 export default PostHeader;

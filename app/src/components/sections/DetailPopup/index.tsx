@@ -3,26 +3,25 @@ import "./index.css";
 import { CafeInfo } from "../MainFeed";
 import { openSearch } from "../WebSearch";
 import { Link } from "react-router-dom";
-import { PopupWrapper, linkCopied } from "../MainPopup";
+import { PopupWrapper } from "../MainPopup";
+import CopyToClipboard from "react-copy-to-clipboard";
+import { copiedLink } from "../PostHeader";
 
 type DetailPopupProps = {
   cafe: CafeInfo | null;
 };
 
 const DetailPopup = ({ cafe }: DetailPopupProps) => {
+  const currentLink = `https://coffee-hmm.inhibitor.io/cafe/${cafe?.id}`;
+
   return (
     <PopupWrapper className="pu-content-wrap">
       <button className="into-place">
         <Link to={`/place=${cafe?.place}`}> {cafe?.place} 검색</Link>
       </button>
-      <button
-        onClick={() => {
-          const currentLink = `https://coffee-hmm.inhibitor.io/cafe/${cafe?.id}`;
-          linkCopied(currentLink);
-        }}
-      >
-        링크 복사
-      </button>
+      <CopyToClipboard text={currentLink}>
+        <button onClick={() => copiedLink(cafe?.name)}>링크 복사</button>
+      </CopyToClipboard>
       <button
         onClick={() => openSearch(cafe?.name + " " + cafe?.place, "Naver")}
       >
