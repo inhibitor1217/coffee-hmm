@@ -53,8 +53,6 @@
   -webkit-overflow-scrolling: touch;
   outline: 0;
   opacity: 0;
-  -webkit-transition: opacity 0.15s linear, z-index 0.15;
-  -o-transition: opacity 0.15s linear, z-index 0.15;
   transition: opacity 0.15s linear, z-index 0.15;
   z-index: -1;
   overflow-x: hidden;
@@ -68,15 +66,8 @@
 }
 
 .pop-up-wrap {
-  -webkit-transform: translate(0, -25%);
-  -ms-transform: translate(0, -25%);
   transform: translate(0, -25%);
-  -webkit-transition: -webkit-transform 0.3s ease-out;
-  -o-transition: -o-transform 0.3s ease-out;
-  transition: -webkit-transform 0.3s ease-out;
-  -o-transition: transform 0.3s ease-out;
   transition: transform 0.3s ease-out;
-  transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
   display: inline-block;
   vertical-align: middle;
   width: 260px;
@@ -91,21 +82,16 @@
   background-color: #fafafa;
   position: relative;
   border-radius: 12px;
-  -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
   box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
   background-clip: padding-box;
   outline: 0;
   text-align: left;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
   max-height: calc(100vh - 70px);
   overflow-y: auto;
 }
 
 .container-open .pop-up-wrap {
-  -webkit-transform: translate(0, 0);
-  -ms-transform: translate(0, 0);
   transform: translate(0, 0);
   position: relative;
   z-index: 999;
@@ -153,4 +139,17 @@
   .pop-up-wrap {
     margin-top: 45px;
   }
+}
+
+.post-back-button {
+  position: absolute;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  left: 8px;
+  top: 50%;
+  transform: translate(0, -50%);
+  padding: 4px;
+  width: 32px;
+  height: 32px;
 }

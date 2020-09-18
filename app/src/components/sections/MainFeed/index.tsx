@@ -3,6 +3,8 @@ import styled from "styled-components";
 import PlacePreviewList from "../PlacePreviewList";
 import { Menus } from "../MenuCategory";
 import MainPost from "../MainPost";
+import "./index.css";
+import MaterialIcon from "../../common/MaterialIcon";
 
 const MContainer = styled.div`
   display: flex;
@@ -55,17 +57,21 @@ const getPlaceCategories = (cafeList: CafeInfo[] | null) => {
 const MainFeed = ({ cafeList }: MainFeedProps) => {
   return (
     <MContainer>
+      <button className="top-button">
+        <MaterialIcon icon="keyboard_arrow_up" />
+      </button>
       <FeedTop>
         <PlacePreviewList places={getPlaceCategories(cafeList)} />
       </FeedTop>
-
-      {cafeList?.map((cafe) => {
-        return (
-          <FeedBox key={cafe.id}>
-            <MainPost cafe={cafe} />
-          </FeedBox>
-        );
-      })}
+      <div>
+        {cafeList?.map((cafe) => {
+          return (
+            <FeedBox key={cafe.id}>
+              <MainPost cafe={cafe} />
+            </FeedBox>
+          );
+        })}
+      </div>
     </MContainer>
   );
 };

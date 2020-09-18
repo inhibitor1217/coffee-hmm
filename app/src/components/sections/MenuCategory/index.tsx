@@ -77,11 +77,11 @@ const getSubPerCategory = (category: MenuCategory) => {
 };
 
 const getTotalSubcategoryNum = ({ menus }: MenuCategoryProps) => {
-  let totalSubcategoryNum = 0;
-
-  menus?.categories?.forEach((category) => {
-    totalSubcategoryNum += getSubPerCategory(category);
-  });
+  const totalSubcategoryNum =
+    menus?.categories?.reduce<number>(
+      (acc, cur) => acc + getSubPerCategory(cur),
+      0
+    ) || 0;
 
   return totalSubcategoryNum;
 };

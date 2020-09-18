@@ -11,6 +11,8 @@ header {
   justify-content: center;
   align-items: center;
   z-index: 999;
+
+  position: relative;
 }
 
 header #home-link {
@@ -19,12 +21,12 @@ header #home-link {
   left: 16px;
 }
 
-header button.leading {
+.back-button {
   position: absolute;
   background-color: transparent;
   border: none;
   outline: none;
-  right: 8px;
+  left: 8px;
   top: 50%;
   transform: translate(0, -50%);
   padding: 4px;

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import "./index.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import MainPopup from "../MainPopup";
 import { CafeInfo } from "../MainFeed";
 import DetailPopup from "../DetailPopup";
+import MaterialIcon from "../../common/MaterialIcon";
 
 const HeaderWrapper = styled.div`
   height: 54px;
@@ -17,6 +18,7 @@ type PostHeaderProps = {
 };
 
 const PostHeader = ({ cafe, fromDetail }: PostHeaderProps) => {
+  const history = useHistory();
   const [popupActive, setPopupActive] = useState<boolean>(false);
   const showPopup = () => {
     setPopupActive(true);
@@ -28,14 +30,20 @@ const PostHeader = ({ cafe, fromDetail }: PostHeaderProps) => {
   return (
     <HeaderWrapper>
       <div className="cafe-header-icon-box">
-        <span className="cafe-header-icon">
-          <img
-            src={"https://" + cafe?.mainImageUri}
-            alt={cafe?.name}
-            width="32px"
-            height="32px"
-          />
-        </span>
+        {fromDetail ? (
+          <button className="post-back-button" onClick={() => history.goBack()}>
+            <MaterialIcon icon="arrow_back" />
+          </button>
+        ) : (
+          <span className="cafe-header-icon">
+            <img
+              src={"https://" + cafe?.mainImageUri}
+              alt={cafe?.name}
+              width="32px"
+              height="32px"
+            />
+          </span>
+        )}
       </div>
       <Link to={`/cafe/${cafe?.id}`}>
         <div className="cafe-header-name">{cafe?.name}</div>
@@ -69,10 +77,6 @@ const PostHeader = ({ cafe, fromDetail }: PostHeaderProps) => {
       </div>
     </HeaderWrapper>
   );
-};
-
-export const copiedLink = (cafeName: string | undefined) => {
-  window.confirm(cafeName + "\nHmm link copied!");
 };
 
 export default PostHeader;

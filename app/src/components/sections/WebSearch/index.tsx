@@ -2,10 +2,19 @@ import React from "react";
 import "./index.css";
 import styled from "styled-components";
 import { CafeInfo } from "../MainFeed";
+import { openSearch } from "../../../utils";
 
-const ButtonWrapper = styled.div`
+const SearchWrapper = styled.div`
   display: flex;
-  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`;
+
+const SearchBox = styled.div`
+  min-width: 220px;
+  display: flex;
+  align-items: center;
+  position: relative;
 `;
 
 type WebSearchProps = {
@@ -20,81 +29,48 @@ const WebSearch = ({ cafe }: WebSearchProps) => {
 
   return (
     <div>
-      <div className="web-search-text">검색결과 보기</div>
-      <ButtonWrapper className="web-button">
-        <button onClick={() => openSearch(searchedData, "Naver")}>
-          <img
-            src="/images/logo/naver_bi.png"
-            alt="naver"
-            style={{ width: "56px", height: "12px" }}
+      <div className="web-search-text">상세검색</div>
+      <SearchWrapper>
+        <SearchBox>
+          <span className="NI-icons">
+            <img src="/images/logo/naver-icon.png" alt="Naver" />
+          </span>
+          <input
+            className="search-input-box"
+            type="text"
+            placeholder={cafe?.name + " " + cafe?.place + " 검색"}
           />
-        </button>
-        <button
-          onClick={() =>
-            openSearch(cafe?.name === undefined ? " " : cafe?.name, "Instagram")
-          }
-        >
-          <img
-            src="/images/logo/insta_bi.png"
-            alt="insta"
-            style={{ width: "60px", height: "18px", paddingTop: "4px" }}
+          <button
+            className="web-button"
+            onClick={() => openSearch(searchedData, "Naver")}
+          >
+            go
+          </button>
+        </SearchBox>
+        <SearchBox>
+          <span className="NI-icons">
+            <img src="/images/logo/insta-icon.png" alt="I" />
+          </span>
+          <input
+            className="search-input-box"
+            type="text"
+            placeholder={"#" + cafe?.name + " 검색"}
           />
-        </button>
-      </ButtonWrapper>
+          <button
+            className="web-button"
+            onClick={() =>
+              openSearch(
+                cafe?.name === undefined ? " " : cafe?.name,
+                "Instagram"
+              )
+            }
+          >
+            go
+          </button>
+        </SearchBox>
+      </SearchWrapper>
     </div>
   );
-};
-
-export const openSearch = (searchedData: string, searchEngine: string) => {
-  const encodedData = encodeURIComponent(searchedData);
-  const userAgent = navigator.userAgent;
-
-  if (userAgent.match(/iPhone|iPad|iPod/i)) {
-    setTimeout(function () {
-      switch (searchEngine) {
-        case "Naver":
-          window
-            .open(
-              "https://m.search.naver.com/search.naver?query=" + encodedData,
-              "_blank"
-            )
-            ?.focus();
-          break;
-
-        case "Instagram":
-          window
-            .open(
-              "https://www.instagram.com/explore/tags/" + encodedData,
-              "_blank"
-            )
-            ?.focus();
-          break;
-      }
-    }, 0);
-  } else if (userAgent.match(/android|Android/i)) {
-    setTimeout(function () {
-      switch (searchEngine) {
-        case "Naver":
-          window.location.href =
-            "intent://inappbrowser?url=https%3A%2F%2Fm.search.naver.com%2Fsearch.naver%3Fquery%3D" +
-            encodedData +
-            "&target=new&version=6#Intent;scheme=naversearchapp;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.search;end";
-          break;
-
-        case "Instagram":
-          window
-            .open(
-              "https://www.instagram.com/explore/tags/" + encodedData,
-              "_blank"
-            )
-            ?.focus();
-          break;
-      }
-    }, 0);
-  } else {
-    window.confirm("모바일 웹만 지원하는 서비스입니다.");
-  }
-  return;
 };
 
 export default WebSearch;

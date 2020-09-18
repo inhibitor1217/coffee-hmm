@@ -1,5 +1,5 @@
-.favorite-icon {
-  margin: 2px;
+.favorite-icon i {
+  margin: 4px;
   position: absolute;
   top: 6px;
   left: 5px;
@@ -9,7 +9,7 @@
   width: 22px;
   height: 20px;
   color: rgba(0, 0, 0, 0.56);
-  margin: 2px;
+  margin: 4px;
   position: absolute;
   top: 6px;
   left: 40px;
@@ -33,4 +33,28 @@
   z-index: 99;
   font-size: 14px;
   color: #fafafa;
+}
+
+.search-icons {
+  width: 24px;
+  height: 24px;
+}
+
+.NI-icons img {
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  margin: 4px;
+}
+
+.N-icon {
+  position: absolute;
+  top: 6px;
+  right: 40px;
+}
+
+.I-icon {
+  position: absolute;
+  top: 6px;
+  right: 5px;
 }

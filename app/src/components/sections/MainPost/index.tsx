@@ -3,15 +3,15 @@ import CafeImageSlide from "../CafeImageSlide";
 import PostHeader from "../PostHeader";
 import { CafeInfo } from "../MainFeed";
 import PostIcon from "../PostIcon";
+import CafeBasicInfo from "../CafeBasicInfo";
+import MenuCategory from "../MenuCategory";
 import {
-  CafeInfoWrapper,
-  MenuContainer,
   DetailContainer,
   ImageWrapper,
   IconWrapper,
-} from "../CafeDetails";
-import CafeBasicInfo from "../CafeBasicInfo";
-import MenuCategory from "../MenuCategory";
+  CafeInfoWrapper,
+  MenuContainer,
+} from "../../../utils";
 
 type MainPostProps = {
   cafe: CafeInfo | null;

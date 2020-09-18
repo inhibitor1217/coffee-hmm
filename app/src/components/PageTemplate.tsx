@@ -3,6 +3,14 @@ import { useLocation } from "react-router";
 import { useTransition, animated } from "react-spring";
 import Header from "./common/Header";
 import Router from "./Router";
+import styled from "styled-components";
+
+const PageTemplateContainer = styled.div`
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  flex-direction: column;
+`;
 
 function getPageTransition(pathname: string) {
   if (pathname === "/") {
@@ -36,7 +44,7 @@ const PageTemplate = () => {
     }
   );
   return (
-    <>
+    <div>
       {routeTransition.map(({ item, props: springProps, key }) => (
         <animated.div
           key={key}
@@ -46,20 +54,24 @@ const PageTemplate = () => {
             minHeight: "100%",
             top: 0,
             left: 0,
-            backgroundColor: "#ffffff",
+            backgroundColor: "#fafafa",
             opacity: 1,
             transform: "translate(0, 0)",
             ...springProps,
           }}
         >
-          <Header location={item} />
-          <main>
-            <Router location={item} />
-          </main>
-          <footer></footer>
+          <PageTemplateContainer>
+            {!location.pathname.includes("/cafe/") && (
+              <Header location={item} />
+            )}
+            <main>
+              <Router location={item} />
+            </main>
+            <footer></footer>
+          </PageTemplateContainer>
         </animated.div>
       ))}
-    </>
+    </div>
   );
 };
 

@@ -9,7 +9,7 @@ const SearchBox = styled.div`
   z-index: 9999;
   position: absolute;
   top: 12px;
-  left: 30%;
+  left: 32%;
 `;
 
 interface HeaderProps {
@@ -33,14 +33,16 @@ const Header = (props: HeaderProps) => {
 
   return (
     <header>
-      <Link to="/" id="home-link">
-        <Logo />
-      </Link>
+      {props.location.pathname === "/" && (
+        <Link to="/" id="home-link">
+          <Logo />
+        </Link>
+      )}
       <SearchBox>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder="search"
+            placeholder="지역을 입력해주세요"
             value={currentPlace}
             onChange={handleChange}
             className="search-box"
@@ -51,7 +53,7 @@ const Header = (props: HeaderProps) => {
         </form>
       </SearchBox>
       {props.location.pathname !== "/" && props.location.pathname !== "/cafe" && (
-        <button className="leading" onClick={() => history.goBack()}>
+        <button className="back-button" onClick={() => history.goBack()}>
           <MaterialIcon icon="arrow_back" />
         </button>
       )}

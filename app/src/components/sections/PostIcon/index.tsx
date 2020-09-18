@@ -4,6 +4,8 @@ import "./index.css";
 import MaterialIcon from "../../common/MaterialIcon";
 import ImageSavePopup from "../ImageSavePopup";
 import { CafeInfo } from "../MainFeed";
+import { useLocation } from "react-router";
+import { openSearch } from "../../../utils";
 
 const IconsContainer = styled.div`
   width: 360px;
@@ -15,6 +17,7 @@ type PostIconProps = {
 };
 
 const PostIcon = ({ cafe }: PostIconProps) => {
+  const location = useLocation();
   const [popupActive, setPopupActive] = useState<boolean>(false);
   const showPopup = () => {
     setPopupActive(true);
@@ -22,6 +25,11 @@ const PostIcon = ({ cafe }: PostIconProps) => {
   const closePopup = () => {
     setPopupActive(false);
   };
+
+  let searchedData = "";
+  if (cafe != null) {
+    searchedData = cafe.name + " " + cafe.place;
+  }
 
   return (
     <IconsContainer>
@@ -35,6 +43,27 @@ const PostIcon = ({ cafe }: PostIconProps) => {
       <span className="material-icons-outlined save-icon" onClick={showPopup}>
         perm_media
       </span>
+      {!location.pathname.includes("/cafe") && (
+        <div>
+          <span
+            className="N-icon NI-icons"
+            onClick={() => openSearch(searchedData, "Naver")}
+          >
+            <img src="/images/logo/naver-icon.png" alt="Naver" />
+          </span>
+          <span
+            className="I-icon NI-icons"
+            onClick={() =>
+              openSearch(
+                cafe?.name === undefined ? " " : cafe?.name,
+                "Instagram"
+              )
+            }
+          >
+            <img src="/images/logo/insta-icon.png" alt="I" />
+          </span>
+        </div>
+      )}
       <div
         className={
           popupActive ? "pop-up-container container-open" : "pop-up-container"

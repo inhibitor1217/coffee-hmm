@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { ImageWrapper } from "../CafeDetails";
 import { CafeInfo } from "../MainFeed";
 import CafeImageSlide from "../CafeImageSlide";
 import "./index.css";
+import { ImageWrapper } from "../../../utils";
 
 const SaveContainer = styled.div`
   display: flex;
