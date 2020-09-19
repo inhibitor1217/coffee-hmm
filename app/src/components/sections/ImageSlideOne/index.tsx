@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import Spinner from "../../common/Spinner";
 
 const SContainer = styled.div`
   align-items: center;
@@ -7,11 +8,26 @@ const SContainer = styled.div`
   active?: boolean;
 `;
 
+const SpinnerContainer = styled.div<{ visible: boolean }>`
+  justify-content: center;
+  align-items: center;
+  width: 360px;
+  height: 360px;
+  display: none;
+  ${(props) => props.visible && "display: flex;"}
+`;
+
 type SlideOneProps = {
   imageUri: string;
 };
 
 const SlideOne = ({ imageUri }: SlideOneProps) => {
+  const [isImageReady, setIsImageReady] = useState<boolean>(false);
+
+  const onImageLoad = () => {
+    setIsImageReady(true);
+  };
+
   return (
     <SContainer>
       <img
@@ -20,8 +36,13 @@ const SlideOne = ({ imageUri }: SlideOneProps) => {
         style={{
           width: "360px",
           height: "360px",
+          display: isImageReady ? "initial" : "none",
         }}
+        onLoad={onImageLoad}
       />
+      <SpinnerContainer visible={!isImageReady}>
+        <Spinner />
+      </SpinnerContainer>
     </SContainer>
   );
 };
