@@ -2,25 +2,25 @@ import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import "./index.css";
 
-const ScrouselWrapper = styled.div`
+const MCarouselWrapper = styled.div`
   display: flex;
 `;
 
-interface ICarouselSlide {
+interface MCarouselSlide {
   active?: boolean;
 }
 
-const SCarouselSlide = styled.div<ICarouselSlide>`
+const MCarouselSlide = styled.div<MCarouselSlide>`
   flex: 0 0 auto;
   transition: all 1s ease;
   widht: 100%;
 `;
 
-interface ICarouselProps {
+interface MCarouselProps {
   currentSlide: number;
 }
 
-const SCarouselSlides = styled.div<ICarouselProps>`
+const MCarouselSlides = styled.div<MCarouselProps>`
   display: flex;
   ${(props) =>
     props.currentSlide &&
@@ -39,9 +39,9 @@ const MenuCarousel = ({ children, totalSubCategory }: IProps) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   let activeSlide = children?.map((slide, index) => (
-    <SCarouselSlide active={currentSlide === index} key={index}>
+    <MCarouselSlide active={currentSlide === index} key={index}>
       {slide}
-    </SCarouselSlide>
+    </MCarouselSlide>
   ));
 
   const subInOneSlide = 2;
@@ -57,11 +57,11 @@ const MenuCarousel = ({ children, totalSubCategory }: IProps) => {
 
   return (
     <div>
-      <ScrouselWrapper>
-        <SCarouselSlides currentSlide={currentSlide}>
+      <MCarouselWrapper>
+        <MCarouselSlides currentSlide={currentSlide}>
           {activeSlide}
-        </SCarouselSlides>
-      </ScrouselWrapper>
+        </MCarouselSlides>
+      </MCarouselWrapper>
 
       <button
         className="Mslide-button Mslide-button-left"

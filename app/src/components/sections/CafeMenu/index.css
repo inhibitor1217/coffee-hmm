@@ -5,14 +5,14 @@
   margin-block-end: 0.2em;
 }
 
-.category {
+.category-one {
   font-weight: bold;
   float: left;
 }
 
 .categoryname {
-  font-size: 11px;
-  margin-bottom: 6px;
+  font-size: 13px;
+  margin-bottom: 4px;
 }
 
 .menu-button {

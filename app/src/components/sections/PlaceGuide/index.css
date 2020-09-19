@@ -26,3 +26,8 @@
 .place-guide-text:hover {
   color: #E8BF7E;
 }
+
+.place-guide-text a {
+  color: #000000;
+  text-decoration: none;
+}

@@ -13,7 +13,7 @@ const TextWrapper = styled.div`
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: flex-start;
 `;
 
 const TextBox = styled.span`
@@ -39,7 +39,7 @@ const PlacePreviewList = ({ places }: PlacePreviewListProps) => {
         {places?.map((place) => {
           return (
             <TextBox key={place}>
-              <Link to={`/place=${place}`} className="place-preview-text">
+              <Link to={`/place/${place}`} className="place-preview-text">
                 # {place}카페
               </Link>
             </TextBox>

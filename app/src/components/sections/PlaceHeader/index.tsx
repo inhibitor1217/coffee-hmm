@@ -1,41 +1,28 @@
 import React from "react";
 import styled from "styled-components";
 import "./index.css";
-import MaterialIcon from "../../common/MaterialIcon";
 
-const SpotHeaderWrapper = styled.div`
-  min-height: 90px;
+const PlaceHeaderWrapper = styled.div`
+  min-height: 80px;
   margin: 30px 16px;
   position: relative;
 `;
 
-type SpotHeaderProps = {
-  spotName: string;
+type PlaceHeaderProps = {
+  placeName: string;
 };
 
-const PlaceHeader = ({ spotName }: SpotHeaderProps) => {
+const PlaceHeader = ({ placeName }: PlaceHeaderProps) => {
   return (
-    <SpotHeaderWrapper>
-      <div>
-        <span className="spot-header-icon">
-          <img
-            src="/images/coffee-hmm-192x192.png"
-            alt={spotName}
-            width="68px"
-            height="68px"
-          />
-        </span>
-      </div>
+    <PlaceHeaderWrapper>
       <div className="spot-header-name">
-        {spotName}&nbsp;카페
-        <span className="new-icon">
-          <MaterialIcon icon="fiber_new" />
-        </span>
+        <span className="material-icons-outlined place-icon">place</span>
+        {placeName}
       </div>
       <div className="spot-header-button">
         <button>거리보기</button>
       </div>
-    </SpotHeaderWrapper>
+    </PlaceHeaderWrapper>
   );
 };
 

@@ -1,7 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import CafePreviewImg from "../CafePreviewImg";
-import { CafeInfo } from "../MainFeed";
+import { Link } from "react-router-dom";
+import "./index.css";
+import { CafeInfo } from "../../../utils";
 
 const PreviewWrapper = styled.div`
   width: 360px;
@@ -28,8 +30,13 @@ const CafePreviewList = ({ cafes }: CafePreviewListProps) => {
     <PreviewWrapper>
       {cafes?.map((cafe) => {
         return (
-          <PreviewBox key={cafe.id}>
-            <CafePreviewImg cafeName={cafe.name} cafeImg={cafe.mainImageUri} />
+          <PreviewBox key={cafe.id} className="cafe-preview-box">
+            <Link to={`/cafe/${cafe.id}`}>
+              <CafePreviewImg
+                cafeName={cafe.name}
+                cafeImg={cafe.mainImageUri}
+              />
+            </Link>
           </PreviewBox>
         );
       })}

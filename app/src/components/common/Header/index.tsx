@@ -9,7 +9,7 @@ const SearchBox = styled.div`
   z-index: 9999;
   position: absolute;
   top: 12px;
-  left: 30%;
+  left: 32%;
 `;
 
 interface HeaderProps {
@@ -27,31 +27,33 @@ const Header = (props: HeaderProps) => {
 
   const [currentPlace, setCurrentPlace] = useState<string | undefined>("");
 
-  const handleChange = (event: React.SyntheticEvent) => {
-    setCurrentPlace((event.target as HTMLTextAreaElement).value);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCurrentPlace(event.currentTarget.value);
   };
 
   return (
     <header>
-      <Link to="/" id="home-link">
-        <Logo />
-      </Link>
+      {props.location.pathname === "/" && (
+        <Link to="/" id="home-link">
+          <Logo />
+        </Link>
+      )}
       <SearchBox>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder="search"
+            placeholder="지역을 입력해주세요"
             value={currentPlace}
             onChange={handleChange}
             className="search-box"
           />
-          <Link to={`/place=${currentPlace}`}>
+          <Link to={`/place/${currentPlace}`}>
             <button type="submit" className="search-button"></button>
           </Link>
         </form>
       </SearchBox>
       {props.location.pathname !== "/" && props.location.pathname !== "/cafe" && (
-        <button className="leading" onClick={() => history.goBack()}>
+        <button className="back-button" onClick={() => history.goBack()}>
           <MaterialIcon icon="arrow_back" />
         </button>
       )}

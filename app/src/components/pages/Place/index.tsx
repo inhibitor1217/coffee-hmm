@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { CafeInfo } from "../../sections/MainFeed";
 import { cafeApiURL, HomeScale } from "../Main";
 import { useParams } from "react-router";
 import PlaceFeed from "../../sections/PlaceFeed";
+import { CafeInfo } from "../../../utils";
 
-const CafeSpotPage = () => {
+const CafePlacePage = () => {
   const { place }: { place: string } = useParams();
   const [cafeApi, setCafeApi] = useState<CafeInfo[] | null>(null);
 
@@ -21,9 +21,9 @@ const CafeSpotPage = () => {
 
   return (
     <HomeScale>
-      <PlaceFeed searchedCafeList={cafeApi} spotName={place} />
+      <PlaceFeed searchedCafeList={cafeApi} placeName={place} />
     </HomeScale>
   );
 };
 
-export default CafeSpotPage;
+export default CafePlacePage;

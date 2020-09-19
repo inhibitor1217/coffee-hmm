@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { HomeScale, cafeApiURL } from "../Main";
 import PlaceGuide from "../../sections/PlaceGuide";
-import { CafeInfo } from "../../sections/MainFeed";
+import { CafeInfo } from "../../../utils";
 
 const PlaceListPage = () => {
   const [cafeApi, setCafeApi] = useState<CafeInfo[] | null>(null);
@@ -17,17 +17,12 @@ const PlaceListPage = () => {
     fetchData();
   }, []);
 
-  const placeSet = new Set<string>();
-
-  cafeApi?.forEach((cafe) => {
-    placeSet.add(cafe.place);
-  });
-
-  const placeCategories = [...placeSet];
+  const placeArray = cafeApi?.map((cafe) => cafe.place);
+  const placeSet = new Set<string>(placeArray);
 
   return (
     <HomeScale>
-      <PlaceGuide placeCategories={placeCategories} />
+      <PlaceGuide placeCategories={[...placeSet]} />
     </HomeScale>
   );
 };

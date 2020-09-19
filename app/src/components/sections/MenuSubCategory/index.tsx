@@ -1,18 +1,23 @@
 import React from "react";
-import { MenuPrice } from "../MenuCategory";
 import "./index.css";
+import { MenuPrice } from "../../../utils";
 
 type MenuSubCategoryProps = {
   categoryMenu: MenuPrice[];
   index: number;
 };
 
+export const menusPerSubcategory = 6;
+
 const MenuSubCategory = ({ categoryMenu, index }: MenuSubCategoryProps) => {
-  let newArr = categoryMenu.slice(index * 6, index * 6 + 6);
+  let dividedMenuArray = categoryMenu.slice(
+    index * menusPerSubcategory,
+    index * menusPerSubcategory + menusPerSubcategory
+  );
 
   return (
     <div className="subcategory">
-      {newArr.map((menu, index) => {
+      {dividedMenuArray.map((menu, index) => {
         return (
           <div className="subcategory-one" key={index}>
             <div className="menu-name">{menu.name} </div>

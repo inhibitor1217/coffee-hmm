@@ -1,29 +1,26 @@
 import React from "react";
 import CafeImageSlide from "../CafeImageSlide";
-import PostIcon from "../PostIcon";
-import WebSearch from "../WebSearch";
 import PostHeader from "../PostHeader";
+import PostIcon from "../PostIcon";
 import CafeBasicInfo from "../CafeBasicInfo";
-import CafeMenu from "../CafeMenu";
-import "./index.css";
+import MenuCategory from "../CafeMenu";
 import {
   DetailContainer,
   ImageWrapper,
   IconWrapper,
   CafeInfoWrapper,
-  InfoRow,
   MenuContainer,
   CafeInfo,
 } from "../../../utils";
 
-type CafeDetailInfoProps = {
+type MainPostProps = {
   cafe: CafeInfo | null;
 };
 
-const CafeDetails = ({ cafe }: CafeDetailInfoProps) => {
+const MainPost = ({ cafe }: MainPostProps) => {
   return (
     <DetailContainer>
-      <PostHeader cafe={cafe} fromDetail={true} />
+      <PostHeader cafe={cafe} fromDetail={false} />
       <ImageWrapper>
         <CafeImageSlide cafe={cafe} />
       </ImageWrapper>
@@ -32,18 +29,13 @@ const CafeDetails = ({ cafe }: CafeDetailInfoProps) => {
       </IconWrapper>
       <CafeInfoWrapper>
         <CafeBasicInfo cafe={cafe} />
-        <InfoRow>
-          <span className="binfo-time">OPEN</span>
-          <span className="binfo-value"> 8:00 ~ 19:00</span>
-        </InfoRow>
-        <WebSearch cafe={cafe} />
         <MenuContainer className="menu-container">
           <div className="menu-header">카페 메뉴</div>
-          <CafeMenu menus={cafe?.menus} />
+          <MenuCategory menus={cafe?.menus} />
         </MenuContainer>
       </CafeInfoWrapper>
     </DetailContainer>
   );
 };
 
-export default CafeDetails;
+export default MainPost;

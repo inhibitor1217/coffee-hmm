@@ -1,8 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import PlacePreviewList from "../PlacePreviewList";
-import { Menus } from "../MenuCategory";
-import Post from "../PostContents";
+import MainPost from "../MainPost";
+import "./index.css";
+import MaterialIcon from "../../common/MaterialIcon";
+import { CafeInfo } from "../../../utils";
 
 const MContainer = styled.div`
   display: flex;
@@ -26,49 +28,34 @@ const FeedBox = styled.div`
   flex: 0 0 360px;
 `;
 
-export type PlaceInfo = {
-  placeCategory: string;
-  cafes: CafeInfo[];
-};
-
-export type CafeInfo = {
-  id: string;
-  name: string;
-  place: string;
-  imageUris: string[];
-  mainImageUri: string;
-  americanoPrice: number;
-  floor: number;
-  menus: Menus;
-};
-
 type MainFeedProps = {
   cafeList: CafeInfo[] | null;
 };
 
 const getPlaceCategories = (cafeList: CafeInfo[] | null) => {
-  const placeSet = new Set<string>();
-  cafeList?.forEach((cafe) => {
-    placeSet.add(cafe.place);
-  });
-  const placeArray = [...placeSet];
-  return placeArray;
+  const placeArray = cafeList?.map((cafe) => cafe.place);
+  const placeSet = new Set<string>(placeArray);
+  return [...placeSet];
 };
 
 const MainFeed = ({ cafeList }: MainFeedProps) => {
   return (
     <MContainer>
+      <button className="top-button">
+        <MaterialIcon icon="keyboard_arrow_up" />
+      </button>
       <FeedTop>
         <PlacePreviewList places={getPlaceCategories(cafeList)} />
       </FeedTop>
-
-      {cafeList?.map((cafe) => {
-        return (
-          <FeedBox key={cafe.id}>
-            <Post cafe={cafe} />
-          </FeedBox>
-        );
-      })}
+      <div>
+        {cafeList?.map((cafe) => {
+          return (
+            <FeedBox key={cafe.id}>
+              <MainPost cafe={cafe} />
+            </FeedBox>
+          );
+        })}
+      </div>
     </MContainer>
   );
 };

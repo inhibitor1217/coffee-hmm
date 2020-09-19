@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital@1&family=Noto+Sans+KR&display=swap');
+
+.menu-container {
+  font-size: 13px;
+  font-family: 'Lora', serif;
+}
+
+.menu-header {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  margin-block-start: 0.5em;
+  margin-block-end: 0.2em;
+  border-bottom: 1px solid #E8BF7E;
+}
+
+.binfo-value {
+  font-size: 13px;
+  font-weight: 500;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.binfo-time {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-right: 20px;
+}
