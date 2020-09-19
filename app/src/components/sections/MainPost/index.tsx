@@ -1,16 +1,16 @@
 import React from "react";
 import CafeImageSlide from "../CafeImageSlide";
 import PostHeader from "../PostHeader";
-import { CafeInfo } from "../MainFeed";
 import PostIcon from "../PostIcon";
 import CafeBasicInfo from "../CafeBasicInfo";
-import MenuCategory from "../MenuCategory";
+import MenuCategory from "../CafeMenu";
 import {
   DetailContainer,
   ImageWrapper,
   IconWrapper,
   CafeInfoWrapper,
   MenuContainer,
+  CafeInfo,
 } from "../../../utils";
 
 type MainPostProps = {

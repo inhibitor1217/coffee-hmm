@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import MainFeed, { CafeInfo } from "../../sections/MainFeed";
+import MainFeed from "../../sections/MainFeed";
 import styled from "styled-components";
+import { CafeInfo } from "../../../utils";
 
 export const HomeScale = styled.div`
   width: 100vw;

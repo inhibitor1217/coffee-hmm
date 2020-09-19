@@ -2,23 +2,9 @@ import React from "react";
 import "./index.css";
 import MenuSubCategory, { menusPerSubcategory } from "../MenuSubCategory";
 import MenuCarousel from "../MenuCarousel";
+import { Menus, MenuCategory } from "../../../utils";
 
-export type Menus = {
-  categories: MenuCategory[] | null;
-};
-
-export type MenuCategory = {
-  categoryName: string;
-  categoryMenu: MenuPrice[];
-};
-
-export type MenuPrice = {
-  name: string;
-  ename: string;
-  price: string;
-};
-
-type MenuCategoryProps = {
+type CafeMenuProps = {
   menus: Menus | undefined;
 };
 
@@ -26,7 +12,7 @@ const fixedSubcategoryAreaWidth = 160;
 const fixedSubcategoryAreaHeight = 120;
 const fixedMenuAreaHeight = 140;
 
-const MenuCategory = ({ menus }: MenuCategoryProps) => {
+const CafeMenu = ({ menus }: CafeMenuProps) => {
   let totalSubcategoryNum = getTotalSubcategoryNum({ menus });
   let neededMenuWidth = totalSubcategoryNum * fixedSubcategoryAreaWidth;
 
@@ -76,7 +62,7 @@ const getSubPerCategory = (category: MenuCategory) => {
   }
 };
 
-const getTotalSubcategoryNum = ({ menus }: MenuCategoryProps) => {
+const getTotalSubcategoryNum = ({ menus }: CafeMenuProps) => {
   const totalSubcategoryNum =
     menus?.categories?.reduce<number>(
       (acc, cur) => acc + getSubPerCategory(cur),
@@ -100,4 +86,4 @@ const OneCategoryArea = (category: MenuCategory, subcategoryNum: number) => {
   return totalMenusPerCategory;
 };
 
-export default MenuCategory;
+export default CafeMenu;

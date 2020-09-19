@@ -3,9 +3,9 @@ import styled from "styled-components";
 import "./index.css";
 import { Link, useHistory } from "react-router-dom";
 import MainPopup from "../MainPopup";
-import { CafeInfo } from "../MainFeed";
 import DetailPopup from "../DetailPopup";
 import MaterialIcon from "../../common/MaterialIcon";
+import { CafeInfo } from "../../../utils";
 
 const HeaderWrapper = styled.div`
   height: 54px;

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import "./index.css";
-import { CafeInfo } from "../MainFeed";
+import { CafeInfo } from "../../../utils";
 
 const PlaceStatsWrapper = styled.div`
   height: 36px;

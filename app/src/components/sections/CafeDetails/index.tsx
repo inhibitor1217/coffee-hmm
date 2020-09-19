@@ -1,11 +1,10 @@
 import React from "react";
-import { CafeInfo } from "../MainFeed";
 import CafeImageSlide from "../CafeImageSlide";
 import PostIcon from "../PostIcon";
 import WebSearch from "../WebSearch";
 import PostHeader from "../PostHeader";
 import CafeBasicInfo from "../CafeBasicInfo";
-import MenuCategory from "../MenuCategory";
+import CafeMenu from "../CafeMenu";
 import "./index.css";
 import {
   DetailContainer,
@@ -14,6 +13,7 @@ import {
   CafeInfoWrapper,
   InfoRow,
   MenuContainer,
+  CafeInfo,
 } from "../../../utils";
 
 type CafeDetailInfoProps = {
@@ -39,7 +39,7 @@ const CafeDetails = ({ cafe }: CafeDetailInfoProps) => {
         <WebSearch cafe={cafe} />
         <MenuContainer className="menu-container">
           <div className="menu-header">카페 메뉴</div>
-          <MenuCategory menus={cafe?.menus} />
+          <CafeMenu menus={cafe?.menus} />
         </MenuContainer>
       </CafeInfoWrapper>
     </DetailContainer>

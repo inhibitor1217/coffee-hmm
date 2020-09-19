@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import CafePreviewImg from "../CafePreviewImg";
-import { CafeInfo } from "../MainFeed";
 import { Link } from "react-router-dom";
 import "./index.css";
+import { CafeInfo } from "../../../utils";
 
 const PreviewWrapper = styled.div`
   width: 360px;

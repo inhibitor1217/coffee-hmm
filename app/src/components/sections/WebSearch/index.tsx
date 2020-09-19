@@ -1,8 +1,7 @@
 import React from "react";
 import "./index.css";
 import styled from "styled-components";
-import { CafeInfo } from "../MainFeed";
-import { openSearch } from "../../../utils";
+import { openSearch, CafeInfo } from "../../../utils";
 
 const SearchWrapper = styled.div`
   display: flex;

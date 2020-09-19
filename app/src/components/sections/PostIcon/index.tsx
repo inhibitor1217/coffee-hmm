@@ -3,9 +3,8 @@ import styled from "styled-components";
 import "./index.css";
 import MaterialIcon from "../../common/MaterialIcon";
 import ImageSavePopup from "../ImageSavePopup";
-import { CafeInfo } from "../MainFeed";
 import { useLocation } from "react-router";
-import { openSearch } from "../../../utils";
+import { openSearch, CafeInfo } from "../../../utils";
 
 const IconsContainer = styled.div`
   width: 360px;

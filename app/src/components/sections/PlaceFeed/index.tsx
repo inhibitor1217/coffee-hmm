@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { CafeInfo } from "../MainFeed";
 import styled from "styled-components";
 import PlaceHeader from "../PlaceHeader";
 import CafePreviewList from "../CafePreviewList";
@@ -8,6 +7,7 @@ import MaterialIcon from "../../common/MaterialIcon";
 import "./index.css";
 import SquareArrange from "../SquareArrange";
 import NoresultForm from "../NoresultForm";
+import { CafeInfo } from "../../../utils";
 
 const PContainer = styled.div`
   display: flex;

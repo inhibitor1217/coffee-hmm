@@ -1,9 +1,8 @@
 import React from "react";
-import { CafeInfo } from "../MainFeed";
 import "./index.css";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { InfoRow } from "../../../utils";
+import { InfoRow, CafeInfo } from "../../../utils";
 
 const BasicInfoWrapper = styled.div`
   display: flex;

@@ -1,9 +1,8 @@
 import React from "react";
 import "./index.css";
-import { CafeInfo } from "../MainFeed";
 import { Link } from "react-router-dom";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { PopupWrapper, copyLink, openSearch } from "../../../utils";
+import { PopupWrapper, copyLink, openSearch, CafeInfo } from "../../../utils";
 
 type DetailPopupProps = {
   cafe: CafeInfo | null;

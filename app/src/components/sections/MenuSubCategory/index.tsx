@@ -1,6 +1,6 @@
 import React from "react";
-import { MenuPrice } from "../MenuCategory";
 import "./index.css";
+import { MenuPrice } from "../../../utils";
 
 type MenuSubCategoryProps = {
   categoryMenu: MenuPrice[];

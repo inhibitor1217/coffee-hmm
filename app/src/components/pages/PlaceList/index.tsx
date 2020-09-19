@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { HomeScale, cafeApiURL } from "../Main";
 import PlaceGuide from "../../sections/PlaceGuide";
-import { CafeInfo } from "../../sections/MainFeed";
+import { CafeInfo } from "../../../utils";
 
 const PlaceListPage = () => {
   const [cafeApi, setCafeApi] = useState<CafeInfo[] | null>(null);
