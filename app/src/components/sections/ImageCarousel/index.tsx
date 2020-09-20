@@ -40,9 +40,13 @@ interface IProps {
 const ImageCarousel = ({ children }: IProps) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  let activeSlide = children?.map((slide, index) => (
+  const activeSlide = children?.map((slide, index) => (
     <SCarouselSlide active={currentSlide === index} key={index}>
-      {slide}
+      {Math.abs(currentSlide - index) <= 1 && (
+        <div style={{ position: "absolute", top: 0, left: 360 * index }}>
+          {slide}
+        </div>
+      )}
     </SCarouselSlide>
   ));
 
