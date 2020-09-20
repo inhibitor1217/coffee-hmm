@@ -12,6 +12,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-spring": "^8.0.27",
+    "react-window": "^1.8.5",
     "styled-components": "^5.1.1"
   },
   "scripts": {
@@ -40,6 +41,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-map-gl": "^5.2.6",
     "@types/react-router-dom": "^5.1.5",
+    "@types/react-window": "^1.8.2",
     "@types/styled-components": "^5.1.2",
     "typescript": "^3.9.7"
   }
