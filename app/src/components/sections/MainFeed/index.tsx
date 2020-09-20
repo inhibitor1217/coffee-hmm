@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { VariableSizeList } from "react-window";
 import PlacePreviewList from "../PlacePreviewList";
 import MainPost from "../MainPost";
 import "./index.css";
@@ -38,24 +39,41 @@ const getPlaceCategories = (cafeList: CafeInfo[] | null) => {
   return [...placeSet];
 };
 
+const FEED_LIST_VISIBLE_HEIGHT = 1000;
+const FEED_TOP_SEMANTIC_HEIGHT = 75;
+const FEED_BOX_SEMANTIC_HEIGHT = 760;
+
 const MainFeed = ({ cafeList }: MainFeedProps) => {
   return (
     <MContainer>
       <button className="top-button">
         <MaterialIcon icon="keyboard_arrow_up" />
       </button>
-      <FeedTop>
-        <PlacePreviewList places={getPlaceCategories(cafeList)} />
-      </FeedTop>
-      <div>
-        {cafeList?.map((cafe) => {
-          return (
-            <FeedBox key={cafe.id}>
-              <MainPost cafe={cafe} />
-            </FeedBox>
-          );
-        })}
-      </div>
+      {cafeList && (
+        <VariableSizeList
+          itemCount={cafeList.length + 1}
+          width="100%"
+          height={FEED_LIST_VISIBLE_HEIGHT}
+          itemSize={(index) =>
+            index ? FEED_BOX_SEMANTIC_HEIGHT : FEED_TOP_SEMANTIC_HEIGHT
+          }
+          style={{ overflowX: "hidden" }}
+        >
+          {({ index, style }) =>
+            index ? (
+              <div style={style}>
+                <FeedBox>
+                  <MainPost cafe={cafeList[index - 1]} />
+                </FeedBox>
+              </div>
+            ) : (
+              <FeedTop style={style}>
+                <PlacePreviewList places={getPlaceCategories(cafeList)} />
+              </FeedTop>
+            )
+          }
+        </VariableSizeList>
+      )}
     </MContainer>
   );
 };
