@@ -167,13 +167,14 @@ module.exports.addView = (event, context, callback) => {
       body: JSON.stringify(err)
     };
     console.error(JSON.stringify(err, null, 2));
+    callback(null, response);
   }
   
   const getParams = {
     TableName: CAFES_TABLE,
     Key: {
-      id: id
-    }
+      id: cafeId,
+    },
   };
 
   documentClient.get(getParams, function(err, data) {
@@ -195,7 +196,7 @@ module.exports.addView = (event, context, callback) => {
 
     documentClient.update(updateParams, function(err, data) {
       if (err) { onError(); return; }
-      
+
       const { Item } = data;
       const response = {
         statusCode: 200,
