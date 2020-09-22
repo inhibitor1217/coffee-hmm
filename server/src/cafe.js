@@ -42,7 +42,7 @@ function populateCafe(cafe, callback) {
 
     const { price: americanoPrice = undefined } = data.Items.find((menu) => menu.ename === 'Americano') || {};
 
-    if (callback) callback(null, { ...cafe, menus, americanoPrice });
+    if (callback) callback(null, { views: 0, ...cafe, menus, americanoPrice });
   });
 }
 
