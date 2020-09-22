@@ -42,7 +42,7 @@ function populateCafe(cafe, callback) {
 
     const { price: americanoPrice = undefined } = data.Items.find((menu) => menu.ename === 'Americano') || {};
 
-    if (callback) callback(null, { ...cafe, menus, americanoPrice });
+    if (callback) callback(null, { views: 0, ...cafe, menus, americanoPrice });
   });
 }
 
@@ -153,3 +153,53 @@ module.exports.cafeHandler = (event, context, callback) => {
     });
   });
 };
+
+module.exports.addView = (event, context, callback) => {
+  const cafeId = event.queryStringParameters.cafe_id;
+  const params = {
+    TableName: CAFES_TABLE,
+    Key: {
+      id: cafeId
+    },
+    UpdateExpression: 'set views = views + :val',
+    ExpressionAttributeValues: {
+      ":val": 1
+    },
+    ReturnValues: "UPDATED_NEW",
+  };
+
+  documentClient.update(params, function(err, data) {
+    if (err) {
+      const response = {
+        statusCode: 500,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+        },
+        body: JSON.stringify(err)
+      };
+      console.error(JSON.stringify(err, null, 2));
+    }
+    const { Item } = data;
+    const response = {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
+      body: JSON.stringify(data)
+    };
+    callback(null, response);
+  })
+}
+
+module.exports.cleanViews = (event, context, callback) => {
+  const response = {
+    statusCode: 501,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+    },
+  }
+  callback(null, response);
+}

@@ -50,6 +50,13 @@ functions:
           path: /cafe/{cafe_id}
           method: get
           cors: true
+  addView:
+    handler: src/cafe.addView
+    events:
+      - http:
+          path: /cafe/view
+          method: put
+          cors: true
 
 resources:
   Resources:
