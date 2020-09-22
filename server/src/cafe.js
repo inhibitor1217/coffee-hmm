@@ -42,7 +42,7 @@ function populateCafe(cafe, callback) {
 
     const { price: americanoPrice = undefined } = data.Items.find((menu) => menu.ename === 'Americano') || {};
 
-    if (callback) callback(null, { views: 0, ...cafe, menus, americanoPrice });
+    if (callback) callback(null, { viewCount: 0, ...cafe, menus, americanoPrice });
   });
 }
 
@@ -156,41 +156,58 @@ module.exports.cafeHandler = (event, context, callback) => {
 
 module.exports.addView = (event, context, callback) => {
   const cafeId = event.queryStringParameters.cafe_id;
-  const params = {
-    TableName: CAFES_TABLE,
-    Key: {
-      id: cafeId
-    },
-    UpdateExpression: 'set views = views + :val',
-    ExpressionAttributeValues: {
-      ":val": 1
-    },
-    ReturnValues: "UPDATED_NEW",
-  };
 
-  documentClient.update(params, function(err, data) {
-    if (err) {
-      const response = {
-        statusCode: 500,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true,
-        },
-        body: JSON.stringify(err)
-      };
-      console.error(JSON.stringify(err, null, 2));
-    }
-    const { Item } = data;
+  function onError() {
     const response = {
-      statusCode: 200,
+      statusCode: 500,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(err)
     };
-    callback(null, response);
-  })
+    console.error(JSON.stringify(err, null, 2));
+  }
+  
+  const getParams = {
+    TableName: CAFES_TABLE,
+    Key: {
+      id: id
+    }
+  };
+
+  documentClient.get(getParams, function(err, data) {
+    if (err) { onError(); return; }
+
+    const { Item: cafe } = data;
+
+    const updateParams = {
+      TableName: CAFES_TABLE,
+      Key: {
+        id: cafeId
+      },
+      UpdateExpression: cafe.viewCount ? 'set viewCount = viewCount + :val' : 'set viewCount = :val',
+      ExpressionAttributeValues: {
+        ":val": 1
+      },
+      ReturnValues: "UPDATED_NEW",
+    };
+
+    documentClient.update(updateParams, function(err, data) {
+      if (err) { onError(); return; }
+      
+      const { Item } = data;
+      const response = {
+        statusCode: 200,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+        },
+        body: JSON.stringify(Item)
+      };
+      callback(null, response);
+    });
+  });
 }
 
 module.exports.cleanViews = (event, context, callback) => {
