@@ -1,7 +1,7 @@
 import React from "react";
-import SlideOne from "../ImageSlideOne";
 import ImageCarousel from "../ImageCarousel";
 import { CafeInfo } from "../../../utils";
+import ImageSlideBig from "../ImageSlideBig";
 
 type CafeImageSlideProps = {
   cafe: CafeInfo | null;
@@ -14,13 +14,13 @@ const CafeImageSlide = ({ cafe }: CafeImageSlideProps) => {
   cafeImageUris = cafe?.imageUris;
 
   if (cafeImageUris === undefined) {
-    return <SlideOne imageUri={cafeDefaultImage} />;
+    return <ImageSlideBig imageUri={cafeDefaultImage} />;
   } else {
     return (
       <div>
         <ImageCarousel>
           {cafeImageUris?.map((uri) => {
-            return <SlideOne imageUri={"https://" + uri} key={uri} />;
+            return <ImageSlideBig imageUri={"https://" + uri} key={uri} />;
           })}
         </ImageCarousel>
       </div>

@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import "./index.css";
 import { Link, useHistory } from "react-router-dom";
-import MainPopup from "../MainPopup";
-import DetailPopup from "../DetailPopup";
 import MaterialIcon from "../../common/MaterialIcon";
 import { CafeInfo } from "../../../utils";
+import DetailPopup from "../DetailPopup";
 
 const HeaderWrapper = styled.div`
   width: 360px;
@@ -21,6 +20,7 @@ type PostHeaderProps = {
 const PostHeader = ({ cafe, fromDetail }: PostHeaderProps) => {
   const history = useHistory();
   const [popupActive, setPopupActive] = useState<boolean>(false);
+
   const showPopup = () => {
     setPopupActive(true);
   };
@@ -33,9 +33,8 @@ const PostHeader = ({ cafe, fromDetail }: PostHeaderProps) => {
       {fromDetail ? (
         <div className="cafe-header-box">
           <button className="post-back-button" onClick={() => history.goBack()}>
-            <MaterialIcon icon="arrow_back" />
+            <MaterialIcon icon="keyboard_arrow_left" />
           </button>
-
           <span
             className="material-icons cafe-header-menu click-here"
             onClick={showPopup}
@@ -44,8 +43,13 @@ const PostHeader = ({ cafe, fromDetail }: PostHeaderProps) => {
           </span>
         </div>
       ) : (
-        <div className="cafe-header-icon">
-          <img src={"https://" + cafe?.mainImageUri} alt={cafe?.name} />
+        <div className="cafe-header-box">
+          <div className="cafe-header-icon">
+            <img src={"https://" + cafe?.mainImageUri} alt={cafe?.name} />
+          </div>
+          <div className="cafe-save-button">
+            <button>저장</button>
+          </div>
         </div>
       )}
 
@@ -64,11 +68,7 @@ const PostHeader = ({ cafe, fromDetail }: PostHeaderProps) => {
           </div>
           <div className="pop-up-box">
             <div className="pop-up-content-wrap">
-              {fromDetail ? (
-                <DetailPopup cafe={cafe} />
-              ) : (
-                <MainPopup cafe={cafe} />
-              )}
+              <DetailPopup cafe={cafe} />;
             </div>
           </div>
         </div>

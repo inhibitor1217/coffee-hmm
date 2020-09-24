@@ -11,10 +11,31 @@
   font-weight: 600;
   font-family: 'Noto Sans KR', sans-serif;
   margin-right: 8px;
+  max-width: 100px;
+  min-width: 60px;
 }
 
 .binfo-name-a a {
   max-height: 14px;
   text-decoration: none;
   color: #000000;
+}
+
+.tag-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tag-list li {
+  float: left;
+  margin-right: 6px;
+  font-size: 12px;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #7A7777;
+  background: #f2f4f6;
+}
+
+.small-image-slides {
+  overflow-y: hidden;
 }

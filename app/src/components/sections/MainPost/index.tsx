@@ -3,13 +3,11 @@ import CafeImageSlide from "../CafeImageSlide";
 import PostHeader from "../PostHeader";
 import PostIcon from "../PostIcon";
 import CafeBasicInfo from "../CafeBasicInfo";
-import MenuCategory from "../CafeMenu";
 import {
   DetailContainer,
   ImageWrapper,
   IconWrapper,
   CafeInfoWrapper,
-  MenuContainer,
   CafeInfo,
 } from "../../../utils";
 
@@ -29,10 +27,6 @@ const MainPost = ({ cafe }: MainPostProps) => {
       </IconWrapper>
       <CafeInfoWrapper>
         <CafeBasicInfo cafe={cafe} />
-        <MenuContainer className="menu-container">
-          <div className="menu-header">카페 메뉴</div>
-          <MenuCategory menus={cafe?.menus} />
-        </MenuContainer>
       </CafeInfoWrapper>
     </DetailContainer>
   );

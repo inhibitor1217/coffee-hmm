@@ -54,7 +54,7 @@ const Header = (props: HeaderProps) => {
       </SearchBox>
       {props.location.pathname !== "/" && props.location.pathname !== "/cafe" && (
         <button className="back-button" onClick={() => history.goBack()}>
-          <MaterialIcon icon="arrow_back" />
+          <MaterialIcon icon="keyboard_arrow_left" />
         </button>
       )}
     </header>

@@ -1,27 +1,22 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Spinner from "../../common/Spinner";
+import "./index.css";
 
-const SContainer = styled.div`
-  align-items: center;
-  display: flex;
-  active?: boolean;
-`;
-
-const SpinnerContainer = styled.div<{ visible: boolean }>`
+const SmallSpinnerContainer = styled.div<{ visible: boolean }>`
   justify-content: center;
   align-items: center;
-  width: 360px;
-  height: 360px;
+  width: 90px;
+  height: 90px;
   display: none;
   ${(props) => props.visible && "display: flex;"}
 `;
 
-type SlideOneProps = {
+type ImageSlideSmallProps = {
   imageUri: string;
 };
 
-const SlideOne = ({ imageUri }: SlideOneProps) => {
+const ImageSlideSmall = ({ imageUri }: ImageSlideSmallProps) => {
   const [isImageReady, setIsImageReady] = useState<boolean>(false);
 
   const onImageLoad = () => {
@@ -29,22 +24,23 @@ const SlideOne = ({ imageUri }: SlideOneProps) => {
   };
 
   return (
-    <SContainer>
+    <div className="image-slide-small">
       <img
         src={imageUri}
         alt="cafe"
         style={{
-          width: "360px",
-          height: "360px",
+          width: "90px",
+          height: "81px",
+          backgroundSize: "none",
           display: isImageReady ? "initial" : "none",
         }}
         onLoad={onImageLoad}
       />
-      <SpinnerContainer visible={!isImageReady}>
+      <SmallSpinnerContainer visible={!isImageReady}>
         <Spinner />
-      </SpinnerContainer>
-    </SContainer>
+      </SmallSpinnerContainer>
+    </div>
   );
 };
 
-export default SlideOne;
+export default ImageSlideSmall;

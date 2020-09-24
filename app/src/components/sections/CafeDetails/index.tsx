@@ -1,6 +1,5 @@
 import React from "react";
 import CafeImageSlide from "../CafeImageSlide";
-import PostIcon from "../PostIcon";
 import WebSearch from "../WebSearch";
 import PostHeader from "../PostHeader";
 import CafeBasicInfo from "../CafeBasicInfo";
@@ -9,7 +8,6 @@ import "./index.css";
 import {
   DetailContainer,
   ImageWrapper,
-  IconWrapper,
   CafeInfoWrapper,
   InfoRow,
   MenuContainer,
@@ -27,14 +25,14 @@ const CafeDetails = ({ cafe }: CafeDetailInfoProps) => {
       <ImageWrapper>
         <CafeImageSlide cafe={cafe} />
       </ImageWrapper>
-      <IconWrapper>
-        <PostIcon cafe={cafe} />
-      </IconWrapper>
       <CafeInfoWrapper>
         <CafeBasicInfo cafe={cafe} />
         <InfoRow>
           <span className="binfo-time">OPEN</span>
           <span className="binfo-value"> 8:00 ~ 19:00</span>
+          <div className="binfo-save-button">
+            <button>정보 저장</button>
+          </div>
         </InfoRow>
         <WebSearch cafe={cafe} />
         <MenuContainer className="menu-container">
