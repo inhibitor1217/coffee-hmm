@@ -1,4 +1,7 @@
-.favorite-icon i {
+.visibility-icon {
+  width: 24px;
+  height: 24px;
+  color: rgba(0, 0, 0, 0.56);
   margin: 4px;
   position: absolute;
   top: 6px;
@@ -6,13 +9,13 @@
 }
 
 .save-icon {
-  width: 22px;
+  width: 24px;
   height: 20px;
   color: rgba(0, 0, 0, 0.56);
   margin: 4px;
   position: absolute;
   top: 6px;
-  left: 40px;
+  right: 5px;
 }
 
 .save-pop-up-box {
@@ -50,11 +53,11 @@
 .N-icon {
   position: absolute;
   top: 6px;
-  right: 40px;
+  right: 75px;
 }
 
 .I-icon {
   position: absolute;
   top: 6px;
-  right: 5px;
+  right: 40px;
 }

@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import { isMobile, isAndroid, isIOS } from "react-device-detect";
 
+export const cafeApiURL =
+  "https://ird14dr4ze.execute-api.ap-northeast-2.amazonaws.com/production/cafe";
+
 export type Menus = {
   categories: MenuCategory[] | null;
 };
@@ -32,9 +35,14 @@ export type CafeInfo = {
   menus: Menus;
 };
 
+export const HomeScale = styled.div`
+  width: 100vw;
+  height: 100vh;
+`;
+
 export const DetailContainer = styled.div`
   display: flex;
-  align-items: stretch;
+  align-items: center;
   justify-content: center;
   flex-direction: column;
 `;

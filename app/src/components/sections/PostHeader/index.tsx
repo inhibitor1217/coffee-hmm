@@ -8,6 +8,7 @@ import MaterialIcon from "../../common/MaterialIcon";
 import { CafeInfo } from "../../../utils";
 
 const HeaderWrapper = styled.div`
+  width: 360px;
   height: 54px;
   position: relative;
 `;
@@ -29,31 +30,29 @@ const PostHeader = ({ cafe, fromDetail }: PostHeaderProps) => {
 
   return (
     <HeaderWrapper>
-      <div className="cafe-header-icon-box">
-        {fromDetail ? (
+      {fromDetail ? (
+        <div className="cafe-header-box">
           <button className="post-back-button" onClick={() => history.goBack()}>
             <MaterialIcon icon="arrow_back" />
           </button>
-        ) : (
-          <span className="cafe-header-icon">
-            <img
-              src={"https://" + cafe?.mainImageUri}
-              alt={cafe?.name}
-              width="32px"
-              height="32px"
-            />
+
+          <span
+            className="material-icons cafe-header-menu click-here"
+            onClick={showPopup}
+          >
+            more_horiz
           </span>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="cafe-header-icon">
+          <img src={"https://" + cafe?.mainImageUri} alt={cafe?.name} />
+        </div>
+      )}
+
       <Link to={`/cafe/${cafe?.id}`}>
         <div className="cafe-header-name">{cafe?.name}</div>
       </Link>
-      <span
-        className="material-icons cafe-header-menu click-here"
-        onClick={showPopup}
-      >
-        more_horiz
-      </span>
+
       <div
         className={
           popupActive ? "pop-up-container container-open" : "pop-up-container"

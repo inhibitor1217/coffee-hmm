@@ -1,15 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MainFeed from "../../sections/MainFeed";
-import styled from "styled-components";
-import { CafeInfo } from "../../../utils";
-
-export const HomeScale = styled.div`
-  width: 100vw;
-  height: 90vh;
-`;
-
-export const cafeApiURL =
-  "https://ird14dr4ze.execute-api.ap-northeast-2.amazonaws.com/production/cafe";
+import { CafeInfo, HomeScale, cafeApiURL } from "../../../utils";
 
 const MainPage = () => {
   const [cafeApi, setCafeApi] = useState<CafeInfo[] | null>(null);

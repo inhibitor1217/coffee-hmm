@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
-import { cafeApiURL, HomeScale } from "../Main";
 import CafeDetails from "../../sections/CafeDetails";
-import { CafeInfo } from "../../../utils";
+import { CafeInfo, HomeScale, cafeApiURL } from "../../../utils";
 
 const CafeDetailPage = () => {
   const { cafeId }: { cafeId: string } = useParams();

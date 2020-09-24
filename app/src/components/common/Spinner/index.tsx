@@ -25,9 +25,9 @@ const StyledSpinner = styled.div<Partial<SpinnerProps>>`
     height: ${(props) => props.size}px;
   }
   border: ${(props) => props.size! / 8}px solid
-    rgba(${(props) => (props.inverted ? "97, 97, 97" : "0, 0, 0")}, 0.2);
+    ${(props) => (props.inverted ? "#ffffff" : "#55AEF3")};
   border-left: ${(props) => props.size! / 8}px solid
-    ${(props) => (props.inverted ? "#ffffff" : "#939393")};
+    ${(props) => (props.inverted ? "#ffffff" : "#fafafa")};
   animation: ${spinnerKeyframes} 1.1s infinite linear;
 `;
 
@@ -36,7 +36,7 @@ const defaultProps: Partial<SpinnerProps> = {
 };
 
 const Spinner = (props: SpinnerProps) => {
-  return <StyledSpinner size={props.size} />;
+  return <StyledSpinner size={props.size / 2} />;
 };
 
 Spinner.defaultProps = defaultProps;

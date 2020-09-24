@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import "./index.css";
-import MaterialIcon from "../../common/MaterialIcon";
 import ImageSavePopup from "../ImageSavePopup";
 import { useLocation } from "react-router";
 import { openSearch, CafeInfo } from "../../../utils";
@@ -32,12 +31,8 @@ const PostIcon = ({ cafe }: PostIconProps) => {
 
   return (
     <IconsContainer>
-      <span className="favorite-icon">
-        <MaterialIcon
-          icon="favorite_border"
-          size={24}
-          color="rgba(0, 0, 0, 0.56)"
-        />
+      <span className="material-icons-outlined visibility-icon">
+        visibility
       </span>
       <span className="material-icons-outlined save-icon" onClick={showPopup}>
         perm_media
@@ -63,6 +58,7 @@ const PostIcon = ({ cafe }: PostIconProps) => {
           </span>
         </div>
       )}
+
       <div
         className={
           popupActive ? "pop-up-container container-open" : "pop-up-container"
