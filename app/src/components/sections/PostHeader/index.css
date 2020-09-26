@@ -1,21 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital@1&family=Noto+Sans+KR&display=swap');
 
-.cafe-save-button button {
-  font-size: 11px;
-  font-family: 'Noto Sans KR', sans-serif;
-  height: 22px;
-  padding: 0 10px;
-  background-color: #fafafa;
-  border-radius: 4px;
-  border: 1px solid #dbdbdb;
-  box-shadow: 0px 0px 1px 0px rgba(143, 137, 143, 1);
+.cafe-save-icon i {
+  color: rgba(0, 0, 0, 0.56);
+  margin: 4px;
+  padding: 4px;
 }
 
-.cafe-save-button {
+.cafe-save-icon {
   display: inline-block;
   position: absolute;
-  top: 14px;
-  right: 10px;
+  top: 8px;
+  right: 8px;
 }
 
 .cafe-header-icon {

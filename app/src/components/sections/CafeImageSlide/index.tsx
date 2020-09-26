@@ -14,13 +14,22 @@ const CafeImageSlide = ({ cafe }: CafeImageSlideProps) => {
   cafeImageUris = cafe?.imageUris;
 
   if (cafeImageUris === undefined) {
-    return <ImageSlideBig imageUri={cafeDefaultImage} />;
+    return (
+      <ImageSlideBig imageUri={cafeDefaultImage} index={0} totalIndex={0} />
+    );
   } else {
     return (
       <div>
         <ImageCarousel>
-          {cafeImageUris?.map((uri) => {
-            return <ImageSlideBig imageUri={"https://" + uri} key={uri} />;
+          {cafeImageUris?.map((uri, index) => {
+            return (
+              <ImageSlideBig
+                imageUri={"https://" + uri}
+                key={uri}
+                index={index}
+                totalIndex={cafeImageUris?.length || 0}
+              />
+            );
           })}
         </ImageCarousel>
       </div>

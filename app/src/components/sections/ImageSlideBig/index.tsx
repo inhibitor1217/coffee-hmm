@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Spinner from "../../common/Spinner";
+import "./index.css";
 
 const SContainer = styled.div`
   align-items: center;
@@ -19,9 +20,11 @@ const SpinnerContainer = styled.div<{ visible: boolean }>`
 
 type ImageSlideBigProps = {
   imageUri: string;
+  index: number;
+  totalIndex: number;
 };
 
-const ImageSlideBig = ({ imageUri }: ImageSlideBigProps) => {
+const ImageSlideBig = ({ imageUri, index, totalIndex }: ImageSlideBigProps) => {
   const [isImageReady, setIsImageReady] = useState<boolean>(false);
 
   const onImageLoad = () => {
@@ -30,6 +33,9 @@ const ImageSlideBig = ({ imageUri }: ImageSlideBigProps) => {
 
   return (
     <SContainer>
+      <div className="image-index">
+        {index + 1}/{totalIndex}
+      </div>
       <img
         src={imageUri}
         alt="cafe"

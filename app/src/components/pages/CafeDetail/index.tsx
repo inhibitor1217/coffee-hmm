@@ -15,6 +15,16 @@ const CafeDetailPage = () => {
         .catch((error) => console.log("Error: ", error));
     }
     fetchData();
+
+    async function addViewCount() {
+      await fetch(cafeApiURL + `/view?cafe_id=${cafeId}`, {
+        method: "PUT",
+      })
+        .then((response) => response.json())
+        .catch((error) => console.log("Error: ", error));
+    }
+
+    addViewCount();
   }, [cafeId]);
   return (
     <HomeScale>

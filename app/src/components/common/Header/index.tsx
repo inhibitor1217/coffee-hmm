@@ -42,7 +42,7 @@ const Header = (props: HeaderProps) => {
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder="지역을 입력해주세요"
+            placeholder="카페 동네 검색"
             value={currentPlace}
             onChange={handleChange}
             className="search-box"

@@ -37,7 +37,7 @@ const ImageSlideSmall = ({ imageUri }: ImageSlideSmallProps) => {
         onLoad={onImageLoad}
       />
       <SmallSpinnerContainer visible={!isImageReady}>
-        <Spinner />
+        <Spinner pathColor="#e0e0e0" size={24} />
       </SmallSpinnerContainer>
     </div>
   );

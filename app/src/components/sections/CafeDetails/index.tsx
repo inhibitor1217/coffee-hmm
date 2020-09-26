@@ -13,6 +13,7 @@ import {
   MenuContainer,
   CafeInfo,
 } from "../../../utils";
+import MaterialIcon from "../../common/MaterialIcon";
 
 type CafeDetailInfoProps = {
   cafe: CafeInfo | null;
@@ -28,10 +29,10 @@ const CafeDetails = ({ cafe }: CafeDetailInfoProps) => {
       <CafeInfoWrapper>
         <CafeBasicInfo cafe={cafe} />
         <InfoRow>
-          <span className="binfo-time">OPEN</span>
-          <span className="binfo-value"> 8:00 ~ 19:00</span>
-          <div className="binfo-save-button">
-            <button>정보 저장</button>
+          <span className="open-time">OPEN</span>
+          <span className="open-time"> 8:00 ~ 19:00</span>
+          <div className="binfo-save-icon">
+            <MaterialIcon icon="save_alt" size={24} color="#261308" />
           </div>
         </InfoRow>
         <WebSearch cafe={cafe} />

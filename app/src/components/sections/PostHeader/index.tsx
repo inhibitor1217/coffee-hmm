@@ -47,8 +47,8 @@ const PostHeader = ({ cafe, fromDetail }: PostHeaderProps) => {
           <div className="cafe-header-icon">
             <img src={"https://" + cafe?.mainImageUri} alt={cafe?.name} />
           </div>
-          <div className="cafe-save-button">
-            <button>저장</button>
+          <div className="cafe-save-icon">
+            <MaterialIcon icon="save_alt" size={18} />
           </div>
         </div>
       )}
@@ -67,9 +67,7 @@ const PostHeader = ({ cafe, fromDetail }: PostHeaderProps) => {
             close
           </div>
           <div className="pop-up-box">
-            <div className="pop-up-content-wrap">
-              <DetailPopup cafe={cafe} />;
-            </div>
+            <DetailPopup cafe={cafe} />
           </div>
         </div>
         <div className="bg-overlay" onClick={closePopup}></div>

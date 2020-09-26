@@ -2,18 +2,17 @@
   font-size: 11px;
   color: rgba(0, 0, 0, 0.56);
   position: absolute;
-  top: 14px;
-  left: 42px;
+  top: 12px;
+  left: 36px;
 }
 
 .visibility-icon {
-  width: 24px;
-  height: 24px;
+  font-size: 20px;
   color: rgba(0, 0, 0, 0.56);
-  margin: 4px;
+  padding: 4px;
   position: absolute;
   top: 6px;
-  left: 5px;
+  left: 8px;
 }
 
 .search-icons {

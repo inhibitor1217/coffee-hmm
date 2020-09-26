@@ -32,7 +32,7 @@ const PlacePreviewList = ({ places }: PlacePreviewListProps) => {
       <div className="place-preview-header">
         Suggested for you..
         <Link to="/places">
-          <span className="place-preview-more">more</span>
+          <span className="place-preview-more">more {">"} </span>
         </Link>
       </div>
       <TextWrapper>
