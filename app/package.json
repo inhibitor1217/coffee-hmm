@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "memoize-one": "^5.1.1",
     "react": "^16.13.1",
     "react-copy-to-clipboard": "^5.0.2",
     "react-device-detect": "^1.13.1",
