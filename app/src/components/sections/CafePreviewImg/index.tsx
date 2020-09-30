@@ -16,14 +16,7 @@ const CafePreviewImg = ({ cafeName, cafeImg }: CafePreviewImagProps) => {
   return (
     <CafePreviewBox>
       <div className="cafe-preview-img">
-        <img
-          src={"https://" + cafeImg}
-          alt="cafe"
-          style={{
-            width: "52px",
-            height: "52px",
-          }}
-        />
+        <img src={"https://" + cafeImg} alt="cafe" />
       </div>
       <div className="cafe-preview-name">{cafeName}</div>
     </CafePreviewBox>

@@ -4,10 +4,17 @@
 }
 
 .cafe-preview-img {
-  width: 50px;
-  height: 50px;
-  border: 1px solid #BF6D4E;
+  width: 54px;
+  height: 54px;
+  background: linear-gradient(109.5deg, rgba(229, 233, 177, 1) 11.2%, rgba(223, 205, 187, 1) 100.2%);
   border-radius: 50%;
   overflow: hidden;
   display: inline-block;
+}
+
+.cafe-preview-img img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-top: 2px;
 }

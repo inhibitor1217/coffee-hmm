@@ -41,7 +41,7 @@ const getPlaceCategories = (cafeList: CafeInfo[] | null) => {
 
 const FEED_LIST_VISIBLE_HEIGHT = 1000;
 const FEED_TOP_SEMANTIC_HEIGHT = 75;
-const FEED_BOX_SEMANTIC_HEIGHT = 760;
+const FEED_BOX_SEMANTIC_HEIGHT = 720;
 
 const MainFeed = ({ cafeList }: MainFeedProps) => {
   return (

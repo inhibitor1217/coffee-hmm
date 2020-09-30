@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import "./index.css";
 import { Link, useHistory } from "react-router-dom";
-import MainPopup from "../MainPopup";
-import DetailPopup from "../DetailPopup";
 import MaterialIcon from "../../common/MaterialIcon";
 import { CafeInfo } from "../../../utils";
+import DetailPopup from "../DetailPopup";
 
 const HeaderWrapper = styled.div`
+  width: 360px;
   height: 54px;
   position: relative;
 `;
@@ -20,6 +20,7 @@ type PostHeaderProps = {
 const PostHeader = ({ cafe, fromDetail }: PostHeaderProps) => {
   const history = useHistory();
   const [popupActive, setPopupActive] = useState<boolean>(false);
+
   const showPopup = () => {
     setPopupActive(true);
   };
@@ -29,31 +30,33 @@ const PostHeader = ({ cafe, fromDetail }: PostHeaderProps) => {
 
   return (
     <HeaderWrapper>
-      <div className="cafe-header-icon-box">
-        {fromDetail ? (
+      {fromDetail ? (
+        <div className="cafe-header-box">
           <button className="post-back-button" onClick={() => history.goBack()}>
-            <MaterialIcon icon="arrow_back" />
+            <MaterialIcon icon="keyboard_arrow_left" />
           </button>
-        ) : (
-          <span className="cafe-header-icon">
-            <img
-              src={"https://" + cafe?.mainImageUri}
-              alt={cafe?.name}
-              width="32px"
-              height="32px"
-            />
+          <span
+            className="material-icons cafe-header-menu click-here"
+            onClick={showPopup}
+          >
+            more_horiz
           </span>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="cafe-header-box">
+          <div className="cafe-header-icon">
+            <img src={"https://" + cafe?.mainImageUri} alt={cafe?.name} />
+          </div>
+          <div className="cafe-save-icon">
+            <MaterialIcon icon="save_alt" size={18} />
+          </div>
+        </div>
+      )}
+
       <Link to={`/cafe/${cafe?.id}`}>
         <div className="cafe-header-name">{cafe?.name}</div>
       </Link>
-      <span
-        className="material-icons cafe-header-menu click-here"
-        onClick={showPopup}
-      >
-        more_horiz
-      </span>
+
       <div
         className={
           popupActive ? "pop-up-container container-open" : "pop-up-container"
@@ -64,13 +67,7 @@ const PostHeader = ({ cafe, fromDetail }: PostHeaderProps) => {
             close
           </div>
           <div className="pop-up-box">
-            <div className="pop-up-content-wrap">
-              {fromDetail ? (
-                <DetailPopup cafe={cafe} />
-              ) : (
-                <MainPopup cafe={cafe} />
-              )}
-            </div>
+            <DetailPopup cafe={cafe} />
           </div>
         </div>
         <div className="bg-overlay" onClick={closePopup}></div>

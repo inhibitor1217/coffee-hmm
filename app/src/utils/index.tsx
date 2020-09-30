@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import { isMobile, isAndroid, isIOS } from "react-device-detect";
 
+export const cafeApiURL =
+  "https://ird14dr4ze.execute-api.ap-northeast-2.amazonaws.com/production/cafe";
+
 export type Menus = {
   categories: MenuCategory[] | null;
 };
@@ -30,11 +33,17 @@ export type CafeInfo = {
   americanoPrice: number;
   floor: number;
   menus: Menus;
+  viewCount: number;
 };
+
+export const HomeScale = styled.div`
+  width: 100vw;
+  height: 98vh;
+`;
 
 export const DetailContainer = styled.div`
   display: flex;
-  align-items: stretch;
+  align-items: center;
   justify-content: center;
   flex-direction: column;
 `;
@@ -57,7 +66,7 @@ export const IconWrapper = styled.div`
 
 export const CafeInfoWrapper = styled.div`
   width: 320px;
-  margin: 0 auto;
+  margin: 8px auto;
   padding-bottom: 14px;
   display: flex;
   align-items: stretch;
@@ -67,6 +76,7 @@ export const CafeInfoWrapper = styled.div`
 export const InfoRow = styled.div`
   display: flex;
   padding-bottom: 8px;
+  position: relative;
 `;
 
 export const MenuContainer = styled.div`

@@ -12,18 +12,20 @@
   font-weight: 600;
   margin-block-start: 0.5em;
   margin-block-end: 0.2em;
-  border-bottom: 1px solid #E8BF7E;
+  border-bottom: 1px solid rgba(223, 205, 187, 1);
 }
 
-.binfo-value {
-  font-size: 13px;
-  font-weight: 500;
-  font-family: 'Noto Sans KR', sans-serif;
-}
-
-.binfo-time {
+.open-time {
   font-size: 13px;
   font-weight: 600;
   font-family: 'Noto Sans KR', sans-serif;
   margin-right: 20px;
+}
+
+.binfo-save-icon i {
+  display: inline-block;
+  position: absolute;
+  right: 0px;
+  bottom: 4px;
+  padding: 4px;
 }

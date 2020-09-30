@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { cafeApiURL, HomeScale } from "../Main";
 import { useParams } from "react-router";
 import PlaceFeed from "../../sections/PlaceFeed";
-import { CafeInfo } from "../../../utils";
+import { CafeInfo, HomeScale, cafeApiURL } from "../../../utils";
 
 const CafePlacePage = () => {
   const { place }: { place: string } = useParams();

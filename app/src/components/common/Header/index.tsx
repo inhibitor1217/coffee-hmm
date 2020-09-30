@@ -42,7 +42,7 @@ const Header = (props: HeaderProps) => {
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder="지역을 입력해주세요"
+            placeholder="카페 동네 검색"
             value={currentPlace}
             onChange={handleChange}
             className="search-box"
@@ -54,7 +54,7 @@ const Header = (props: HeaderProps) => {
       </SearchBox>
       {props.location.pathname !== "/" && props.location.pathname !== "/cafe" && (
         <button className="back-button" onClick={() => history.goBack()}>
-          <MaterialIcon icon="arrow_back" />
+          <MaterialIcon icon="keyboard_arrow_left" />
         </button>
       )}
     </header>

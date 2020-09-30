@@ -37,6 +37,12 @@ header #home-link {
 .search-box {
   border: 1px solid #dbdbdb;
   text-align: center;
+  height: 18px;
+}
+
+.search-box::placeholder {
+  font-size: 12px;
+  color: #261308;
 }
 
 .search-button {

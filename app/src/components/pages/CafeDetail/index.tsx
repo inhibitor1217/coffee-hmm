@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
-import { cafeApiURL, HomeScale } from "../Main";
 import CafeDetails from "../../sections/CafeDetails";
-import { CafeInfo } from "../../../utils";
+import { CafeInfo, HomeScale, cafeApiURL } from "../../../utils";
 
 const CafeDetailPage = () => {
   const { cafeId }: { cafeId: string } = useParams();
@@ -16,6 +15,16 @@ const CafeDetailPage = () => {
         .catch((error) => console.log("Error: ", error));
     }
     fetchData();
+
+    async function addViewCount() {
+      await fetch(cafeApiURL + `/view?cafe_id=${cafeId}`, {
+        method: "PUT",
+      })
+        .then((response) => response.json())
+        .catch((error) => console.log("Error: ", error));
+    }
+
+    addViewCount();
   }, [cafeId]);
   return (
     <HomeScale>

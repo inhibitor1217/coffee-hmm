@@ -1,38 +1,18 @@
-.favorite-icon i {
-  margin: 4px;
-  position: absolute;
-  top: 6px;
-  left: 5px;
-}
-
-.save-icon {
-  width: 22px;
-  height: 20px;
+.view-count {
+  font-size: 11px;
   color: rgba(0, 0, 0, 0.56);
-  margin: 4px;
+  position: absolute;
+  top: 12px;
+  left: 36px;
+}
+
+.visibility-icon {
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.56);
+  padding: 4px;
   position: absolute;
   top: 6px;
-  left: 40px;
-}
-
-.save-pop-up-box {
-  background-color: #fafafa;
-  border-radius: 0px;
-  margin-top: 0px;
-}
-
-.save-pop-up-wrap {
-  width: 360px;
-}
-
-.save-close-btn {
-  position: absolute;
-  right: 2px;
-  top: -20px;
-  cursor: pointer;
-  z-index: 99;
-  font-size: 14px;
-  color: #fafafa;
+  left: 8px;
 }
 
 .search-icons {
@@ -40,21 +20,14 @@
   height: 24px;
 }
 
-.NI-icons img {
-  width: 24px;
-  height: 24px;
-  background: transparent;
-  margin: 4px;
-}
-
 .N-icon {
   position: absolute;
   top: 6px;
-  right: 40px;
+  right: 54px;
 }
 
 .I-icon {
   position: absolute;
   top: 6px;
-  right: 5px;
+  right: 12px;
 }
