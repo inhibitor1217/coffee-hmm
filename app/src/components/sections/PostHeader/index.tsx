@@ -9,7 +9,6 @@ import DetailPopup from "../DetailPopup";
 const HeaderWrapper = styled.div`
   width: 360px;
   height: 54px;
-  position: relative;
 `;
 
 type PostHeaderProps = {
@@ -31,7 +30,10 @@ const PostHeader = ({ cafe, fromDetail }: PostHeaderProps) => {
   return (
     <HeaderWrapper>
       {fromDetail ? (
-        <div className="cafe-header-box">
+        <div
+          className="cafe-header-box"
+          style={{ position: "fixed", top: "0", zIndex: 999 }}
+        >
           <button className="post-back-button" onClick={() => history.goBack()}>
             <MaterialIcon icon="keyboard_arrow_left" />
           </button>
@@ -41,21 +43,20 @@ const PostHeader = ({ cafe, fromDetail }: PostHeaderProps) => {
           >
             more_horiz
           </span>
+          <Link to={`/cafe/${cafe?.id}`}>
+            <div className="cafe-header-name">{cafe?.name}</div>
+          </Link>
         </div>
       ) : (
         <div className="cafe-header-box">
           <div className="cafe-header-icon">
             <img src={"https://" + cafe?.mainImageUri} alt={cafe?.name} />
           </div>
-          <div className="cafe-save-icon">
-            <MaterialIcon icon="save_alt" size={18} />
-          </div>
+          <Link to={`/cafe/${cafe?.id}`}>
+            <div className="cafe-header-name">{cafe?.name}</div>
+          </Link>
         </div>
       )}
-
-      <Link to={`/cafe/${cafe?.id}`}>
-        <div className="cafe-header-name">{cafe?.name}</div>
-      </Link>
 
       <div
         className={

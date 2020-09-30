@@ -61,7 +61,7 @@ const MainFeed = ({ cafeList }: MainFeedProps) => {
         >
           {({ index, style }) =>
             index ? (
-              <div style={style}>
+              <div key={index} style={style}>
                 <FeedBox>
                   <MainPost cafe={cafeList[index - 1]} />
                 </FeedBox>

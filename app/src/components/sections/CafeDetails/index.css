@@ -21,11 +21,3 @@
   font-family: 'Noto Sans KR', sans-serif;
   margin-right: 20px;
 }
-
-.binfo-save-icon i {
-  display: inline-block;
-  position: absolute;
-  right: 0px;
-  bottom: 4px;
-  padding: 4px;
-}
