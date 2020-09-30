@@ -33,9 +33,6 @@ const ImageSlideBig = ({ imageUri, index, totalIndex }: ImageSlideBigProps) => {
 
   return (
     <SContainer>
-      <div className="image-index">
-        {index + 1}/{totalIndex}
-      </div>
       <img
         src={imageUri}
         alt="cafe"

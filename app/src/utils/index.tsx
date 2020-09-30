@@ -46,6 +46,16 @@ export const DetailContainer = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  position: relative;
+`;
+
+export const PostContents = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: absolute;
+  top: 54px;
 `;
 
 export const ImageWrapper = styled.div`

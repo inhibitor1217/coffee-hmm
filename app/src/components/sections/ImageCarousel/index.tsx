@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import "./index.css";
+import MaterialIcon from "../../common/MaterialIcon";
 
 const ScrouselWrapper = styled.div`
   width: 360px;
@@ -71,11 +72,15 @@ const ImageCarousel = ({ children }: IProps) => {
       <button
         className="slide-button slide-button-left"
         onTouchStart={slideLeft}
-      />
+      >
+        <MaterialIcon icon="keyboard_arrow_left" />
+      </button>
       <button
         className="slide-button slide-button-right"
         onTouchStart={slideRight}
-      />
+      >
+        <MaterialIcon icon="keyboard_arrow_right" />
+      </button>
     </div>
   );
 };
