@@ -14,7 +14,7 @@ const DetailPopup = ({ cafe }: DetailPopupProps) => {
   return (
     <PopupWrapper className="pu-content-wrap">
       <button className="into-place">
-        <Link to={`/place=${cafe?.place}`}> {cafe?.place} 검색</Link>
+        <Link to={`/place/${cafe?.place}`}> {cafe?.place} 검색</Link>
       </button>
       <CopyToClipboard text={currentLink}>
         <button onClick={() => copyLink(cafe?.name)}>링크 복사</button>
