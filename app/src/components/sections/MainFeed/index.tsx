@@ -44,13 +44,23 @@ const FEED_TOP_SEMANTIC_HEIGHT = 75;
 const FEED_BOX_SEMANTIC_HEIGHT = 720;
 
 const MainFeed = ({ cafeList }: MainFeedProps) => {
+  const listRef = React.useRef<VariableSizeList>(null);
+
   return (
     <MContainer>
-      <button className="top-button">
+      <button
+        className="top-button"
+        onClick={() => {
+          if (listRef.current) {
+            listRef.current.scrollToItem(0);
+          }
+        }}
+      >
         <MaterialIcon icon="keyboard_arrow_up" />
       </button>
       {cafeList && (
         <VariableSizeList
+          ref={listRef}
           itemCount={cafeList.length + 1}
           width="100%"
           height={FEED_LIST_VISIBLE_HEIGHT}

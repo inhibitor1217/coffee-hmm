@@ -8,7 +8,13 @@
   border-radius: 50%;
   border-color: transparent;
   position: absolute;
-  bottom: 6px;
+  bottom: 32px;
   right: 0px;
   z-index: 999999;
+  outline: none;
+}
+
+.top-button:active {
+  background-color: #b0b0b0;
+  outline: none;
 }
