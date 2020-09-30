@@ -1,0 +1,23 @@
+.Mslide-button {
+  width: 50px;
+  height: 150px;
+  z-index: 9999;
+  background-color: transparent;
+  border: none;
+}
+
+.Mslide-button:focus {
+  outline: transparent;
+}
+
+.Mslide-button-left {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+}
+
+.Mslide-button-right {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+}

@@ -1,0 +1,20 @@
+.top-button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin: 8px;
+  background-color: #dbdbdb;
+  opacity: 0.3;
+  border-radius: 50%;
+  border-color: transparent;
+  position: absolute;
+  bottom: 32px;
+  right: 0px;
+  z-index: 999999;
+  outline: none;
+}
+
+.top-button:active {
+  background-color: #b0b0b0;
+  outline: none;
+}

@@ -1,0 +1,33 @@
+.view-count {
+  font-size: 11px;
+  color: rgba(0, 0, 0, 0.56);
+  position: absolute;
+  top: 12px;
+  left: 36px;
+}
+
+.visibility-icon {
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.56);
+  padding: 4px;
+  position: absolute;
+  top: 6px;
+  left: 8px;
+}
+
+.search-icons {
+  width: 24px;
+  height: 24px;
+}
+
+.N-icon {
+  position: absolute;
+  top: 6px;
+  right: 54px;
+}
+
+.I-icon {
+  position: absolute;
+  top: 6px;
+  right: 12px;
+}

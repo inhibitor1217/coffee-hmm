@@ -4,19 +4,24 @@ header {
 
   background-color: #fafafa;
   border-bottom: 1px solid #eeeeee;
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.1);
 
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  z-index: 999;
+
+  position: relative;
 }
 
 header #home-link {
   text-decoration: none;
+  position: absolute;
+  left: 16px;
 }
 
-header button.leading {
+.back-button {
   position: absolute;
   background-color: transparent;
   border: none;
@@ -27,4 +32,20 @@ header button.leading {
   padding: 4px;
   width: 32px;
   height: 32px;
+}
+
+.search-box {
+  border: 1px solid #dbdbdb;
+  text-align: center;
+  height: 18px;
+}
+
+.search-box::placeholder {
+  font-size: 12px;
+  color: #261308;
+}
+
+.search-button {
+  background-color: transparent;
+  border-color: transparent;
 }

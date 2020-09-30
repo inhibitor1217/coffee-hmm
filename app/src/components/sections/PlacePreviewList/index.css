@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Karla&display=swap');
+
+.place-preview-header {
+  font-family: 'Karla', sans-serif;
+  font-size: 14px;
+  padding-bottom: 8px;
+  margin-left: 2px;
+  position: relative;
+}
+
+.place-preview-text {
+  font-size: 13px;
+  text-decoration: none;
+  color: black;
+}
+
+.place-preview-text:hover {
+  color: #E8BF7E;
+}
+
+.place-preview-more {
+  color: black;
+  position: absolute;
+  right: 6px;
+}
+
+.place-preview-more:hover {
+  color: #E8BF7E;
+}
