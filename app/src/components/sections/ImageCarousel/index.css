@@ -1,7 +1,7 @@
 .slide-button {
   width: 50px;
   height: 350px;
-  z-index: 9999;
+  z-index: 1;
   background-color: transparent;
   border: none;
 }
