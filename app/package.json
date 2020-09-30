@@ -17,7 +17,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build"
+    "build": "react-scripts build && npx sw-precache --config=sw-precache-config.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -43,6 +43,7 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/react-window": "^1.8.2",
     "@types/styled-components": "^5.1.2",
+    "sw-precache": "^5.2.1",
     "typescript": "^3.9.7"
   }
 }
