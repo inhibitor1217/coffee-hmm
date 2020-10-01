@@ -2,7 +2,7 @@
 
 판교앞 커피거리 :coffee:
 
-[Go to page](http://coffee-hmm.inhibitor.com.s3-website.ap-northeast-2.amazonaws.com/)
+[Go to page](https://coffee-hmm.inhibitor.io)
 
 **Builds**
 
