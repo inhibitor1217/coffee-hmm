@@ -25,10 +25,8 @@ const CafeList = ({searchValue}: CafeListProps) => {
                 setCafes(data);
             });
         }
-        if(searchValue !== ""){
-            fetchData();
-        }
-    }, [searchValue])
+        fetchData();
+    },[searchValue])
 
 
     const isEmptyArray = (array: CafeInfo[]) => {
@@ -59,9 +57,7 @@ const CafeList = ({searchValue}: CafeListProps) => {
                 </StyledColumnFlex>
             </div>
             <div className="search-bottom">버튼을 눌러 카페를 확인하세요<span><img src="/images/arrow.png" alt="arrow"/></span></div>
-        </div>
-       
+        </div>       
     )
 }
-
 export default CafeList;

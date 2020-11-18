@@ -2,8 +2,9 @@ import { isMobile, isAndroid, isIOS } from "react-device-detect";
 
 export const letterValidation = (data: string) => {
     let Korean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    let English = /[a-zA-Z]/;
  
-    if(!Korean.test(data)){
+    if(!Korean.test(data) && !English.test(data)){
         return false;
     }
     return true;
