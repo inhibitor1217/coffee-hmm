@@ -5,24 +5,20 @@ interface RouterProps {
   location?: any;
 }
 
-const MainPage = lazy(() => import("./pages/Main"));
-const CafeDetailPage = lazy(() => import("./pages/CafeDetail"));
-const CafePlacePage = lazy(() => import("./pages/Place"));
-const PlaceListPage = lazy(() => import("./pages/PlaceList"));
+const IntroPage = lazy(() => import("./pages/Intro"));
+const SearchPage = lazy(() => import("./pages/Search"));
 
 const Router = (props: RouterProps) => {
-  return (
+return(
     <React.Suspense fallback={<div>Loading...</div>}>
-      <Switch location={props.location}>
-        <Route path="/" exact render={() => <MainPage />} />
-        <Route path="/cafe/:cafeId" render={() => <CafeDetailPage />} />
-        <Route path="/place/:place" render={() => <CafePlacePage />} />
-        <Route path="/places" render={() => <PlaceListPage />} />
-
-        <Redirect to="/" />
-      </Switch>
-    </React.Suspense>
+    <Switch location={props.location}>    
+        <Route path="/" exact render={() => <IntroPage />}/>
+        <Route path="/search" exact render={() => <SearchPage/>}/>
+      <Redirect to="/" />
+    </Switch>
+    </React.Suspense>  
   );
 };
+
 
 export default Router;

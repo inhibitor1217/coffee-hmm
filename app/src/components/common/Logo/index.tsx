@@ -1,8 +1,14 @@
-import React from "react";
-import "./style.css";
+import React from 'react';
+import './index.css';
 
-const Logo = () => {
-  return <span className="logo">hmm</span>;
-};
+type LogoProps = {
+    pathname: string;
+ }
+
+const Logo = ({pathname}: LogoProps) => {
+    return(
+        <div className="logo">Coffee Hmm</div>
+    )
+}
 
 export default Logo;

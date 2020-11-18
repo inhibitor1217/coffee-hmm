@@ -1,9 +1,8 @@
 {
-  "short_name": "Coffee Hmm",
-  "name": "Coffee Hmm",
-  "icons": [],
+  "short_name": "React App",
+  "name": "Create React App Sample",
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#5D4037",
+  "theme_color": "#000000",
   "background_color": "#ffffff"
 }
