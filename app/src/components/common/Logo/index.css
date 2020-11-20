@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Alef&display=swap');
+
+.logo {
+    font-family: 'Alef', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 16px;
+    color: #ffffff;
+    text-shadow: -1px 0 #524F4A, 0 1px #524F4A, 1px 0 #524F4A, 0 -1px #524F4A;
+}

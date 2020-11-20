@@ -1,18 +1,12 @@
 import React from "react";
 import { useLocation } from "react-router";
-import { useTransition, animated } from "react-spring";
+import { animated, useTransition } from "react-spring";
+import Footer from "./common/Footer";
 import Header from "./common/Header";
 import Router from "./Router";
-import styled from "styled-components";
 
-const PageTemplateContainer = styled.div`
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
-  flex-direction: column;
-`;
 
-function getPageTransition(pathname: string) {
+function getPageTransition(pathname: string){
   if (pathname === "/") {
     return {
       initial: { opacity: 0 },
@@ -21,7 +15,6 @@ function getPageTransition(pathname: string) {
       leave: { opacity: 0 },
     };
   }
-
   return {
     initial: { transform: "translate(0, 0)", opacity: 0 },
     from: { transform: "translate(100%, 0)", opacity: 0 },
@@ -30,7 +23,12 @@ function getPageTransition(pathname: string) {
   };
 }
 
-const PageTemplate = () => {
+type props = {
+  searchValue: string;
+}
+
+
+const PageTemplate = ({searchValue}: props) => {
   const location = useLocation();
   const routeTransition = useTransition(
     location,
@@ -43,9 +41,10 @@ const PageTemplate = () => {
       unique: true,
     }
   );
+
   return (
     <div>
-      {routeTransition.map(({ item, props: springProps, key }) => (
+       {routeTransition.map(({ item, props: springProps, key }) => (
         <animated.div
           key={key}
           style={{
@@ -54,21 +53,16 @@ const PageTemplate = () => {
             minHeight: "100%",
             top: 0,
             left: 0,
-            backgroundColor: "#fafafa",
+            backgroundColor: "#ffffff",
             opacity: 1,
-            transform: "translate(0, 0)",
             ...springProps,
           }}
         >
-          <PageTemplateContainer>
-            {!location.pathname.includes("/cafe/") && (
-              <Header location={item} />
-            )}
-            <main>
-              <Router location={item} />
-            </main>
-            <footer></footer>
-          </PageTemplateContainer>
+          <Header location={item} searchValue={searchValue}/>
+          <main>
+            <Router location={item}/>
+          </main>
+          <Footer location={item} />
         </animated.div>
       ))}
     </div>
