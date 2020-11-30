@@ -36,7 +36,7 @@ const CafeDetail = ({ cafe, setIsClicked}: CafeDetailProps) => {
 
                 <div className="detail-more">
                     <h5>카페의 구체적인 정보가 필요하신가요?</h5>
-                    <button className="detail-more-button"onClick={() => setWebSearchClicked(true)}>네이버, 인스타 검색 바로가기</button>
+                    <div className="detail-more-button"><button onClick={() => setWebSearchClicked(true)}>네이버, 인스타 검색 바로가기</button></div>
                   
                     <WebSearchBottomPopup cafe={cafe} isWebSearchClicked={isWebSearchClicked} setWebSearchClicked={setWebSearchClicked}/>
                 </div>

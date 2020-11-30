@@ -77,10 +77,10 @@
     font-style: normal;
     font-weight: normal;
     color: #ffffff;
-    padding: 8px 0px;
+    padding: 20px 0px;
 }
 
-.detail-more-button {
+.detail-more-button button {
     width: 180px;
     height: 36px;
     border: 1px solid #F2D6A2;
@@ -96,4 +96,8 @@
 .detail-button i {
     font-size: 20px;
     color: #ffffff;
+}
+
+.detail-container {
+    padding-bottom: 20px;
 }
