@@ -1,0 +1,53 @@
+name: ci-services@beta
+on:
+  push:
+    tags:
+      - "service/*"
+defaults:
+  run:
+    shell: bash
+env:
+  APP_STAGE: beta
+jobs:
+  env:
+    runs-on: ubuntu-18.04
+    outputs:
+      service: ${{ steps.service.outputs.parsed }}
+      version: ${{ steps.version.outputs.parsed }}
+    steps:
+      - uses: actions/checkout@master
+      - name: Set current tag.
+        id: tag
+        run: echo ::set-output name=parsed::${GITHUB_REF#refs/tags/service/}
+      - name: Parse service name.
+        id: service
+        run: echo ::set-output name=parsed::${TAG%@*}
+        env:
+          TAG: ${{ steps.tag.outputs.parsed }}
+      - name: Parse version.
+        id: version
+        run: echo ::set-output name=parsed::${TAG#*@}
+        env:
+          TAG: ${{ steps.tag.outputs.parsed }}
+  build:
+    runs-on: ubuntu-18.04
+    needs: env
+    defaults:
+      run:
+        working-directory: services/${{ needs.env.outputs.service }}
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+          node-version: "12"
+      - name: Print environment configuration.
+        run: make info APP_STAGE=${APP_STAGE}
+      - name: Install dependencies.
+        run: make deps
+      - name: Check linting of source.
+        run: make lint
+      - name: Deploy source via serverless framework.
+        run: make deploy APP_STAGE=${APP_STAGE} AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.SERVERLESS_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SERVERLESS_AWS_SECRET_ACCESS_KEY }}

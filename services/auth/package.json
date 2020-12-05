@@ -1,0 +1,56 @@
+{
+  "name": "coffee-hmm-auth",
+  "version": "0.1.0",
+  "description": "An authentication microservice for coffee-hmm",
+  "scripts": {
+    "debug": "npx ts-node-dev --respawn --transpile-only --ignore-watch node_modules ./src/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://github.com/inhibitor1217/coffee-hmm"
+  },
+  "author": "inhibitor <inhibitor@kaist.ac.kr>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/inhibitor1217/coffee-hmm/issues"
+  },
+  "homepage": "https://github.com/inhibitor1217/coffee-hmm",
+  "devDependencies": {
+    "@tsconfig/recommended": "^1.0.1",
+    "@types/koa": "^2.11.6",
+    "@types/koa-bodyparser": "^4.3.0",
+    "@typescript-eslint/eslint-plugin": "^4.9.0",
+    "@typescript-eslint/parser": "^4.9.0",
+    "copy-webpack-plugin": "^6.3.2",
+    "eslint": "^7.15.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.2.0",
+    "husky": "^4.3.0",
+    "prettier": "^2.2.1",
+    "serverless": "^2.15.0",
+    "serverless-webpack": "^5.3.5",
+    "ts-loader": "^8.0.11",
+    "ts-node": "^9.1.0",
+    "ts-node-dev": "^1.0.0",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^4.1.2",
+    "webpack": "^5.10.0",
+    "webpack-node-externals": "^2.5.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "make lint"
+    }
+  },
+  "dependencies": {
+    "@koa/cors": "^3.1.0",
+    "@koa/router": "^10.0.0",
+    "@types/koa__cors": "^3.0.2",
+    "@types/koa__router": "^8.0.3",
+    "koa": "^2.13.0",
+    "koa-bodyparser": "^4.3.0",
+    "serverless-http": "^2.6.0"
+  }
+}
