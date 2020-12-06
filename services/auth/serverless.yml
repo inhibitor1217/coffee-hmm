@@ -49,3 +49,4 @@ functions:
       APP_NAME: ${self:service}
       APP_VERSION: ${self:custom.version}
       APP_STAGE: ${self:custom.stage}
+      LOG_LEVEL: info

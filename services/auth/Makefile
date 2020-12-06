@@ -11,6 +11,7 @@ SERVERLESS_CONFIG_FILE=serverless.yml
 
 APP_STAGE=local
 PORT=7007
+LOG_LEVEL=verbose
 
 help: info
 	@echo
@@ -42,7 +43,7 @@ lint:
 
 serve:
 	@echo "Starting $(APP_STAGE)@$(CURRENT_VERSION) server on port $(PORT) ..."
-	@APP_NAME=$(APP_NAME) APP_VERSION=$(CURRENT_VERSION) APP_STAGE=$(APP_STAGE) PORT=$(PORT) $(PKM) run debug
+	@APP_NAME=$(APP_NAME) APP_VERSION=$(CURRENT_VERSION) APP_STAGE=$(APP_STAGE) PORT=$(PORT) LOG_LEVEL=$(LOG_LEVEL) $(PKM) run debug
 
 deploy:
 	@AWS_ACCESS_KEY_ID=$(AWS_ACCESS_KEY_ID) AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY) npx serverless deploy --config $(SERVERLESS_CONFIG_FILE)

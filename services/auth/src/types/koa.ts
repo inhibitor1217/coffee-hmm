@@ -1,3 +1,5 @@
+import Logger from '../util/logger';
+
 export interface KoaContextState {
-  version: string;
+  logger: Logger;
 }
