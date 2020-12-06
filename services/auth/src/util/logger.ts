@@ -54,7 +54,9 @@ export default class Logger {
 
       // eslint-disable-next-line no-console
       console.log(
-        `[${new Date().toISOString()}] [${level.toString()}] ${messageStr}`
+        `[${new Date().toISOString()}] [${LogLevel[
+          level
+        ].toUpperCase()}] ${messageStr}`
       );
 
       if (message instanceof Error) {

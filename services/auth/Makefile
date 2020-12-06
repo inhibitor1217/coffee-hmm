@@ -12,6 +12,7 @@ SERVERLESS_CONFIG_FILE=serverless.yml
 APP_STAGE=local
 PORT=7007
 LOG_LEVEL=verbose
+GOOGLE_APPLICATION_CREDENTIALS=.firebase/config.json
 
 help: info
 	@echo
@@ -43,8 +44,9 @@ lint:
 
 serve:
 	@echo "Starting $(APP_STAGE)@$(CURRENT_VERSION) server on port $(PORT) ..."
-	@APP_NAME=$(APP_NAME) APP_VERSION=$(CURRENT_VERSION) APP_STAGE=$(APP_STAGE) PORT=$(PORT) LOG_LEVEL=$(LOG_LEVEL) $(PKM) run debug
+	@APP_NAME=$(APP_NAME) APP_VERSION=$(CURRENT_VERSION) APP_STAGE=$(APP_STAGE) PORT=$(PORT) LOG_LEVEL=$(LOG_LEVEL) GOOGLE_APPLICATION_CREDENTIALS=$(GOOGLE_APPLICATION_CREDENTIALS) $(PKM) run debug
 
 deploy:
 	@cp .ormconfig/$(APP_STAGE).json .ormconfig/default.json
+	@cp .firebase/$(APP_STAGE).json .firebase/default.json
 	@AWS_ACCESS_KEY_ID=$(AWS_ACCESS_KEY_ID) AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY) npx serverless deploy --config $(SERVERLESS_CONFIG_FILE)

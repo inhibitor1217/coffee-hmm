@@ -50,6 +50,10 @@ module.exports = {
           from: '.ormconfig/default.json',
           to: 'ormconfig.json',
         },
+        {
+          from: '.firebase/default.json',
+          to: 'firebase.json',
+        },
       ],
     }),
   ],

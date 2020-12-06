@@ -5,9 +5,10 @@ import bodyParser from 'koa-bodyparser';
 import koaLogger from 'koa-logger';
 import cors from '@koa/cors';
 import routes from './routes';
-import logger from './middlewares/logger';
-import error from './middlewares/error';
+import auth from './middlewares/auth';
 import db from './middlewares/db';
+import error from './middlewares/error';
+import logger from './middlewares/logger';
 
 const app = new Koa();
 
@@ -16,6 +17,7 @@ app.use(logger());
 app.use(cors());
 app.use(error());
 app.use(db());
+app.use(auth());
 app.use(bodyParser());
 app.use(routes.routes()).use(routes.allowedMethods());
 

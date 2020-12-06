@@ -50,3 +50,4 @@ functions:
       APP_VERSION: ${self:custom.version}
       APP_STAGE: ${self:custom.stage}
       LOG_LEVEL: info
+      GOOGLE_APPLICATION_CREDENTIALS: firebase.json
