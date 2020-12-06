@@ -13,6 +13,7 @@
   },
   "files": ["src/@types/index.d.ts"],
   "compilerOptions": {
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   }
 }

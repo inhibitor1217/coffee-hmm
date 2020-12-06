@@ -43,5 +43,14 @@ module.exports = {
       },
     ],
   },
-  plugins: [],
+  plugins: [
+    new CopyPlugin({
+      patterns: [
+        {
+          from: '.ormconfig/default.json',
+          to: 'ormconfig.json',
+        },
+      ],
+    }),
+  ],
 };

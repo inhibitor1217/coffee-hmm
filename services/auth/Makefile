@@ -46,4 +46,5 @@ serve:
 	@APP_NAME=$(APP_NAME) APP_VERSION=$(CURRENT_VERSION) APP_STAGE=$(APP_STAGE) PORT=$(PORT) LOG_LEVEL=$(LOG_LEVEL) $(PKM) run debug
 
 deploy:
+	@cp .ormconfig/$(APP_STAGE).json .ormconfig/default.json
 	@AWS_ACCESS_KEY_ID=$(AWS_ACCESS_KEY_ID) AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY) npx serverless deploy --config $(SERVERLESS_CONFIG_FILE)
