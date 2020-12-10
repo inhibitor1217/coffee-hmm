@@ -13,3 +13,15 @@ interface JSON {
     reviver?: ((this: any, key: string, value: any) => any) | undefined
   ): AnyJson;
 }
+
+interface ArrayConstructor {
+  normalize<T>(
+    array: T[],
+    selector: (item: T) => string | number
+  ): { [key: string]: T };
+
+  groupBy<T>(
+    array: T[],
+    identifier: (item: T) => string | number
+  ): { [key: string]: T[] };
+}
