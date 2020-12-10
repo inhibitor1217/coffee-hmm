@@ -1,4 +1,10 @@
-import { isOperationTypeString, OperationType, OperationTypeStrings } from '.';
+import {
+  isOperationTypeString,
+  OperationSchema,
+  OperationType,
+  OperationTypeStrings,
+} from '.';
+import Exception, { ExceptionCode } from '../error';
 
 type IamRuleParams = {
   operationType: OperationType;
@@ -31,6 +37,14 @@ export default class IamRule {
       operation: this.operation,
       resource: this.resource,
     };
+  }
+
+  public canExecuteOperation(schema: OperationSchema): boolean {
+    return (
+      this.operationType === schema.operationType &&
+      this.operation === schema.operation &&
+      (this.resource === '*' || this.resource === schema.resource)
+    );
   }
 
   static isValidRuleJsonObject(json: AnyJson): json is IamRuleObject {

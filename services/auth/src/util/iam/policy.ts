@@ -1,4 +1,4 @@
-import { IamRule, IamRuleObject } from '.';
+import { IamRule, IamRuleObject, OperationSchema } from '.';
 import Exception, { ExceptionCode } from '../error';
 
 type IamPolicyParams = {
@@ -20,6 +20,14 @@ export default class IamPolicy {
     return {
       rules: this.rules.map((rule) => rule.toJsonObject()),
     };
+  }
+
+  public canExecuteOperation(schema: OperationSchema): boolean {
+    return this.rules.some((rule) => rule.canExecuteOperation(schema));
+  }
+
+  public canExecuteOperations(schemas: OperationSchema[]): boolean {
+    return schemas.every((schema) => this.canExecuteOperation(schema));
   }
 
   static isValidPolicyJsonObject(json: AnyJson): json is IamPolicyObject {
