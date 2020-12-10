@@ -14,6 +14,7 @@ import {
 } from 'typeorm';
 import { KoaContextState } from '../types/koa';
 import UserProfile from './userProfile';
+import Policy from './policy';
 
 export enum UserState {
   active = 0,
@@ -44,11 +45,18 @@ export default class User {
   lastSignedAt?: Date;
 
   @Column({ type: 'uuid', name: 'fk_user_profile_id' })
-  fkProfileId!: string;
+  fkUserProfileId!: string;
 
   @OneToOne(() => UserProfile)
   @JoinColumn({ name: 'fk_user_profile_id' })
   readonly profile!: UserProfile;
+
+  @Column({ type: 'uuid', name: 'fk_policy_id' })
+  fkPolicyId!: string;
+
+  @OneToOne(() => Policy)
+  @JoinColumn({ name: 'fk_policy_id' })
+  readonly policy!: Policy;
 
   @Column({ type: 'int2', name: 'state' })
   state!: UserState;
@@ -82,6 +90,8 @@ export const createUserLoader = (context: KoaContextState) =>
 
     const normalized = await getManager()
       .createQueryBuilder(User, 'user')
+      .leftJoinAndSelect('user.profile', 'profile')
+      .leftJoinAndSelect('user.policy', 'policy')
       .whereInIds(userIds)
       .getMany()
       .then((users) => Array.normalize<User>(users, (user) => user.id));
@@ -100,5 +110,5 @@ export const createUserProfileLoader = (context: KoaContextState) =>
       .getMany()
       .then((users) => Array.normalize<User>(users, (user) => user.id));
 
-    return userIds.map((id) => normalized[id].profile);
+    return userIds.map((id) => normalized[id]?.profile);
   });
