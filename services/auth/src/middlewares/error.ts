@@ -1,4 +1,10 @@
 import { Middleware, Next, ParameterizedContext } from 'koa';
+import {
+  HTTP_BAD_REQUEST,
+  HTTP_FORBIDDEN,
+  HTTP_INTERNAL_SERVER_ERROR,
+  HTTP_UNAUTHORIZED,
+} from '../const';
 import { KoaContextState } from '../types/koa';
 import Exception, { ExceptionCode } from '../util/error';
 
@@ -10,13 +16,23 @@ const error = (): Middleware<KoaContextState> => async (
     await next();
   } catch (e) {
     if (Exception.isExceptionOf(e, ExceptionCode.badRequest)) {
-      ctx.status = 400;
+      ctx.status = HTTP_BAD_REQUEST;
       ctx.body = { error: e.message };
       return;
     }
 
+    if (Exception.isExceptionOf(e, ExceptionCode.unauthorized)) {
+      ctx.status = HTTP_UNAUTHORIZED;
+      ctx.body = { error: e.message };
+    }
+
+    if (Exception.isExceptionOf(e, ExceptionCode.forbidden)) {
+      ctx.status = HTTP_FORBIDDEN;
+      ctx.body = { error: e.message };
+    }
+
     ctx.state.logger.error(e);
-    ctx.status = 500;
+    ctx.status = HTTP_INTERNAL_SERVER_ERROR;
   }
 };
 
