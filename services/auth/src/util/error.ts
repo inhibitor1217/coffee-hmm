@@ -1,5 +1,6 @@
 export enum ExceptionCode {
   invalidArgument,
+  notImplemented,
   badRequest,
   unauthorized,
   forbidden,

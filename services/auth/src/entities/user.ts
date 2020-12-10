@@ -15,6 +15,7 @@ import {
 import { KoaContextState } from '../types/koa';
 import UserProfile from './userProfile';
 import Policy from './policy';
+import Exception, { ExceptionCode } from '../util/error';
 
 export enum UserState {
   active = 0,
@@ -28,6 +29,20 @@ export enum AuthProvider {
 }
 
 export type AuthProviderStrings = keyof typeof AuthProvider;
+
+export const parseFirebaseSignInProvider = (
+  firebaseSignInProvider: string
+): AuthProvider => {
+  switch (firebaseSignInProvider) {
+    case 'google.com':
+      return AuthProvider.google;
+    default:
+      throw new Exception(
+        ExceptionCode.notImplemented,
+        `given sign in method is not supported. got: ${firebaseSignInProvider}`
+      );
+  }
+};
 
 @Entity('users')
 @Unique('idx_provider', ['provider', 'providerUserId'])
