@@ -1,4 +1,5 @@
 import { IamRule, IamRuleObject } from '.';
+import Exception, { ExceptionCode } from '../error';
 
 type IamPolicyParams = {
   rules: IamRule[];
@@ -50,12 +51,22 @@ export default class IamPolicy {
   }
 
   static parse(raw: string): IamPolicy {
-    const json = JSON.parse(raw);
+    try {
+      const json = JSON.parse(raw);
 
-    if (!this.isValidPolicyJsonObject(json)) {
-      throw Error(`invalid iam policy statement: got ${raw}`);
+      if (!this.isValidPolicyJsonObject(json)) {
+        throw new Exception(
+          ExceptionCode.invalidArgument,
+          `invalid iam policy statement: got ${raw}`
+        );
+      }
+
+      return this.fromJsonObject(json);
+    } catch (e) {
+      if (e instanceof SyntaxError) {
+        throw new Exception(ExceptionCode.invalidArgument, e.message);
+      }
+      throw e;
     }
-
-    return this.fromJsonObject(json);
   }
 }
