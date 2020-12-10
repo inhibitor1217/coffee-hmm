@@ -9,7 +9,7 @@ type IamRuleParams = {
 export type IamRuleObject = {
   operationType: OperationTypeStrings;
   operation: string;
-  resource: string | null;
+  resource: string;
 };
 
 export default class IamRule {
@@ -17,19 +17,19 @@ export default class IamRule {
 
   public operation: string;
 
-  public resource?: string;
+  public resource: string;
 
   constructor(params: IamRuleParams) {
     this.operationType = params.operationType;
     this.operation = params.operation;
-    this.resource = params.resource;
+    this.resource = params.resource ?? '*';
   }
 
   public toJsonObject(): IamRuleObject {
     return {
       operationType: OperationType[this.operationType] as OperationTypeStrings,
       operation: this.operation,
-      resource: this.resource ?? null,
+      resource: this.resource,
     };
   }
 
@@ -62,7 +62,7 @@ export default class IamRule {
     return new IamRule({
       operationType: OperationType[json.operationType],
       operation: json.operation,
-      resource: json.resource ?? undefined,
+      resource: json.resource ?? '*',
     });
   }
 }
