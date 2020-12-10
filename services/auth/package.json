@@ -52,6 +52,7 @@
     "@koa/router": "^10.0.0",
     "@types/koa__cors": "^3.0.2",
     "@types/koa__router": "^8.0.3",
+    "dataloader": "^2.0.0",
     "firebase-admin": "^9.4.1",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0",

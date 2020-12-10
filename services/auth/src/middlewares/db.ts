@@ -1,8 +1,16 @@
 import { Middleware, Next, ParameterizedContext } from 'koa';
 import { Connection, createConnection } from 'typeorm';
+import { createUserLoader, createUserProfileLoader } from '../entities/user';
 import { AppStage } from '../types/env';
 import { KoaContextState } from '../types/koa';
 import { appStage } from '../util';
+
+const createDataLoaders = (context: KoaContextState) => ({
+  user: createUserLoader(context),
+  userProfile: createUserProfileLoader(context),
+});
+
+export type DataLoaders = ReturnType<typeof createDataLoaders>;
 
 const db = (): Middleware<KoaContextState> => async (
   ctx: ParameterizedContext<KoaContextState>,
@@ -15,6 +23,8 @@ const db = (): Middleware<KoaContextState> => async (
     }
     return connection;
   };
+
+  ctx.state.loaders = createDataLoaders(ctx.state);
 
   await next();
 
