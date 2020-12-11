@@ -12,25 +12,25 @@ const createDataLoaders = (context: KoaContextState) => ({
 
 export type DataLoaders = ReturnType<typeof createDataLoaders>;
 
-const db = (): Middleware<KoaContextState> => async (
-  ctx: ParameterizedContext<KoaContextState>,
-  next: Next
-) => {
+const db = (): Middleware<KoaContextState> => {
   let connection: Connection | null = null;
-  ctx.state.connection = async (): Promise<Connection> => {
-    if (!connection) {
-      connection = await createConnection();
+
+  return async (ctx: ParameterizedContext<KoaContextState>, next: Next) => {
+    ctx.state.connection = async (): Promise<Connection> => {
+      if (!connection) {
+        connection = await createConnection();
+      }
+      return connection;
+    };
+
+    ctx.state.loaders = createDataLoaders(ctx.state);
+
+    await next();
+
+    if (appStage() !== AppStage.local) {
+      await connection?.close();
     }
-    return connection;
   };
-
-  ctx.state.loaders = createDataLoaders(ctx.state);
-
-  await next();
-
-  if (appStage() !== AppStage.local) {
-    await (connection as Connection | null)?.close();
-  }
 };
 
 export default db;
