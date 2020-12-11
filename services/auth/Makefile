@@ -22,7 +22,7 @@ help: info
 	@echo "  make deps             - install all dependencies."
 	@echo "  make lint             - run lint."
 	@echo "  make serve            - start local server for development."
-	@echo "  make deploy           - deploy the service via serverless
+	@echo "  make deploy           - deploy the service via serverless"
 
 info:
 	@[ ! -z "$(NODE)" ] && echo node version: `$(NODE) --version` "$(NODE)"
