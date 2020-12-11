@@ -47,7 +47,7 @@ export const parseFirebaseSignInProvider = (
 @Entity('users')
 @Unique('idx_provider', ['provider', 'providerUserId'])
 export default class User {
-  @PrimaryGeneratedColumn({ type: 'uuid', name: 'id' })
+  @PrimaryGeneratedColumn('uuid', { name: 'id' })
   readonly id!: string;
 
   @CreateDateColumn({ type: 'timestamptz', name: 'created_at' })
