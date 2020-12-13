@@ -35,21 +35,30 @@ const handler = <ParamsT = VariablesMap, QueryT = VariablesMap>(
   if (options?.schema?.params) {
     const validation = options.schema.params.validate(ctx.params);
     if (validation.error) {
-      throw new Exception(ExceptionCode.badRequest, validation.error);
+      throw new Exception(ExceptionCode.badRequest, {
+        message: 'request params validation failed',
+        details: validation.error,
+      });
     }
   }
 
   if (options?.schema?.query) {
     const validation = options.schema.query.validate(ctx.params);
     if (validation.error) {
-      throw new Exception(ExceptionCode.badRequest, validation.error);
+      throw new Exception(ExceptionCode.badRequest, {
+        message: 'request query validation failed',
+        details: validation.error,
+      });
     }
   }
 
   if (options?.schema?.body) {
     const validation = options.schema.body.validate(ctx.body);
     if (validation.error) {
-      throw new Exception(ExceptionCode.badRequest, validation.error);
+      throw new Exception(ExceptionCode.badRequest, {
+        message: 'request body validation failed',
+        details: validation.error,
+      });
     }
   }
 
