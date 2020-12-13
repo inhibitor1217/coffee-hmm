@@ -17,18 +17,20 @@ const error = (): Middleware<KoaContextState> => async (
   } catch (e) {
     if (Exception.isExceptionOf(e, ExceptionCode.badRequest)) {
       ctx.status = HTTP_BAD_REQUEST;
-      ctx.body = { error: e.message };
+      ctx.body = { error: e.payload };
       return;
     }
 
     if (Exception.isExceptionOf(e, ExceptionCode.unauthorized)) {
       ctx.status = HTTP_UNAUTHORIZED;
-      ctx.body = { error: e.message };
+      ctx.body = { error: e.payload };
+      return;
     }
 
     if (Exception.isExceptionOf(e, ExceptionCode.forbidden)) {
       ctx.status = HTTP_FORBIDDEN;
-      ctx.body = { error: e.message };
+      ctx.body = { error: e.payload };
+      return;
     }
 
     ctx.state.logger.error(e);
