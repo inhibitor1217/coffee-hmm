@@ -4,7 +4,6 @@ import {
   OperationType,
   OperationTypeStrings,
 } from '.';
-import Exception, { ExceptionCode } from '../error';
 
 type IamRuleParams = {
   operationType: OperationType;
