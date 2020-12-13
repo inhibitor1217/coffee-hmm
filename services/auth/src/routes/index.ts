@@ -1,9 +1,13 @@
 import Router from '@koa/router';
+import { Context } from 'koa';
 import { HTTP_OK } from '../const';
+import { KoaContextState } from '../types/koa';
 import { buildString } from '../util';
+import * as authControl from './auth.control';
 import handler from './handler';
+import user from './user';
 
-const routes = new Router();
+const routes = new Router<KoaContextState, Context>();
 
 routes.get(
   '/',

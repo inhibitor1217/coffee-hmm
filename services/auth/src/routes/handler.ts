@@ -1,22 +1,62 @@
-import { KoaRouteHandler, KoaRouteHandlerOptions } from '../types/koa';
+import {
+  KoaContext,
+  KoaRouteHandler,
+  KoaRouteHandlerOptions,
+  VariablesMap,
+} from '../types/koa';
 import Exception, { ExceptionCode } from '../util/error';
 import { OperationSchema } from '../util/iam';
 
-const normalizeRequiredRules = (
-  rules?: OperationSchema | OperationSchema[]
+const normalizeRequiredRules = <ParamsT = VariablesMap, QueryT = VariablesMap>(
+  ctx: KoaContext<ParamsT, QueryT>,
+  rules?:
+    | OperationSchema
+    | OperationSchema[]
+    | ((
+        ctx: KoaContext<ParamsT, QueryT>
+      ) => OperationSchema | OperationSchema[])
 ) => {
   if (!rules) {
     return null;
   }
 
+  if (typeof rules === 'function') {
+    const derivedRules = rules(ctx);
+    return Array.isArray(derivedRules) ? derivedRules : [derivedRules];
+  }
+
   return Array.isArray(rules) ? rules : [rules];
 };
 
-const handler = (
-  routeHandler: KoaRouteHandler,
-  options?: KoaRouteHandlerOptions
-): KoaRouteHandler => async (ctx) => {
-  const requiredRules = normalizeRequiredRules(options?.requiredRules);
+const handler = <ParamsT = VariablesMap, QueryT = VariablesMap>(
+  routeHandler: KoaRouteHandler<ParamsT, QueryT>,
+  options?: KoaRouteHandlerOptions<ParamsT, QueryT>
+): KoaRouteHandler<ParamsT, QueryT> => async (ctx) => {
+  if (options?.schema?.params) {
+    const validation = options.schema.params.validate(ctx.params);
+    if (validation.error) {
+      throw new Exception(ExceptionCode.badRequest, validation.error);
+    }
+  }
+
+  if (options?.schema?.query) {
+    const validation = options.schema.query.validate(ctx.params);
+    if (validation.error) {
+      throw new Exception(ExceptionCode.badRequest, validation.error);
+    }
+  }
+
+  if (options?.schema?.body) {
+    const validation = options.schema.body.validate(ctx.body);
+    if (validation.error) {
+      throw new Exception(ExceptionCode.badRequest, validation.error);
+    }
+  }
+
+  const requiredRules = normalizeRequiredRules<ParamsT, QueryT>(
+    ctx,
+    options?.requiredRules
+  );
 
   if (requiredRules && !ctx.state.policy?.canExecuteOperations(requiredRules)) {
     throw new Exception(ExceptionCode.forbidden, {
