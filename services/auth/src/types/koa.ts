@@ -1,5 +1,5 @@
 import Router from '@koa/router';
-import { Context, ParameterizedContext } from 'koa';
+import * as Koa from 'koa';
 import { Schema } from 'joi';
 import { Connection } from 'typeorm';
 import { DataLoaders } from '../middlewares/db';
@@ -17,20 +17,26 @@ export interface KoaContextState {
 export type VariablesMap = { [key: string]: string | number | boolean };
 
 interface RouteParamContext<ParamsT = VariablesMap, QueryT = VariablesMap>
-  extends Router.RouterParamContext<KoaContextState, Context> {
+  extends Router.RouterParamContext<KoaContextState, Koa.Context> {
   params: ParamsT;
   query: QueryT;
+}
+
+interface KoaTypedRequest<BodyT = AnyJson> extends Koa.Request {
+  body?: BodyT;
 }
 
 export interface KoaContext<
   ParamsT = VariablesMap,
   QueryT = VariablesMap,
   BodyT = AnyJson
-> extends ParameterizedContext<
+> extends Koa.ParameterizedContext<
     KoaContextState,
     RouteParamContext<ParamsT, QueryT>
   > {
-  body: BodyT;
+  params: ParamsT;
+  query: QueryT;
+  request: KoaTypedRequest<BodyT>;
 }
 
 export type KoaRouteHandler<

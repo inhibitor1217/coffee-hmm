@@ -51,7 +51,7 @@ const handler = <
   }
 
   if (options?.schema?.query) {
-    const validation = options.schema.query.validate(ctx.params);
+    const validation = options.schema.query.validate(ctx.query);
     if (validation.error) {
       throw new Exception(ExceptionCode.badRequest, {
         message: 'request query validation failed',
@@ -61,7 +61,7 @@ const handler = <
   }
 
   if (options?.schema?.body) {
-    const validation = options.schema.body.validate(ctx.body);
+    const validation = options.schema.body.validate(ctx.request.body);
     if (validation.error) {
       throw new Exception(ExceptionCode.badRequest, {
         message: 'request body validation failed',
