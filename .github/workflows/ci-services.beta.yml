@@ -2,7 +2,7 @@ name: ci-services@beta
 on:
   push:
     tags:
-      - "service-beta/*"
+      - "service/*"
 defaults:
   run:
     shell: bash
@@ -42,13 +42,16 @@ jobs:
           node-version: "12"
       - name: Print environment configuration.
         run: make info APP_STAGE=${APP_STAGE}
-      - name: Retrieve ORM configuration.
-        run: echo "::set-env name=ORMCONFIG_SECRET_NAME::ORMCONFIG_${{ needs.env.outputs.service }}_${APP_STAGE}"
+      - id: ormconfig
+        name: Retrieve ORM configuration.
+        run: echo "::set-output name=secret_name::ORMCONFIG_$(echo ${{ needs.env.outputs.service }} | tr a-z A-Z)_$(echo ${APP_STAGE} | tr a-z A-Z)"
       - name: Copy ORM configuration file.
         run: |
           mkdir .ormconfig
           ORMCONFIG=${{ secrets[env.ORMCONFIG_SECRET_NAME] }} echo $ORMCONFIG >> .ormconfig/encoded
           base64 -d .ormconfig/encoded > .ormconfig/${APP_STAGE}.json
+        env:
+          ORMCONFIG_SECRET_NAME: ${{ steps.ormconfig.outputs.secret_name }}
       - name: Install dependencies.
         run: make deps
       - name: Check linting of source.
