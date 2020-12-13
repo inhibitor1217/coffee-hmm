@@ -51,7 +51,7 @@ export const parseFirebaseSignInProvider = (
 @Index('idx_policy_id', ['fkPolicyId'])
 @Index('idx_state', ['state'])
 export default class User {
-  @PrimaryGeneratedColumn({ type: 'uuid', name: 'id' })
+  @PrimaryGeneratedColumn('uuid', { name: 'id' })
   readonly id!: string;
 
   @CreateDateColumn({ type: 'timestamptz', name: 'created_at' })

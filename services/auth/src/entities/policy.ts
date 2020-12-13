@@ -9,7 +9,7 @@ import { IamPolicy } from '../util/iam';
 
 @Entity('policies')
 export default class Policy {
-  @PrimaryGeneratedColumn({ type: 'uuid', name: 'id' })
+  @PrimaryGeneratedColumn('uuid', { name: 'id' })
   readonly id!: string;
 
   @CreateDateColumn({ type: 'timestamptz', name: 'created_at' })
