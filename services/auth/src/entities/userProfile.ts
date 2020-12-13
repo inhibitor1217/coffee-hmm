@@ -8,7 +8,7 @@ import {
 
 @Entity('user_profiles')
 export default class UserProfile {
-  @PrimaryGeneratedColumn('uuid', { name: 'id' })
+  @PrimaryGeneratedColumn({ type: 'uuid', name: 'id' })
   readonly id!: string;
 
   @CreateDateColumn({ type: 'timestamptz', name: 'created_at' })

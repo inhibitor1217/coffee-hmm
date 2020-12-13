@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   Entity,
   getManager,
+  Index,
   JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -46,8 +47,11 @@ export const parseFirebaseSignInProvider = (
 
 @Entity('users')
 @Unique('idx_provider', ['provider', 'providerUserId'])
+@Index('idx_updated_at', ['updatedAt'])
+@Index('idx_policy_id', ['fkPolicyId'])
+@Index('idx_state', ['state'])
 export default class User {
-  @PrimaryGeneratedColumn('uuid', { name: 'id' })
+  @PrimaryGeneratedColumn({ type: 'uuid', name: 'id' })
   readonly id!: string;
 
   @CreateDateColumn({ type: 'timestamptz', name: 'created_at' })

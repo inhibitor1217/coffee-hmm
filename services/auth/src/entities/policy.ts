@@ -9,7 +9,7 @@ import { IamPolicy } from '../util/iam';
 
 @Entity('policies')
 export default class Policy {
-  @PrimaryGeneratedColumn('uuid', { name: 'id' })
+  @PrimaryGeneratedColumn({ type: 'uuid', name: 'id' })
   readonly id!: string;
 
   @CreateDateColumn({ type: 'timestamptz', name: 'created_at' })
@@ -18,7 +18,7 @@ export default class Policy {
   @UpdateDateColumn({ type: 'timestamptz', name: 'updated_at' })
   readonly updatedAt!: Date;
 
-  @Column({ type: 'varchar', name: 'name', length: 255 })
+  @Column({ type: 'varchar', name: 'name', length: 255, unique: true })
   name!: string;
 
   @Column({ type: 'varchar', name: 'value', length: 4000 })
