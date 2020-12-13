@@ -7,13 +7,17 @@ import {
 import Exception, { ExceptionCode } from '../util/error';
 import { OperationSchema } from '../util/iam';
 
-const normalizeRequiredRules = <ParamsT = VariablesMap, QueryT = VariablesMap>(
-  ctx: KoaContext<ParamsT, QueryT>,
+const normalizeRequiredRules = <
+  ParamsT = VariablesMap,
+  QueryT = VariablesMap,
+  BodyT = AnyJson
+>(
+  ctx: KoaContext<ParamsT, QueryT, BodyT>,
   rules?:
     | OperationSchema
     | OperationSchema[]
     | ((
-        ctx: KoaContext<ParamsT, QueryT>
+        ctx: KoaContext<ParamsT, QueryT, BodyT>
       ) => OperationSchema | OperationSchema[])
 ) => {
   if (!rules) {
@@ -28,10 +32,14 @@ const normalizeRequiredRules = <ParamsT = VariablesMap, QueryT = VariablesMap>(
   return Array.isArray(rules) ? rules : [rules];
 };
 
-const handler = <ParamsT = VariablesMap, QueryT = VariablesMap>(
-  routeHandler: KoaRouteHandler<ParamsT, QueryT>,
-  options?: KoaRouteHandlerOptions<ParamsT, QueryT>
-): KoaRouteHandler<ParamsT, QueryT> => async (ctx) => {
+const handler = <
+  ParamsT = VariablesMap,
+  QueryT = VariablesMap,
+  BodyT = AnyJson
+>(
+  routeHandler: KoaRouteHandler<ParamsT, QueryT, BodyT>,
+  options?: KoaRouteHandlerOptions<ParamsT, QueryT, BodyT>
+): KoaRouteHandler<ParamsT, QueryT, BodyT> => async (ctx) => {
   if (options?.schema?.params) {
     const validation = options.schema.params.validate(ctx.params);
     if (validation.error) {
@@ -62,7 +70,7 @@ const handler = <ParamsT = VariablesMap, QueryT = VariablesMap>(
     }
   }
 
-  const requiredRules = normalizeRequiredRules<ParamsT, QueryT>(
+  const requiredRules = normalizeRequiredRules<ParamsT, QueryT, BodyT>(
     ctx,
     options?.requiredRules
   );

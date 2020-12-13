@@ -22,21 +22,27 @@ interface RouteParamContext<ParamsT = VariablesMap, QueryT = VariablesMap>
   query: QueryT;
 }
 
-export type KoaContext<
+export interface KoaContext<
   ParamsT = VariablesMap,
-  QueryT = VariablesMap
-> = ParameterizedContext<
-  KoaContextState,
-  Context & RouteParamContext<ParamsT, QueryT>
->;
+  QueryT = VariablesMap,
+  BodyT = AnyJson
+> extends ParameterizedContext<
+    KoaContextState,
+    RouteParamContext<ParamsT, QueryT>
+  > {
+  body: BodyT;
+}
 
-export type KoaRouteHandler<ParamsT = VariablesMap, QueryT = VariablesMap> = (
-  ctx: KoaContext<ParamsT, QueryT>
-) => Promise<void> | void;
+export type KoaRouteHandler<
+  ParamsT = VariablesMap,
+  QueryT = VariablesMap,
+  BodyT = AnyJson
+> = (ctx: KoaContext<ParamsT, QueryT, BodyT>) => Promise<void> | void;
 
 export interface KoaRouteHandlerOptions<
   ParamsT = VariablesMap,
-  QueryT = VariablesMap
+  QueryT = VariablesMap,
+  BodyT = AnyJson
 > {
   schema?: {
     params?: Schema;
@@ -47,6 +53,6 @@ export interface KoaRouteHandlerOptions<
     | OperationSchema
     | OperationSchema[]
     | ((
-        ctx: KoaContext<ParamsT, QueryT>
+        ctx: KoaContext<ParamsT, QueryT, BodyT>
       ) => OperationSchema | OperationSchema[]);
 }
