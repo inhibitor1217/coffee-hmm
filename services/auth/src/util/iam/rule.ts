@@ -38,10 +38,31 @@ export default class IamRule {
     };
   }
 
+  private compareOperationHierarchy(
+    allowed: string[],
+    requesting: string[]
+  ): boolean {
+    const [allowedFirst, ...allowedRest] = allowed;
+    const [requestingFirst, ...requestingRest] = requesting;
+
+    return (
+      allowedFirst === '*' ||
+      (allowedFirst === requestingFirst &&
+        this.compareOperationHierarchy(allowedRest, requestingRest))
+    );
+  }
+
+  private compareOperation(allowed: string, requesting: string): boolean {
+    return this.compareOperationHierarchy(
+      allowed.split('.'),
+      requesting.split('.')
+    );
+  }
+
   public canExecuteOperation(schema: OperationSchema): boolean {
     return (
       this.operationType === schema.operationType &&
-      this.operation === schema.operation &&
+      this.compareOperation(this.operation, schema.operation) &&
       (this.resource === '*' || this.resource === schema.resource)
     );
   }
