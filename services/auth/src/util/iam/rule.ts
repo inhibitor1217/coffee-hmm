@@ -45,6 +45,10 @@ export default class IamRule {
     const [allowedFirst, ...allowedRest] = allowed;
     const [requestingFirst, ...requestingRest] = requesting;
 
+    if (!allowedFirst && !requestingFirst) {
+      return true;
+    }
+
     return (
       allowedFirst === '*' ||
       (allowedFirst === requestingFirst &&
