@@ -24,3 +24,7 @@ export const version = (): string => env('APP_VERSION');
 
 export const buildString = () =>
   `${env('APP_NAME')}@${env('APP_VERSION')}-${env('APP_STAGE')}`;
+
+export const enumKeyStrings = (map: {
+  [key: string]: string | number;
+}): string[] => Object.keys(map).filter((key) => typeof map[key] === 'number');
