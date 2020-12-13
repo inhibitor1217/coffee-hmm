@@ -13,7 +13,7 @@ export default class Exception extends Error {
 
   public payload: unknown;
 
-  constructor(code: ExceptionCode, payload: unknown) {
+  constructor(code: ExceptionCode, payload?: unknown) {
     super(`[${ExceptionCode[code].toUpperCase()}] ${JSON.stringify(payload)}`);
 
     this.code = code;

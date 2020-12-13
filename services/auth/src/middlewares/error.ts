@@ -3,6 +3,7 @@ import {
   HTTP_BAD_REQUEST,
   HTTP_FORBIDDEN,
   HTTP_INTERNAL_SERVER_ERROR,
+  HTTP_NOT_IMPLEMENTED,
   HTTP_UNAUTHORIZED,
 } from '../const';
 import { KoaContextState } from '../types/koa';
@@ -29,6 +30,12 @@ const error = (): Middleware<KoaContextState> => async (
 
     if (Exception.isExceptionOf(e, ExceptionCode.forbidden)) {
       ctx.status = HTTP_FORBIDDEN;
+      ctx.body = { error: e.payload };
+      return;
+    }
+
+    if (Exception.isExceptionOf(e, ExceptionCode.notImplemented)) {
+      ctx.status = HTTP_NOT_IMPLEMENTED;
       ctx.body = { error: e.payload };
       return;
     }
