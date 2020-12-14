@@ -7,6 +7,8 @@ import {
 } from 'typeorm';
 import { IamPolicy } from '../util/iam';
 
+export const DEFAULT_USER_POLICY_NAME = 'DefaultUserPolicy';
+
 @Entity('policies')
 export default class Policy {
   @PrimaryGeneratedColumn('uuid', { name: 'id' })

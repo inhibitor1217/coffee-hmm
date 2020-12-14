@@ -1,5 +1,9 @@
 export { default as IamRule, IamRuleObject } from './rule';
-export { default as IamPolicy, IamPolicyObject } from './policy';
+export {
+  default as IamPolicy,
+  generateDefaultUserPolicy,
+  IamPolicyObject,
+} from './policy';
 export { default as OperationSchema, OperationSchemaObject } from './schema';
 
 export enum OperationType {

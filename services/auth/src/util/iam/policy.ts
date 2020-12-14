@@ -1,4 +1,6 @@
-import { IamRule, IamRuleObject, OperationSchema } from '.';
+import { ParameterizedContext } from 'koa';
+import { IamRule, IamRuleObject, OperationSchema, OperationType } from '.';
+import { KoaContextState } from '../../types/koa';
 import Exception, { ExceptionCode } from '../error';
 
 type IamPolicyParams = {
@@ -22,12 +24,18 @@ export default class IamPolicy {
     };
   }
 
-  public canExecuteOperation(schema: OperationSchema): boolean {
-    return this.rules.some((rule) => rule.canExecuteOperation(schema));
+  public canExecuteOperation(
+    ctx: ParameterizedContext<KoaContextState>,
+    schema: OperationSchema
+  ): boolean {
+    return this.rules.some((rule) => rule.canExecuteOperation(ctx, schema));
   }
 
-  public canExecuteOperations(schemas: OperationSchema[]): boolean {
-    return schemas.every((schema) => this.canExecuteOperation(schema));
+  public canExecuteOperations(
+    ctx: ParameterizedContext<KoaContextState>,
+    schemas: OperationSchema[]
+  ): boolean {
+    return schemas.every((schema) => this.canExecuteOperation(ctx, schema));
   }
 
   static isValidPolicyJsonObject(json: AnyJson): json is IamPolicyObject {
@@ -78,3 +86,34 @@ export default class IamPolicy {
     }
   }
 }
+
+export const generateDefaultUserPolicy = () =>
+  new IamPolicy({
+    rules: [
+      new IamRule({
+        operationType: OperationType.query,
+        operation: 'auth.user',
+        resource: '[uid]',
+      }),
+      new IamRule({
+        operationType: OperationType.mutation,
+        operation: 'auth.user',
+        resource: '[uid]',
+      }),
+      new IamRule({
+        operationType: OperationType.query,
+        operation: 'auth.user.profile',
+        resource: '[uid]',
+      }),
+      new IamRule({
+        operationType: OperationType.mutation,
+        operation: 'auth.user.profile',
+        resource: '[uid]',
+      }),
+      new IamRule({
+        operationType: OperationType.query,
+        operation: 'auth.user.policy',
+        resource: '[uid]',
+      }),
+    ],
+  });

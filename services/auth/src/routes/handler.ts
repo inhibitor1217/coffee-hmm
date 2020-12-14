@@ -75,7 +75,10 @@ const handler = <
     options?.requiredRules
   );
 
-  if (requiredRules && !ctx.state.policy?.canExecuteOperations(requiredRules)) {
+  if (
+    requiredRules &&
+    !ctx.state.policy?.canExecuteOperations(ctx, requiredRules)
+  ) {
     throw new Exception(ExceptionCode.forbidden, {
       message: 'request context does not have privilege to execute operation',
       requiredOperations: requiredRules.map((rules) => rules.toJsonObject()),
