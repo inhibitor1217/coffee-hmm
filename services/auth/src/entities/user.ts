@@ -27,6 +27,7 @@ export type UserStateStrings = keyof typeof UserState;
 
 export enum AuthProvider {
   google = 0,
+  custom = 10,
 }
 
 export type AuthProviderStrings = keyof typeof AuthProvider;
@@ -37,6 +38,8 @@ export const parseFirebaseSignInProvider = (
   switch (firebaseSignInProvider) {
     case 'google.com':
       return AuthProvider.google;
+    case 'custom':
+      return AuthProvider.custom;
     default:
       throw new Exception(
         ExceptionCode.notImplemented,
