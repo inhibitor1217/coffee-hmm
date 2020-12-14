@@ -6,7 +6,7 @@ An authentication microservice for [Coffee Hmm](https://coffee-hmm.inhibitor.io)
 
 ### `POST /register`
 
-Creates an user with given profile and policy.
+Creates an user with given profile.
 
 **Required Rule**
 
@@ -23,38 +23,10 @@ Creates an user with given profile and policy.
 **Request Example**
 
 ```
-// Specify policy with policy id.
 {
   "profile": {
     "name": "foo",
     "email": "foo@example.com"    // optional
-  },
-  "policy": {
-    "id": "11111111-1111-1111-1111-111111111111"
-  }
-}
-
-// Specify policy with policy name.
-{
-  "profile": {
-    "name": "foo",
-    "email": "foo@example.com"    // optional
-  },
-  "policy": {
-    "name": "DefaultUserPolicy"
-  }
-}
-
-// Specify policy by providing a policy value string.
-// A newly created policy will be named "Policy@<policy-id>".
-// Proceed to "Policy" section for more details about policies.
-{
-  "profile": {
-    "name": "foo",
-    "email": "foo@example.com"    // optional
-  },
-  "policy": {
-    "value": ""
   }
 }
 ```

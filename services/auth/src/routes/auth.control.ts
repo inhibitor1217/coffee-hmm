@@ -1,13 +1,13 @@
 import firebaseAdmin from 'firebase-admin';
 import Joi from 'joi';
 import { getRepository } from 'typeorm';
-import { v4 as uuidv4 } from 'uuid';
 import { HTTP_CREATED } from '../const';
-import Policy from '../entities/policy';
+import Policy, { DEFAULT_USER_POLICY_NAME } from '../entities/policy';
 import User, { parseFirebaseSignInProvider, UserState } from '../entities/user';
 import UserProfile from '../entities/userProfile';
 import { KoaRouteHandler, VariablesMap } from '../types/koa';
 import Exception, { ExceptionCode } from '../util/error';
+import { generateDefaultUserPolicy } from '../util/iam';
 import handler from './handler';
 
 const verifyFirebaseIdToken = async (idToken: string) => {
@@ -43,15 +43,10 @@ export const register: KoaRouteHandler<
       name: string;
       email?: string;
     };
-    policy: {
-      id?: string;
-      name?: string;
-      value?: string;
-    };
   }
 > = handler(
   async (ctx) => {
-    await ctx.state.connection();
+    const connection = await ctx.state.connection();
 
     const { id_token: idToken } = ctx.query;
     const {
@@ -75,50 +70,38 @@ export const register: KoaRouteHandler<
 
     const profileName = ctx.request.body?.profile.name;
     const profileEmail = ctx.request.body?.profile.email;
-    const policyId = ctx.request.body?.policy.id;
-    const policyName = ctx.request.body?.policy.name;
-    const policyValue = ctx.request.body?.policy.value;
 
-    const { id: fkUserProfileId } = await getRepository(UserProfile)
-      .createQueryBuilder()
-      .insert()
-      .values({
-        name: profileName,
-        email: profileEmail,
-      })
-      .returning(['id'])
-      .execute()
-      .then((insertResult) => insertResult.generatedMaps[0] as { id: string });
+    await connection.transaction(async (manager) => {
+      const { id: fkUserProfileId } = await manager
+        .createQueryBuilder(UserProfile, 'user_profile')
+        .insert()
+        .values({
+          name: profileName,
+          email: profileEmail,
+        })
+        .returning(['id'])
+        .execute()
+        .then(
+          (insertResult) => insertResult.generatedMaps[0] as { id: string }
+        );
 
-    const fkPolicyId = await (async () => {
-      if (policyId) {
-        return policyId;
-      }
-
-      if (policyName) {
-        const policy = await getRepository(Policy)
-          .createQueryBuilder()
+      const fkPolicyId = await (async () => {
+        const maybeDefaultUserPolicy = await manager
+          .createQueryBuilder(Policy, 'policy')
           .select()
-          .where({ name: policyName })
+          .where({ name: DEFAULT_USER_POLICY_NAME })
           .getOne();
 
-        if (!policy) {
-          throw new Exception(
-            ExceptionCode.badRequest,
-            `policy with given id does not exist`
-          );
+        if (maybeDefaultUserPolicy) {
+          return maybeDefaultUserPolicy.id;
         }
 
-        return policy.id;
-      }
-
-      if (policyValue) {
-        const policy = await getRepository(Policy)
-          .createQueryBuilder()
+        const defaultUserPolicy = await manager
+          .createQueryBuilder(Policy, 'policy')
           .insert()
           .values({
-            name: `Policy@TEMP_${uuidv4()}`,
-            value: policyValue,
+            name: DEFAULT_USER_POLICY_NAME,
+            value: JSON.stringify(generateDefaultUserPolicy().toJsonObject()),
           })
           .returning(['id'])
           .execute()
@@ -126,49 +109,40 @@ export const register: KoaRouteHandler<
             (insertResult) => insertResult.generatedMaps[0] as { id: string }
           );
 
-        await getRepository(Policy)
-          .createQueryBuilder()
-          .update()
-          .set({ name: `Policy@${policy.id}` })
-          .where({ id: policy.id })
-          .execute();
+        return defaultUserPolicy.id;
+      })();
 
-        return policy.id;
-      }
+      const user = await manager
+        .createQueryBuilder(User, 'user')
+        .insert()
+        .values({
+          fkUserProfileId,
+          fkPolicyId,
+          state: UserState.active,
+          provider,
+          providerUserId,
+          providerUserEmail,
+        })
+        .returning('*')
+        .execute()
+        .then((insertResult) => insertResult.generatedMaps[0] as User);
 
-      throw new Error('Unreachable code');
-    })();
-
-    const user = await getRepository(User)
-      .createQueryBuilder()
-      .insert()
-      .values({
-        fkUserProfileId,
-        fkPolicyId,
-        state: UserState.active,
-        provider,
-        providerUserId,
-        providerUserEmail,
-      })
-      .returning('*')
-      .execute()
-      .then((insertResult) => insertResult.generatedMaps[0] as User);
-
-    ctx.status = HTTP_CREATED;
-    ctx.body = {
-      user: {
-        id: user.id,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-        lastSignedAt: user.lastSignedAt,
-        userProfileId: user.fkUserProfileId,
-        policyId: user.fkPolicyId,
-        state: user.stateString,
-        provider: user.providerString,
-        providerUserId: user.providerUserId,
-        providerUserEmail: user.providerUserEmail,
-      },
-    };
+      ctx.status = HTTP_CREATED;
+      ctx.body = {
+        user: {
+          id: user.id,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
+          lastSignedAt: user.lastSignedAt,
+          userProfileId: user.fkUserProfileId,
+          policyId: user.fkPolicyId,
+          state: user.stateString,
+          provider: user.providerString,
+          providerUserId: user.providerUserId,
+          providerUserEmail: user.providerUserEmail,
+        },
+      };
+    });
   },
   {
     schema: {
@@ -184,14 +158,6 @@ export const register: KoaRouteHandler<
               name: Joi.string().min(1).max(30).required(),
               email: Joi.string().email(),
             })
-            .required(),
-          policy: Joi.object()
-            .keys({
-              id: Joi.string().uuid({ version: 'uuidv4' }),
-              name: Joi.string().min(1).max(30),
-              value: Joi.string(),
-            })
-            .xor('id', 'name', 'value')
             .required(),
         })
         .required(),
