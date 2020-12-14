@@ -6,7 +6,7 @@
   "password": "postgres",
   "database": "postgres",
   "synchronize": "true",
-  "logging": "true",
+  "logging": "all",
   "entities": ["src/entities/**/*.ts"],
   "migrations": ["src/migrations/**/*.ts"],
   "subscribers": ["src/subscribers/**/*.ts"]
