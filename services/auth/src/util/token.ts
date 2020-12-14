@@ -1,4 +1,4 @@
-import { sign, SignOptions, verify } from 'jsonwebtoken';
+import { sign, SignOptions, verify, VerifyOptions } from 'jsonwebtoken';
 import { appStage, env } from '.';
 import service from '../services';
 import { AppStage } from '../types/env';
@@ -8,6 +8,12 @@ const secretKey = async (): Promise<string> =>
   appStage() === AppStage.local
     ? env('JWT_SECRET_KEY')
     : service().secret().get('JWT_SECRET_KEY');
+
+export enum TokenSubject {
+  accessToken = 'access_token',
+}
+
+export type TokenSubjectStrings = keyof typeof TokenSubject;
 
 export const generateToken = async <T extends Record<string, unknown>>(
   payload: T,
@@ -34,7 +40,8 @@ export const generateToken = async <T extends Record<string, unknown>>(
 };
 
 export const verifyToken = async <T extends Record<string, unknown>>(
-  token: string
+  token: string,
+  options?: VerifyOptions
 ): Promise<T> => {
   const jwtSecretKey = await secretKey();
   return new Promise<T>((resolve, reject) => {
@@ -42,6 +49,7 @@ export const verifyToken = async <T extends Record<string, unknown>>(
       token,
       jwtSecretKey,
       {
+        ...options,
         issuer: issuer(),
       },
       (err, payload) => {

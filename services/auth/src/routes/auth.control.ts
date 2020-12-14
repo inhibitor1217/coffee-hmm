@@ -1,22 +1,27 @@
 import firebaseAdmin from 'firebase-admin';
 import Joi from 'joi';
-import { getRepository } from 'typeorm';
-import { HTTP_CREATED } from '../const';
+import { getManager, getRepository } from 'typeorm';
+import { HTTP_CREATED, HTTP_OK } from '../const';
 import Policy, { DEFAULT_USER_POLICY_NAME } from '../entities/policy';
-import User, { parseFirebaseSignInProvider, UserState } from '../entities/user';
+import User, {
+  AuthProvider,
+  parseFirebaseSignInProvider,
+  UserState,
+} from '../entities/user';
 import UserProfile from '../entities/userProfile';
 import { KoaRouteHandler, VariablesMap } from '../types/koa';
 import Exception, { ExceptionCode } from '../util/error';
 import { generateDefaultUserPolicy } from '../util/iam';
+import { generateToken, TokenSubject } from '../util/token';
 import handler from './handler';
 
 const verifyFirebaseIdToken = async (idToken: string) => {
-  const {
-    uid: firebaseUid,
-    email: firebaseUserEmail,
-    firebase: { sign_in_provider: firebaseSignInProvider },
-  } = await firebaseAdmin.auth().verifyIdToken(idToken);
   try {
+    const {
+      uid: firebaseUid,
+      email: firebaseUserEmail,
+      firebase: { sign_in_provider: firebaseSignInProvider },
+    } = await firebaseAdmin.auth().verifyIdToken(idToken);
     const authProvider = parseFirebaseSignInProvider(firebaseSignInProvider);
 
     return {
@@ -29,7 +34,10 @@ const verifyFirebaseIdToken = async (idToken: string) => {
       throw new Exception(ExceptionCode.unauthorized, e.message);
     }
 
-    throw e;
+    throw new Exception(
+      ExceptionCode.unauthorized,
+      'firebase id token verification failed'
+    );
   }
 };
 
@@ -171,8 +179,44 @@ export const token: KoaRouteHandler<
     id_token: string;
   }
 > = handler(
-  () => {
-    throw new Exception(ExceptionCode.notImplemented);
+  async (ctx) => {
+    await ctx.state.connection();
+
+    const { id_token: idToken } = ctx.query;
+    const { provider, providerUserId } = await verifyFirebaseIdToken(idToken);
+
+    const user = await getManager()
+      .createQueryBuilder(User, 'user')
+      .select()
+      .where({ provider, providerUserId })
+      .getOne();
+
+    if (!user) {
+      throw new Exception(ExceptionCode.forbidden, {
+        message: 'firebase user is not registered to service',
+        provider: AuthProvider[provider],
+        providerUserId,
+      });
+    }
+
+    const policy = await getManager()
+      .createQueryBuilder(Policy, 'policy')
+      .select()
+      .where({ id: user.fkPolicyId })
+      .getOne();
+
+    const payload = {
+      uid: user.id,
+      policy: policy?.iamPolicy.toJsonObject(),
+    };
+
+    const accessToken = await generateToken<typeof payload>(payload, {
+      subject: TokenSubject.accessToken,
+      expiresIn: '1h',
+    });
+
+    ctx.status = HTTP_OK;
+    ctx.body = { token: accessToken };
   },
   {
     schema: {
