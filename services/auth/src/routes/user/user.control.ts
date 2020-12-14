@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { HTTP_OK } from '../../const';
 import { UserState, UserStateStrings } from '../../entities/user';
 import { SortOrder, SortOrderStrings } from '../../types';
 import { KoaRouteHandler, VariablesMap } from '../../types/koa';
@@ -10,8 +11,32 @@ import handler from '../handler';
 export const getSingleUser: KoaRouteHandler<{
   userId: string;
 }> = handler(
-  () => {
-    throw new Exception(ExceptionCode.notImplemented);
+  async (ctx) => {
+    await ctx.state.connection();
+
+    const { userId } = ctx.params;
+
+    const user = await ctx.state.loaders.user.load(userId);
+
+    if (!user) {
+      throw new Exception(ExceptionCode.notFound);
+    }
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      user: {
+        id: user.id,
+        createdAt: user.createdAt.toISOString(),
+        updatedAt: user.updatedAt.toISOString(),
+        lastSignedAt: user.lastSignedAt?.toISOString(),
+        userProfileId: user.fkUserProfileId,
+        policyId: user.fkPolicyId,
+        state: user.stateString,
+        provider: user.providerString,
+        providerUserId: user.providerUserId,
+        providerUserEmail: user.providerUserEmail,
+      },
+    };
   },
   {
     schema: {
