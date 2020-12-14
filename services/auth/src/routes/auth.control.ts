@@ -199,11 +199,7 @@ export const token: KoaRouteHandler<
       });
     }
 
-    const policy = await getManager()
-      .createQueryBuilder(Policy, 'policy')
-      .select()
-      .where({ id: user.fkPolicyId })
-      .getOne();
+    const policy = await ctx.state.loaders.policy.load(user.fkPolicyId);
 
     const payload = {
       uid: user.id,
