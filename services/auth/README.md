@@ -14,6 +14,12 @@ Creates an user with given profile and policy.
 (none)
 ```
 
+**Query Parameters**
+
+| **Name**   | **Type**     | **Required?** | **Description**                                                                                                                                                                                                      |
+| ---------- | ------------ | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id_token` | string (JWT) | yes           | This token will be used to verify and identify the user. By using `GET /token` endpoint, the user can retrieve an access token through the firebase identity **after** the user registered by calling this endpoint. |
+
 **Request Example**
 
 ```
@@ -75,21 +81,22 @@ Creates an user with given profile and policy.
 
 Retrieve an access token, which the client can use for other services to access privileged API. The expiration time of given access token is 1 hour. The client should invoke this API again to refresh its access token.
 
-The client should provide a firebase id token at HTTP `Authorization` header to retrieve an access token.
-
 **Required Rule**
 
 ```
 (none)
 ```
 
+**Query Parameters**
+
+| **Name**   | **Type**     | **Required?** | **Description**                                                                                                                               |
+| ---------- | ------------ | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id_token` | string (JWT) | yes           | This token will be used to verify and identify the user. The firebase user should have invoked `POST /register` endpoint to retrieve a token. |
+
 **Request example**
 
 ```
 (empty)
-
-// At HTTP header,
-// Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
 ```
 
 **Response example**
