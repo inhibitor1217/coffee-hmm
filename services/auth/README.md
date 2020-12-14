@@ -73,6 +73,7 @@ Creates an user with given profile and policy.
     "state": "active",                                    // "active" | "deleted"
     "provider": "google",                                 // "google"
     "providerUserId": "<provider-id>"                     // a unique id from login provider.
+    "providerUserEmail": "<provider-user-email>"          // nullable, an email address given by the login provider.
   }
 }
 ```
