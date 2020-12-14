@@ -17,6 +17,7 @@
   "homepage": "https://github.com/inhibitor1217/coffee-hmm",
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.1",
+    "@types/jsonwebtoken": "^8.5.0",
     "@types/koa": "^2.11.6",
     "@types/koa-bodyparser": "^4.3.0",
     "@types/koa-logger": "^3.1.1",
@@ -59,6 +60,7 @@
     "firebase": "^8.2.0",
     "firebase-admin": "^9.4.1",
     "joi": "^17.3.0",
+    "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0",
     "koa-logger": "^3.2.1",
