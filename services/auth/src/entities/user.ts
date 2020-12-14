@@ -8,6 +8,7 @@ import {
   getManager,
   Index,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
   Unique,
@@ -76,7 +77,7 @@ export default class User {
   @Column({ type: 'uuid', name: 'fk_policy_id' })
   fkPolicyId!: string;
 
-  @OneToOne(() => Policy)
+  @ManyToOne(() => Policy)
   @JoinColumn({ name: 'fk_policy_id' })
   readonly policy!: Policy;
 
