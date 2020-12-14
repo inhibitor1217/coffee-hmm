@@ -114,6 +114,7 @@ Retrieve a general information about user.
     "state": "active",                                    // "active" | "deleted"
     "provider": "google",                                 // "google"
     "providerUserId": "<provider-id>"                     // a unique id from login provider.
+    "providerUserEmail": "<provider-user-email>"          // nullable, an email address given by the login provider.
   }
 }
 ```
@@ -193,6 +194,7 @@ Retrieve a list of users registered to the service.
         "state": "active",                                    // "active" | "deleted"
         "provider": "google",                                 // "google"
         "providerUserId": "<provider-id>"                     // a unique id from login provider.
+        "providerUserEmail": "<provider-user-email>"          // nullable, an email address given by the login provider.
       }
     ]
   }
@@ -235,6 +237,7 @@ Modifies the current state of given user.
     "state": "deleted",                                   // "active" | "deleted"
     "provider": "google",                                 // "google"
     "providerUserId": "<provider-id>"                     // a unique id from login provider.
+    "providerUserEmail": "<provider-user-email>"          // nullable, an email address given by the login provider.
   }
 }
 ```
