@@ -1,6 +1,7 @@
 import Joi from 'joi';
+import { getManager } from 'typeorm';
 import { HTTP_OK } from '../../const';
-import { UserState, UserStateStrings } from '../../entities/user';
+import User, { UserState, UserStateStrings } from '../../entities/user';
 import { SortOrder, SortOrderStrings } from '../../types';
 import { KoaRouteHandler, VariablesMap } from '../../types/koa';
 import { enumKeyStrings } from '../../util';
@@ -56,8 +57,19 @@ export const getSingleUser: KoaRouteHandler<{
 );
 
 export const getUserCount: KoaRouteHandler = handler(
-  () => {
-    throw new Exception(ExceptionCode.notImplemented);
+  async (ctx) => {
+    await ctx.state.connection();
+
+    const count = await getManager()
+      .createQueryBuilder(User, 'user')
+      .getCount();
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      user: {
+        count,
+      },
+    };
   },
   {
     requiredRules: new OperationSchema({
