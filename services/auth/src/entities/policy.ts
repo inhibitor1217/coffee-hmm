@@ -29,8 +29,19 @@ export default class Policy {
   @Column({ type: 'varchar', name: 'value', length: 4000 })
   value!: string;
 
-  get iamPolicy(): IamPolicy {
+  public get iamPolicy(): IamPolicy {
     return IamPolicy.parse(this.value);
+  }
+
+  public toJsonObject(): AnyJson {
+    return {
+      id: this.id,
+      createdAt: this.createdAt.toISOString(),
+      updatedAt: this.updatedAt.toISOString(),
+      name: this.name,
+      value: this.value,
+      ...this.iamPolicy.toJsonObject(),
+    };
   }
 }
 

@@ -364,8 +364,20 @@ export const putUserProfile: KoaRouteHandler<
 export const getUserPolicy: KoaRouteHandler<{
   userId: string;
 }> = handler(
-  () => {
-    throw new Exception(ExceptionCode.notImplemented);
+  async (ctx) => {
+    const { userId } = ctx.params;
+
+    await ctx.state.connection();
+
+    const user = await ctx.state.loaders.user.load(userId);
+    const policy = await ctx.state.loaders.policy.load(user.fkPolicyId);
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      user: {
+        policy: policy.toJsonObject(),
+      },
+    };
   },
   {
     schema: {
