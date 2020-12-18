@@ -100,11 +100,7 @@ export const getUserList: KoaRouteHandler<
     await ctx.state.connection();
 
     const entityOnCursor = cursor
-      ? await getManager()
-          .createQueryBuilder(User, 'user')
-          .select()
-          .where({ id: cursor })
-          .getOne()
+      ? await ctx.state.loaders.user.load(cursor)
       : undefined;
 
     let queryBuilder = getManager().createQueryBuilder(User, 'user').select();
@@ -218,8 +214,29 @@ export const putUserState: KoaRouteHandler<
     state: UserStateStrings;
   }
 > = handler(
-  () => {
-    throw new Exception(ExceptionCode.notImplemented);
+  async (ctx) => {
+    if (!ctx.request.body) {
+      throw new Exception(ExceptionCode.badRequest);
+    }
+
+    const { userId } = ctx.params;
+    const state = UserState[ctx.request.body.state];
+
+    await ctx.state.connection();
+
+    await getManager()
+      .createQueryBuilder(User, 'user')
+      .update()
+      .set({ state })
+      .where({ id: userId })
+      .execute();
+
+    const user = await ctx.state.loaders.user.load(userId);
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      user: user.toJsonObject(),
+    };
   },
   {
     schema: {

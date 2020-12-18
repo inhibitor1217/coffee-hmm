@@ -128,8 +128,6 @@ export const createUserLoader = (context: KoaContextState) =>
 
     const normalized = await getManager()
       .createQueryBuilder(User, 'user')
-      .leftJoinAndSelect('user.profile', 'profile')
-      .leftJoinAndSelect('user.policy', 'policy')
       .whereInIds(userIds)
       .getMany()
       .then((users) => Array.normalize<User>(users, (user) => user.id));
