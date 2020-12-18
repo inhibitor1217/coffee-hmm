@@ -1,9 +1,13 @@
 import Joi from 'joi';
+import { getManager } from 'typeorm';
+import { UNIQUE_VIOLATION } from 'pg-error-constants';
+import { HTTP_CREATED } from '../../const';
+import Policy from '../../entities/policy';
 import { SortOrder, SortOrderStrings } from '../../types';
 import { KoaRouteHandler, VariablesMap } from '../../types/koa';
 import { enumKeyStrings } from '../../util';
 import Exception, { ExceptionCode } from '../../util/error';
-import { OperationSchema, OperationType } from '../../util/iam';
+import { IamPolicy, OperationSchema, OperationType } from '../../util/iam';
 import handler from '../handler';
 
 export const postPolicy: KoaRouteHandler<
@@ -14,8 +18,47 @@ export const postPolicy: KoaRouteHandler<
     value: string;
   }
 > = handler(
-  () => {
-    throw new Exception(ExceptionCode.notImplemented);
+  async (ctx) => {
+    if (!ctx.request.body) {
+      throw new Exception(ExceptionCode.badRequest);
+    }
+
+    const { name, value } = ctx.request.body;
+
+    try {
+      IamPolicy.parse(value);
+
+      await ctx.state.connection();
+
+      const { id } = await getManager()
+        .createQueryBuilder(Policy, 'policy')
+        .insert()
+        .values({ name, value })
+        .returning(['id'])
+        .execute()
+        .then((insertResult) => insertResult.generatedMaps[0] as { id: string })
+        .catch((e: { code: string }) => {
+          if (e.code === UNIQUE_VIOLATION) {
+            throw new Exception(
+              ExceptionCode.badRequest,
+              `duplicate policy name: ${name}`
+            );
+          }
+          throw e;
+        });
+
+      const policy = await ctx.state.loaders.policy.load(id);
+
+      ctx.status = HTTP_CREATED;
+      ctx.body = {
+        policy: policy.toJsonObject(),
+      };
+    } catch (e) {
+      if (Exception.isExceptionOf(e, ExceptionCode.invalidArgument)) {
+        throw new Exception(ExceptionCode.badRequest, e.message);
+      }
+      throw e;
+    }
   },
   {
     schema: {
