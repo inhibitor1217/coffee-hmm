@@ -25,3 +25,7 @@ interface ArrayConstructor {
     identifier: (item: T) => string | number
   ): { [key: string]: T[] };
 }
+
+interface ObjectConstructor {
+  filterUndefinedKeys(object: { [key: string]: AnyJson | undefined }): JsonMap;
+}

@@ -65,7 +65,7 @@ export default class User {
   readonly updatedAt!: Date;
 
   @Column({ type: 'timestamptz', name: 'last_signed_at', nullable: true })
-  lastSignedAt?: Date;
+  lastSignedAt!: Date | null;
 
   @Column({ type: 'uuid', name: 'fk_user_profile_id' })
   fkUserProfileId!: string;
@@ -104,7 +104,7 @@ export default class User {
     length: 255,
     nullable: true,
   })
-  providerUserEmail?: string;
+  providerUserEmail!: string | null;
 
   public toJsonObject(): AnyJson {
     return {
@@ -117,7 +117,7 @@ export default class User {
       state: this.stateString,
       provider: this.providerString,
       providerUserId: this.providerUserId,
-      providerUserEmail: this.providerUserEmail ?? null,
+      providerUserEmail: this.providerUserEmail,
     };
   }
 }

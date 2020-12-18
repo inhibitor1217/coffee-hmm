@@ -1,7 +1,10 @@
+import '../../util/extension';
+
 import Joi from 'joi';
 import { getManager, LessThan, MoreThan } from 'typeorm';
 import { HTTP_OK } from '../../const';
 import User, { UserState, UserStateStrings } from '../../entities/user';
+import UserProfile from '../../entities/userProfile';
 import { SortOrder, SortOrderStrings } from '../../types';
 import { KoaRouteHandler, VariablesMap } from '../../types/koa';
 import { enumKeyStrings } from '../../util';
@@ -306,8 +309,33 @@ export const putUserProfile: KoaRouteHandler<
     email?: string | null;
   }
 > = handler(
-  () => {
-    throw new Exception(ExceptionCode.notImplemented);
+  async (ctx) => {
+    if (!ctx.request.body) {
+      throw new Exception(ExceptionCode.badRequest);
+    }
+
+    const { userId } = ctx.params;
+    const { name, email } = ctx.request.body;
+
+    await ctx.state.connection();
+
+    const user = await ctx.state.loaders.user.load(userId);
+
+    await getManager()
+      .createQueryBuilder(UserProfile, 'user_profile')
+      .update()
+      .set(Object.filterUndefinedKeys({ name, email }))
+      .where({ id: user.fkUserProfileId })
+      .execute();
+
+    const profile = await ctx.state.loaders.userProfile.load(userId);
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      user: {
+        profile: profile.toJsonObject(),
+      },
+    };
   },
   {
     schema: {
