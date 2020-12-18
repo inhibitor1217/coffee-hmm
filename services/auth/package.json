@@ -65,6 +65,7 @@
     "koa-bodyparser": "^4.3.0",
     "koa-logger": "^3.2.1",
     "pg": "^8.5.1",
+    "pg-error-constants": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "serverless-http": "^2.6.0",
     "typeorm": "^0.2.29",
