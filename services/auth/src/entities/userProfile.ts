@@ -22,4 +22,14 @@ export default class UserProfile {
 
   @Column({ type: 'varchar', name: 'email', length: 255, nullable: true })
   email?: string;
+
+  public toJsonObject(): AnyJson {
+    return {
+      id: this.id,
+      createdAt: this.createdAt.toISOString(),
+      updatedAt: this.updatedAt.toISOString(),
+      name: this.name,
+      email: this.email ?? null,
+    };
+  }
 }

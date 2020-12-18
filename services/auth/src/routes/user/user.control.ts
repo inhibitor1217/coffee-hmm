@@ -265,8 +265,19 @@ export const putUserState: KoaRouteHandler<
 export const getUserProfile: KoaRouteHandler<{
   userId: string;
 }> = handler(
-  () => {
-    throw new Exception(ExceptionCode.notImplemented);
+  async (ctx) => {
+    const { userId } = ctx.params;
+
+    await ctx.state.connection();
+
+    const profile = await ctx.state.loaders.userProfile.load(userId);
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      user: {
+        profile: profile.toJsonObject(),
+      },
+    };
   },
   {
     schema: {
