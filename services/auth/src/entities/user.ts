@@ -105,6 +105,21 @@ export default class User {
     nullable: true,
   })
   providerUserEmail?: string;
+
+  public toJsonObject(): AnyJson {
+    return {
+      id: this.id,
+      createdAt: this.createdAt.toISOString(),
+      updatedAt: this.updatedAt.toISOString(),
+      lastSignedAt: this.lastSignedAt?.toISOString() ?? null,
+      userProfileId: this.fkUserProfileId,
+      policyId: this.fkPolicyId,
+      state: this.stateString,
+      provider: this.providerString,
+      providerUserId: this.providerUserId,
+      providerUserEmail: this.providerUserEmail ?? null,
+    };
+  }
 }
 
 export const createUserLoader = (context: KoaContextState) =>

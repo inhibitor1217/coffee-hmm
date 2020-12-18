@@ -1,6 +1,6 @@
 export enum SortOrder {
-  asc = 0,
-  desc = 1,
+  asc = 'ASC',
+  desc = 'DESC',
 }
 
 export type SortOrderStrings = keyof typeof SortOrder;

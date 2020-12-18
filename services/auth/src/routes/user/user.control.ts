@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { getManager } from 'typeorm';
+import { getManager, LessThan, MoreThan } from 'typeorm';
 import { HTTP_OK } from '../../const';
 import User, { UserState, UserStateStrings } from '../../entities/user';
 import { SortOrder, SortOrderStrings } from '../../types';
@@ -25,18 +25,7 @@ export const getSingleUser: KoaRouteHandler<{
 
     ctx.status = HTTP_OK;
     ctx.body = {
-      user: {
-        id: user.id,
-        createdAt: user.createdAt.toISOString(),
-        updatedAt: user.updatedAt.toISOString(),
-        lastSignedAt: user.lastSignedAt?.toISOString(),
-        userProfileId: user.fkUserProfileId,
-        policyId: user.fkPolicyId,
-        state: user.stateString,
-        provider: user.providerString,
-        providerUserId: user.providerUserId,
-        providerUserEmail: user.providerUserEmail,
-      },
+      user: user.toJsonObject(),
     };
   },
   {
@@ -98,8 +87,108 @@ export const getUserList: KoaRouteHandler<
     order?: SortOrderStrings;
   }
 > = handler(
-  () => {
-    throw new Exception(ExceptionCode.notImplemented);
+  async (ctx) => {
+    const {
+      limit,
+      cursor,
+      orderBy: orderByString = 'updatedAt',
+      order: orderString = 'asc',
+    } = ctx.query;
+    const orderBy = UserListOrder[orderByString];
+    const order = SortOrder[orderString];
+
+    await ctx.state.connection();
+
+    const entityOnCursor = cursor
+      ? await getManager()
+          .createQueryBuilder(User, 'user')
+          .select()
+          .where({ id: cursor })
+          .getOne()
+      : undefined;
+
+    let queryBuilder = getManager().createQueryBuilder(User, 'user').select();
+
+    if (entityOnCursor) {
+      const comparator = order === SortOrder.asc ? MoreThan : LessThan;
+      switch (orderBy) {
+        case UserListOrder.updatedAt:
+          queryBuilder = queryBuilder.where([
+            {
+              updatedAt: comparator(entityOnCursor.updatedAt),
+            },
+            {
+              updatedAt: entityOnCursor.updatedAt,
+              id: comparator(entityOnCursor.id),
+            },
+          ]);
+          break;
+        case UserListOrder.policy:
+          queryBuilder = queryBuilder.where([
+            {
+              fkPolicyId: comparator(entityOnCursor.fkPolicyId),
+            },
+            {
+              fkPolicyId: entityOnCursor.fkPolicyId,
+              id: comparator(entityOnCursor.id),
+            },
+          ]);
+          break;
+        case UserListOrder.provider:
+          queryBuilder = queryBuilder.where([
+            {
+              provider: comparator(entityOnCursor.provider),
+            },
+            {
+              provider: entityOnCursor.provider,
+              id: comparator(entityOnCursor.id),
+            },
+          ]);
+          break;
+        case UserListOrder.state:
+          queryBuilder = queryBuilder.where([
+            {
+              state: comparator(entityOnCursor.state),
+            },
+            {
+              state: entityOnCursor.state,
+              id: comparator(entityOnCursor.id),
+            },
+          ]);
+          break;
+        default:
+          throw Error('invalid UserListOrder');
+      }
+    }
+
+    switch (orderBy) {
+      case UserListOrder.updatedAt:
+        queryBuilder = queryBuilder.orderBy({ 'user.updatedAt': order });
+        break;
+      case UserListOrder.policy:
+        queryBuilder = queryBuilder.orderBy({ 'user.fkPolicyId': order });
+        break;
+      case UserListOrder.provider:
+        queryBuilder = queryBuilder.orderBy({ 'user.provider': order });
+        break;
+      case UserListOrder.state:
+        queryBuilder = queryBuilder.orderBy({ 'user.state': order });
+        break;
+      default:
+        throw Error('invalid UserListOrder');
+    }
+    queryBuilder.addOrderBy('user.id', order);
+
+    queryBuilder = queryBuilder.limit(limit);
+
+    const users = await queryBuilder.getMany();
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      user: {
+        list: users.map((user) => user.toJsonObject()),
+      },
+    };
   },
   {
     schema: {
