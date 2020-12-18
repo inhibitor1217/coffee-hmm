@@ -38,6 +38,7 @@ const error = (): Middleware<KoaContextState> => async (
     if (Exception.isExceptionOf(e, ExceptionCode.notFound)) {
       ctx.status = HTTP_NOT_FOUND;
       ctx.body = { error: e.payload };
+      return;
     }
 
     if (Exception.isExceptionOf(e, ExceptionCode.notImplemented)) {

@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import { getManager } from 'typeorm';
 import { UNIQUE_VIOLATION } from 'pg-error-constants';
-import { HTTP_CREATED } from '../../const';
+import { HTTP_CREATED, HTTP_OK } from '../../const';
 import Policy from '../../entities/policy';
 import { SortOrder, SortOrderStrings } from '../../types';
 import { KoaRouteHandler, VariablesMap } from '../../types/koa';
@@ -80,8 +80,21 @@ export const postPolicy: KoaRouteHandler<
 export const getSinglePolicy: KoaRouteHandler<{
   policyId: string;
 }> = handler(
-  () => {
-    throw new Exception(ExceptionCode.notImplemented);
+  async (ctx) => {
+    const { policyId } = ctx.params;
+
+    await ctx.state.connection();
+
+    const policy = await ctx.state.loaders.policy.load(policyId);
+
+    if (!policy) {
+      throw new Exception(ExceptionCode.notFound);
+    }
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      policy: policy.toJsonObject(),
+    };
   },
   {
     schema: {
