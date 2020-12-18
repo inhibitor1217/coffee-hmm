@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { getManager } from 'typeorm';
+import { getManager, LessThan, MoreThan } from 'typeorm';
 import { UNIQUE_VIOLATION } from 'pg-error-constants';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
 import Policy from '../../entities/policy';
@@ -153,8 +153,75 @@ export const getPolicyList: KoaRouteHandler<
     order?: SortOrderStrings;
   }
 > = handler(
-  () => {
-    throw new Exception(ExceptionCode.notImplemented);
+  async (ctx) => {
+    const {
+      limit,
+      cursor,
+      orderBy: orderByString = 'updatedAt',
+      order: orderString = 'asc',
+    } = ctx.query;
+    const orderBy = PolicyListOrder[orderByString];
+    const order = SortOrder[orderString];
+
+    await ctx.state.connection();
+
+    const entityOnCursor = cursor
+      ? await ctx.state.loaders.policy.load(cursor)
+      : undefined;
+
+    // TODO: implement cursor-based pagination by using generated columns
+    // TODO: return cursor value and next page invokation uri at response
+
+    let queryBuilder = getManager()
+      .createQueryBuilder(Policy, 'policy')
+      .select();
+
+    if (entityOnCursor) {
+      const comparator = order === SortOrder.asc ? MoreThan : LessThan;
+      switch (orderBy) {
+        case PolicyListOrder.updatedAt:
+          queryBuilder = queryBuilder.where([
+            {
+              updatedAt: comparator(entityOnCursor.updatedAt),
+            },
+            {
+              updatedAt: entityOnCursor.updatedAt,
+              id: comparator(entityOnCursor.id),
+            },
+          ]);
+          break;
+        case PolicyListOrder.name:
+          queryBuilder = queryBuilder.where({
+            name: comparator(entityOnCursor.name),
+          });
+          break;
+        default:
+          throw Error('invalid PolicyListOrder');
+      }
+    }
+
+    switch (orderBy) {
+      case PolicyListOrder.updatedAt:
+        queryBuilder = queryBuilder.orderBy({ 'policy.updatedAt': order });
+        break;
+      case PolicyListOrder.name:
+        queryBuilder = queryBuilder.orderBy({ 'policy.name': order });
+        break;
+      default:
+        throw Error('invalid PolicyListOrder');
+    }
+    queryBuilder = queryBuilder.addOrderBy('policy.id', order);
+
+    queryBuilder = queryBuilder.limit(limit);
+
+    const policies = await queryBuilder.getMany();
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      policy: {
+        list: policies.map((policy) => policy.toJsonObject()),
+      },
+    };
   },
   {
     schema: {

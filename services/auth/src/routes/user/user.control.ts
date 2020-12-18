@@ -106,6 +106,9 @@ export const getUserList: KoaRouteHandler<
       ? await ctx.state.loaders.user.load(cursor)
       : undefined;
 
+    // TODO: implement cursor-based pagination by using generated columns
+    // TODO: return cursor value and next page invokation uri at response
+
     let queryBuilder = getManager().createQueryBuilder(User, 'user').select();
 
     if (entityOnCursor) {
@@ -176,7 +179,7 @@ export const getUserList: KoaRouteHandler<
       default:
         throw Error('invalid UserListOrder');
     }
-    queryBuilder.addOrderBy('user.id', order);
+    queryBuilder = queryBuilder.addOrderBy('user.id', order);
 
     queryBuilder = queryBuilder.limit(limit);
 

@@ -490,12 +490,12 @@ Retrieves a list of policies.
 
 **Query Parameters**
 
-| **Name**  | **Type**                | **Required?**                 | **Description**                                                                                                                                                                                                      |
-| --------- | ----------------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `limit`   | `int`                   | yes                           | Max number of items to retrieve by this query. Max value is 64.                                                                                                                                                      |
-| `cursor`  | `uuid`                  | no                            | If `cursor` is provided, this endpoint will fetch the user which has `id` of `cursor` and after such user. Use `cursor` for pagination. If the user with `cursor` does not exist, then the `cursor` will be ignored. |
-| `orderBy` | `"updatedAt"`, `"name"` | no (default is `"updatedAt"`) | Configures how the result will be sorted.                                                                                                                                                                            |
-| `order`   | `"asc"`, `"desc"`       | no (default is `"asc"`)       | Configures how the result will be ordered. (`"asc"` meaning ascending and `"desc"` meaning descending)                                                                                                               |
+| **Name**  | **Type**                | **Required?**                 | **Description**                                                                                                                                                                                              |
+| --------- | ----------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `limit`   | `int`                   | yes                           | Max number of items to retrieve by this query. Max value is 64.                                                                                                                                              |
+| `cursor`  | `uuid`                  | no                            | If `cursor` is provided, this endpoint will fetch items after the item which has `id` of `cursor`. Use `cursor` for pagination. If the item with `cursor` does not exist, then the `cursor` will be ignored. |
+| `orderBy` | `"updatedAt"`, `"name"` | no (default is `"updatedAt"`) | Configures how the result will be sorted.                                                                                                                                                                    |
+| `order`   | `"asc"`, `"desc"`       | no (default is `"asc"`)       | Configures how the result will be ordered. (`"asc"` meaning ascending and `"desc"` meaning descending)                                                                                                       |
 
 **Request Example**
 
