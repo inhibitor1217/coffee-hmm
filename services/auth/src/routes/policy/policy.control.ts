@@ -114,8 +114,19 @@ export const getSinglePolicy: KoaRouteHandler<{
 );
 
 export const getPolicyCount: KoaRouteHandler = handler(
-  () => {
-    throw new Exception(ExceptionCode.notImplemented);
+  async (ctx) => {
+    await ctx.state.connection();
+
+    const count = await getManager()
+      .createQueryBuilder(Policy, 'policy')
+      .getCount();
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      policy: {
+        count,
+      },
+    };
   },
   {
     requiredRules: new OperationSchema({
