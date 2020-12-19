@@ -1,7 +1,7 @@
 import '../../util/extension';
 
 import Joi from 'joi';
-import { getManager, LessThan, MoreThan } from 'typeorm';
+import { getManager, getRepository, LessThan, MoreThan } from 'typeorm';
 import { HTTP_OK } from '../../const';
 import User, { UserState, UserStateStrings } from '../../entities/user';
 import UserProfile from '../../entities/userProfile';
@@ -230,18 +230,21 @@ export const putUserState: KoaRouteHandler<
 
     await ctx.state.connection();
 
-    await getManager()
-      .createQueryBuilder(User, 'user')
+    const repo = getRepository(User);
+    const updated = await repo
+      .createQueryBuilder()
       .update()
       .set({ state })
       .where({ id: userId })
-      .execute();
-
-    const user = await ctx.state.loaders.user.load(userId);
+      .returning(User.columns)
+      .execute()
+      .then((updateResult) =>
+        User.fromRawColumns((updateResult.raw as Record<string, unknown>[])[0])
+      );
 
     ctx.status = HTTP_OK;
     ctx.body = {
-      user: user.toJsonObject(),
+      user: updated.toJsonObject(),
     };
   },
   {
@@ -324,19 +327,23 @@ export const putUserProfile: KoaRouteHandler<
 
     const user = await ctx.state.loaders.user.load(userId);
 
-    await getManager()
+    const updated = await getManager()
       .createQueryBuilder(UserProfile, 'user_profile')
       .update()
-      .set(Object.filterUndefinedKeys({ name, email }))
+      .set({ ...{ name, email } })
       .where({ id: user.fkUserProfileId })
-      .execute();
-
-    const profile = await ctx.state.loaders.userProfile.load(userId);
+      .returning(UserProfile.columns)
+      .execute()
+      .then((updateResult) =>
+        UserProfile.fromRawColumns(
+          (updateResult.raw as Record<string, unknown>[])[0]
+        )
+      );
 
     ctx.status = HTTP_OK;
     ctx.body = {
       user: {
-        profile: profile.toJsonObject(),
+        profile: updated.toJsonObject(),
       },
     };
   },

@@ -131,7 +131,7 @@ export const register: KoaRouteHandler<
           providerUserId,
           providerUserEmail,
         })
-        .returning('*')
+        .returning(User.columns)
         .execute()
         .then((insertResult) => insertResult.generatedMaps[0] as User);
 

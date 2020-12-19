@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { getManager, LessThan, MoreThan } from 'typeorm';
+import { getManager, getRepository, LessThan, MoreThan } from 'typeorm';
 import { UNIQUE_VIOLATION } from 'pg-error-constants';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
 import Policy from '../../entities/policy';
@@ -30,13 +30,14 @@ export const postPolicy: KoaRouteHandler<
 
       await ctx.state.connection();
 
-      const { id } = await getManager()
-        .createQueryBuilder(Policy, 'policy')
+      const repo = getRepository(Policy);
+      const inserted = await repo
+        .createQueryBuilder()
         .insert()
         .values({ name, value })
-        .returning(['id'])
+        .returning(Policy.columns)
         .execute()
-        .then((insertResult) => insertResult.generatedMaps[0] as { id: string })
+        .then((insertResult) => repo.create(insertResult.generatedMaps[0]))
         .catch((e: { code: string }) => {
           if (e.code === UNIQUE_VIOLATION) {
             throw new Exception(
@@ -47,11 +48,9 @@ export const postPolicy: KoaRouteHandler<
           throw e;
         });
 
-      const policy = await ctx.state.loaders.policy.load(id);
-
       ctx.status = HTTP_CREATED;
       ctx.body = {
-        policy: policy.toJsonObject(),
+        policy: inserted.toJsonObject(),
       };
     } catch (e) {
       if (Exception.isExceptionOf(e, ExceptionCode.invalidArgument)) {
@@ -252,8 +251,54 @@ export const putPolicy: KoaRouteHandler<
     value?: string;
   }
 > = handler(
-  () => {
-    throw new Exception(ExceptionCode.notImplemented);
+  async (ctx) => {
+    if (!ctx.request.body) {
+      throw new Exception(ExceptionCode.badRequest);
+    }
+
+    const { policyId } = ctx.params;
+    const { name, value } = ctx.request.body;
+
+    try {
+      if (value) {
+        IamPolicy.parse(value);
+      }
+
+      await ctx.state.connection();
+
+      const repo = getRepository(Policy);
+      const updated = await repo
+        .createQueryBuilder()
+        .update()
+        .set({ ...{ name, value } })
+        .where({ id: policyId })
+        .returning(Policy.columns)
+        .execute()
+        .then((updateResult) =>
+          Policy.fromRawColumns(
+            (updateResult.raw as Record<string, unknown>[])[0]
+          )
+        )
+        .catch((e: { code: string }) => {
+          if (e.code === UNIQUE_VIOLATION) {
+            throw new Exception(
+              ExceptionCode.badRequest,
+              `duplicate policy name: ${name ?? '(undefined)'}`
+            );
+          }
+          throw e;
+        });
+
+      ctx.status = HTTP_OK;
+      ctx.body = {
+        policy: updated.toJsonObject(),
+      };
+    } catch (e) {
+      if (Exception.isExceptionOf(e, ExceptionCode.invalidArgument)) {
+        throw new Exception(ExceptionCode.badRequest, e.message);
+      }
+      throw e;
+    }
   },
   {
     schema: {
