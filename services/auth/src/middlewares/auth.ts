@@ -3,10 +3,14 @@ import firebaseAdmin from 'firebase-admin';
 import { KoaContextState } from '../types/koa';
 import { appStage, env } from '../util';
 import { AppStage } from '../types/env';
-import { IamPolicy } from '../util/iam';
+import { IamPolicy, IamPolicyObject } from '../util/iam';
 import Exception, { ExceptionCode } from '../util/error';
+import { TokenSubject, verifyToken } from '../util/token';
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const bearerToken = /^Bearer ([a-zA-Z0-9\-_.]+)$/i;
+const parseBearerToken = (header: string): string =>
+  (bearerToken.exec(header) || [])[1];
 
 const invalidDebugUidErrorMessage = `Invalid debug user id. Debug user id should be given with valid UUID format.`;
 const invalidDebugPolicyErrorMessage = `Invalid debug policy. Either valid debug iam policy string should be provided using [x-debug-iam-policy] header, or user of given id should already exist in the service, so that policy could be read from database.`;
@@ -76,12 +80,26 @@ const auth = (): Middleware<KoaContextState> => {
       }
     };
 
-    const parseAuthorizationHeader = (): [string, IamPolicy] | null => {
+    const parseAuthorizationHeader = async (): Promise<
+      [string, IamPolicy] | null
+    > => {
+      const accessToken = parseBearerToken(ctx.get('Authorization'));
+      if (accessToken) {
+        const { uid, policy } = await verifyToken<{
+          uid: string;
+          policy: IamPolicyObject;
+        }>(accessToken, {
+          subject: TokenSubject.accessToken,
+        });
+
+        return [uid, IamPolicy.fromJsonObject(policy)];
+      }
+
       return null;
     };
 
     const [uid, policy] =
-      (await parseDebugHeaders()) ?? parseAuthorizationHeader() ?? [];
+      (await parseDebugHeaders()) ?? (await parseAuthorizationHeader()) ?? [];
 
     ctx.state.uid = uid;
     ctx.state.policy = policy;
