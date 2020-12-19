@@ -54,6 +54,10 @@ export const register: KoaRouteHandler<
   }
 > = handler(
   async (ctx) => {
+    if (!ctx.request.body) {
+      throw new Exception(ExceptionCode.badRequest);
+    }
+
     const connection = await ctx.state.connection();
 
     const { id_token: idToken } = ctx.query;
@@ -76,8 +80,9 @@ export const register: KoaRouteHandler<
       });
     }
 
-    const profileName = ctx.request.body?.profile.name;
-    const profileEmail = ctx.request.body?.profile.email;
+    const {
+      profile: { name: profileName, email: profileEmail },
+    } = ctx.request.body;
 
     await connection.transaction(async (manager) => {
       const { id: fkUserProfileId } = await manager
