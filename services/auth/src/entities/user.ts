@@ -137,7 +137,8 @@ export default class User {
   ];
 
   static fromRawColumns(raw: Record<string, unknown>, alias?: string) {
-    const rawColumnName = (column: string) => [alias, column].join('_');
+    const rawColumnName = (column: string) =>
+      [alias, column].filter((e) => !!e).join('_');
     return getRepository(User).create({
       id: raw[rawColumnName('id')],
       createdAt: raw[rawColumnName('created_at')],
