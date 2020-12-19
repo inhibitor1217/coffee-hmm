@@ -1,15 +1,14 @@
 import { Middleware, Next, ParameterizedContext } from 'koa';
 import firebaseAdmin from 'firebase-admin';
-import { getRepository } from 'typeorm';
 import { KoaContextState } from '../types/koa';
-import { appStage, buildString, env } from '../util';
+import { appStage, env } from '../util';
 import { AppStage } from '../types/env';
-import { IamPolicy } from '../util/iam';
+import { IamPolicy, IamPolicyObject } from '../util/iam';
 import Exception, { ExceptionCode } from '../util/error';
-import User, { parseFirebaseSignInProvider } from '../entities/user';
+import { TokenSubject, verifyToken } from '../util/token';
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-const bearerToken = /Bearer ([a-zA-Z0-9\-_.]+)/;
+const bearerToken = /^Bearer ([a-zA-Z0-9\-_.]+)$/i;
 const parseBearerToken = (header: string): string =>
   (bearerToken.exec(header) || [])[1];
 
@@ -84,38 +83,16 @@ const auth = (): Middleware<KoaContextState> => {
     const parseAuthorizationHeader = async (): Promise<
       [string, IamPolicy] | null
     > => {
-      const idToken = parseBearerToken(ctx.get('Authorization'));
-      if (idToken) {
-        try {
-          const {
-            uid: firebaseUid,
-            firebase: { sign_in_provider: firebaseSignInProvider },
-          } = await firebaseAdmin.auth().verifyIdToken(idToken);
-          const provider = parseFirebaseSignInProvider(firebaseSignInProvider);
+      const accessToken = parseBearerToken(ctx.get('Authorization'));
+      if (accessToken) {
+        const { uid, policy } = await verifyToken<{
+          uid: string;
+          policy: IamPolicyObject;
+        }>(accessToken, {
+          subject: TokenSubject.accessToken,
+        });
 
-          /* find user with given auth provider and provider uid. */
-          await ctx.state.connection();
-          const user = await getRepository(User)
-            .createQueryBuilder('user')
-            .leftJoinAndSelect('user.policy', 'policy')
-            .where({ provider, providerUserId: firebaseUid })
-            .getOne();
-
-          if (!user) {
-            throw new Exception(
-              ExceptionCode.unauthorized,
-              `user is not registered to ${buildString()} service`
-            );
-          }
-
-          return [user.id, user.policy.iamPolicy];
-        } catch (e) {
-          if (Exception.isExceptionOf(e, ExceptionCode.notImplemented)) {
-            throw new Exception(ExceptionCode.unauthorized, e.message);
-          }
-
-          throw e;
-        }
+        return [uid, IamPolicy.fromJsonObject(policy)];
       }
 
       return null;

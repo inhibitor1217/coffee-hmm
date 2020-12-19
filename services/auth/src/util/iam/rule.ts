@@ -1,10 +1,11 @@
+import { ParameterizedContext } from 'koa';
 import {
   isOperationTypeString,
   OperationSchema,
   OperationType,
   OperationTypeStrings,
 } from '.';
-import Exception, { ExceptionCode } from '../error';
+import { KoaContextState } from '../../types/koa';
 
 type IamRuleParams = {
   operationType: OperationType;
@@ -18,6 +19,9 @@ export type IamRuleObject = {
   resource: string;
 };
 
+const ANY_WORD = '*';
+const MATCH_UID = '[uid]';
+
 export default class IamRule {
   public operationType: OperationType;
 
@@ -28,7 +32,7 @@ export default class IamRule {
   constructor(params: IamRuleParams) {
     this.operationType = params.operationType;
     this.operation = params.operation;
-    this.resource = params.resource ?? '*';
+    this.resource = params.resource ?? ANY_WORD;
   }
 
   public toJsonObject(): IamRuleObject {
@@ -39,11 +43,41 @@ export default class IamRule {
     };
   }
 
-  public canExecuteOperation(schema: OperationSchema): boolean {
+  private compareOperationHierarchy(
+    allowed: string[],
+    requesting: string[]
+  ): boolean {
+    const [allowedFirst, ...allowedRest] = allowed;
+    const [requestingFirst, ...requestingRest] = requesting;
+
+    if (!allowedFirst && !requestingFirst) {
+      return true;
+    }
+
+    return (
+      allowedFirst === ANY_WORD ||
+      (allowedFirst === requestingFirst &&
+        this.compareOperationHierarchy(allowedRest, requestingRest))
+    );
+  }
+
+  private compareOperation(allowed: string, requesting: string): boolean {
+    return this.compareOperationHierarchy(
+      allowed.split('.'),
+      requesting.split('.')
+    );
+  }
+
+  public canExecuteOperation(
+    ctx: ParameterizedContext<KoaContextState>,
+    schema: OperationSchema
+  ): boolean {
     return (
       this.operationType === schema.operationType &&
-      this.operation === schema.operation &&
-      (this.resource === '*' || this.resource === schema.resource)
+      this.compareOperation(this.operation, schema.operation) &&
+      (this.resource === ANY_WORD ||
+        (this.resource === MATCH_UID && schema.resource === ctx.state.uid) ||
+        this.resource === schema.resource)
     );
   }
 
@@ -76,7 +110,7 @@ export default class IamRule {
     return new IamRule({
       operationType: OperationType[json.operationType],
       operation: json.operation,
-      resource: json.resource ?? '*',
+      resource: json.resource ?? ANY_WORD,
     });
   }
 }

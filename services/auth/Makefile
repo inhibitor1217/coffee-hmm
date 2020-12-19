@@ -13,6 +13,9 @@ APP_STAGE=local
 PORT=7007
 LOG_LEVEL=verbose
 GOOGLE_APPLICATION_CREDENTIALS=.firebase/config.json
+JWT_SECRET_KEY=JWT_SECRET_KEY
+
+USER_ID=test
 
 help: info
 	@echo
@@ -23,6 +26,7 @@ help: info
 	@echo "  make lint             - run lint."
 	@echo "  make serve            - start local server for development."
 	@echo "  make deploy           - deploy the service via serverless"
+	@echo "  make token            - generate a firebase id token in local environment for testing"
 
 info:
 	@[ ! -z "$(NODE)" ] && echo node version: `$(NODE) --version` "$(NODE)"
@@ -44,9 +48,14 @@ lint:
 
 serve:
 	@echo "Starting $(APP_STAGE)@$(CURRENT_VERSION) server on port $(PORT) ..."
-	@APP_NAME=$(APP_NAME) APP_VERSION=$(CURRENT_VERSION) APP_STAGE=$(APP_STAGE) PORT=$(PORT) LOG_LEVEL=$(LOG_LEVEL) GOOGLE_APPLICATION_CREDENTIALS=$(GOOGLE_APPLICATION_CREDENTIALS) $(PKM) run debug
+	@APP_NAME=$(APP_NAME) APP_VERSION=$(CURRENT_VERSION) APP_STAGE=$(APP_STAGE) PORT=$(PORT) LOG_LEVEL=$(LOG_LEVEL) GOOGLE_APPLICATION_CREDENTIALS=$(GOOGLE_APPLICATION_CREDENTIALS) JWT_SECRET_KEY=$(JWT_SECRET_KEY) $(PKM) run debug
 
 deploy:
 	@cp .ormconfig/$(APP_STAGE).json .ormconfig/default.json
 	@cp .firebase/$(APP_STAGE).json .firebase/default.json
 	@AWS_ACCESS_KEY_ID=$(AWS_ACCESS_KEY_ID) AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY) npx serverless deploy --config $(SERVERLESS_CONFIG_FILE)
+
+token:
+	@echo "Creating a custom firebase id token on local environment ..."
+	@echo ""
+	@APP_NAME=$(APP_NAME) APP_STAGE=local USER_ID=$(USER_ID) GOOGLE_APPLICATION_CREDENTIALS=$(GOOGLE_APPLICATION_CREDENTIALS) npx ts-node src/externals/generateFirebaseToken.ts

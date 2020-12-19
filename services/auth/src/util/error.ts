@@ -4,6 +4,7 @@ export enum ExceptionCode {
   badRequest,
   unauthorized,
   forbidden,
+  notFound,
 }
 
 export type ExceptionCodeStrings = keyof typeof ExceptionCode;
@@ -11,13 +12,13 @@ export type ExceptionCodeStrings = keyof typeof ExceptionCode;
 export default class Exception extends Error {
   public code: ExceptionCode;
 
-  public message: string;
+  public payload: unknown;
 
-  constructor(code: ExceptionCode, message: string) {
-    super(`[${ExceptionCode[code]}] ${message}`);
+  constructor(code: ExceptionCode, payload?: unknown) {
+    super(`[${ExceptionCode[code].toUpperCase()}] ${JSON.stringify(payload)}`);
 
     this.code = code;
-    this.message = message;
+    this.payload = payload;
   }
 
   static isException(err: Error): err is Exception {

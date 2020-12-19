@@ -1,5 +1,6 @@
 import { Middleware, Next, ParameterizedContext } from 'koa';
 import { Connection, createConnection } from 'typeorm';
+import { createPolicyLoader } from '../entities/policy';
 import { createUserLoader, createUserProfileLoader } from '../entities/user';
 import { AppStage } from '../types/env';
 import { KoaContextState } from '../types/koa';
@@ -8,6 +9,7 @@ import { appStage } from '../util';
 const createDataLoaders = (context: KoaContextState) => ({
   user: createUserLoader(context),
   userProfile: createUserProfileLoader(context),
+  policy: createPolicyLoader(context),
 });
 
 export type DataLoaders = ReturnType<typeof createDataLoaders>;

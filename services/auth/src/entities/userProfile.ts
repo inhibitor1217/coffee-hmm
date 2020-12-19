@@ -1,14 +1,16 @@
 import {
   Column,
   CreateDateColumn,
+  DeepPartial,
   Entity,
+  getRepository,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('user_profiles')
 export default class UserProfile {
-  @PrimaryGeneratedColumn({ type: 'uuid', name: 'id' })
+  @PrimaryGeneratedColumn('uuid', { name: 'id' })
   readonly id!: string;
 
   @CreateDateColumn({ type: 'timestamptz', name: 'created_at' })
@@ -21,5 +23,35 @@ export default class UserProfile {
   name!: string;
 
   @Column({ type: 'varchar', name: 'email', length: 255, nullable: true })
-  email?: string;
+  email!: string | null;
+
+  public toJsonObject(): AnyJson {
+    return {
+      id: this.id,
+      createdAt: this.createdAt.toISOString(),
+      updatedAt: this.updatedAt.toISOString(),
+      name: this.name,
+      email: this.email,
+    };
+  }
+
+  static readonly columns: string[] = [
+    'id',
+    'createdAt',
+    'updatedAt',
+    'name',
+    'email',
+  ];
+
+  static fromRawColumns(raw: Record<string, unknown>, alias?: string) {
+    const rawColumnName = (column: string) =>
+      [alias, column].filter((e) => !!e).join('_');
+    return getRepository(UserProfile).create({
+      id: raw[rawColumnName('id')],
+      createdAt: raw[rawColumnName('created_at')],
+      updatedAt: raw[rawColumnName('updated_at')],
+      name: raw[rawColumnName('name')],
+      email: raw[rawColumnName('email')],
+    } as DeepPartial<UserProfile>);
+  }
 }
