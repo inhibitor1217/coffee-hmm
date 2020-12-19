@@ -165,12 +165,12 @@ Retrieve a list of users registered to the service.
 
 **Query Parameters**
 
-| **Name**  | **Type**                                           | **Required?**                 | **Description**                                                                                                                                                                                              |
-| --------- | -------------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `limit`   | `int`                                              | yes                           | Max number of items to retrieve by this query. Max value is 64.                                                                                                                                              |
-| `cursor`  | `uuid`                                             | no                            | If `cursor` is provided, this endpoint will fetch users after the user which has `id` of `cursor`. Use `cursor` for pagination. If the user with `cursor` does not exist, then the `cursor` will be ignored. |
-| `orderBy` | `"updatedAt"`, `"policy"`, `"provider"`, `"state"` | no (default is `"updatedAt"`) | Configures how the result will be sorted.                                                                                                                                                                    |
-| `order`   | `"asc"`, `"desc"`                                  | no (default is `"asc"`)       | Configures how the result will be ordered. (`"asc"` meaning ascending and `"desc"` meaning descending)                                                                                                       |
+| **Name**  | **Type**                                           | **Required?**                 | **Description**                                                                                                                                                                                                         |
+| --------- | -------------------------------------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `limit`   | `int`                                              | yes                           | Max number of items to retrieve by this query. Max value is 64.                                                                                                                                                         |
+| `cursor`  | `string`                                           | no                            | If `cursor` is provided, this endpoint will fetch items after the item at `cursor`. Use `cursor` for pagination. Initially fetch list from this endpoint, then provide the cursor from last request to fetch next page. |
+| `orderBy` | `"updatedAt"`, `"policy"`, `"provider"`, `"state"` | no (default is `"updatedAt"`) | Configures how the result will be sorted.                                                                                                                                                                               |
+| `order`   | `"asc"`, `"desc"`                                  | no (default is `"asc"`)       | Configures how the result will be ordered. (`"asc"` meaning ascending and `"desc"` meaning descending)                                                                                                                  |
 
 **Request Example**
 
@@ -197,7 +197,8 @@ Retrieve a list of users registered to the service.
         "providerUserEmail": "<provider-user-email>"          // nullable, an email address given by the login provider.
       }
     ]
-  }
+  },
+  "cursor": <cursor-string>                                   // set this as query parameter as query parameter to fetch next page
 }
 ```
 
@@ -490,12 +491,12 @@ Retrieves a list of policies.
 
 **Query Parameters**
 
-| **Name**  | **Type**                | **Required?**                 | **Description**                                                                                                                                                                                              |
-| --------- | ----------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `limit`   | `int`                   | yes                           | Max number of items to retrieve by this query. Max value is 64.                                                                                                                                              |
-| `cursor`  | `uuid`                  | no                            | If `cursor` is provided, this endpoint will fetch items after the item which has `id` of `cursor`. Use `cursor` for pagination. If the item with `cursor` does not exist, then the `cursor` will be ignored. |
-| `orderBy` | `"updatedAt"`, `"name"` | no (default is `"updatedAt"`) | Configures how the result will be sorted.                                                                                                                                                                    |
-| `order`   | `"asc"`, `"desc"`       | no (default is `"asc"`)       | Configures how the result will be ordered. (`"asc"` meaning ascending and `"desc"` meaning descending)                                                                                                       |
+| **Name**  | **Type**                | **Required?**                 | **Description**                                                                                                                                                                                                         |
+| --------- | ----------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `limit`   | `int`                   | yes                           | Max number of items to retrieve by this query. Max value is 64.                                                                                                                                                         |
+| `cursor`  | `string`                | no                            | If `cursor` is provided, this endpoint will fetch items after the item at `cursor`. Use `cursor` for pagination. Initially fetch list from this endpoint, then provide the cursor from last request to fetch next page. |
+| `orderBy` | `"updatedAt"`, `"name"` | no (default is `"updatedAt"`) | Configures how the result will be sorted.                                                                                                                                                                               |
+| `order`   | `"asc"`, `"desc"`       | no (default is `"asc"`)       | Configures how the result will be ordered. (`"asc"` meaning ascending and `"desc"` meaning descending)                                                                                                                  |
 
 **Request Example**
 
@@ -522,7 +523,8 @@ Retrieves a list of policies.
         }
       ]
     ]
-  }
+  },
+  "cursor": <cursor-string>    // set this as query parameter as query parameter to fetch next page
 }
 ```
 
