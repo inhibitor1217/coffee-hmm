@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { getManager, getRepository, LessThan, MoreThan } from 'typeorm';
-import { UNIQUE_VIOLATION } from 'pg-error-constants';
+import { FOREIGN_KEY_VIOLATION, UNIQUE_VIOLATION } from 'pg-error-constants';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
 import Policy from '../../entities/policy';
 import { SortOrder, SortOrderStrings } from '../../types';
@@ -327,8 +327,38 @@ export const putPolicy: KoaRouteHandler<
 export const deletePolicy: KoaRouteHandler<{
   policyId: string;
 }> = handler(
-  () => {
-    throw new Exception(ExceptionCode.notImplemented);
+  async (ctx) => {
+    const { policyId } = ctx.params;
+
+    await ctx.state.connection();
+
+    const repo = getRepository(Policy);
+    const affected = await repo
+      .createQueryBuilder()
+      .delete()
+      .where({ id: policyId })
+      .execute()
+      .then((updateResult) => updateResult.affected)
+      .catch((e: { code: string }) => {
+        if (e.code === FOREIGN_KEY_VIOLATION) {
+          throw new Exception(
+            ExceptionCode.badRequest,
+            `policy ${policyId} is still referenced from users`
+          );
+        }
+        throw e;
+      });
+
+    if (!affected) {
+      throw new Exception(ExceptionCode.notFound);
+    }
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      policy: {
+        id: policyId,
+      },
+    };
   },
   {
     schema: {
