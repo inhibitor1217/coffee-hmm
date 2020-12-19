@@ -1,7 +1,7 @@
 import '../../util/extension';
 
 import Joi from 'joi';
-import { getManager, getRepository, LessThan, MoreThan } from 'typeorm';
+import { DeepPartial, getManager, getRepository } from 'typeorm';
 import { HTTP_OK } from '../../const';
 import User, { UserState, UserStateStrings } from '../../entities/user';
 import UserProfile from '../../entities/userProfile';
@@ -102,65 +102,59 @@ export const getUserList: KoaRouteHandler<
 
     await ctx.state.connection();
 
-    const entityOnCursor = cursor
-      ? await ctx.state.loaders.user.load(cursor)
-      : undefined;
+    let queryBuilder = getRepository(User).createQueryBuilder('user').select();
 
-    // TODO: implement cursor-based pagination by using generated columns
-    // TODO: return cursor value and next page invokation uri at response
-
-    let queryBuilder = getManager().createQueryBuilder(User, 'user').select();
-
-    if (entityOnCursor) {
-      const comparator = order === SortOrder.asc ? MoreThan : LessThan;
-      switch (orderBy) {
-        case UserListOrder.updatedAt:
-          queryBuilder = queryBuilder.where([
-            {
-              updatedAt: comparator(entityOnCursor.updatedAt),
-            },
-            {
-              updatedAt: entityOnCursor.updatedAt,
-              id: comparator(entityOnCursor.id),
-            },
-          ]);
-          break;
-        case UserListOrder.policy:
-          queryBuilder = queryBuilder.where([
-            {
-              fkPolicyId: comparator(entityOnCursor.fkPolicyId),
-            },
-            {
-              fkPolicyId: entityOnCursor.fkPolicyId,
-              id: comparator(entityOnCursor.id),
-            },
-          ]);
-          break;
-        case UserListOrder.provider:
-          queryBuilder = queryBuilder.where([
-            {
-              provider: comparator(entityOnCursor.provider),
-            },
-            {
-              provider: entityOnCursor.provider,
-              id: comparator(entityOnCursor.id),
-            },
-          ]);
-          break;
-        case UserListOrder.state:
-          queryBuilder = queryBuilder.where([
-            {
-              state: comparator(entityOnCursor.state),
-            },
-            {
-              state: entityOnCursor.state,
-              id: comparator(entityOnCursor.id),
-            },
-          ]);
-          break;
-        default:
-          throw Error('invalid UserListOrder');
-      }
+    const comparator = order === SortOrder.asc ? '>' : '<';
+    switch (orderBy) {
+      case UserListOrder.updatedAt:
+        queryBuilder = queryBuilder.addSelect(
+          `CONCAT("user"."updated_at", '.', "user"."id") AS "cursor"`
+        );
+        if (cursor) {
+          const splitPos = cursor.lastIndexOf('.');
+          const cursorUpdatedAt = cursor.slice(0, splitPos);
+          const cursorId = cursor.slice(splitPos + 1);
+          queryBuilder = queryBuilder.where(
+            `("user"."updated_at", "user"."id") ${comparator} (:updatedAt, :id)`,
+            { updatedAt: cursorUpdatedAt, id: cursorId }
+          );
+        }
+        break;
+      case UserListOrder.policy:
+        queryBuilder = queryBuilder.addSelect(
+          `CONCAT("user"."fk_policy_id", '.', "user"."id") AS "cursor"`
+        );
+        if (cursor) {
+          queryBuilder = queryBuilder.where(
+            `CONCAT("user"."fk_policy_id", '.', "user"."id") ${comparator} :cursor`,
+            { cursor }
+          );
+        }
+        break;
+      case UserListOrder.provider:
+        queryBuilder = queryBuilder.addSelect(
+          `CONCAT(LPAD(("user"."provider" + 32768)::text, 5, '0'), '.', "user"."id") AS "cursor"`
+        );
+        if (cursor) {
+          queryBuilder = queryBuilder.where(
+            `CONCAT(LPAD(("user"."provider" + 32768)::text, 5, '0'), '.', "user"."id") ${comparator} :cursor`,
+            { cursor }
+          );
+        }
+        break;
+      case UserListOrder.state:
+        queryBuilder = queryBuilder.addSelect(
+          `CONCAT(LPAD(("user"."state" + 32768)::text, 5, '0'), '.', "user"."id") AS "cursor"`
+        );
+        if (cursor) {
+          queryBuilder = queryBuilder.where(
+            `CONCAT(LPAD(("user"."state" + 32768)::text, 5, '0'), '.', "user"."id") ${comparator} :cursor`,
+            { cursor }
+          );
+        }
+        break;
+      default:
+        throw Error('invalid UserListOrder');
     }
 
     switch (orderBy) {
@@ -183,13 +177,19 @@ export const getUserList: KoaRouteHandler<
 
     queryBuilder = queryBuilder.limit(limit);
 
-    const users = await queryBuilder.getMany();
+    const { users, cursor: nextCursor } = await queryBuilder
+      .getRawMany()
+      .then((rows: (DeepPartial<User> & { cursor: string })[]) => ({
+        users: rows.map((row) => User.fromRawColumns(row, 'user')),
+        cursor: rows[rows.length - 1]?.cursor,
+      }));
 
     ctx.status = HTTP_OK;
     ctx.body = {
       user: {
         list: users.map((user) => user.toJsonObject()),
       },
+      cursor: nextCursor && encodeURIComponent(nextCursor),
     };
   },
   {
@@ -197,7 +197,7 @@ export const getUserList: KoaRouteHandler<
       query: Joi.object()
         .keys({
           limit: Joi.number().integer().min(1).max(64).required(),
-          cursor: Joi.string().uuid({ version: 'uuidv4' }),
+          cursor: Joi.string(),
           orderBy: Joi.string().valid(...enumKeyStrings(UserListOrder)),
           order: Joi.string().valid(...enumKeyStrings(SortOrder)),
         })

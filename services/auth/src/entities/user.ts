@@ -136,18 +136,19 @@ export default class User {
     'providerUserEmail',
   ];
 
-  static fromRawColumns(raw: Record<string, unknown>) {
+  static fromRawColumns(raw: Record<string, unknown>, alias?: string) {
+    const rawColumnName = (column: string) => [alias, column].join('_');
     return getRepository(User).create({
-      id: raw.id,
-      createdAt: raw.created_at,
-      updatedAt: raw.updated_at,
-      lastSignedAt: raw.last_signed_at,
-      fkUserProfileId: raw.fk_user_profile_id,
-      fkPolicyId: raw.fk_policy_id,
-      state: raw.state,
-      provider: raw.provider,
-      providerUserId: raw.provider_uid,
-      providerUserEmail: raw.provider_email,
+      id: raw[rawColumnName('id')],
+      createdAt: raw[rawColumnName('created_at')],
+      updatedAt: raw[rawColumnName('updated_at')],
+      lastSignedAt: raw[rawColumnName('last_signed_at')],
+      fkUserProfileId: raw[rawColumnName('fk_user_profile_id')],
+      fkPolicyId: raw[rawColumnName('fk_policy_id')],
+      state: raw[rawColumnName('state')],
+      provider: raw[rawColumnName('provider')],
+      providerUserId: raw[rawColumnName('provider_uid')],
+      providerUserEmail: raw[rawColumnName('provider_email')],
     } as DeepPartial<User>);
   }
 }

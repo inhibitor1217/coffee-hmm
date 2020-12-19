@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { getManager, getRepository, LessThan, MoreThan } from 'typeorm';
+import { DeepPartial, getManager, getRepository } from 'typeorm';
 import { FOREIGN_KEY_VIOLATION, UNIQUE_VIOLATION } from 'pg-error-constants';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
 import Policy from '../../entities/policy';
@@ -164,39 +164,40 @@ export const getPolicyList: KoaRouteHandler<
 
     await ctx.state.connection();
 
-    const entityOnCursor = cursor
-      ? await ctx.state.loaders.policy.load(cursor)
-      : undefined;
-
-    // TODO: implement cursor-based pagination by using generated columns
-    // TODO: return cursor value and next page invokation uri at response
-
-    let queryBuilder = getManager()
-      .createQueryBuilder(Policy, 'policy')
+    let queryBuilder = getRepository(Policy)
+      .createQueryBuilder('policy')
       .select();
 
-    if (entityOnCursor) {
-      const comparator = order === SortOrder.asc ? MoreThan : LessThan;
-      switch (orderBy) {
-        case PolicyListOrder.updatedAt:
-          queryBuilder = queryBuilder.where([
+    const comparator = order === SortOrder.asc ? '>' : '<';
+    switch (orderBy) {
+      case PolicyListOrder.updatedAt:
+        queryBuilder = queryBuilder.addSelect(
+          `CONCAT("policy"."updated_at", '.', "policy"."id") AS "cursor"`
+        );
+        if (cursor) {
+          const splitPos = cursor.lastIndexOf('.');
+          const cursorUpdatedAt = cursor.slice(0, splitPos);
+          const cursorId = cursor.slice(splitPos + 1);
+          queryBuilder = queryBuilder.where(
+            `("policy"."updated_at", "policy"."id") ${comparator} (:updatedAt, :id)`,
             {
-              updatedAt: comparator(entityOnCursor.updatedAt),
-            },
-            {
-              updatedAt: entityOnCursor.updatedAt,
-              id: comparator(entityOnCursor.id),
-            },
-          ]);
-          break;
-        case PolicyListOrder.name:
-          queryBuilder = queryBuilder.where({
-            name: comparator(entityOnCursor.name),
-          });
-          break;
-        default:
-          throw Error('invalid PolicyListOrder');
-      }
+              updatedAt: cursorUpdatedAt,
+              id: cursorId,
+            }
+          );
+        }
+        break;
+      case PolicyListOrder.name:
+        queryBuilder = queryBuilder.addSelect(`"policy"."name" AS "cursor"`);
+        if (cursor) {
+          queryBuilder = queryBuilder.where(
+            `"policy"."name" ${comparator} :cursor`,
+            { cursor }
+          );
+        }
+        break;
+      default:
+        throw Error('invalid PolicyListOrder');
     }
 
     switch (orderBy) {
@@ -213,13 +214,22 @@ export const getPolicyList: KoaRouteHandler<
 
     queryBuilder = queryBuilder.limit(limit);
 
-    const policies = await queryBuilder.getMany();
+    const {
+      policies,
+      cursor: nextCursor,
+    } = await queryBuilder
+      .getRawMany()
+      .then((rows: (DeepPartial<Policy> & { cursor: string })[]) => ({
+        policies: rows.map((row) => Policy.fromRawColumns(row, 'policy')),
+        cursor: rows[rows.length - 1]?.cursor,
+      }));
 
     ctx.status = HTTP_OK;
     ctx.body = {
       policy: {
         list: policies.map((policy) => policy.toJsonObject()),
       },
+      cursor: nextCursor && encodeURIComponent(nextCursor),
     };
   },
   {
@@ -227,7 +237,7 @@ export const getPolicyList: KoaRouteHandler<
       query: Joi.object()
         .keys({
           limit: Joi.number().integer().min(1).max(64).required(),
-          cursor: Joi.string().uuid({ version: 'uuidv4' }),
+          cursor: Joi.string(),
           orderBy: Joi.string().valid(...enumKeyStrings(PolicyListOrder)),
           order: Joi.string().valid(...enumKeyStrings(SortOrder)),
         })

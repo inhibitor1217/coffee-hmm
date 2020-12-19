@@ -43,13 +43,14 @@ export default class UserProfile {
     'email',
   ];
 
-  static fromRawColumns(raw: Record<string, unknown>) {
+  static fromRawColumns(raw: Record<string, unknown>, alias?: string) {
+    const rawColumnName = (column: string) => [alias, column].join('_');
     return getRepository(UserProfile).create({
-      id: raw.id,
-      createdAt: raw.created_at,
-      updatedAt: raw.updated_at,
-      name: raw.name,
-      email: raw.email,
+      id: raw[rawColumnName('id')],
+      createdAt: raw[rawColumnName('created_at')],
+      updatedAt: raw[rawColumnName('updated_at')],
+      name: raw[rawColumnName('name')],
+      email: raw[rawColumnName('email')],
     } as DeepPartial<UserProfile>);
   }
 }
