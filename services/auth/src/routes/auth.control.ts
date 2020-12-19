@@ -1,6 +1,7 @@
 import firebaseAdmin from 'firebase-admin';
 import Joi from 'joi';
-import { getManager, getRepository } from 'typeorm';
+import { UNIQUE_VIOLATION } from 'pg-error-constants';
+import { DeepPartial, getManager } from 'typeorm';
 import { HTTP_CREATED, HTTP_OK } from '../const';
 import Policy, { DEFAULT_USER_POLICY_NAME } from '../entities/policy';
 import User, {
@@ -67,38 +68,27 @@ export const register: KoaRouteHandler<
       providerUserEmail,
     } = await verifyFirebaseIdToken(idToken);
 
-    const maybeExistingUser = await getRepository(User)
-      .createQueryBuilder()
-      .select()
-      .where({ provider, providerUserId })
-      .getOne();
-
-    if (maybeExistingUser) {
-      throw new Exception(ExceptionCode.badRequest, {
-        message: `user already exists with given firebase credentials`,
-        userId: maybeExistingUser.id,
-      });
-    }
-
     const {
       profile: { name: profileName, email: profileEmail },
     } = ctx.request.body;
 
     await connection.transaction(async (manager) => {
-      const { id: fkUserProfileId } = await manager
+      const userProfile = await manager
         .createQueryBuilder(UserProfile, 'user_profile')
         .insert()
         .values({
           name: profileName,
           email: profileEmail,
         })
-        .returning(['id'])
+        .returning(UserProfile.columns)
         .execute()
-        .then(
-          (insertResult) => insertResult.generatedMaps[0] as { id: string }
+        .then((insertResult) =>
+          UserProfile.fromRawColumns(
+            (insertResult.raw as DeepPartial<UserProfile>[])[0]
+          )
         );
 
-      const fkPolicyId = await (async () => {
+      const userPolicy = await (async () => {
         const maybeDefaultUserPolicy = await manager
           .createQueryBuilder(Policy, 'policy')
           .select()
@@ -106,7 +96,7 @@ export const register: KoaRouteHandler<
           .getOne();
 
         if (maybeDefaultUserPolicy) {
-          return maybeDefaultUserPolicy.id;
+          return maybeDefaultUserPolicy;
         }
 
         const defaultUserPolicy = await manager
@@ -116,21 +106,23 @@ export const register: KoaRouteHandler<
             name: DEFAULT_USER_POLICY_NAME,
             value: JSON.stringify(generateDefaultUserPolicy().toJsonObject()),
           })
-          .returning(['id'])
+          .returning(Policy.columns)
           .execute()
-          .then(
-            (insertResult) => insertResult.generatedMaps[0] as { id: string }
+          .then((insertResult) =>
+            Policy.fromRawColumns(
+              (insertResult.raw as DeepPartial<Policy>[])[0]
+            )
           );
 
-        return defaultUserPolicy.id;
+        return defaultUserPolicy;
       })();
 
       const user = await manager
         .createQueryBuilder(User, 'user')
         .insert()
         .values({
-          fkUserProfileId,
-          fkPolicyId,
+          fkUserProfileId: userProfile.id,
+          fkPolicyId: userPolicy.id,
           state: UserState.active,
           provider,
           providerUserId,
@@ -138,22 +130,21 @@ export const register: KoaRouteHandler<
         })
         .returning(User.columns)
         .execute()
-        .then((insertResult) => insertResult.generatedMaps[0] as User);
+        .then((insertResult) =>
+          User.fromRawColumns((insertResult.raw as DeepPartial<User>[])[0])
+        )
+        .catch((e: { code: string }) => {
+          if (e.code === UNIQUE_VIOLATION) {
+            throw new Exception(ExceptionCode.badRequest, {
+              message: `user already exists with given firebase credentials`,
+            });
+          }
+          throw e;
+        });
 
       ctx.status = HTTP_CREATED;
       ctx.body = {
-        user: {
-          id: user.id,
-          createdAt: user.createdAt,
-          updatedAt: user.updatedAt,
-          lastSignedAt: user.lastSignedAt,
-          userProfileId: user.fkUserProfileId,
-          policyId: user.fkPolicyId,
-          state: user.stateString,
-          provider: user.providerString,
-          providerUserId: user.providerUserId,
-          providerUserEmail: user.providerUserEmail,
-        },
+        user: user.toJsonObject(),
       };
     });
   },

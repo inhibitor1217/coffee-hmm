@@ -30,14 +30,15 @@ export const postPolicy: KoaRouteHandler<
 
       await ctx.state.connection();
 
-      const repo = getRepository(Policy);
-      const inserted = await repo
+      const inserted = await getRepository(Policy)
         .createQueryBuilder()
         .insert()
         .values({ name, value })
         .returning(Policy.columns)
         .execute()
-        .then((insertResult) => repo.create(insertResult.generatedMaps[0]))
+        .then((insertResult) =>
+          Policy.fromRawColumns((insertResult.raw as DeepPartial<Policy>[])[0])
+        )
         .catch((e: { code: string }) => {
           if (e.code === UNIQUE_VIOLATION) {
             throw new Exception(
