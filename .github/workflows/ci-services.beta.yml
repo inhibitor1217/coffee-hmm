@@ -2,7 +2,7 @@ name: ci-services@beta
 on:
   push:
     tags:
-      - "service/*"
+      - "service-beta/*"
 defaults:
   run:
     shell: bash
@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@master
       - name: Set current tag.
         id: tag
-        run: echo ::set-output name=parsed::${GITHUB_REF#refs/tags/service/}
+        run: echo ::set-output name=parsed::${GITHUB_REF#refs/tags/service-beta/}
       - name: Parse service name.
         id: service
         run: echo ::set-output name=parsed::${TAG%@*}
