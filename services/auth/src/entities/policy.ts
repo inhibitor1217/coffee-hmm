@@ -2,8 +2,10 @@ import DataLoader from 'dataloader';
 import {
   Column,
   CreateDateColumn,
+  DeepPartial,
   Entity,
   getManager,
+  getRepository,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -42,6 +44,24 @@ export default class Policy {
       value: this.value,
       ...this.iamPolicy.toJsonObject(),
     };
+  }
+
+  static readonly columns: string[] = [
+    'id',
+    'createdAt',
+    'updatedAt',
+    'name',
+    'value',
+  ];
+
+  static fromRawColumns(raw: Record<string, unknown>) {
+    return getRepository(Policy).create({
+      id: raw.id,
+      createdAt: raw.created_at,
+      updatedAt: raw.updated_at,
+      name: raw.name,
+      value: raw.value,
+    } as DeepPartial<Policy>);
   }
 }
 

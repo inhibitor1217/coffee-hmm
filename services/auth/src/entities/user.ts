@@ -4,8 +4,10 @@ import DataLoader from 'dataloader';
 import {
   Column,
   CreateDateColumn,
+  DeepPartial,
   Entity,
   getManager,
+  getRepository,
   Index,
   JoinColumn,
   ManyToOne,
@@ -119,6 +121,34 @@ export default class User {
       providerUserId: this.providerUserId,
       providerUserEmail: this.providerUserEmail,
     };
+  }
+
+  static readonly columns: string[] = [
+    'id',
+    'createdAt',
+    'updatedAt',
+    'lastSignedAt',
+    'fkUserProfileId',
+    'fkPolicyId',
+    'state',
+    'provider',
+    'providerUserId',
+    'providerUserEmail',
+  ];
+
+  static fromRawColumns(raw: Record<string, unknown>) {
+    return getRepository(User).create({
+      id: raw.id,
+      createdAt: raw.created_at,
+      updatedAt: raw.updated_at,
+      lastSignedAt: raw.last_signed_at,
+      fkUserProfileId: raw.fk_user_profile_id,
+      fkPolicyId: raw.fk_policy_id,
+      state: raw.state,
+      provider: raw.provider,
+      providerUserId: raw.provider_uid,
+      providerUserEmail: raw.provider_email,
+    } as DeepPartial<User>);
   }
 }
 

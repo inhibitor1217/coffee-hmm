@@ -1,7 +1,9 @@
 import {
   Column,
   CreateDateColumn,
+  DeepPartial,
   Entity,
+  getRepository,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -31,5 +33,23 @@ export default class UserProfile {
       name: this.name,
       email: this.email,
     };
+  }
+
+  static readonly columns: string[] = [
+    'id',
+    'createdAt',
+    'updatedAt',
+    'name',
+    'email',
+  ];
+
+  static fromRawColumns(raw: Record<string, unknown>) {
+    return getRepository(UserProfile).create({
+      id: raw.id,
+      createdAt: raw.created_at,
+      updatedAt: raw.updated_at,
+      name: raw.name,
+      email: raw.email,
+    } as DeepPartial<UserProfile>);
   }
 }
