@@ -199,6 +199,13 @@ export const token: KoaRouteHandler<
       });
     }
 
+    await getManager()
+      .createQueryBuilder(User, 'user')
+      .update()
+      .set({ lastSignedAt: new Date(Date.now()) })
+      .where({ id: user.id })
+      .execute();
+
     const policy = await ctx.state.loaders.policy.load(user.fkPolicyId);
 
     const payload = {
