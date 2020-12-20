@@ -2,7 +2,21 @@
 
 An authentication microservice for [Coffee Hmm](https://coffee-hmm.inhibitor.io)
 
+## Table of contents
+
+- [API Documentation](#api_documentation)
+  - [General](#general)
+  - [User](#user)
+  - [Policy](#policy)
+- [Policy](#policy_doc)
+
+<a name="api_documentation"></a>
+
 ## API Documentation
+
+<a name="general"></a>
+
+## General
 
 ### `POST /register`
 
@@ -79,6 +93,10 @@ Retrieve an access token, which the client can use for other services to access 
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"    // This token is different with the firebase id token client provided
 }
 ```
+
+<a name="user"></a>
+
+## User
 
 ### `GET /user/:userId`
 
@@ -361,6 +379,10 @@ Retrieve the policy attached to given user.
 }
 ```
 
+<a name="policy"></a>
+
+## Policy
+
 ### `POST /policy`
 
 Creates a new policy. The `value` field of the request must be a valid policy string.
@@ -601,6 +623,8 @@ Delete a policy with given id. **There should be no users using this policy.**
   }
 }
 ```
+
+<a name="policy_doc"></a>
 
 ## Policy
 
