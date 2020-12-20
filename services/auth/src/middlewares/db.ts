@@ -1,3 +1,5 @@
+import 'pg';
+
 import { Middleware, Next, ParameterizedContext } from 'koa';
 import { Connection, createConnection } from 'typeorm';
 import { createPolicyLoader } from '../entities/policy';
