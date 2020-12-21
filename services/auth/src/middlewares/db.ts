@@ -8,7 +8,7 @@ import { createPolicyLoader } from '../entities/policy';
 import { createUserLoader, createUserProfileLoader } from '../entities/user';
 import { AppStage } from '../types/env';
 import { KoaContextState } from '../types/koa';
-import { appStage } from '../util';
+import { appStage, env } from '../util';
 import entities from '../entities';
 
 const createDataLoaders = (context: KoaContextState) => ({
@@ -19,20 +19,32 @@ const createDataLoaders = (context: KoaContextState) => ({
 
 export type DataLoaders = ReturnType<typeof createDataLoaders>;
 
-const readOrmConfig = () =>
-  new Promise<ConnectionOptions>((resolve, reject) => {
+const readOrmConfig = (): Promise<ConnectionOptions> =>
+  new Promise<AnyJson>((resolve, reject) => {
+    if (process.env.TEST_ORMCONFIG) {
+      console.log(JSON.parse(process.env.TEST_ORMCONFIG));
+      resolve(JSON.parse(process.env.TEST_ORMCONFIG));
+      return;
+    }
+
     readFile(
-      path.resolve(process.cwd(), 'ormconfig.json'),
+      path.resolve(process.cwd(), env('ORMCONFIG_FILE')),
       'utf8',
       (err, data) => {
         if (err) {
           reject(err);
         } else {
           const config = JSON.parse(data);
-          resolve((config as unknown) as ConnectionOptions);
+          resolve(config);
         }
       }
     );
+  }).then((config) => (config as unknown) as ConnectionOptions);
+
+export const connect = async () =>
+  createConnection({
+    ...(await readOrmConfig()),
+    entities,
   });
 
 const db = (): Middleware<KoaContextState> => {
@@ -41,10 +53,7 @@ const db = (): Middleware<KoaContextState> => {
   return async (ctx: ParameterizedContext<KoaContextState>, next: Next) => {
     ctx.state.connection = async (): Promise<Connection> => {
       if (!connection) {
-        connection = await createConnection({
-          ...(await readOrmConfig()),
-          entities,
-        });
+        connection = await connect();
       }
       return connection;
     };

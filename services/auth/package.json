@@ -4,7 +4,7 @@
   "description": "An authentication microservice for coffee-hmm",
   "scripts": {
     "debug": "npx ts-node-dev --respawn --transpile-only --ignore-watch node_modules ./src/server.ts",
-    "test": "jest --collectCoverage"
+    "test": "jest --collectCoverage --maxWorkers=4"
   },
   "repository": {
     "type": "git",
@@ -18,6 +18,7 @@
   "homepage": "https://github.com/inhibitor1217/coffee-hmm",
   "devDependencies": {
     "@babel/core": "^7.12.10",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-proposal-decorators": "^7.12.1",
     "@babel/plugin-transform-typescript": "^7.12.1",
     "@babel/preset-env": "^7.12.11",
