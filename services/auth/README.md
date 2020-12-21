@@ -14,6 +14,16 @@ An authentication microservice for [Coffee Hmm](https://coffee-hmm.inhibitor.io)
 
 ## API Documentation
 
+### Authorization
+
+For endpoints not in [General](#general) section, an access token is needed to invoke the endpoint. The access token stores the core information about the user (user id, user policy, etc). Retrieve the access token using `GET /token`, then set the access token as **Bearer Token** at the header of HTTP request.
+
+```
+Authorization: Bearer <access token>
+```
+
+If access token is not provided or invalid, the endpoint will always throw `401 Unauthorized`.
+
 <a name="general"></a>
 
 ## General
