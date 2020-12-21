@@ -22,7 +22,6 @@ export type DataLoaders = ReturnType<typeof createDataLoaders>;
 const readOrmConfig = (): Promise<ConnectionOptions> =>
   new Promise<AnyJson>((resolve, reject) => {
     if (process.env.TEST_ORMCONFIG) {
-      console.log(JSON.parse(process.env.TEST_ORMCONFIG));
       resolve(JSON.parse(process.env.TEST_ORMCONFIG));
       return;
     }
