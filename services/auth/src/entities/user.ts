@@ -188,3 +188,17 @@ export const createUserProfileLoader = (context: KoaContextState) =>
 
     return userIds.map((id) => normalized[id]?.profile);
   });
+
+export const createUserPolicyLoader = (context: KoaContextState) =>
+  new DataLoader<string, Policy>(async (userIds) => {
+    await context.connection();
+
+    const normalized = await getManager()
+      .createQueryBuilder(User, 'user')
+      .leftJoinAndSelect('user.policy', 'policy')
+      .whereInIds(userIds)
+      .getMany()
+      .then((users) => Array.normalize<User>(users, (user) => user.id));
+
+    return userIds.map((id) => normalized[id]?.policy);
+  });

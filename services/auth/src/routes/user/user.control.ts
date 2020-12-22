@@ -379,8 +379,7 @@ export const getUserPolicy: KoaRouteHandler<{
 
     await ctx.state.connection();
 
-    const user = await ctx.state.loaders.user.load(userId);
-    const policy = await ctx.state.loaders.policy.load(user.fkPolicyId);
+    const policy = await ctx.state.loaders.userPolicy.load(userId);
 
     ctx.status = HTTP_OK;
     ctx.body = {

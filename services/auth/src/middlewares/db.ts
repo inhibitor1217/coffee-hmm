@@ -5,7 +5,11 @@ import { Middleware, Next, ParameterizedContext } from 'koa';
 import path from 'path';
 import { Connection, ConnectionOptions, createConnection } from 'typeorm';
 import { createPolicyLoader } from '../entities/policy';
-import { createUserLoader, createUserProfileLoader } from '../entities/user';
+import {
+  createUserLoader,
+  createUserPolicyLoader,
+  createUserProfileLoader,
+} from '../entities/user';
 import { AppStage } from '../types/env';
 import { KoaContextState } from '../types/koa';
 import { appStage, env } from '../util';
@@ -14,6 +18,7 @@ import entities from '../entities';
 const createDataLoaders = (context: KoaContextState) => ({
   user: createUserLoader(context),
   userProfile: createUserProfileLoader(context),
+  userPolicy: createUserPolicyLoader(context),
   policy: createPolicyLoader(context),
 });
 

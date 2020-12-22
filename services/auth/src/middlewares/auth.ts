@@ -53,9 +53,9 @@ const auth = (): Middleware<KoaContextState> => {
         const rawDebugIamPolicy = ctx.get('x-debug-iam-policy');
         const debugIamPolicy = rawDebugIamPolicy
           ? IamPolicy.parse(rawDebugIamPolicy)
-          : await ctx.state.loaders.user
+          : await ctx.state.loaders.userPolicy
               .load(debugUserId)
-              .then((user) => user?.policy?.iamPolicy);
+              .then((policy) => policy?.iamPolicy);
 
         if (!debugIamPolicy) {
           throw new Exception(
