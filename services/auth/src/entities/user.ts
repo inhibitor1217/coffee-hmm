@@ -3,6 +3,7 @@ import '../util/extension';
 import DataLoader from 'dataloader';
 import {
   Column,
+  Connection,
   CreateDateColumn,
   DeepPartial,
   Entity,
@@ -136,10 +137,17 @@ export default class User {
     'providerUserEmail',
   ];
 
-  static fromRawColumns(raw: Record<string, unknown>, alias?: string) {
+  static fromRawColumns(
+    raw: Record<string, unknown>,
+    options?: { alias?: string; connection?: Connection }
+  ) {
     const rawColumnName = (column: string) =>
-      [alias, column].filter((e) => !!e).join('_');
-    return getRepository(User).create({
+      [options?.alias, column].filter((e) => !!e).join('_');
+
+    const repo =
+      options?.connection?.getRepository(User) ?? getRepository(User);
+
+    return repo.create({
       id: raw[rawColumnName('id')],
       createdAt: raw[rawColumnName('created_at')],
       updatedAt: raw[rawColumnName('updated_at')],

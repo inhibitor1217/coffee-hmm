@@ -221,7 +221,9 @@ export const getPolicyList: KoaRouteHandler<
     } = await queryBuilder
       .getRawMany()
       .then((rows: (DeepPartial<Policy> & { cursor: string })[]) => ({
-        policies: rows.map((row) => Policy.fromRawColumns(row, 'policy')),
+        policies: rows.map((row) =>
+          Policy.fromRawColumns(row, { alias: 'policy' })
+        ),
         cursor: rows[rows.length - 1]?.cursor,
       }));
 

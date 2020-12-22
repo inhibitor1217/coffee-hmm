@@ -1,6 +1,7 @@
 import DataLoader from 'dataloader';
 import {
   Column,
+  Connection,
   CreateDateColumn,
   DeepPartial,
   Entity,
@@ -54,10 +55,17 @@ export default class Policy {
     'value',
   ];
 
-  static fromRawColumns(raw: Record<string, unknown>, alias?: string) {
+  static fromRawColumns(
+    raw: Record<string, unknown>,
+    options?: { alias?: string; connection?: Connection }
+  ) {
     const rawColumnName = (column: string) =>
-      [alias, column].filter((e) => !!e).join('_');
-    return getRepository(Policy).create({
+      [options?.alias, column].filter((e) => !!e).join('_');
+
+    const repo =
+      options?.connection?.getRepository(Policy) ?? getRepository(Policy);
+
+    return repo.create({
       id: raw[rawColumnName('id')],
       createdAt: raw[rawColumnName('created_at')],
       updatedAt: raw[rawColumnName('updated_at')],

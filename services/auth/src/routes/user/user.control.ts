@@ -180,7 +180,7 @@ export const getUserList: KoaRouteHandler<
     const { users, cursor: nextCursor } = await queryBuilder
       .getRawMany()
       .then((rows: (DeepPartial<User> & { cursor: string })[]) => ({
-        users: rows.map((row) => User.fromRawColumns(row, 'user')),
+        users: rows.map((row) => User.fromRawColumns(row, { alias: 'user' })),
         cursor: rows[rows.length - 1]?.cursor,
       }));
 
