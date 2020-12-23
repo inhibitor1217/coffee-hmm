@@ -351,7 +351,7 @@ describe('Policy - PUT /policy/:policyId', () => {
 
     const policy = await connection
       .getRepository(Policy)
-      .findOne(testPolicyIds[128]);
+      .findOne(testPolicyIds[129]);
     expect(policy?.value).toBe(JSON.stringify(newPolicy.toJsonObject()));
   });
 
@@ -380,6 +380,7 @@ describe('Policy - PUT /policy/:policyId', () => {
     await request
       .put(`/policy/${uuid.v4()}`)
       .set({ 'x-debug-user-id': adminUid })
+      .send({ name: 'NewPolicy' })
       .expect(HTTP_NOT_FOUND);
   });
 });
