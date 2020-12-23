@@ -342,7 +342,9 @@ describe('User - PUT /user/:userId/state', () => {
       .query({ id_token: idToken })
       .expect(HTTP_FORBIDDEN);
 
-    expect(response.body).toEqual({ msg: `user ${testUids[10]} is deleted` });
+    expect(response.body).toEqual({
+      error: { message: `user ${testUids[10]} is deleted` },
+    });
   });
 });
 
