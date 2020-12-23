@@ -189,7 +189,7 @@ export const getUserList: KoaRouteHandler<
       user: {
         list: users.map((user) => user.toJsonObject()),
       },
-      cursor: nextCursor && encodeURIComponent(nextCursor),
+      cursor: nextCursor,
     };
   },
   {
@@ -330,7 +330,7 @@ export const putUserProfile: KoaRouteHandler<
     const updated = await getManager()
       .createQueryBuilder(UserProfile, 'user_profile')
       .update()
-      .set({ ...{ name, email } })
+      .set(Object.filterUndefinedKeys({ name, email }))
       .where({ id: user.fkUserProfileId })
       .returning(UserProfile.columns)
       .execute()

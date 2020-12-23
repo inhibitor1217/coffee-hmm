@@ -26,6 +26,10 @@ interface ArrayConstructor {
   ): { [key: string]: T[] };
 }
 
+interface ObjectConstructor {
+  filterUndefinedKeys(object: { [key: string]: AnyJson | undefined }): JsonMap;
+}
+
 declare module 'pg-error-constants' {
   // Class 00 — Successful Completion
   const SUCCESSFUL_COMPLETION = '00000';

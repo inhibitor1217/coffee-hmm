@@ -232,7 +232,7 @@ export const getPolicyList: KoaRouteHandler<
       policy: {
         list: policies.map((policy) => policy.toJsonObject()),
       },
-      cursor: nextCursor && encodeURIComponent(nextCursor),
+      cursor: nextCursor,
     };
   },
   {
@@ -283,15 +283,19 @@ export const putPolicy: KoaRouteHandler<
       const updated = await repo
         .createQueryBuilder()
         .update()
-        .set({ ...{ name, value } })
+        .set(Object.filterUndefinedKeys({ name, value }))
         .where({ id: policyId })
         .returning(Policy.columns)
         .execute()
-        .then((updateResult) =>
-          Policy.fromRawColumns(
+        .then((updateResult) => {
+          if (!updateResult.affected) {
+            throw new Exception(ExceptionCode.notFound);
+          }
+
+          return Policy.fromRawColumns(
             (updateResult.raw as Record<string, unknown>[])[0]
-          )
-        )
+          );
+        })
         .catch((e: { code: string }) => {
           if (e.code === UNIQUE_VIOLATION) {
             throw new Exception(
