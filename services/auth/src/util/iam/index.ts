@@ -2,6 +2,7 @@ export { default as IamRule, IamRuleObject } from './rule';
 export {
   default as IamPolicy,
   generateDefaultUserPolicy,
+  generateRootPolicy,
   IamPolicyObject,
 } from './policy';
 export { default as OperationSchema, OperationSchemaObject } from './schema';
