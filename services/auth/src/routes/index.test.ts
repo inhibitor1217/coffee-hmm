@@ -1,5 +1,11 @@
 import { SuperTest, Test } from 'supertest';
-import { Connection, createConnection, getRepository } from 'typeorm';
+import {
+  Connection,
+  createConnection,
+  DeepPartial,
+  getRepository,
+} from 'typeorm';
+import * as uuid from 'uuid';
 import {
   HTTP_BAD_REQUEST,
   HTTP_CREATED,
@@ -8,7 +14,7 @@ import {
   HTTP_UNAUTHORIZED,
 } from '../const';
 import Policy from '../entities/policy';
-import User from '../entities/user';
+import User, { AuthProvider, UserState } from '../entities/user';
 import UserProfile from '../entities/userProfile';
 import { cleanDatabase, closeServer, openServer, ormConfigs } from '../test';
 import { firebaseCustomIdToken } from '../test/util';
@@ -22,6 +28,62 @@ let request: SuperTest<Test>;
 
 // eslint-disable-next-line no-console
 console.log = jest.fn();
+
+const defaultUserPolicyString = JSON.stringify(
+  generateDefaultUserPolicy().toJsonObject()
+);
+
+const setupUser = async () => {
+  return connection.transaction(async (manager) => {
+    const userProfile = await manager
+      .createQueryBuilder(UserProfile, 'user_profile')
+      .insert()
+      .values({ name: `test` })
+      .returning(UserProfile.columns)
+      .execute()
+      .then((insertResult) =>
+        UserProfile.fromRawColumns(
+          (insertResult.raw as DeepPartial<UserProfile>[])[0],
+          { connection }
+        )
+      );
+
+    const adminerPolicy = await manager
+      .createQueryBuilder(Policy, 'policy')
+      .insert()
+      .values({
+        name: 'DefaultUserPolicy',
+        value: defaultUserPolicyString,
+      })
+      .returning(Policy.columns)
+      .execute()
+      .then((insertResult) =>
+        Policy.fromRawColumns((insertResult.raw as DeepPartial<Policy>[])[0], {
+          connection,
+        })
+      );
+
+    const user = await manager
+      .createQueryBuilder(User, 'user')
+      .insert()
+      .values({
+        fkUserProfileId: userProfile.id,
+        fkPolicyId: adminerPolicy.id,
+        state: UserState.active,
+        provider: AuthProvider.custom,
+        providerUserId: `test`,
+      })
+      .returning(User.columns)
+      .execute()
+      .then((insertResult) =>
+        User.fromRawColumns((insertResult.raw as DeepPartial<User>[])[0], {
+          connection,
+        })
+      );
+
+    return user.id;
+  });
+};
 
 beforeAll(async () => {
   connection = await createConnection(
@@ -193,5 +255,42 @@ describe('General - GET /token', () => {
 
     const user = await getRepository(User).findOne(userId);
     expect(user?.lastSignedAt).toBeTruthy();
+  });
+});
+
+describe('Overriding with root user', () => {
+  test('Can override own policy as root user', async () => {
+    const testUid = await setupUser();
+
+    process.env.ROOT_UID = testUid;
+
+    await request
+      .get('/policy/count')
+      .set({ 'x-debug-user-id': testUid })
+      .expect(HTTP_OK);
+  });
+
+  test('Cannot override policy when ROOT_UID is given different', async () => {
+    const testUid = await setupUser();
+
+    process.env.ROOT_UID = uuid.v4();
+
+    await request
+      .get('/policy/count')
+      .set({ 'x-debug-user-id': testUid })
+      .expect(HTTP_FORBIDDEN);
+  });
+
+  test('Prints logs when acting as root user', async () => {
+    const testUid = await setupUser();
+
+    process.env.ROOT_UID = testUid;
+
+    await request.get('/policy/count').set({ 'x-debug-user-id': testUid });
+
+    // eslint-disable-next-line no-console
+    expect(console.log).toHaveBeenCalledWith(
+      expect.stringContaining(`user ${testUid} executing as root policy`)
+    );
   });
 });
