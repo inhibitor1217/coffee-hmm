@@ -404,3 +404,41 @@ export const getUserPolicy: KoaRouteHandler<{
       }),
   }
 );
+
+export const putUserPolicy: KoaRouteHandler<
+  {
+    userId: string;
+  },
+  VariablesMap,
+  {
+    policyId: string;
+  }
+> = handler(
+  (ctx) => {
+    if (!ctx.request.body) {
+      throw new Exception(ExceptionCode.badRequest);
+    }
+
+    throw new Exception(ExceptionCode.notImplemented);
+  },
+  {
+    schema: {
+      params: Joi.object()
+        .keys({
+          userId: Joi.string().uuid({ version: 'uuidv4' }).required(),
+        })
+        .required(),
+      body: Joi.object()
+        .keys({
+          policyId: Joi.string().uuid({ version: 'uuidv4' }).required(),
+        })
+        .required(),
+    },
+    requiredRules: (ctx) =>
+      new OperationSchema({
+        operationType: OperationType.mutation,
+        operation: 'auth.user.policy',
+        resource: ctx.params.userId,
+      }),
+  }
+);

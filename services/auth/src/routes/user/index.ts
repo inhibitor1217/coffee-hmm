@@ -12,5 +12,6 @@ user.put('/:userId/state', userControl.putUserState);
 user.get('/:userId/profile', userControl.getUserProfile);
 user.put('/:userId/profile', userControl.putUserProfile);
 user.get('/:userId/policy', userControl.getUserPolicy);
+user.put('/:userId/policy', userControl.putUserPolicy);
 
 export default user;
