@@ -15,6 +15,8 @@ LOG_LEVEL=verbose
 GOOGLE_APPLICATION_CREDENTIALS=.firebase/config.json
 JWT_SECRET_KEY=JWT_SECRET_KEY
 
+ORMCONFIG_FILE=ormconfig.json
+
 USER_ID=test
 
 help: info
@@ -25,6 +27,7 @@ help: info
 	@echo "  make deps             - install all dependencies."
 	@echo "  make lint             - run lint."
 	@echo "  make serve            - start local server for development."
+	@echo "  make test             - test local server."
 	@echo "  make deploy           - deploy the service via serverless"
 	@echo "  make token            - generate a firebase id token in local environment for testing"
 
@@ -48,7 +51,10 @@ lint:
 
 serve:
 	@echo "Starting $(APP_STAGE)@$(CURRENT_VERSION) server on port $(PORT) ..."
-	@APP_NAME=$(APP_NAME) APP_VERSION=$(CURRENT_VERSION) APP_STAGE=$(APP_STAGE) PORT=$(PORT) LOG_LEVEL=$(LOG_LEVEL) GOOGLE_APPLICATION_CREDENTIALS=$(GOOGLE_APPLICATION_CREDENTIALS) JWT_SECRET_KEY=$(JWT_SECRET_KEY) $(PKM) run debug
+	@APP_NAME=$(APP_NAME) APP_VERSION=$(CURRENT_VERSION) APP_STAGE=$(APP_STAGE) PORT=$(PORT) LOG_LEVEL=$(LOG_LEVEL) GOOGLE_APPLICATION_CREDENTIALS=$(GOOGLE_APPLICATION_CREDENTIALS) JWT_SECRET_KEY=$(JWT_SECRET_KEY) ORMCONFIG_FILE=$(ORMCONFIG_FILE) $(PKM) run debug
+
+test:
+	@APP_NAME=$(APP_NAME) APP_VERSION=$(CURRENT_VERSION) APP_STAGE=$(APP_STAGE) PORT=$(PORT) LOG_LEVEL=$(LOG_LEVEL) GOOGLE_APPLICATION_CREDENTIALS=$(GOOGLE_APPLICATION_CREDENTIALS) JWT_SECRET_KEY=$(JWT_SECRET_KEY) JEST_WORKERS=4 TEST_SERVER_BASE_PORT=7100 $(PKM) test
 
 deploy:
 	@cp .ormconfig/$(APP_STAGE).json .ormconfig/default.json

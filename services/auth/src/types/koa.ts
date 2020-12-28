@@ -2,6 +2,7 @@ import Router from '@koa/router';
 import * as Koa from 'koa';
 import { Schema } from 'joi';
 import { Connection } from 'typeorm';
+import app from '../app';
 import { DataLoaders } from '../middlewares/db';
 import { IamPolicy, OperationSchema } from '../util/iam';
 import Logger from '../util/logger';
@@ -62,3 +63,5 @@ export interface KoaRouteHandlerOptions<
         ctx: KoaContext<ParamsT, QueryT, BodyT>
       ) => OperationSchema | OperationSchema[]);
 }
+
+export type KoaServer = ReturnType<typeof app.listen>;

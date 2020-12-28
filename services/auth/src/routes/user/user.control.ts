@@ -180,7 +180,7 @@ export const getUserList: KoaRouteHandler<
     const { users, cursor: nextCursor } = await queryBuilder
       .getRawMany()
       .then((rows: (DeepPartial<User> & { cursor: string })[]) => ({
-        users: rows.map((row) => User.fromRawColumns(row, 'user')),
+        users: rows.map((row) => User.fromRawColumns(row, { alias: 'user' })),
         cursor: rows[rows.length - 1]?.cursor,
       }));
 
@@ -189,7 +189,7 @@ export const getUserList: KoaRouteHandler<
       user: {
         list: users.map((user) => user.toJsonObject()),
       },
-      cursor: nextCursor && encodeURIComponent(nextCursor),
+      cursor: nextCursor,
     };
   },
   {
@@ -330,7 +330,7 @@ export const putUserProfile: KoaRouteHandler<
     const updated = await getManager()
       .createQueryBuilder(UserProfile, 'user_profile')
       .update()
-      .set({ ...{ name, email } })
+      .set(Object.filterUndefinedKeys({ name, email }))
       .where({ id: user.fkUserProfileId })
       .returning(UserProfile.columns)
       .execute()
@@ -379,8 +379,7 @@ export const getUserPolicy: KoaRouteHandler<{
 
     await ctx.state.connection();
 
-    const user = await ctx.state.loaders.user.load(userId);
-    const policy = await ctx.state.loaders.policy.load(user.fkPolicyId);
+    const policy = await ctx.state.loaders.userPolicy.load(userId);
 
     ctx.status = HTTP_OK;
     ctx.body = {

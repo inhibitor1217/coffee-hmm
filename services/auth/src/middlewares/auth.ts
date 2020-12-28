@@ -1,7 +1,7 @@
 import { Middleware, Next, ParameterizedContext } from 'koa';
-import firebaseAdmin from 'firebase-admin';
 import { KoaContextState } from '../types/koa';
-import { appStage, env } from '../util';
+import { appStage } from '../util';
+import { firebaseProjectName, initializeFirebaseAdmin } from '../util/firebase';
 import { AppStage } from '../types/env';
 import { IamPolicy, IamPolicyObject } from '../util/iam';
 import Exception, { ExceptionCode } from '../util/error';
@@ -20,15 +20,11 @@ const auth = (): Middleware<KoaContextState> => {
 
   return async (ctx: ParameterizedContext<KoaContextState>, next: Next) => {
     if (!initialized) {
-      const firebaseProjectName = `${env('APP_NAME')}-${env('APP_STAGE')}`;
       ctx.state.logger.verbose(
-        `Initializing firebase project with project name: ${firebaseProjectName}`
+        `Initializing firebase project with project name: ${firebaseProjectName()}`
       );
 
-      firebaseAdmin.initializeApp({
-        credential: firebaseAdmin.credential.applicationDefault(),
-        databaseURL: `https://${firebaseProjectName}.firebaseio.com`,
-      });
+      initializeFirebaseAdmin();
       ctx.state.logger.debug(`Initialized firebase project.`);
 
       initialized = true;
@@ -57,9 +53,9 @@ const auth = (): Middleware<KoaContextState> => {
         const rawDebugIamPolicy = ctx.get('x-debug-iam-policy');
         const debugIamPolicy = rawDebugIamPolicy
           ? IamPolicy.parse(rawDebugIamPolicy)
-          : await ctx.state.loaders.user
+          : await ctx.state.loaders.userPolicy
               .load(debugUserId)
-              .then((user) => user?.policy?.iamPolicy);
+              .then((policy) => policy?.iamPolicy);
 
         if (!debugIamPolicy) {
           throw new Exception(

@@ -3,6 +3,7 @@ import '../util/extension';
 import DataLoader from 'dataloader';
 import {
   Column,
+  Connection,
   CreateDateColumn,
   DeepPartial,
   Entity,
@@ -136,10 +137,17 @@ export default class User {
     'providerUserEmail',
   ];
 
-  static fromRawColumns(raw: Record<string, unknown>, alias?: string) {
+  static fromRawColumns(
+    raw: Record<string, unknown>,
+    options?: { alias?: string; connection?: Connection }
+  ) {
     const rawColumnName = (column: string) =>
-      [alias, column].filter((e) => !!e).join('_');
-    return getRepository(User).create({
+      [options?.alias, column].filter((e) => !!e).join('_');
+
+    const repo =
+      options?.connection?.getRepository(User) ?? getRepository(User);
+
+    return repo.create({
       id: raw[rawColumnName('id')],
       createdAt: raw[rawColumnName('created_at')],
       updatedAt: raw[rawColumnName('updated_at')],
@@ -179,4 +187,18 @@ export const createUserProfileLoader = (context: KoaContextState) =>
       .then((users) => Array.normalize<User>(users, (user) => user.id));
 
     return userIds.map((id) => normalized[id]?.profile);
+  });
+
+export const createUserPolicyLoader = (context: KoaContextState) =>
+  new DataLoader<string, Policy>(async (userIds) => {
+    await context.connection();
+
+    const normalized = await getManager()
+      .createQueryBuilder(User, 'user')
+      .leftJoinAndSelect('user.policy', 'policy')
+      .whereInIds(userIds)
+      .getMany()
+      .then((users) => Array.normalize<User>(users, (user) => user.id));
+
+    return userIds.map((id) => normalized[id]?.policy);
   });

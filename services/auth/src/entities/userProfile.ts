@@ -1,5 +1,6 @@
 import {
   Column,
+  Connection,
   CreateDateColumn,
   DeepPartial,
   Entity,
@@ -43,10 +44,18 @@ export default class UserProfile {
     'email',
   ];
 
-  static fromRawColumns(raw: Record<string, unknown>, alias?: string) {
+  static fromRawColumns(
+    raw: Record<string, unknown>,
+    options?: { alias?: string; connection?: Connection }
+  ) {
     const rawColumnName = (column: string) =>
-      [alias, column].filter((e) => !!e).join('_');
-    return getRepository(UserProfile).create({
+      [options?.alias, column].filter((e) => !!e).join('_');
+
+    const repo =
+      options?.connection?.getRepository(UserProfile) ??
+      getRepository(UserProfile);
+
+    return repo.create({
       id: raw[rawColumnName('id')],
       createdAt: raw[rawColumnName('created_at')],
       updatedAt: raw[rawColumnName('updated_at')],

@@ -2,24 +2,10 @@
 import firebase from 'firebase';
 import firebaseAdmin from 'firebase-admin';
 import { env } from '../util';
+import { initializeFirebase, initializeFirebaseAdmin } from '../util/firebase';
 
-const firebaseProjectName = `${env('APP_NAME')}-${env('APP_STAGE')}`;
-
-firebaseAdmin.initializeApp({
-  credential: firebaseAdmin.credential.applicationDefault(),
-  databaseURL: `https://${firebaseProjectName}.firebaseio.com`,
-});
-
-const localFirebaseConfiguration = {
-  apiKey: 'AIzaSyBmgGtUXirbO8dOepUiAdOwoXTenwzKpuc',
-  authDomain: 'coffee-hmm-auth-local.firebaseapp.com',
-  projectId: 'coffee-hmm-auth-local',
-  storageBucket: 'coffee-hmm-auth-local.appspot.com',
-  messagingSenderId: '1052599771060',
-  appId: '1:1052599771060:web:b3746156d360c970505ce1',
-};
-
-firebase.initializeApp(localFirebaseConfiguration);
+initializeFirebase();
+initializeFirebaseAdmin();
 
 firebaseAdmin
   .auth()

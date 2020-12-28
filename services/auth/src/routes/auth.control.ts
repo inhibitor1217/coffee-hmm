@@ -202,20 +202,31 @@ export const token: KoaRouteHandler<
       .where({ id: user.id })
       .execute();
 
-    const policy = await ctx.state.loaders.policy.load(user.fkPolicyId);
+    switch (user.state) {
+      case UserState.active: {
+        const policy = await ctx.state.loaders.policy.load(user.fkPolicyId);
 
-    const payload = {
-      uid: user.id,
-      policy: policy?.iamPolicy.toJsonObject(),
-    };
+        const payload = {
+          uid: user.id,
+          policy: policy?.iamPolicy.toJsonObject(),
+        };
 
-    const accessToken = await generateToken<typeof payload>(payload, {
-      subject: TokenSubject.accessToken,
-      expiresIn: '1h',
-    });
+        const accessToken = await generateToken<typeof payload>(payload, {
+          subject: TokenSubject.accessToken,
+          expiresIn: '1h',
+        });
 
-    ctx.status = HTTP_OK;
-    ctx.body = { token: accessToken };
+        ctx.status = HTTP_OK;
+        ctx.body = { token: accessToken };
+        break;
+      }
+      case UserState.deleted:
+        throw new Exception(ExceptionCode.forbidden, {
+          message: `user ${user.id} is deleted`,
+        });
+      default:
+        throw Error(`invalid user.state`);
+    }
   },
   {
     schema: {
