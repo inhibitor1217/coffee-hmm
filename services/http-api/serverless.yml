@@ -14,11 +14,10 @@ resources:
 
 plugins:
   - serverless-webpack
-  - serverless-domain-manager
 
 custom:
   stage: ${env:APP_STAGE, 'beta'}
-  version: 0.1.0
+  version: 0.0.1
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules:
@@ -26,12 +25,6 @@ custom:
         - aws-sdk
     packager: yarn
     excludeFiles: src/**/*.test.ts
-  customDomain:
-    domainName: ${self:custom.stage}.api.coffee-hmm.inhibitor.io
-    stage: ${self:custom.stage}
-    basePath: ''
-    certificateName: '*.api.coffee-hmm.inhibitor.io'
-    createRoute53Record: true
 
 functions:
   app:
