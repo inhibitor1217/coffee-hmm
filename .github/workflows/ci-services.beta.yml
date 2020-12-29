@@ -44,7 +44,7 @@ jobs:
         run: make info APP_STAGE=${APP_STAGE}
       - id: ormconfig
         name: Retrieve ORM configuration.
-        run: echo "::set-output name=secret_name::ORMCONFIG_$(echo ${{ needs.env.outputs.service }} | tr a-z A-Z)_$(echo ${APP_STAGE} | tr a-z A-Z)"
+        run: echo "::set-output name=secret_name::ORMCONFIG_$(echo ${{ needs.env.outputs.service }} | tr a-z A-Z | tr - _)_$(echo ${APP_STAGE} | tr a-z A-Z)"
       - name: Copy ORM configuration file.
         run: |
           mkdir .ormconfig
@@ -54,7 +54,7 @@ jobs:
           ORMCONFIG_SECRET_NAME: ${{ steps.ormconfig.outputs.secret_name }}
       - id: firebase
         name: Retrieve firebase configuration.
-        run: echo "::set-output name=secret_name::FIREBASE_$(echo ${{ needs.env.outputs.service }} | tr a-z A-Z)_$(echo ${APP_STAGE} | tr a-z A-Z)"
+        run: echo "::set-output name=secret_name::FIREBASE_$(echo ${{ needs.env.outputs.service }} | tr a-z A-Z | tr - _)_$(echo ${APP_STAGE} | tr a-z A-Z)"
       - name: Copy firebase configuration file.
         run: |
           mkdir .firebase
