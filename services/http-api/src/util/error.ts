@@ -2,6 +2,10 @@ export enum ExceptionCode {
   invalidArgument,
   badRequest,
   forbidden,
+  notFound,
+  notImplemented,
+  unauthorized,
+  service,
 }
 
 export type ExceptionCodeStrings = keyof typeof ExceptionCode;

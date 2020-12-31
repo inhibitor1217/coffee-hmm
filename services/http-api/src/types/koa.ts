@@ -1,12 +1,14 @@
 import Router from '@koa/router';
 import * as Koa from 'koa';
 import { Schema } from 'joi';
+import { Connection } from 'typeorm';
 import app from '../app';
 import { IamPolicy, OperationSchema } from '../util/iam';
 import Logger from '../util/logger';
 
 export interface KoaContextState {
   logger: Logger;
+  connection(): Promise<Connection>;
   uid?: string;
   policy?: IamPolicy;
 }
