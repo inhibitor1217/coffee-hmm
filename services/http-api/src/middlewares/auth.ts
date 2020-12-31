@@ -1,4 +1,5 @@
 import { Middleware, Next, ParameterizedContext } from 'koa';
+import service from '../services';
 import { AppStage } from '../types/env';
 import { KoaContextState } from '../types/koa';
 import { appStage } from '../util';
@@ -16,7 +17,7 @@ const invalidDebugPolicyErrorMessage = `Invalid debug policy. Either valid debug
 
 const auth = (): Middleware<KoaContextState> => {
   return async (ctx: ParameterizedContext<KoaContextState>, next: Next) => {
-    const parseDebugHeaders = (): [string, IamPolicy] | null => {
+    const parseDebugHeaders = async (): Promise<[string, IamPolicy] | null> => {
       if (appStage() !== AppStage.local) {
         return null;
       }
@@ -39,7 +40,7 @@ const auth = (): Middleware<KoaContextState> => {
         const rawDebugIamPolicy = ctx.get('x-debug-iam-policy');
         const debugIamPolicy = rawDebugIamPolicy
           ? IamPolicy.parse(rawDebugIamPolicy)
-          : null; // TODO: fetch policy from auth microservice
+          : await service().auth().getUserPolicy(debugUserId);
 
         if (!debugIamPolicy) {
           throw new Exception(
@@ -82,7 +83,7 @@ const auth = (): Middleware<KoaContextState> => {
     };
 
     const [uid, policy] =
-      parseDebugHeaders() ?? (await parseAuthorizationHeader()) ?? [];
+      (await parseDebugHeaders()) ?? (await parseAuthorizationHeader()) ?? [];
 
     ctx.state.uid = uid;
     ctx.state.policy = policy;
