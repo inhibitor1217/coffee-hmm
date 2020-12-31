@@ -8,10 +8,12 @@ import routes from './routes';
 import error from './middlewares/error';
 import db from './middlewares/db';
 import auth from './middlewares/auth';
+import logger from './middlewares/logger';
 
 const app = new Koa();
 
 app.use(koaLogger());
+app.use(logger());
 app.use(cors());
 app.use(error());
 app.use(db());
