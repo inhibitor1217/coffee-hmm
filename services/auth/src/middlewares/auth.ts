@@ -81,14 +81,20 @@ const auth = (): Middleware<KoaContextState> => {
     > => {
       const accessToken = parseBearerToken(ctx.get('Authorization'));
       if (accessToken) {
-        const { uid, policy } = await verifyToken<{
-          uid: string;
-          policy: IamPolicyObject;
-        }>(accessToken, {
-          subject: TokenSubject.accessToken,
-        });
+        try {
+          const { uid, policy } = await verifyToken<{
+            uid: string;
+            policy: IamPolicyObject;
+          }>(accessToken, {
+            subject: TokenSubject.accessToken,
+          });
 
-        return [uid, IamPolicy.fromJsonObject(policy)];
+          return [uid, IamPolicy.fromJsonObject(policy)];
+        } catch (e) {
+          throw new Exception(ExceptionCode.unauthorized, {
+            msg: 'Bearer token verification failed.',
+          });
+        }
       }
 
       return null;
