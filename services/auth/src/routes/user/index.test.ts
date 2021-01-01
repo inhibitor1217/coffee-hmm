@@ -420,4 +420,11 @@ describe('User - PUT /user/:userId/policy', () => {
     } = response.body as { user: { policy: IamPolicyObject } };
     expect({ rules }).toEqual(generateDefaultUserPolicy().toJsonObject());
   });
+
+  test('Throws 404 if user does not exist', async () => {
+    await request
+      .get(`/user/${uuid.v4()}/policy`)
+      .set({ 'x-debug-user-id': adminUid })
+      .expect(HTTP_NOT_FOUND);
+  });
 });
