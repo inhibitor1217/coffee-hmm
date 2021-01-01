@@ -51,6 +51,7 @@ functions:
       APP_STAGE: ${self:custom.stage}
       LOG_LEVEL: info
       AUTH_SERVICE: https://${self:custom.stage}.auth.coffee-hmm.inhibitor.io
+      ORMCONFIG_FILE: ormconfig.json
   updateEventStatistics:
     handler: src/scheduledEvents/updateEventStatistics.handler
     events:
@@ -61,3 +62,4 @@ functions:
       APP_STAGE: ${self:custom.stage}
       LOG_LEVEL: info
       AUTH_SERVICE: https://${self:custom.stage}.auth.coffee-hmm.inhibitor.io
+      ORMCONFIG_FILE: ormconfig.json
