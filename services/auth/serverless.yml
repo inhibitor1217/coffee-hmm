@@ -51,3 +51,4 @@ functions:
       APP_STAGE: ${self:custom.stage}
       LOG_LEVEL: info
       GOOGLE_APPLICATION_CREDENTIALS: firebase.json
+      ORMCONFIG_FILE: ormconfig.json
