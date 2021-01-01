@@ -381,6 +381,10 @@ export const getUserPolicy: KoaRouteHandler<{
 
     const policy = await ctx.state.loaders.userPolicy.load(userId);
 
+    if (!policy) {
+      throw new Exception(ExceptionCode.notFound);
+    }
+
     ctx.status = HTTP_OK;
     ctx.body = {
       user: {
