@@ -20,8 +20,8 @@ export default class Event {
   @UpdateDateColumn({ type: 'timestamptz', name: 'updated_at' })
   readonly updatedAt!: Date;
 
-  @Column({ type: 'uuid', name: 'uid' })
-  userId!: string;
+  @Column({ type: 'uuid', name: 'uid', nullable: true })
+  userId!: string | null;
 
   @Column({ type: 'varchar', name: 'category', length: 255 })
   category!: string;
