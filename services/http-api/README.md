@@ -10,6 +10,7 @@ A main HTTP api service for [Coffee Hmm](https://coffee-hmm.inhibitor.io)
   - [Cafe Image - Mutations](#cafe_image_mutations)
   - [Place - Queries](#place_queries)
   - [Place - Mutations](#place_mutations)
+  - [User Events](#user_events)
 
 <a name="api_documentation"></a>
 
@@ -900,6 +901,47 @@ Deletes a single place. The place requested to be deleted should not have any ca
 {
   "place": {
     "id": "11111111-1111-1111-1111-111111111111"
+  }
+}
+```
+
+<a name="user_events"></a>
+
+### User Events
+
+### `POST /event`
+
+Reports a new event.
+
+The list of categories and event names:
+
+| **Category** | **Name** | **Value** | **Description**                                                           |
+| ------------ | -------- | --------- | ------------------------------------------------------------------------- |
+| `CAFE`       | `VIEW`   | `cafeId`  | A cafe view event. This event will be counted to the `views` of the cafe. |
+
+**Request Example - Cafe View Event**
+
+```
+{
+  "category": "CAFE",
+  "name": "VIEW",
+  "value": "11111111-1111-1111-1111-111111111111"
+}
+```
+
+**Response Example**
+
+```
+{
+  "event": {
+    "id": "11111111-1111-1111-1111-111111111111",
+    "createdAt": "2020-01-01T00:00:00.000Z",
+    "updatedAt": "2020-01-01T00:00:00.000Z",
+    "userId": "11111111-1111-1111-1111-111111111111" // this will be set as null, if user is not signed
+    "category": "CAFE",
+    "name": "VIEW",
+    "label": <label> // nullable
+    "value": <value> // nullable
   }
 }
 ```
