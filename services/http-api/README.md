@@ -144,6 +144,90 @@ To clarify:
 
 > Cafe images were planned to be paginated, but by second thought it was decided against it since there would be few images uploaded per cafe.
 
+### `GET /cafe/feed`
+
+Retrieves a list of cafe as a feed, which is selected randomly (for now), among the list of cafes.
+
+- The list of cafes is **fixed** per user, and per day. Unsigned users will retrieve different result per request.
+
+**Query Parameters**
+
+| **Name**     | **Type** | **Required?** | **Description**                                                                                                                                                                                                                                                                        |
+| ------------ | -------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `cursor`     | `string` | no            | If `cursor` is provided, this query will fetch items after the `cursor`. Use `cursor` for pagination. Initially fetch the feed with no `cursor`, then set the `cursor` from the last request as query parameter to fetch next page.                                                    |
+| `identifier` | `string` | no            | `identifier` is used to identify the **unsigned** requester among requests for different pages. If the requester is unsigend, initially fetch the feed with no `identifier`, then set the `identifier` from the first request as the query parameter for fetching the following pages. |
+
+**Request Example**
+
+```
+(empty)
+```
+
+**Response Example**
+
+```
+{
+  "cafe": {
+    "list": [
+      {
+        "id": "11111111-1111-1111-1111-111111111111",
+        "createdAt": "2020-01-01T00:00:00.000Z",
+        "updatedAt": "2020-01-01T00:00:00.000Z",
+        "name": "알레그리아",
+        "place": {
+          "id": "11111111-1111-1111-1111-111111111111",
+          "createdAt": "2020-01-01T00:00:00.000Z",
+          "updatedAt": "2020-01-01T00:00:00.000Z",
+          "name": "판교"
+        },
+        "metadata": {
+          "hour": "09:00 ~ 19:00"
+        },
+        "state": "active",
+        "image": {
+          "count": 2
+        },
+        "views": {
+          "daily": 12,
+          "weekly": 45,
+          "monthly": 235,
+          "total": 372
+        },
+        "numLikes": 10
+      },
+      {
+        "id": "11111111-1111-1111-1111-111111111111",
+        "createdAt": "2020-01-01T00:00:00.000Z",
+        "updatedAt": "2020-01-01T00:00:00.000Z",
+        "name": "알레그리아",
+        "place": {
+          "id": "11111111-1111-1111-1111-111111111111",
+          "createdAt": "2020-01-01T00:00:00.000Z",
+          "updatedAt": "2020-01-01T00:00:00.000Z",
+          "name": "판교"
+        },
+        "metadata": {
+          "hour": "09:00 ~ 19:00"
+        },
+        "state": "active",
+        "image": {
+          "count": 2
+        },
+        "views": {
+          "daily": 12,
+          "weekly": 45,
+          "monthly": 235,
+          "total": 372
+        },
+        "numLikes": 10
+      }
+    ]
+  },
+  "cursor": <cursor-string>, // Set this as query parameter of next request to fetch the next page.
+  "identifier": <identifier-string> // Returned only if the requester was not signed. Set this as query parameter of request for next page to ensure that the results are consistent.
+}
+```
+
 ### `GET /cafe/count`
 
 Retrieve the number of cafes.
