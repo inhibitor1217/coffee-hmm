@@ -7,6 +7,7 @@ A main HTTP api service for [Coffee Hmm](https://coffee-hmm.inhibitor.io)
 - [API Documentation](#api_documentation)
   - [Cafe - Queries](#cafe_queries)
   - [Cafe - Mutations](#cafe_mutations)
+  - [Cafe Image - Mutations](#cafe_image_mutations)
   - [Place - Queries](#place_queries)
   - [Place - Mutations](#place_mutations)
 
@@ -342,13 +343,13 @@ Creates a new cafe.
 
 ```
 {
-  "name": "알레그리아",
-  "placeId": "11111111-1111-1111-1111-111111111111",
+  "name": "알레그리아", // optional
+  "placeId": "11111111-1111-1111-1111-111111111111", // optional
   "metadata": {
     "hour": "10:00 ~ 22:00",
     "tag": ["감성"]
-  },
-  "status": "active"
+  }, // optional
+  "status": "active" // optional
 }
 ```
 
@@ -412,6 +413,299 @@ Creates a new cafe.
       "total": 372
     },
     "numLikes": 10
+  }
+}
+```
+
+<a name="cafe_image_mutations"></a>
+
+### Cafe Image - Mutations
+
+### `POST /cafe/:cafeId/image`
+
+Attaches an image to cafe. If this is the first image attached to cafe and `state` is set to `active`, then this image will set as the main image.
+
+First upload the actual image to the resource media server, then use the retrieved uri as request body.
+
+**Required Rule**
+
+```
+{
+  "operationType": "mutation",
+  "operation": "*" | "api.*" | "api.cafe.*" | "api.cafe.image",
+  "resource": cafeId
+}
+```
+
+**Request Example**
+
+```
+{
+  "uri": "/images/****************.png",
+  "metadata": {
+    "tag": "입구",
+    "width": 1080,
+    "height": 1920
+  },
+  "state": "hidden" // optional, "active" | "hidden", defaults to "hidden"
+}
+```
+
+**Response Example**
+
+```
+{
+  "cafe": {
+    "id": "11111111-1111-1111-1111-111111111111",
+    "image": {
+      "id": "11111111-1111-1111-1111-111111111111",
+      "createdAt": "2020-01-01T00:00:00.000Z",
+      "updatedAt": "2020-01-01T00:00:00.000Z",
+      "cafeId": "11111111-1111-1111-1111-111111111111",
+      "index": 2,
+      "isMain": false,
+      "metadata": {
+        "tag": "입구",
+        "width": 1080,
+        "height": 1920
+      }
+      "relativeUri": "/images/****************.png",
+      "state": "hidden"
+    }
+  }
+}
+```
+
+### `PUT /cafe/:cafeId/image`
+
+Reorders the images, or set the main image of cafe.
+
+The indices and `isMain` field should be _consistent_: that is, after updating the cafe image records, the images attached to the cafe should satisfy
+
+- Exactly one of the images should have `isMain: true`.
+- The main image of the cafe should have `state: "active"`.
+- If there are `n` images, the `index` fields of the images should consist of `0, 1, ..., n-1`.
+
+**Required Rule**
+
+```
+{
+  "operationType": "mutation",
+  "operation": "*" | "api.*" | "api.cafe.*" | "api.cafe.image",
+  "resource": cafeId
+}
+```
+
+**Request Example**
+
+```
+{
+  "list": [
+    {
+      "id": "11111111-1111-1111-1111-111111111111",
+      "index": 0,
+      "isMain": false
+    },
+    {
+      "id": "11111111-1111-1111-1111-111111111111",
+      "index": 2,
+      "isMain": true
+    }
+  ]
+}
+```
+
+**Response Example**
+
+```
+{
+  "cafe": {
+    "id": "11111111-1111-1111-1111-111111111111",
+    "image": {
+      "count": 3,
+      "list": [
+        {
+          "id": "11111111-1111-1111-1111-111111111111",
+          "createdAt": "2020-01-01T00:00:00.000Z",
+          "updatedAt": "2020-01-01T00:00:00.000Z",
+          "cafeId": "11111111-1111-1111-1111-111111111111",
+          "index": 0,
+          "isMain": false,
+          "metadata": {
+            "tag": "입구",
+            "width": 1024,
+            "height": 1920
+          }
+          "relativeUri": "/images/11111111-1111-1111-1111-111111111111",
+          "state": "active"
+        },
+        {
+          "id": "11111111-1111-1111-1111-111111111111",
+          "createdAt": "2020-01-01T00:00:00.000Z",
+          "updatedAt": "2020-01-01T00:00:00.000Z",
+          "cafeId": "11111111-1111-1111-1111-111111111111",
+          "index": 1,
+          "isMain": false,
+          "metadata": {
+            "tag": "입구",
+            "width": 1024,
+            "height": 1920
+          }
+          "relativeUri": "/images/11111111-1111-1111-1111-111111111111",
+          "state": "hidden"
+        },
+        {
+          "id": "11111111-1111-1111-1111-111111111111",
+          "createdAt": "2020-01-01T00:00:00.000Z",
+          "updatedAt": "2020-01-01T00:00:00.000Z",
+          "cafeId": "11111111-1111-1111-1111-111111111111",
+          "index": 2,
+          "isMain": true,
+          "metadata": {
+            "tag": "입구",
+            "width": 1024,
+            "height": 1920
+          }
+          "relativeUri": "/images/11111111-1111-1111-1111-111111111111",
+          "state": "active"
+        }
+      ]
+    }
+  }
+}
+```
+
+### `PUT /cafe/:cafeId/image/:cafeImageId`
+
+Modifies image uri, metadata, or state of an image attached to cafe.
+
+**Required Rule**
+
+```
+{
+  "operationType": "mutation",
+  "operation": "*" | "api.*" | "api.cafe.*" | "api.cafe.image",
+  "resource": cafeImageId
+}
+```
+
+**Request Example**
+
+```
+{
+  "uri": "/images/****************.png", // optional
+  "metadata": {
+    "tag": "입구",
+    "width": 1080,
+    "height": 1920
+  }, // optional
+  "state": "active" // optional
+}
+```
+
+**Response Example**
+
+```
+{
+  "cafe": {
+    "id": "11111111-1111-1111-1111-111111111111",
+    "image": {
+      "id": "11111111-1111-1111-1111-111111111111",
+      "createdAt": "2020-01-01T00:00:00.000Z",
+      "updatedAt": "2020-01-01T00:00:00.000Z",
+      "cafeId": "11111111-1111-1111-1111-111111111111",
+      "index": 2,
+      "isMain": false,
+      "metadata": {
+        "tag": "입구",
+        "width": 1080,
+        "height": 1920
+      }
+      "relativeUri": "/images/****************.png",
+      "state": "active"
+    }
+  }
+}
+```
+
+### `DELETE /cafe/:cafeId/image`
+
+Deletes a list of images attached to cafe.
+
+**Required Rule**
+
+```
+{
+  "operationType": "mutation",
+  "operation": "*" | "api.*" | "api.cafe.*" | "api.cafe.image",
+  "resource": cafeId
+}
+```
+
+**Request Example**
+
+```
+{
+  "list": [
+    "11111111-1111-1111-1111-11111111111",
+    "11111111-1111-1111-1111-11111111111"
+  ]
+}
+```
+
+**Response Example**
+
+```
+{
+  "cafe": {
+    "id": "11111111-1111-1111-1111-111111111111",
+    "image": {
+      "list": [
+        {
+          "id": "11111111-1111-1111-1111-111111111111"
+        },
+        {
+          "id": "11111111-1111-1111-1111-111111111111"
+        }
+      ]
+    }
+  }
+}
+```
+
+### `DELETE /cafe/:cafeId/image/:cafeImageId`
+
+Delete an image attached to cafe.
+
+**Required Rule**
+
+```
+{
+  "operationType": "mutation",
+  "operation": "*" | "api.*" | "api.cafe.*" | "api.cafe.image",
+  "resource": cafeImageId
+}
+```
+
+**Request Example**
+
+```
+(empty)
+```
+
+**Response Example**
+
+```
+{
+  "cafe": {
+    "id": "11111111-1111-1111-1111-111111111111",
+    "image": {
+      "list": [
+        {
+          "id": "11111111-1111-1111-1111-111111111111"
+        }
+      ]
+    }
   }
 }
 ```
