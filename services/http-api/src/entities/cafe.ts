@@ -5,9 +5,12 @@ import {
   DeepPartial,
   Entity,
   getRepository,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import Place from './place';
 
 export enum CafeState {
   active = 0,
@@ -31,8 +34,12 @@ export default class Cafe {
   @Column({ type: 'varchar', name: 'name', length: 255 })
   name!: string;
 
-  @Column({ type: 'varchar', name: 'place', length: 255 })
-  place!: string;
+  @Column({ type: 'uuid', name: 'fk_place_id' })
+  fkPlaceId!: string;
+
+  @ManyToOne(() => Place)
+  @JoinColumn({ name: 'fk_place_id' })
+  readonly place!: Place;
 
   @Column({ type: 'varchar', name: 'metadata', length: 4000, nullable: true })
   metadata!: string | null;
@@ -58,7 +65,7 @@ export default class Cafe {
       createdAt: this.createdAt.toISOString(),
       updatedAt: this.updatedAt.toISOString(),
       name: this.name,
-      place: this.place,
+      place: this.place.toJsonObject(),
       metadata: this.metadataObject,
       state: this.stateString,
     };
@@ -69,7 +76,7 @@ export default class Cafe {
     'createdAt',
     'updatedAt',
     'name',
-    'place',
+    'fk_place_id',
     'metadata',
     'state',
   ];
@@ -89,7 +96,7 @@ export default class Cafe {
       createdAt: raw[rawColumnName('created_at')],
       updatedAt: raw[rawColumnName('updated_at')],
       name: raw[rawColumnName('name')],
-      place: raw[rawColumnName('place')],
+      fkPlaceId: raw[rawColumnName('fk_place_id')],
       metadata: raw[rawColumnName('metadata')],
       state: raw[rawColumnName('state')],
     } as DeepPartial<Cafe>);
