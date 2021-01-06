@@ -2,7 +2,12 @@ import pLimit from 'p-limit';
 import { SuperTest, Test } from 'supertest';
 import { Connection, createConnection, DeepPartial } from 'typeorm';
 import * as uuid from 'uuid';
-import { HTTP_FORBIDDEN, HTTP_NOT_FOUND, HTTP_OK } from '../../const';
+import {
+  HTTP_BAD_REQUEST,
+  HTTP_FORBIDDEN,
+  HTTP_NOT_FOUND,
+  HTTP_OK,
+} from '../../const';
 import Policy, { DEFAULT_USER_POLICY_NAME } from '../../entities/policy';
 import User, {
   AuthProvider,
@@ -29,6 +34,7 @@ let request: SuperTest<Test>;
 
 let testUids: string[];
 let adminUid: string;
+let anotherPolicyId: string;
 
 jest.setTimeout(30000);
 // eslint-disable-next-line no-console
@@ -37,6 +43,16 @@ console.log = jest.fn();
 const defaultUserPolicyString = JSON.stringify(
   generateDefaultUserPolicy().toJsonObject()
 );
+
+const updatedUserPolicy = new IamPolicy({
+  rules: [
+    new IamRule({
+      operationType: OperationType.query,
+      operation: 'auth.user',
+    }),
+  ],
+});
+
 const adminerPolicyString = JSON.stringify(
   new IamPolicy({
     rules: [
@@ -168,6 +184,25 @@ const setupAdminer = async () => {
   });
 };
 
+const setupOtherPolicies = async () => {
+  const updatedPolicy = await connection
+    .createQueryBuilder(Policy, 'policy')
+    .insert()
+    .values({
+      name: 'AnotherUserPolicy',
+      value: JSON.stringify(updatedUserPolicy.toJsonObject()),
+    })
+    .returning(Policy.columns)
+    .execute()
+    .then((insertResult) =>
+      Policy.fromRawColumns((insertResult.raw as DeepPartial<Policy>[])[0], {
+        connection,
+      })
+    );
+
+  return updatedPolicy.id;
+};
+
 beforeAll(async () => {
   connection = await createConnection(
     ormConfigs.worker(parseInt(env('JEST_WORKER_ID'), 10))
@@ -180,6 +215,7 @@ beforeAll(async () => {
   await cleanDatabase(connection);
   testUids = await setupUsers();
   adminUid = await setupAdminer();
+  anotherPolicyId = await setupOtherPolicies();
 });
 
 afterAll(async () => {
@@ -426,5 +462,56 @@ describe('User - PUT /user/:userId/policy', () => {
       .get(`/user/${uuid.v4()}/policy`)
       .set({ 'x-debug-user-id': adminUid })
       .expect(HTTP_NOT_FOUND);
+  });
+});
+
+describe('User - PUT /user/:userId/policy', () => {
+  test("Successfully updates a user's policy", async () => {
+    const response = await request
+      .put(`/user/${testUids[26]}/policy`)
+      .set({ 'x-debug-user-id': adminUid })
+      .send({ policyId: anotherPolicyId })
+      .expect(HTTP_OK);
+
+    const {
+      user: {
+        policy: { id, name, rules },
+      },
+    } = response.body as {
+      user: { policy: { id: string; name: string } & IamPolicyObject };
+    };
+
+    expect(id).toBe(anotherPolicyId);
+    expect(name).toBe(`AnotherUserPolicy`);
+    expect({ rules }).toEqual(updatedUserPolicy.toJsonObject());
+
+    await request
+      .get(`/user/count`)
+      .set({ 'x-debug-user-id': testUids[26] })
+      .expect(HTTP_OK);
+  });
+
+  test('Cannot update without privilege', async () => {
+    await request
+      .put(`/user/${testUids[27]}/policy`)
+      .set({ 'x-debug-user-id': testUids[27] })
+      .send({ policyId: anotherPolicyId })
+      .expect(HTTP_FORBIDDEN);
+  });
+
+  test('Throws 404 if user is not found', async () => {
+    await request
+      .put(`/user/${uuid.v4()}/policy`)
+      .set({ 'x-debug-user-id': adminUid })
+      .send({ policyId: anotherPolicyId })
+      .expect(HTTP_NOT_FOUND);
+  });
+
+  test('Throws 400 if policy is not found', async () => {
+    await request
+      .put(`/user/${testUids[28]}/policy`)
+      .set({ 'x-debug-user-id': adminUid })
+      .send({ policyId: uuid.v4() })
+      .expect(HTTP_BAD_REQUEST);
   });
 });

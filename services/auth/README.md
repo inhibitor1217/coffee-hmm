@@ -389,6 +389,51 @@ Retrieve the policy attached to given user.
 }
 ```
 
+### `PUT /user/:userId/policy`
+
+Updates the policy attached to given user.
+
+**Required Rule**
+
+```
+{
+  "operationType": "mutation",
+  "operation": "*" | "auth.*" | "auth.user.*" | "auth.user.policy",
+  "resource": "*" | userId
+}
+```
+
+**Request Example**
+
+```
+{
+  "policyId": "11111111-1111-1111-111111111111"
+}
+```
+
+**Response Example**
+
+```
+{
+  "user": {
+    "policy": {
+      "id": "11111111-1111-1111-111111111111",
+      "createdAt": "2020-01-01T00:00:00.000Z",
+      "updatedAt": "2020-01-01T00:00:00.000Z",
+      "name": "DefaultUserPolicy",
+      "value": "{\"rules\":[{\"operationType\":\"query\",\"operation\":\"auth.*\",\"resource\":\"*\"}]}",
+      "rules": [
+        {
+          "operationType": "query",
+          "operation": "auth.*",
+          "resource": "*"
+        }
+      ]
+    }
+  }
+}
+```
+
 <a name="policy"></a>
 
 ## Policy

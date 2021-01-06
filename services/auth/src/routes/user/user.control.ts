@@ -1,6 +1,7 @@
 import '../../util/extension';
 
 import Joi from 'joi';
+import { FOREIGN_KEY_VIOLATION } from 'pg-error-constants';
 import { DeepPartial, getManager, getRepository } from 'typeorm';
 import { HTTP_OK } from '../../const';
 import User, { UserState, UserStateStrings } from '../../entities/user';
@@ -403,6 +404,81 @@ export const getUserPolicy: KoaRouteHandler<{
     requiredRules: (ctx) =>
       new OperationSchema({
         operationType: OperationType.query,
+        operation: 'auth.user.policy',
+        resource: ctx.params.userId,
+      }),
+  }
+);
+
+export const putUserPolicy: KoaRouteHandler<
+  {
+    userId: string;
+  },
+  VariablesMap,
+  {
+    policyId: string;
+  }
+> = handler(
+  async (ctx) => {
+    if (!ctx.request.body) {
+      throw new Exception(ExceptionCode.badRequest);
+    }
+
+    const { userId } = ctx.params;
+    const { policyId } = ctx.request.body;
+
+    await ctx.state.connection();
+
+    const updated = await getManager()
+      .createQueryBuilder(User, 'user')
+      .update()
+      .set({ fkPolicyId: policyId })
+      .where({ id: userId })
+      .returning(User.columns)
+      .execute()
+      .then((updateResult) => {
+        if (updateResult?.affected) {
+          return User.fromRawColumns(
+            (updateResult.raw as Record<string, unknown>[])[0]
+          );
+        }
+        throw new Exception(ExceptionCode.notFound);
+      })
+      .catch((e: { code: string }) => {
+        if (e.code === FOREIGN_KEY_VIOLATION) {
+          throw new Exception(
+            ExceptionCode.badRequest,
+            `policy not found: ${policyId}`
+          );
+        }
+        throw e;
+      });
+
+    const policy = await ctx.state.loaders.policy.load(updated.fkPolicyId);
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      user: {
+        policy: policy.toJsonObject(),
+      },
+    };
+  },
+  {
+    schema: {
+      params: Joi.object()
+        .keys({
+          userId: Joi.string().uuid({ version: 'uuidv4' }).required(),
+        })
+        .required(),
+      body: Joi.object()
+        .keys({
+          policyId: Joi.string().uuid({ version: 'uuidv4' }).required(),
+        })
+        .required(),
+    },
+    requiredRules: (ctx) =>
+      new OperationSchema({
+        operationType: OperationType.mutation,
         operation: 'auth.user.policy',
         resource: ctx.params.userId,
       }),
