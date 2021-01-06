@@ -117,3 +117,11 @@ export const generateDefaultUserPolicy = () =>
       }),
     ],
   });
+
+export const generateRootPolicy = () =>
+  new IamPolicy({
+    rules: [
+      new IamRule({ operationType: OperationType.query, operation: '*' }),
+      new IamRule({ operationType: OperationType.mutation, operation: '*' }),
+    ],
+  });
