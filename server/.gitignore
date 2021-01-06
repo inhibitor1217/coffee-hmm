@@ -1,5 +1,0 @@
-node_modules/
-.serverless/
-data/
-.env
-yarn-error.log

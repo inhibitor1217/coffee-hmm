@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  auth-db:
+    image: postgres
+    ports:
+      - target: 5432
+        published: 5000
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
