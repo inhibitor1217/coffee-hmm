@@ -6,6 +6,14 @@ import { KoaContextState } from '../types/koa';
 import entities from '../entities';
 import { appStage, env } from '../util';
 import { AppStage } from '../types/env';
+import { createCafeLoader, createCafeWithImagesLoader } from '../entities/cafe';
+
+const createDataLoaders = (context: KoaContextState) => ({
+  cafe: createCafeLoader(context),
+  cafeWithImages: createCafeWithImagesLoader(context),
+});
+
+export type DataLoaders = ReturnType<typeof createDataLoaders>;
 
 const readOrmConfig = (): Promise<ConnectionOptions> =>
   new Promise<AnyJson>((resolve, reject) => {
@@ -44,6 +52,8 @@ const db = (): Middleware<KoaContextState> => {
       }
       return connection;
     };
+
+    ctx.state.loaders = createDataLoaders(ctx.state);
 
     await next();
 

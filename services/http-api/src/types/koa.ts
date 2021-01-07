@@ -5,10 +5,12 @@ import { Connection } from 'typeorm';
 import app from '../app';
 import { IamPolicy, OperationSchema } from '../util/iam';
 import Logger from '../util/logger';
+import { DataLoaders } from '../middlewares/db';
 
 export interface KoaContextState {
   logger: Logger;
   connection(): Promise<Connection>;
+  loaders: DataLoaders;
   uid?: string;
   policy?: IamPolicy;
 }

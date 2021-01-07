@@ -23,7 +23,7 @@ let request: SuperTest<Test>;
 
 jest.setTimeout(30000);
 // eslint-disable-next-line no-console
-console.log = jest.fn();
+// console.log = jest.fn();
 
 const adminerPolicyString = JSON.stringify(
   new IamPolicy({

@@ -63,12 +63,6 @@ export default class CafeStatistic {
         monthly: this.monthlyViews,
         total: this.totalViews,
       },
-      review: {
-        count: this.numReviews,
-        rating: {
-          average: this.sumRatings / this.numReviews,
-        },
-      },
       numLikes: this.numLikes,
     };
   }

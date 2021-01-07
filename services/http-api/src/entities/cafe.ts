@@ -1,16 +1,26 @@
+import '../util/extension';
+
+import DataLoader from 'dataloader';
 import {
   Column,
   Connection,
   CreateDateColumn,
   DeepPartial,
   Entity,
+  getManager,
   getRepository,
   JoinColumn,
   ManyToOne,
+  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { KoaContextState } from '../types/koa';
 import Place from './place';
+import CafeStatistic from './cafeStatistic';
+import CafeImage from './cafeImage';
+import CafeImageCount from './cafeImageCount';
 
 export enum CafeState {
   active = 0,
@@ -59,15 +69,38 @@ export default class Cafe {
     return CafeState[this.state] as CafeStateStrings;
   }
 
-  public toJsonObject(): AnyJson {
+  @OneToOne(() => CafeStatistic, (statistic) => statistic.cafe)
+  readonly statistic!: CafeStatistic;
+
+  @OneToOne(() => CafeImageCount, (imageCount) => imageCount.cafe)
+  readonly imageCount!: CafeImageCount;
+
+  @OneToMany(() => CafeImage, (image) => image.cafe)
+  readonly images!: CafeImage[];
+
+  public toJsonObject(options?: { showHiddenImage?: boolean }): AnyJson {
     return {
       id: this.id,
       createdAt: this.createdAt.toISOString(),
       updatedAt: this.updatedAt.toISOString(),
       name: this.name,
-      place: this.place.toJsonObject(),
+      place: this.place?.toJsonObject(),
       metadata: this.metadataObject,
       state: this.stateString,
+      image: this.imageCount && {
+        count:
+          options?.showHiddenImage ?? false
+            ? this.imageCount.total
+            : this.imageCount.active,
+        list: this.images?.map((image) => image.toJsonObject()),
+      },
+      views: this.statistic && {
+        daily: this.statistic.dailyViews,
+        weekly: this.statistic.weeklyViews,
+        monthly: this.statistic.monthlyViews,
+        total: this.statistic.totalViews,
+      },
+      numLikes: this.statistic.numLikes,
     };
   }
 
@@ -76,7 +109,7 @@ export default class Cafe {
     'createdAt',
     'updatedAt',
     'name',
-    'fk_place_id',
+    'fkPlaceId',
     'metadata',
     'state',
   ];
@@ -102,3 +135,38 @@ export default class Cafe {
     } as DeepPartial<Cafe>);
   }
 }
+
+export const createCafeLoader = (context: KoaContextState) =>
+  new DataLoader<string, Cafe>(async (cafeIds) => {
+    await context.connection();
+
+    const normalized = await getManager()
+      .createQueryBuilder(Cafe, 'cafe')
+      .select()
+      .leftJoinAndSelect('cafe.place', 'place')
+      .leftJoinAndSelect('cafe.statistic', 'cafe_statistic')
+      .leftJoinAndSelect('cafe.imageCount', 'cafe_image_count')
+      .whereInIds(cafeIds)
+      .getMany()
+      .then((cafes) => Array.normalize<Cafe>(cafes, (cafe) => cafe.id));
+
+    return cafeIds.map((id) => normalized[id]);
+  });
+
+export const createCafeWithImagesLoader = (context: KoaContextState) =>
+  new DataLoader<string, Cafe>(async (cafeIds) => {
+    await context.connection();
+
+    const normalized = await getManager()
+      .createQueryBuilder(Cafe, 'cafe')
+      .select()
+      .leftJoinAndSelect('cafe.place', 'place')
+      .leftJoinAndSelect('cafe.statistic', 'cafe_statistic')
+      .leftJoinAndSelect('cafe.imageCount', 'cafe_image_count')
+      .leftJoinAndSelect('cafe.images', 'cafe_image')
+      .whereInIds(cafeIds)
+      .getMany()
+      .then((cafes) => Array.normalize<Cafe>(cafes, (cafe) => cafe.id));
+
+    return cafeIds.map((id) => normalized[id]);
+  });
