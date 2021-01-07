@@ -547,7 +547,11 @@ describe('Cafe - GET /cafe/:cafeId', () => {
 });
 
 const NUM_TEST_CAFES = 200;
-const setupCafes = async () => {
+const setupCafes = async (
+  generateImages?: (
+    index: number
+  ) => { uri: string; state: CafeImageState; metadata?: AnyJson }[]
+) => {
   const place = await setupPlace({ name: '판교' });
 
   const throttle = pLimit(16);
@@ -558,7 +562,8 @@ const setupCafes = async () => {
           name: `카페_${i.toString().padStart(3, '0')}`,
           placeId: place.id,
           state: i % 2 === 0 ? CafeState.active : CafeState.hidden,
-        })
+          images: generateImages && generateImages(i),
+        }).then(({ cafe }) => cafe.id)
       )
       .map((task) => throttle(task))
   );
@@ -574,14 +579,19 @@ const setupCafes = async () => {
 
 type SimpleCafe = {
   id: string;
+  updatedAt: string;
   name: string;
   place: { name: string };
   state: CafeStateStrings;
+  image: {
+    count: number;
+  };
 };
 
 const sweepCafes = async (
   uri: string,
-  query: Record<string, number | string | boolean>
+  query: Record<string, number | string | boolean>,
+  admin?: boolean
 ) => {
   async function recursiveSweep(
     cafes: SimpleCafe[],
@@ -589,6 +599,10 @@ const sweepCafes = async (
   ): Promise<SimpleCafe[]> {
     const response = await request
       .get(uri)
+      .set({
+        'x-debug-user-id': admin && uuid.v4(),
+        'x-debug-iam-policy': admin && adminerPolicyString,
+      })
       .query({ limit: 10, ...query, cursor, identifier })
       .expect(HTTP_OK);
 
@@ -599,7 +613,7 @@ const sweepCafes = async (
     } = response.body as {
       cafe: { list: SimpleCafe[] };
       cursor: string;
-      identifier: string;
+      identifier?: string;
     };
 
     expect(list.length).toBeLessThanOrEqual((query.limit as number) ?? 10);
@@ -763,6 +777,102 @@ describe('Cafe - GET /cafe/count', () => {
     } = response.body as { cafe: { count: number } };
 
     expect(count).toBe(NUM_TEST_CAFES);
+  });
+});
+
+describe('Cafe - GET /cafe/list', () => {
+  test('Can list all cafes: order by updatedAt descending', async () => {
+    const { activeCafeIds } = await setupCafes();
+
+    const cafes = await sweepCafes('/cafe/list', { order: 'desc' });
+
+    expect(cafes.length).toBe(activeCafeIds.length);
+    const updatedAts = cafes.map((cafe) => Date.parse(cafe.updatedAt));
+    for (let i = 0; i < cafes.length - 1; i += 1) {
+      expect(updatedAts[i]).toBeGreaterThanOrEqual(updatedAts[i + 1]);
+    }
+  });
+
+  test('Can list all cafes: order by name ascending', async () => {
+    const { activeCafeIds, activeCafeNames } = await setupCafes();
+
+    const cafes = await sweepCafes('/cafe/list', {
+      orderBy: 'name',
+    });
+
+    expect(cafes.length).toBe(activeCafeIds.length);
+    const names = cafes.map((cafe) => cafe.name);
+    for (let i = 0; i < cafes.length - 1; i += 1) {
+      expect(activeCafeNames).toContain(names[i]);
+      expect(names[i] <= names[i + 1]).toBe(true);
+    }
+  });
+
+  test('Can list all cafes: order by state ascending', async () => {
+    const { activeCafeIds } = await setupCafes();
+
+    const cafes = await sweepCafes(
+      '/cafe/list',
+      {
+        orderBy: 'state',
+        order: 'asc',
+        showHidden: true,
+      },
+      true
+    );
+
+    expect(cafes.length).toBe(NUM_TEST_CAFES);
+    for (let i = 0; i < cafes.length; i += 1) {
+      if (i < activeCafeIds.length) {
+        expect(cafes[i].state).toBe('active');
+      } else {
+        expect(cafes[i].state).toBe('hidden');
+      }
+    }
+  });
+
+  test('Can list all cafes: order by numImages descending', async () => {
+    const { activeCafeIds } = await setupCafes();
+
+    const cafes = await sweepCafes('/cafe/list', {
+      orderBy: 'numImages',
+      order: 'desc',
+    });
+
+    expect(cafes.length).toBe(activeCafeIds.length);
+    for (let i = 0; i < cafes.length - 1; i += 1) {
+      expect(cafes[i].image.count).toBeGreaterThanOrEqual(
+        cafes[i + 1].image.count
+      );
+    }
+  });
+
+  test('Can list cafes using keyword', async () => {
+    const cafes = await sweepCafes('/cafe/list', { keyword: '성수동' });
+
+    expect(cafes.length).toBe(0);
+  });
+
+  test('Can count hidden cafe images', async () => {
+    const { cafeIds } = await setupCafes((i) =>
+      [...Array(i % 5).keys()].map((j) => ({
+        uri: `/image/${i}/${j}`,
+        state: j % 2 === 0 ? CafeImageState.active : CafeImageState.hidden,
+      }))
+    );
+
+    const cafes = await sweepCafes(
+      '/cafe/list',
+      { showHidden: true, showHiddenImages: true },
+      true
+    );
+
+    expect(cafes.length).toBe(NUM_TEST_CAFES);
+    cafes.forEach((cafe) => {
+      const reference = cafeIds.findIndex((id) => cafe.id === id);
+      expect(reference).toBeGreaterThanOrEqual(0);
+      expect(cafe.image.count).toBe(reference % 5);
+    });
   });
 });
 
