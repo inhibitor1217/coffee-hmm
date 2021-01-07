@@ -2,7 +2,12 @@ import pLimit from 'p-limit';
 import { SuperTest, Test } from 'supertest';
 import { Connection, createConnection } from 'typeorm';
 import * as uuid from 'uuid';
-import { HTTP_FORBIDDEN, HTTP_NOT_FOUND, HTTP_OK } from '../../const';
+import {
+  HTTP_CREATED,
+  HTTP_FORBIDDEN,
+  HTTP_NOT_FOUND,
+  HTTP_OK,
+} from '../../const';
 import Cafe, { CafeState, CafeStateStrings } from '../../entities/cafe';
 import CafeImage, { CafeImageState } from '../../entities/cafeImage';
 import CafeStatistic from '../../entities/cafeStatistic';
@@ -29,6 +34,10 @@ const adminerPolicyString = JSON.stringify(
       new IamRule({
         operationType: OperationType.query,
         operation: 'api.cafe.image.hidden',
+      }),
+      new IamRule({
+        operationType: OperationType.mutation,
+        operation: 'api.cafe',
       }),
     ],
   }).toJsonObject()
@@ -753,5 +762,63 @@ describe('Cafe - GET /cafe/count', () => {
     } = response.body as { cafe: { count: number } };
 
     expect(count).toBe(NUM_TEST_CAFES);
+  });
+});
+
+describe('Cafe - POST /cafe', () => {
+  test('Can create a cafe', async () => {
+    const place = await setupPlace({ name: '연희동' });
+
+    const response = await request
+      .post('/cafe')
+      .set({
+        'x-debug-user-id': uuid.v4(),
+        'x-debug-iam-policy': adminerPolicyString,
+      })
+      .send({
+        name: '알레그리아',
+        placeId: place.id,
+        metadata: {
+          hour: '09:00 ~ 20:00',
+          tag: ['감성'],
+        },
+        state: 'active',
+      })
+      .expect(HTTP_CREATED);
+
+    const {
+      cafe: {
+        name,
+        place: { name: placeName },
+        metadata,
+        state,
+        image,
+        views,
+        numLikes,
+      },
+    } = response.body as {
+      cafe: {
+        name: string;
+        place: { name: string };
+        metadata: AnyJson;
+        state: CafeStateStrings;
+        image: { count: number; list: unknown[] };
+        views: {
+          daily: number;
+          weekly: number;
+          monthly: number;
+          total: number;
+        };
+        numLikes: number;
+      };
+    };
+
+    expect(name).toBe('알레그리아');
+    expect(placeName).toBe('연희동');
+    expect(metadata).toEqual({ hour: '09:00 ~ 20:00', tag: ['감성'] });
+    expect(state).toBe('active');
+    expect(image).toEqual({ count: 0, list: [] });
+    expect(views).toEqual({ daily: 0, weekly: 0, monthly: 0, total: 0 });
+    expect(numLikes).toBe(0);
   });
 });
