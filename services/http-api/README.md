@@ -436,7 +436,7 @@ Creates a new cafe.
     "hour": "10:00 ~ 22:00",
     "tag": ["감성"]
   }, // optional
-  "status": "active" // optional
+  "state": "active" // optional
 }
 ```
 
