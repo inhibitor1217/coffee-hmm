@@ -1,8 +1,9 @@
+import pLimit from 'p-limit';
 import { SuperTest, Test } from 'supertest';
 import { Connection, createConnection } from 'typeorm';
 import * as uuid from 'uuid';
 import { HTTP_FORBIDDEN, HTTP_NOT_FOUND, HTTP_OK } from '../../const';
-import Cafe, { CafeState } from '../../entities/cafe';
+import Cafe, { CafeState, CafeStateStrings } from '../../entities/cafe';
 import CafeImage, { CafeImageState } from '../../entities/cafeImage';
 import CafeStatistic from '../../entities/cafeStatistic';
 import Place from '../../entities/place';
@@ -532,5 +533,192 @@ describe('Cafe - GET /cafe/:cafeId', () => {
     await request
       .get(`/cafe/${cafe.id}?showHiddenImages=true`)
       .expect(HTTP_FORBIDDEN);
+  });
+});
+
+const NUM_TEST_CAFES = 200;
+const setupCafes = async () => {
+  const place = await setupPlace({ name: '판교' });
+
+  const throttle = pLimit(16);
+  const cafeIds = await Promise.all(
+    [...Array(NUM_TEST_CAFES).keys()]
+      .map((i) => () =>
+        setupCafe({
+          name: `카페_${i.toString().padStart(3, '0')}`,
+          placeId: place.id,
+          state: i % 2 === 0 ? CafeState.active : CafeState.hidden,
+        })
+      )
+      .map((task) => throttle(task))
+  );
+
+  const activeCafeIds = cafeIds.filter((_, i) => i % 2 === 0);
+  const cafeNames = [...Array(NUM_TEST_CAFES).keys()].map(
+    (i) => `카페_${i.toString().padStart(3, '0')}`
+  );
+  const activeCafeNames = cafeNames.filter((_, i) => i % 2 === 0);
+
+  return { cafeIds, activeCafeIds, cafeNames, activeCafeNames };
+};
+
+type SimpleCafe = {
+  id: string;
+  name: string;
+  place: { name: string };
+  state: CafeStateStrings;
+};
+
+const sweepCafes = async (
+  uri: string,
+  query: Record<string, number | string | boolean>
+) => {
+  async function recursiveSweep(
+    cafes: SimpleCafe[],
+    { cursor, identifier }: { cursor?: string; identifier?: string }
+  ): Promise<SimpleCafe[]> {
+    const response = await request
+      .get(uri)
+      .query({ limit: 10, ...query, cursor, identifier })
+      .expect(HTTP_OK);
+
+    const {
+      cafe: { list },
+      cursor: nextCursor,
+      identifier: nextIdentifier,
+    } = response.body as {
+      cafe: { list: SimpleCafe[] };
+      cursor: string;
+      identifier: string;
+    };
+
+    expect(list.length).toBeLessThanOrEqual((query.limit as number) ?? 10);
+
+    const merged = [...cafes, ...list];
+    if (!cursor) {
+      return merged;
+    }
+
+    return recursiveSweep(merged, {
+      cursor: nextCursor,
+      identifier: nextIdentifier,
+    });
+  }
+
+  return recursiveSweep([], {});
+};
+
+describe('Cafe - GET /cafe/feed', () => {
+  test('Retrieves a list of cafes', async () => {
+    const { activeCafeIds, activeCafeNames } = await setupCafes();
+
+    const response = await request
+      .get('/cafe/feed')
+      .query({ limit: 20 })
+      .expect(HTTP_OK);
+
+    const {
+      cafe: { list },
+      cursor,
+      identifier,
+    } = response.body as {
+      cafe: { list: SimpleCafe[] };
+      cursor: string;
+      identifier: string;
+    };
+
+    expect(list.length).toBeLessThanOrEqual(20);
+    expect(cursor).toBeTruthy();
+    expect(identifier).toBeTruthy();
+
+    list.forEach((item) => {
+      expect(activeCafeIds).toContain(item.id);
+      expect(activeCafeNames).toContain(item.name);
+      expect(item.place.name).toBe('판교');
+      expect(item.state).toBe('active');
+    });
+  });
+
+  test('Can list all active cafes using cursor', async () => {
+    const { activeCafeIds, activeCafeNames } = await setupCafes();
+
+    const cafes = await sweepCafes('/cafe/feed', {});
+
+    expect(cafes.length).toBe(NUM_TEST_CAFES);
+    cafes.forEach((item) => {
+      expect(activeCafeIds).toContain(item.id);
+      expect(activeCafeNames).toContain(item.name);
+      expect(item.place.name).toBe('판교');
+      expect(item.state).toBe('active');
+    });
+  });
+
+  test('A list should be different per user id, or an unsigned user', async () => {
+    await setupCafes();
+
+    const uid0 = uuid.v4();
+    const responses = await Promise.all(
+      [uid0, uid0, uuid.v4(), null, null].map((uid) =>
+        request
+          .get('/cafe/feed')
+          .query({ limit: 20 })
+          .set({
+            'x-debug-user-id': uid,
+            'x-debug-iam-policy': adminerPolicyString,
+          })
+          .expect(HTTP_OK)
+      )
+    );
+
+    const cafeIdLists = responses
+      .map(
+        (response) =>
+          response.body as {
+            cafe: { list: SimpleCafe[] };
+            cursor: string;
+            identifier: string;
+          }
+      )
+      .map((body) => body.cafe.list.map((cafe) => cafe.id));
+
+    expect(cafeIdLists[0]).toEqual(cafeIdLists[1]);
+    expect(cafeIdLists[1]).not.toEqual(cafeIdLists[2]);
+    expect(cafeIdLists[2]).not.toEqual(cafeIdLists[3]);
+    expect(cafeIdLists[3]).not.toEqual(cafeIdLists[4]);
+  });
+
+  test('A list should be different in next day', async () => {
+    await setupCafes();
+
+    const uid = uuid.v4();
+
+    Date.now = jest.fn(() => new Date(Date.UTC(2021, 1, 1)).valueOf());
+
+    const todayCafeIds = ((
+      await request
+        .get('/cafe/feed')
+        .query({ limit: 10 })
+        .set({
+          'x-debug-user-id': uid,
+          'x-debug-iam-policy': adminerPolicyString,
+        })
+        .expect(HTTP_OK)
+    ).body as {
+      cafe: { list: SimpleCafe[] };
+      cursor: string;
+      identifier: string;
+    }).cafe.list.map((cafe) => cafe.id);
+
+    Date.now = jest.fn(() => new Date(Date.UTC(2021, 1, 2)).valueOf());
+
+    const tomorrowCafeIds = ((
+      await request.get('/cafe/feed').query({ limit: 10 }).expect(HTTP_OK)
+    ).body as {
+      cafe: { list: SimpleCafe[] };
+      cursor: string;
+      identifier: string;
+    }).cafe.list.map((cafe) => cafe.id);
+
+    expect(todayCafeIds).not.toEqual(tomorrowCafeIds);
   });
 });
