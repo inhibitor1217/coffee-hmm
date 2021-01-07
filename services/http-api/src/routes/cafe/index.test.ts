@@ -722,3 +722,36 @@ describe('Cafe - GET /cafe/feed', () => {
     expect(todayCafeIds).not.toEqual(tomorrowCafeIds);
   });
 });
+
+describe('Cafe - GET /cafe/count', () => {
+  test('Can retrieve number of cafes', async () => {
+    const { activeCafeIds } = await setupCafes();
+
+    const response = await request.get('/cafe/count').expect(HTTP_OK);
+
+    const {
+      cafe: { count },
+    } = response.body as { cafe: { count: number } };
+
+    expect(count).toBe(activeCafeIds.length);
+  });
+
+  test('Can retrieve number of cafes including hidden ones', async () => {
+    await setupCafes();
+
+    const response = await request
+      .get('/cafe/count')
+      .query({ showHidden: true })
+      .set({
+        'x-debug-user-id': uuid.v4(),
+        'x-debug-iam-policy': adminerPolicyString,
+      })
+      .expect(HTTP_OK);
+
+    const {
+      cafe: { count },
+    } = response.body as { cafe: { count: number } };
+
+    expect(count).toBe(NUM_TEST_CAFES);
+  });
+});
