@@ -26,9 +26,9 @@ Retrieve data of a single cafe.
 
 **Query Parameters**
 
-| **Name**           | **Type**  | **Required?**           | **Description**                                                                                                                                                                                            |
-| ------------------ | --------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `showHiddenImages` | `boolean` | no (default is `false`) | If `showHiddenImages` is true, then the result includes hidden cafe images. Requires `{ "operationType": "query", "operation": "api.cafe.image.hidden" }` privilege to use this query parameter as `true`. |
+| **Name**           | **Type**  | **Required?**           | **Description**                                                                                                                                                                                                                |
+| ------------------ | --------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `showHiddenImages` | `boolean` | no (default is `false`) | If `showHiddenImages` is true, then the result includes hidden cafe images. Requires `{ "operationType": "query", "operation": "api.cafe.image.hidden", "resource": cafeId }` privilege to use this query parameter as `true`. |
 
 **Request Example**
 
@@ -143,7 +143,7 @@ The follows describe the detailed response schema.
 
 To clarify:
 
-- To retrieve hidden cafes or cafe images, `{ operationType: "query", operation: "api.cafe.hidden" }` or `{ operationType: "query", "operation": "api.cafe.image.hidden" }` rules, respectively, is needed to be allowed at the requester's policy. If the requester does not have the privilege, then `403 Forbidden` will be thrown.
+- To retrieve hidden cafes or cafe images, `{ operationType: "query", operation: "api.cafe.hidden" }` or `{ operationType: "query", "operation": "api.cafe.image.hidden", "resource": cafeId }` rules, respectively, is needed to be allowed at the requester's policy. If the requester does not have the privilege, then `403 Forbidden` will be thrown.
 - `metadata` fields do not have concrete schema. It is set when the cafe is created or updated, and the data is retrieved as is.
 - `image.list` are ordered by its `index`.
 - Only one of the image among `image.list` is guaranteed to have `isMain: true`.
