@@ -426,6 +426,12 @@ Creates a new cafe.
 }
 ```
 
+**Query Parameters**
+
+| **Name**           | **Type**  | **Required?**           | **Description**                                                                                                                                                                                                                |
+| ------------------ | --------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `showHiddenImages` | `boolean` | no (default is `false`) | If `showHiddenImages` is true, then the result includes hidden cafe images. Requires `{ "operationType": "query", "operation": "api.cafe.image.hidden", "resource": cafeId }` privilege to use this query parameter as `true`. |
+
 **Request Example**
 
 ```
