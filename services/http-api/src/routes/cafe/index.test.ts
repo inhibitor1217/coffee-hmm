@@ -544,6 +544,30 @@ describe('Cafe - GET /cafe/:cafeId', () => {
       .get(`/cafe/${cafe.id}?showHiddenImages=true`)
       .expect(HTTP_FORBIDDEN);
   });
+
+  test('Cannot retrieve deleted cafe', async () => {
+    const place = await setupPlace({ name: '성수동' });
+    const { cafe } = await setupCafe({
+      name: '카페__000',
+      placeId: place.id,
+      metadata: { hours: '09:00 ~ 20:00' },
+      state: CafeState.deleted,
+      images: [
+        {
+          uri: '/images/0',
+          state: CafeImageState.hidden,
+        },
+        {
+          uri: '/images/1',
+          state: CafeImageState.active,
+          metadata: { tag: '현관' },
+        },
+      ],
+      mainImageIndex: 1,
+    });
+
+    await request.get(`/cafe/${cafe.id}`).expect(HTTP_NOT_FOUND);
+  });
 });
 
 describe('Cafe - POST /cafe', () => {
@@ -716,6 +740,24 @@ describe('Cafe - PUT /cafe/:cafeId', () => {
 
     await request
       .put(`/cafe/${uuid.v4()}`)
+      .set({
+        'x-debug-user-id': uuid.v4(),
+        'x-debug-iam-policy': adminerPolicyString,
+      })
+      .send({ name: '커피밀' })
+      .expect(HTTP_NOT_FOUND);
+  });
+
+  test('Throws 404 if cafe is deleted', async () => {
+    const place = await setupPlace({ name: '판교' });
+    const { cafe } = await setupCafe({
+      name: '알레그리아',
+      placeId: place.id,
+      state: CafeState.deleted,
+    });
+
+    await request
+      .put(`/cafe/${cafe.id}`)
       .set({
         'x-debug-user-id': uuid.v4(),
         'x-debug-iam-policy': adminerPolicyString,
