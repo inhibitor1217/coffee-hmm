@@ -24,6 +24,12 @@ A main HTTP api service for [Coffee Hmm](https://coffee-hmm.inhibitor.io)
 
 Retrieve data of a single cafe.
 
+**Query Parameters**
+
+| **Name**           | **Type**  | **Required?**           | **Description**                                                                                                                                                                                            |
+| ------------------ | --------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `showHiddenImages` | `boolean` | no (default is `false`) | If `showHiddenImages` is true, then the result includes hidden cafe images. Requires `{ "operationType": "query", "operation": "api.cafe.image.hidden" }` privilege to use this query parameter as `true`. |
+
 **Request Example**
 
 ```
@@ -261,14 +267,15 @@ Retrieve a list of cafes.
 
 **Query Parameters**
 
-| **Name**     | **Type**                                                      | **Required?**                 | **Description**                                                                                                                                                                                                                     |
-| ------------ | ------------------------------------------------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `limit`      | `int`                                                         | yes                           | Max number of items to be retrieved by this query. Max value is 64.                                                                                                                                                                 |
-| `cursor`     | `string`                                                      | no                            | If `cursor` is provided, this query will fetch items after the `cursor`. Use `cursor` for pagination. Initially fetch the list with no `cursor`, then set the `cursor` from the last request as query parameter to fetch next page. |
-| `orderBy`    | `"updatedAt"`, `"name"`, `"place"`, `"status"`, `"numImages"` | no (default is `"updatedAt"`) | Sets how the result will be sorted.                                                                                                                                                                                                 |
-| `order`      | `"asc"`, `"desc"`                                             | no (default is `"asc"`)       | Sets how the result will be ordered. (`"asc"` meaning ascending and `"desc"` meaning descending)                                                                                                                                    |
-| `keyword`    | `string`                                                      | no                            | If `keyword` is provided, the resulting list will be filetered which consists of cafe with name or place similar with given `keyword`.                                                                                              |
-| `showHidden` | `boolean`                                                     | no (default is `false`)       | If `showHidden` is true, then the result includes the cafes which are hidden. Requires `{ "operationType": "query", "operation": "api.cafe.hidden" }` privilege to use this query parameter.                                        |
+| **Name**           | **Type**                                                      | **Required?**                 | **Description**                                                                                                                                                                                                                     |
+| ------------------ | ------------------------------------------------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `limit`            | `int`                                                         | yes                           | Max number of items to be retrieved by this query. Max value is 64.                                                                                                                                                                 |
+| `cursor`           | `string`                                                      | no                            | If `cursor` is provided, this query will fetch items after the `cursor`. Use `cursor` for pagination. Initially fetch the list with no `cursor`, then set the `cursor` from the last request as query parameter to fetch next page. |
+| `orderBy`          | `"updatedAt"`, `"name"`, `"place"`, `"status"`, `"numImages"` | no (default is `"updatedAt"`) | Sets how the result will be sorted.                                                                                                                                                                                                 |
+| `order`            | `"asc"`, `"desc"`                                             | no (default is `"asc"`)       | Sets how the result will be ordered. (`"asc"` meaning ascending and `"desc"` meaning descending)                                                                                                                                    |
+| `keyword`          | `string`                                                      | no                            | If `keyword` is provided, the resulting list will be filetered which consists of cafe with name or place similar with given `keyword`.                                                                                              |
+| `showHidden`       | `boolean`                                                     | no (default is `false`)       | If `showHidden` is true, then the result includes the cafes which are hidden. Requires `{ "operationType": "query", "operation": "api.cafe.hidden" }` privilege to use this query parameter.                                        |
+| `showHiddenImages` | `boolean`                                                     | no (default is `false`)       | If `showHiddenImages` is true, then the result includes hidden cafe images. Requires `{ "operationType": "query", "operation": "api.cafe.image.hidden" }` privilege to use this query parameter as `true`.                          |
 
 **Request Example**
 
