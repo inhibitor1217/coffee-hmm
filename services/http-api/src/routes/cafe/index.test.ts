@@ -3,6 +3,7 @@ import { SuperTest, Test } from 'supertest';
 import { Connection, createConnection } from 'typeorm';
 import * as uuid from 'uuid';
 import {
+  HTTP_BAD_REQUEST,
   HTTP_CREATED,
   HTTP_FORBIDDEN,
   HTTP_NOT_FOUND,
@@ -821,6 +822,25 @@ describe('Cafe - POST /cafe', () => {
     expect(views).toEqual({ daily: 0, weekly: 0, monthly: 0, total: 0 });
     expect(numLikes).toBe(0);
   });
+
+  test('Throws 400 if place id is invalid', async () => {
+    await request
+      .post('/cafe')
+      .set({
+        'x-debug-user-id': uuid.v4(),
+        'x-debug-iam-policy': adminerPolicyString,
+      })
+      .send({
+        name: '알레그리아',
+        placeId: uuid.v4(),
+        metadata: {
+          hour: '09:00 ~ 20:00',
+          tag: ['감성'],
+        },
+        state: 'active',
+      })
+      .expect(HTTP_BAD_REQUEST);
+  });
 });
 
 describe('Cafe - PUT /cafe/:cafeId', () => {
@@ -922,5 +942,23 @@ describe('Cafe - PUT /cafe/:cafeId', () => {
       })
       .send({ name: '커피밀' })
       .expect(HTTP_NOT_FOUND);
+  });
+
+  test('Throws 400 if place id is invalid', async () => {
+    const place = await setupPlace({ name: '판교' });
+    const { cafe } = await setupCafe({
+      name: '알레그리아',
+      placeId: place.id,
+      state: CafeState.active,
+    });
+
+    await request
+      .put(`/cafe/${cafe.id}`)
+      .set({
+        'x-debug-user-id': uuid.v4(),
+        'x-debug-iam-policy': adminerPolicyString,
+      })
+      .send({ placeId: uuid.v4() })
+      .expect(HTTP_BAD_REQUEST);
   });
 });
