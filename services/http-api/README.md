@@ -409,12 +409,6 @@ Creates a new cafe.
       "monthly": 0,
       "total": 0
     },
-    "review": {
-      "count": 0,
-      "rating": {
-        "average": 0.0
-      }
-    },
     "numLikes": 0
   }
 }
