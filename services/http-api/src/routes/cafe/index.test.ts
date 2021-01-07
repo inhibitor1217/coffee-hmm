@@ -822,3 +822,105 @@ describe('Cafe - POST /cafe', () => {
     expect(numLikes).toBe(0);
   });
 });
+
+describe('Cafe - PUT /cafe/:cafeId', () => {
+  test('Can change cafe name and place', async () => {
+    const place = await setupPlace({ name: '판교' });
+    const newPlace = await setupPlace({ name: '양재' });
+    const { cafe } = await setupCafe({
+      name: '알레그리아',
+      placeId: place.id,
+      state: CafeState.active,
+    });
+
+    await request
+      .put(`/cafe/${cafe.id}`)
+      .set({
+        'x-debug-user-id': uuid.v4(),
+        'x-debug-iam-policy': adminerPolicyString,
+      })
+      .send({ name: '커피밀', placeId: newPlace.id })
+      .expect(HTTP_OK);
+
+    const updated = await connection.getRepository(Cafe).findOne(cafe.id);
+    expect(updated?.name).toBe('커피밀');
+    const updatedPlace = await connection
+      .getRepository(Place)
+      .findOne(cafe.fkPlaceId);
+    expect(updatedPlace?.name).toBe('양재');
+  });
+
+  test('Can change cafe metadata', async () => {
+    const place = await setupPlace({ name: '판교' });
+    const { cafe } = await setupCafe({
+      name: '알레그리아',
+      placeId: place.id,
+      state: CafeState.active,
+    });
+
+    await request
+      .put(`/cafe/${cafe.id}`)
+      .set({
+        'x-debug-user-id': uuid.v4(),
+        'x-debug-iam-policy': adminerPolicyString,
+      })
+      .send({ metadata: { hour: '09:00 ~ 17:00' } })
+      .expect(HTTP_OK);
+
+    const firstUpdated = await connection.getRepository(Cafe).findOne(cafe.id);
+    expect(firstUpdated?.metadataObject).toEqual({ hour: '09:00 ~ 17:00' });
+
+    await request
+      .put(`/cafe/${cafe.id}`)
+      .set({
+        'x-debug-user-id': uuid.v4(),
+        'x-debug-iam-policy': adminerPolicyString,
+      })
+      .send({ metadata: null })
+      .expect(HTTP_OK);
+
+    const secondUpdated = await connection.getRepository(Cafe).findOne(cafe.id);
+    expect(secondUpdated?.metadataObject).toBe(null);
+  });
+
+  test('Can change cafe status to hidden', async () => {
+    const place = await setupPlace({ name: '판교' });
+    const { cafe } = await setupCafe({
+      name: '알레그리아',
+      placeId: place.id,
+      state: CafeState.active,
+    });
+
+    await request
+      .put(`/cafe/${cafe.id}`)
+      .set({
+        'x-debug-user-id': uuid.v4(),
+        'x-debug-iam-policy': adminerPolicyString,
+      })
+      .send({ state: 'hidden' })
+      .expect(HTTP_OK);
+
+    const updated = await connection.getRepository(Cafe).findOne(cafe.id);
+    expect(updated?.state).toBe(CafeState.hidden);
+
+    await request.get(`/cafe/${cafe.id}`).expect(HTTP_FORBIDDEN);
+  });
+
+  test('Throws 404 if cafe does not exist', async () => {
+    const place = await setupPlace({ name: '판교' });
+    await setupCafe({
+      name: '알레그리아',
+      placeId: place.id,
+      state: CafeState.active,
+    });
+
+    await request
+      .put(`/cafe/${uuid.v4()}`)
+      .set({
+        'x-debug-user-id': uuid.v4(),
+        'x-debug-iam-policy': adminerPolicyString,
+      })
+      .send({ name: '커피밀' })
+      .expect(HTTP_NOT_FOUND);
+  });
+});
