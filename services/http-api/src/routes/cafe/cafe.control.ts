@@ -1,6 +1,6 @@
 import joi from 'joi';
 import { FOREIGN_KEY_VIOLATION } from 'pg-error-constants';
-import { Not } from 'typeorm';
+import { getManager, Not } from 'typeorm';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
 import Cafe, {
   CafeState,
@@ -76,9 +76,63 @@ export const getFeed = handler(() => {
   throw new Exception(ExceptionCode.notImplemented);
 });
 
-export const getCount = handler(() => {
-  throw new Exception(ExceptionCode.notImplemented);
-});
+export const getCount: KoaRouteHandler<
+  VariablesMap,
+  {
+    keyword?: string;
+    showHidden?: boolean;
+  }
+> = handler(
+  async (ctx) => {
+    const { keyword, showHidden = false } = ctx.query;
+
+    await ctx.state.connection();
+
+    let query = getManager()
+      .createQueryBuilder(Cafe, 'cafe')
+      .where(`"cafe"."state" IS DISTINCT FROM :deleted`, {
+        deleted: CafeState.deleted,
+      });
+
+    if (!showHidden) {
+      query = query.andWhere(`"cafe"."state" IS DISTINCT FROM :hidden`, {
+        hidden: CafeState.hidden,
+      });
+    }
+
+    if (keyword) {
+      query = query.andWhere(`"cafe"."name" LIKE :keyword`, {
+        keyword: `%${keyword}%`,
+      });
+    }
+
+    const count = await query.getCount();
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      cafe: { count },
+    };
+  },
+  {
+    schema: {
+      query: joi.object().keys({
+        keyword: joi.string().min(1).max(255),
+        showHidden: joi.boolean(),
+      }),
+    },
+    requiredRules: (ctx) => [
+      ...(ctx.query.showHidden ?? false
+        ? [
+            new OperationSchema({
+              operationType: OperationType.query,
+              operation: 'api.cafe.hidden',
+              resource: '*',
+            }),
+          ]
+        : []),
+    ],
+  }
+);
 
 export const getList = handler(() => {
   throw new Exception(ExceptionCode.notImplemented);

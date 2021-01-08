@@ -6,10 +6,10 @@ import cafeImage from './image';
 
 const cafe = new Router<KoaContextState, Context>();
 
-cafe.get('/:cafeId', cafeControl.getOne);
 cafe.get('/feed', cafeControl.getFeed);
 cafe.get('/count', cafeControl.getCount);
 cafe.get('/list', cafeControl.getList);
+cafe.get('/:cafeId', cafeControl.getOne);
 cafe.post('/', cafeControl.create);
 cafe.put('/:cafeId', cafeControl.updateOne);
 
