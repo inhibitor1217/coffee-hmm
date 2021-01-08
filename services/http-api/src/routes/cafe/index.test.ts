@@ -10,6 +10,7 @@ import {
 } from '../../const';
 import Cafe, { CafeState, CafeStateStrings } from '../../entities/cafe';
 import CafeImage, { CafeImageState } from '../../entities/cafeImage';
+import CafeImageCount from '../../entities/cafeImageCount';
 import CafeStatistic from '../../entities/cafeStatistic';
 import Place from '../../entities/place';
 import { cleanDatabase, closeServer, openServer, ormConfigs } from '../../test';
@@ -162,7 +163,26 @@ const setupCafe = async ({
         )
       );
 
-    return { cafe, cafeImages, cafeStatistic };
+    const cafeImageCount = await manager
+      .createQueryBuilder(CafeImageCount, 'cafe_image_count')
+      .insert()
+      .values({
+        fkCafeId: cafe.id,
+        total: images?.length ?? 0,
+        active:
+          images?.filter((image) => image.state === CafeImageState.active)
+            ?.length ?? 0,
+      })
+      .returning(CafeImageCount.columns)
+      .execute()
+      .then((insertResult) =>
+        CafeImageCount.fromRawColumns(
+          (insertResult.raw as Record<string, number>[])[0],
+          { connection }
+        )
+      );
+
+    return { cafe, cafeImages, cafeStatistic, cafeImageCount };
   });
 };
 
