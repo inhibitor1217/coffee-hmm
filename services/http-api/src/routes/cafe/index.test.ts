@@ -234,6 +234,7 @@ describe('Cafe - GET /cafe/:cafeId', () => {
         state: 'active',
         image: {
           count: 0,
+          list: [],
         },
         views: {
           daily: 0,
