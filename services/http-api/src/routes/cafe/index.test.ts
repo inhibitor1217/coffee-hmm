@@ -23,7 +23,7 @@ let request: SuperTest<Test>;
 
 jest.setTimeout(30000);
 // eslint-disable-next-line no-console
-// console.log = jest.fn();
+console.log = jest.fn();
 
 const adminerPolicyString = JSON.stringify(
   new IamPolicy({
@@ -657,7 +657,7 @@ describe('Cafe - PUT /cafe/:cafeId', () => {
       state: CafeState.active,
     });
 
-    await request
+    const response = await request
       .put(`/cafe/${cafe.id}`)
       .set({
         'x-debug-user-id': uuid.v4(),
@@ -666,11 +666,34 @@ describe('Cafe - PUT /cafe/:cafeId', () => {
       .send({ name: '커피밀', placeId: newPlace.id })
       .expect(HTTP_OK);
 
+    const {
+      cafe: { name, place: returnedPlace, metadata, state, image },
+    } = response.body as {
+      cafe: {
+        name: string;
+        place: AnyJson;
+        metadata: AnyJson | null;
+        state: string;
+        image: AnyJson;
+      };
+    };
+
+    expect(name).toBe('커피밀');
+    expect(returnedPlace).toEqual({
+      id: newPlace.id,
+      createdAt: newPlace.createdAt.toISOString(),
+      updatedAt: newPlace.updatedAt.toISOString(),
+      name: '양재',
+    });
+    expect(metadata).toBe(null);
+    expect(state).toBe('active');
+    expect(image).toEqual({ count: 0, list: [] });
+
     const updated = await connection.getRepository(Cafe).findOne(cafe.id);
     expect(updated?.name).toBe('커피밀');
     const updatedPlace = await connection
       .getRepository(Place)
-      .findOne(cafe.fkPlaceId);
+      .findOne(updated?.fkPlaceId);
     expect(updatedPlace?.name).toBe('양재');
   });
 
