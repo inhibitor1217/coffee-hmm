@@ -1,7 +1,12 @@
 import joi from 'joi';
 import { FOREIGN_KEY_VIOLATION } from 'pg-error-constants';
-import { HTTP_CREATED } from '../../const';
-import Cafe, { CafeState, CafeStateStrings } from '../../entities/cafe';
+import { Not } from 'typeorm';
+import { HTTP_CREATED, HTTP_OK } from '../../const';
+import Cafe, {
+  CafeState,
+  CafeStateStrings,
+  createCafeWithImagesLoader,
+} from '../../entities/cafe';
 import CafeImageCount from '../../entities/cafeImageCount';
 import CafeStatistic from '../../entities/cafeStatistic';
 import { KoaRouteHandler, VariablesMap } from '../../types/koa';
@@ -45,7 +50,7 @@ export const create: KoaRouteHandler<
 
     const connection = await ctx.state.connection();
 
-    const cafeId = await connection.transaction(async (manager) => {
+    const created = await connection.transaction(async (manager) => {
       const cafe = await manager
         .createQueryBuilder(Cafe, 'cafe')
         .insert()
@@ -98,10 +103,8 @@ export const create: KoaRouteHandler<
         })
         .execute();
 
-      return cafe.id;
+      return createCafeWithImagesLoader(ctx, { manager }).load(cafe.id);
     });
-
-    const created = await ctx.state.loaders.cafeWithImages.load(cafeId);
 
     ctx.status = HTTP_CREATED;
     ctx.body = {
@@ -128,6 +131,95 @@ export const create: KoaRouteHandler<
   }
 );
 
-export const updateOne = handler(() => {
-  throw new Exception(ExceptionCode.notImplemented);
-});
+export const updateOne: KoaRouteHandler<
+  { cafeId: string },
+  { showHiddenImages?: boolean },
+  {
+    name?: string;
+    placeId?: string;
+    metadata?: AnyJson;
+    state?: CafeStateStrings;
+  }
+> = handler(
+  async (ctx) => {
+    if (!ctx.request.body) {
+      throw new Exception(ExceptionCode.badRequest);
+    }
+
+    const { cafeId } = ctx.params;
+    const { showHiddenImages = false } = ctx.query;
+    const { name, placeId, metadata, state } = ctx.request.body;
+
+    const connection = await ctx.state.connection();
+
+    const cafe = await connection.transaction(async (manager) => {
+      const updated = await manager
+        .createQueryBuilder(Cafe, 'cafe')
+        .update()
+        .set(
+          Object.filterUndefinedKeys({
+            name,
+            fkPlaceId: placeId,
+            metadata: metadata ? JSON.stringify(metadata) : metadata,
+            state: state ? CafeState[state] : state,
+          })
+        )
+        .where({ id: cafeId, state: Not(CafeState.deleted) })
+        .returning(Cafe.columns)
+        .execute()
+        .then((updateResult) => {
+          if (!updateResult.affected) {
+            throw new Exception(ExceptionCode.notFound);
+          }
+
+          return Cafe.fromRawColumns(
+            (updateResult.raw as Record<string, unknown>[])[0]
+          );
+        })
+        .catch((e: { code: string }) => {
+          if (e.code === FOREIGN_KEY_VIOLATION) {
+            throw new Exception(
+              ExceptionCode.badRequest,
+              `invalid place ${placeId ?? ''}: place does not exist`
+            );
+          }
+          throw e;
+        });
+
+      return createCafeWithImagesLoader(ctx, {
+        manager,
+        showHiddenImages,
+      }).load(updated.id);
+    });
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      cafe: cafe?.toJsonObject(),
+    };
+  },
+  {
+    schema: {
+      params: joi
+        .object()
+        .keys({ cafeId: joi.string().uuid({ version: 'uuidv4' }).required() })
+        .required(),
+      query: joi.object().keys({ showHiddenImages: joi.boolean() }),
+      body: joi
+        .object()
+        .keys({
+          name: joi.string().min(1).max(255),
+          placeId: joi.string().uuid({ version: 'uuidv4' }),
+          metadata: joi.object().allow(null),
+          state: joi.string().valid(...enumKeyStrings(CafeState)),
+        })
+        .or('name', 'placeId', 'metadata', 'state')
+        .required(),
+    },
+    requiredRules: (ctx) =>
+      new OperationSchema({
+        operationType: OperationType.mutation,
+        operation: 'api.cafe',
+        resource: ctx.params.cafeId,
+      }),
+  }
+);

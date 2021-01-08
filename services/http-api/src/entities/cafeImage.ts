@@ -65,7 +65,17 @@ export default class CafeImage {
     return CafeImageState[this.state] as CafeImageStateStrings;
   }
 
+  public isDeleted(): boolean {
+    return this.state === CafeImageState.deleted;
+  }
+
   public toJsonObject(): AnyJson {
+    if (this.isDeleted()) {
+      return {
+        id: this.id,
+      };
+    }
+
     return {
       id: this.id,
       createdAt: this.createdAt.toISOString(),

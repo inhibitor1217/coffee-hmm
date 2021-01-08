@@ -1,13 +1,14 @@
 import '../util/extension';
 
 import DataLoader from 'dataloader';
+import { ParameterizedContext } from 'koa';
 import {
   Column,
   Connection,
   CreateDateColumn,
   DeepPartial,
   Entity,
-  getManager,
+  EntityManager,
   getRepository,
   JoinColumn,
   ManyToOne,
@@ -19,8 +20,10 @@ import {
 import { KoaContextState } from '../types/koa';
 import Place from './place';
 import CafeStatistic from './cafeStatistic';
-import CafeImage from './cafeImage';
+import CafeImage, { CafeImageState } from './cafeImage';
 import CafeImageCount from './cafeImageCount';
+import { OperationSchema, OperationType } from '../util/iam';
+import Exception, { ExceptionCode } from '../util/error';
 
 export enum CafeState {
   active = 0,
@@ -69,6 +72,10 @@ export default class Cafe {
     return CafeState[this.state] as CafeStateStrings;
   }
 
+  public isDeleted(): boolean {
+    return this.state === CafeState.deleted;
+  }
+
   @OneToOne(() => CafeStatistic, (statistic) => statistic.cafe)
   readonly statistic!: CafeStatistic;
 
@@ -79,6 +86,12 @@ export default class Cafe {
   readonly images!: CafeImage[];
 
   public toJsonObject(options?: { showHiddenImage?: boolean }): AnyJson {
+    if (this.isDeleted()) {
+      return {
+        id: this.id,
+      };
+    }
+
     return {
       id: this.id,
       createdAt: this.createdAt.toISOString(),
@@ -136,28 +149,57 @@ export default class Cafe {
   }
 }
 
-export const createCafeLoader = (context: KoaContextState) =>
+export const createCafeLoader = (
+  ctx: ParameterizedContext<KoaContextState>,
+  options?: { manager?: EntityManager }
+) =>
   new DataLoader<string, Cafe>(async (cafeIds) => {
-    await context.connection();
+    const manager =
+      options?.manager ?? (await ctx.state.connection()).createEntityManager();
 
-    const normalized = await getManager()
+    const normalized = await manager
       .createQueryBuilder(Cafe, 'cafe')
       .select()
       .leftJoinAndSelect('cafe.place', 'place')
       .leftJoinAndSelect('cafe.statistic', 'cafe_statistic')
       .leftJoinAndSelect('cafe.imageCount', 'cafe_image_count')
       .whereInIds(cafeIds)
+      .andWhere('cafe.state != :deleted', { deleted: CafeState.deleted })
       .getMany()
       .then((cafes) => Array.normalize<Cafe>(cafes, (cafe) => cafe.id));
 
     return cafeIds.map((id) => normalized[id]);
   });
 
-export const createCafeWithImagesLoader = (context: KoaContextState) =>
+export const createCafeWithImagesLoader = (
+  ctx: ParameterizedContext<KoaContextState>,
+  options?: { manager?: EntityManager; showHiddenImages?: boolean }
+) =>
   new DataLoader<string, Cafe>(async (cafeIds) => {
-    await context.connection();
+    if (options?.showHiddenImages ?? false) {
+      if (
+        !(
+          ctx.state.policy?.canExecuteOperations(
+            ctx,
+            cafeIds.map(
+              (cafeId) =>
+                new OperationSchema({
+                  operationType: OperationType.query,
+                  operation: 'api.cafe.image.hidden',
+                  resource: cafeId,
+                })
+            )
+          ) ?? false
+        )
+      ) {
+        throw new Exception(ExceptionCode.forbidden);
+      }
+    }
 
-    const normalized = await getManager()
+    const manager =
+      options?.manager ?? (await ctx.state.connection()).createEntityManager();
+
+    let query = manager
       .createQueryBuilder(Cafe, 'cafe')
       .select()
       .leftJoinAndSelect('cafe.place', 'place')
@@ -165,6 +207,20 @@ export const createCafeWithImagesLoader = (context: KoaContextState) =>
       .leftJoinAndSelect('cafe.imageCount', 'cafe_image_count')
       .leftJoinAndSelect('cafe.images', 'cafe_image')
       .whereInIds(cafeIds)
+      .andWhere('cafe.state IS DISTINCT FROM :deleted', {
+        deleted: CafeState.deleted,
+      })
+      .andWhere('cafe_image.state IS DISTINCT FROM :deleted', {
+        deleted: CafeImageState.deleted,
+      });
+
+    if (!(options?.showHiddenImages ?? false)) {
+      query = query.andWhere('cafe_image.state IS DISTINCT FROM :hidden', {
+        hidden: CafeImageState.hidden,
+      });
+    }
+
+    const normalized = await query
       .getMany()
       .then((cafes) => Array.normalize<Cafe>(cafes, (cafe) => cafe.id));
 

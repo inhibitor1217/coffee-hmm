@@ -8,10 +8,20 @@ import { appStage, env } from '../util';
 import { AppStage } from '../types/env';
 import { createCafeLoader, createCafeWithImagesLoader } from '../entities/cafe';
 
-const createDataLoaders = (context: KoaContextState) => ({
-  cafe: createCafeLoader(context),
-  cafeWithImages: createCafeWithImagesLoader(context),
-});
+const createDataLoaders = (ctx: ParameterizedContext<KoaContextState>) => {
+  const cafeWithAllImages = createCafeWithImagesLoader(ctx, {
+    showHiddenImages: true,
+  });
+  const cafeWithActiveImages = createCafeWithImagesLoader(ctx, {
+    showHiddenImages: false,
+  });
+
+  return {
+    cafe: createCafeLoader(ctx),
+    cafeWithImages: (options: { showHiddenImages: boolean }) =>
+      options.showHiddenImages ? cafeWithAllImages : cafeWithActiveImages,
+  };
+};
 
 export type DataLoaders = ReturnType<typeof createDataLoaders>;
 
@@ -53,7 +63,7 @@ const db = (): Middleware<KoaContextState> => {
       return connection;
     };
 
-    ctx.state.loaders = createDataLoaders(ctx.state);
+    ctx.state.loaders = createDataLoaders(ctx);
 
     await next();
 
