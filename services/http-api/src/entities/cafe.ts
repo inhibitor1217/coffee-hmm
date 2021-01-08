@@ -85,12 +85,24 @@ export default class Cafe {
   @OneToMany(() => CafeImage, (image) => image.cafe)
   readonly images!: CafeImage[];
 
-  public toJsonObject(options?: { showHiddenImage?: boolean }): AnyJson {
+  public toJsonObject(options?: { showHiddenImages?: boolean }): AnyJson {
     if (this.isDeleted()) {
       return {
         id: this.id,
       };
     }
+
+    const imageCount =
+      options?.showHiddenImages ?? false
+        ? this.imageCount.total
+        : this.imageCount.active;
+
+    const imageList = this.images
+      ?.map((image) => image.toJsonObject())
+      ?.map((imageObject, index) => {
+        /* correct the image indices */
+        return { ...(imageObject as JsonMap), index };
+      });
 
     return {
       id: this.id,
@@ -101,11 +113,8 @@ export default class Cafe {
       metadata: this.metadataObject,
       state: this.stateString,
       image: this.imageCount && {
-        count:
-          options?.showHiddenImage ?? false
-            ? this.imageCount.total
-            : this.imageCount.active,
-        list: this.images?.map((image) => image.toJsonObject()),
+        count: imageCount,
+        list: imageList,
       },
       views: this.statistic && {
         daily: this.statistic.dailyViews,
@@ -219,6 +228,8 @@ export const createCafeWithImagesLoader = (
         hidden: CafeImageState.hidden,
       });
     }
+
+    query = query.orderBy(`"cafe_image"."index"`, 'ASC');
 
     const normalized = await query
       .getMany()

@@ -15,9 +15,62 @@ import Exception, { ExceptionCode } from '../../util/error';
 import { OperationSchema, OperationType } from '../../util/iam';
 import handler from '../handler';
 
-export const getOne = handler(() => {
-  throw new Exception(ExceptionCode.notImplemented);
-});
+export const getOne: KoaRouteHandler<
+  {
+    cafeId: string;
+  },
+  {
+    showHiddenImages?: boolean;
+  },
+  AnyJson
+> = handler(
+  async (ctx) => {
+    const { cafeId } = ctx.params;
+    const { showHiddenImages = false } = ctx.query;
+
+    await ctx.state.connection();
+
+    const cafe = await ctx.state.loaders
+      .cafeWithImages({ showHiddenImages })
+      .load(cafeId);
+
+    if (!cafe) {
+      throw new Exception(ExceptionCode.notFound);
+    }
+
+    if (cafe.state === CafeState.hidden) {
+      /* check privilege for hidden cafe */
+      if (
+        !(
+          ctx.state.policy?.canExecuteOperation(
+            ctx,
+            new OperationSchema({
+              operationType: OperationType.query,
+              operation: 'api.cafe.hidden',
+              resource: '*',
+            })
+          ) ?? false
+        )
+      ) {
+        throw new Exception(ExceptionCode.forbidden);
+      }
+    }
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      cafe: cafe.toJsonObject({ showHiddenImages }),
+    };
+  },
+  {
+    schema: {
+      params: joi
+        .object()
+        .keys({ cafeId: joi.string().uuid({ version: 'uuidv4' }).required() })
+        .required(),
+      query: joi.object().keys({ showHiddenImages: joi.boolean() }),
+    },
+  }
+);
 
 export const getFeed = handler(() => {
   throw new Exception(ExceptionCode.notImplemented);
@@ -194,7 +247,7 @@ export const updateOne: KoaRouteHandler<
 
     ctx.status = HTTP_OK;
     ctx.body = {
-      cafe: cafe?.toJsonObject(),
+      cafe: cafe?.toJsonObject({ showHiddenImages }),
     };
   },
   {
