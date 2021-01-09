@@ -1,5 +1,5 @@
 import joi from 'joi';
-import { UNIQUE_VIOLATION } from 'pg-error-constants';
+import { FOREIGN_KEY_VIOLATION, UNIQUE_VIOLATION } from 'pg-error-constants';
 import { getRepository } from 'typeorm';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
 import Place from '../../entities/place';
@@ -149,7 +149,53 @@ export const updateOne: KoaRouteHandler<
 export const deleteList = handler(() => {
   throw new Exception(ExceptionCode.notImplemented);
 });
+export const deleteOne: KoaRouteHandler<{ placeId: string }> = handler(
+  async (ctx) => {
+    const { placeId } = ctx.params;
 
-export const deleteOne = handler(() => {
-  throw new Exception(ExceptionCode.notImplemented);
-});
+    const connection = await ctx.state.connection();
+
+    await connection.transaction((manager) =>
+      manager
+        .createQueryBuilder(Place, 'place')
+        .delete()
+        .where({ id: placeId })
+        .execute()
+        .then((deleteResult) => {
+          if (!deleteResult.affected) {
+            throw new Exception(ExceptionCode.notFound);
+          }
+        })
+        .catch((e: { code: string }) => {
+          if (e.code === FOREIGN_KEY_VIOLATION) {
+            throw new Exception(
+              ExceptionCode.badRequest,
+              `place ${placeId} has cafe connected to itself`
+            );
+          }
+          throw e;
+        })
+    );
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      place: {
+        id: placeId,
+      },
+    };
+  },
+  {
+    schema: {
+      params: joi
+        .object()
+        .keys({ placeId: joi.string().uuid({ version: 'uuidv4' }).required() })
+        .required(),
+    },
+    requiredRules: (ctx) =>
+      new OperationSchema({
+        operationType: OperationType.mutation,
+        operation: 'api.place',
+        resource: ctx.params.placeId,
+      }),
+  }
+);
