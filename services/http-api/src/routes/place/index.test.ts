@@ -10,7 +10,7 @@ import {
 } from '../../const';
 import Place from '../../entities/place';
 import { cleanDatabase, closeServer, openServer, ormConfigs } from '../../test';
-import { setupCafe } from '../../test/util';
+import { setupCafe, setupPlace } from '../../test/util';
 import { KoaServer } from '../../types/koa';
 import { env } from '../../util';
 import { IamPolicy, IamRule, OperationType } from '../../util/iam';
@@ -34,22 +34,6 @@ const adminerPolicyString = JSON.stringify(
   }).toJsonObject()
 );
 
-const setupPlace = async ({ name }: { name: string }) => {
-  const place = await connection
-    .createQueryBuilder(Place, 'place')
-    .insert()
-    .values({ name })
-    .returning(Place.columns)
-    .execute()
-    .then((insertResult) =>
-      Place.fromRawColumns((insertResult.raw as Record<string, unknown>[])[0], {
-        connection,
-      })
-    );
-
-  return place;
-};
-
 beforeAll(async () => {
   connection = await createConnection(
     ormConfigs.worker(parseInt(env('JEST_WORKER_ID'), 10))
@@ -72,7 +56,9 @@ beforeEach(async () => {
 describe('Place - GET /place/list', () => {
   test('Can retrieve an entire list of places', async () => {
     await Promise.all(
-      ['판교', '연남동', '양재', '성수동'].map((name) => setupPlace({ name }))
+      ['판교', '연남동', '양재', '성수동'].map((name) =>
+        setupPlace(connection, { name })
+      )
     );
 
     const response = await request.get('/place/list').expect(HTTP_OK);
@@ -111,7 +97,7 @@ describe('Place - POST /place', () => {
   });
 
   test('Throws 400 if the place with given name already exists', async () => {
-    await setupPlace({ name: '양재' });
+    await setupPlace(connection, { name: '양재' });
 
     await request
       .post('/place')
@@ -127,7 +113,7 @@ describe('Place - POST /place', () => {
 describe('Place - PUT /place/:placeId', () => {
   test('Can update a name of place', async () => {
     const places = await Promise.all(
-      ['양재', '성수동'].map((name) => setupPlace({ name }))
+      ['양재', '성수동'].map((name) => setupPlace(connection, { name }))
     );
 
     const response = await request
@@ -152,7 +138,7 @@ describe('Place - PUT /place/:placeId', () => {
 
   test('Cannot update to a name that already exists', async () => {
     const places = await Promise.all(
-      ['양재', '성수동'].map((name) => setupPlace({ name }))
+      ['양재', '성수동'].map((name) => setupPlace(connection, { name }))
     );
 
     await request
@@ -166,7 +152,9 @@ describe('Place - PUT /place/:placeId', () => {
   });
 
   test('Throws 404 if place does not exist', async () => {
-    await Promise.all(['양재', '성수동'].map((name) => setupPlace({ name })));
+    await Promise.all(
+      ['양재', '성수동'].map((name) => setupPlace(connection, { name }))
+    );
 
     await request
       .put(`/place/${uuid.v4()}`)
@@ -182,7 +170,7 @@ describe('Place - PUT /place/:placeId', () => {
 describe('Place - DELETE /place/:placeId', () => {
   test('Can delete a place without any connected cafes', async () => {
     const places = await Promise.all(
-      ['양재', '성수동'].map((name) => setupPlace({ name }))
+      ['양재', '성수동'].map((name) => setupPlace(connection, { name }))
     );
 
     const response = await request
@@ -203,7 +191,7 @@ describe('Place - DELETE /place/:placeId', () => {
 
   test('Cannot delete a place with connected cafe', async () => {
     const places = await Promise.all(
-      ['양재', '성수동'].map((name) => setupPlace({ name }))
+      ['양재', '성수동'].map((name) => setupPlace(connection, { name }))
     );
     await setupCafe(connection, { name: '알레그리아', placeId: places[0].id });
     await setupCafe(connection, { name: '커피밀', placeId: places[0].id });
@@ -219,7 +207,9 @@ describe('Place - DELETE /place/:placeId', () => {
   });
 
   test('Throws 404 if cafe does not exist', async () => {
-    await Promise.all(['양재', '성수동'].map((name) => setupPlace({ name })));
+    await Promise.all(
+      ['양재', '성수동'].map((name) => setupPlace(connection, { name }))
+    );
 
     await request
       .delete(`/place/${uuid.v4()}`)
@@ -235,7 +225,7 @@ describe('Place - DELETE /place/:placeId', () => {
 describe('Place - DELETE /place', () => {
   test('Can delete a list of places', async () => {
     const places = await Promise.all(
-      ['양재', '성수동', '판교'].map((name) => setupPlace({ name }))
+      ['양재', '성수동', '판교'].map((name) => setupPlace(connection, { name }))
     );
     await setupCafe(connection, { name: '알레그리아', placeId: places[1].id });
     await setupCafe(connection, { name: '커피밀', placeId: places[1].id });
@@ -264,7 +254,7 @@ describe('Place - DELETE /place', () => {
 
   test('Cannot delete if one of given places has connected cafes', async () => {
     const places = await Promise.all(
-      ['양재', '성수동', '판교'].map((name) => setupPlace({ name }))
+      ['양재', '성수동', '판교'].map((name) => setupPlace(connection, { name }))
     );
     await setupCafe(connection, { name: '알레그리아', placeId: places[1].id });
     await setupCafe(connection, { name: '커피밀', placeId: places[1].id });
@@ -281,7 +271,7 @@ describe('Place - DELETE /place', () => {
 
   test('Throws 404 if one of given places is not found', async () => {
     const places = await Promise.all(
-      ['양재', '성수동', '판교'].map((name) => setupPlace({ name }))
+      ['양재', '성수동', '판교'].map((name) => setupPlace(connection, { name }))
     );
 
     await request
