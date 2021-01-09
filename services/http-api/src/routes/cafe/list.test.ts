@@ -272,7 +272,8 @@ const sweepCafes = async (
     expect(list.length).toBeLessThanOrEqual((query.limit as number) ?? 10);
 
     const merged = [...cafes, ...list];
-    if (!cursor) {
+
+    if (!nextCursor) {
       return merged;
     }
 
@@ -349,7 +350,7 @@ describe('Cafe - GET /cafe/feed', () => {
   test('Can list all active cafes using cursor', async () => {
     const cafes = await sweepCafes('/cafe/feed', {});
 
-    expect(cafes.length).toBe(NUM_TEST_CAFES);
+    expect(cafes.length).toBe(activeCafeIds.length);
     cafes.forEach((item) => {
       expect(activeCafeIds).toContain(item.id);
       expect(activeCafeNames).toContain(item.name);
@@ -365,10 +366,14 @@ describe('Cafe - GET /cafe/feed', () => {
         request
           .get('/cafe/feed')
           .query({ limit: 20 })
-          .set({
-            'x-debug-user-id': uid,
-            'x-debug-iam-policy': adminerPolicyString,
-          })
+          .set(
+            uid
+              ? {
+                  'x-debug-user-id': uid,
+                  'x-debug-iam-policy': adminerPolicyString,
+                }
+              : {}
+          )
           .expect(HTTP_OK)
       )
     );
