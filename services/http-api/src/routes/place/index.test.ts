@@ -21,7 +21,7 @@ let request: SuperTest<Test>;
 
 jest.setTimeout(30000);
 // eslint-disable-next-line no-console
-console.log = jest.fn();
+// console.log = jest.fn();
 
 const adminerPolicyString = JSON.stringify(
   new IamPolicy({
@@ -175,7 +175,7 @@ describe('Place - PUT /place/:placeId', () => {
         'x-debug-iam-policy': adminerPolicyString,
       })
       .send({ name: '판교' })
-      .expect(HTTP_BAD_REQUEST);
+      .expect(HTTP_NOT_FOUND);
   });
 });
 
