@@ -6,10 +6,12 @@ import {
   Entity,
   getRepository,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('places')
+@Unique('idx_name', ['name'])
 export default class Place {
   @PrimaryGeneratedColumn('uuid', { name: 'id' })
   readonly id!: string;
