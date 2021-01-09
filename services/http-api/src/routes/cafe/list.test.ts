@@ -3,12 +3,10 @@ import { SuperTest, Test } from 'supertest';
 import { Connection, createConnection } from 'typeorm';
 import * as uuid from 'uuid';
 import { HTTP_OK } from '../../const';
-import Cafe, { CafeState, CafeStateStrings } from '../../entities/cafe';
-import CafeImage, { CafeImageState } from '../../entities/cafeImage';
-import CafeImageCount from '../../entities/cafeImageCount';
-import CafeStatistic from '../../entities/cafeStatistic';
-import Place from '../../entities/place';
+import { CafeState, CafeStateStrings } from '../../entities/cafe';
+import { CafeImageState } from '../../entities/cafeImage';
 import { cleanDatabase, closeServer, openServer, ormConfigs } from '../../test';
+import { setupCafe, setupPlace } from '../../test/util';
 import { KoaServer } from '../../types/koa';
 import { env } from '../../util';
 import { IamPolicy, IamRule, OperationType } from '../../util/iam';
@@ -44,164 +42,19 @@ const adminerPolicyString = JSON.stringify(
   }).toJsonObject()
 );
 
-const setupPlace = async ({ name }: { name: string }) => {
-  const place = await connection
-    .createQueryBuilder(Place, 'place')
-    .insert()
-    .values({ name })
-    .returning(Place.columns)
-    .execute()
-    .then((insertResult) =>
-      Place.fromRawColumns((insertResult.raw as Record<string, unknown>[])[0], {
-        connection,
-      })
-    );
-
-  return place;
-};
-
-const setupCafe = async ({
-  name,
-  placeId,
-  metadata,
-  state,
-  images,
-  mainImageIndex,
-  views,
-  numLikes,
-}: {
-  name: string;
-  placeId: string;
-  metadata?: AnyJson;
-  state?: CafeState;
-  images?: {
-    uri: string;
-    state: CafeImageState;
-    metadata?: AnyJson;
-  }[];
-  mainImageIndex?: number;
-  views?: {
-    daily?: number;
-    weekly?: number;
-    monthly?: number;
-    total?: number;
-  };
-  numLikes?: number;
-}) => {
-  return connection.transaction(async (manager) => {
-    const cafe = await manager
-      .createQueryBuilder(Cafe, 'cafe')
-      .insert()
-      .values({
-        name,
-        fkPlaceId: placeId,
-        metadata: JSON.stringify(metadata),
-        state: state ?? CafeState.hidden,
-      })
-      .returning(Cafe.columns)
-      .execute()
-      .then((insertResult) =>
-        Cafe.fromRawColumns(
-          (insertResult.raw as Record<string, unknown>[])[0],
-          {
-            connection,
-          }
-        )
-      );
-
-    let cafeImages: CafeImage[] = [];
-    if (images) {
-      if (images.length === 0) {
-        expect(mainImageIndex).toBeFalsy();
-      } else {
-        expect(mainImageIndex ?? 0).toBeLessThan(images.length);
-      }
-
-      cafeImages = await Promise.all(
-        images.map((image, index) =>
-          manager
-            .createQueryBuilder(CafeImage, 'cafe_image')
-            .insert()
-            .values({
-              fkCafeId: cafe.id,
-              index,
-              isMain: index === (mainImageIndex ?? 0),
-              metadata: JSON.stringify(image.metadata),
-              relativeUri: image.uri,
-              state: image.state,
-            })
-            .returning(CafeImage.columns)
-            .execute()
-            .then((insertResult) =>
-              CafeImage.fromRawColumns(
-                (insertResult.raw as Record<string, unknown>[])[0],
-                {
-                  connection,
-                }
-              )
-            )
-        )
-      );
-    }
-
-    const cafeStatistic = await manager
-      .createQueryBuilder(CafeStatistic, 'cafe_statistic')
-      .insert()
-      .values({
-        fkCafeId: cafe.id,
-        dailyViews: views?.daily ?? 0,
-        weeklyViews: views?.weekly ?? 0,
-        monthlyViews: views?.monthly ?? 0,
-        totalViews: views?.total ?? 0,
-        numReviews: 0,
-        sumRatings: 0,
-        numLikes: numLikes ?? 0,
-      })
-      .returning(CafeStatistic.columns)
-      .execute()
-      .then((insertResult) =>
-        CafeStatistic.fromRawColumns(
-          (insertResult.raw as Record<string, number>[])[0],
-          { connection }
-        )
-      );
-
-    const cafeImageCount = await manager
-      .createQueryBuilder(CafeImageCount, 'cafe_image_count')
-      .insert()
-      .values({
-        fkCafeId: cafe.id,
-        total: images?.length ?? 0,
-        active:
-          images?.filter((image) => image.state === CafeImageState.active)
-            ?.length ?? 0,
-      })
-      .returning(CafeImageCount.columns)
-      .execute()
-      .then((insertResult) =>
-        CafeImageCount.fromRawColumns(
-          (insertResult.raw as Record<string, number>[])[0],
-          { connection }
-        )
-      );
-
-    return { cafe, cafeImages, cafeStatistic, cafeImageCount };
-  });
-};
-
 const NUM_TEST_CAFES = 200;
 const setupCafes = async (
   generateImages?: (
     index: number
   ) => { uri: string; state: CafeImageState; metadata?: AnyJson }[]
 ) => {
-  const place = await setupPlace({ name: '판교' });
+  const place = await setupPlace(connection, { name: '판교' });
 
   const throttle = pLimit(16);
   const ids = await Promise.all(
     [...Array(NUM_TEST_CAFES).keys()]
       .map((i) => () =>
-        setupCafe({
+        setupCafe(connection, {
           name: `카페_${i.toString().padStart(3, '0')}`,
           placeId: place.id,
           state: i % 2 === 0 ? CafeState.active : CafeState.hidden,
