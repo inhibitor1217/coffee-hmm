@@ -52,7 +52,7 @@ export default class Cafe {
 
   @ManyToOne(() => Place)
   @JoinColumn({ name: 'fk_place_id' })
-  readonly place!: Place;
+  place!: Place;
 
   @Column({ type: 'varchar', name: 'metadata', length: 4000, nullable: true })
   metadata!: string | null;
@@ -77,13 +77,13 @@ export default class Cafe {
   }
 
   @OneToOne(() => CafeStatistic, (statistic) => statistic.cafe)
-  readonly statistic!: CafeStatistic;
+  statistic!: CafeStatistic;
 
   @OneToOne(() => CafeImageCount, (imageCount) => imageCount.cafe)
-  readonly imageCount!: CafeImageCount;
+  imageCount!: CafeImageCount;
 
   @OneToMany(() => CafeImage, (image) => image.cafe)
-  readonly images!: CafeImage[];
+  images!: CafeImage[];
 
   public toJsonObject(options?: { showHiddenImages?: boolean }): AnyJson {
     if (this.isDeleted()) {

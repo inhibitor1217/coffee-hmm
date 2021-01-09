@@ -1,6 +1,7 @@
 import joi from 'joi';
 import { FOREIGN_KEY_VIOLATION } from 'pg-error-constants';
-import { getManager, Not } from 'typeorm';
+import { getManager, getRepository, Not } from 'typeorm';
+import * as uuid from 'uuid';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
 import Cafe, {
   CafeState,
@@ -9,6 +10,7 @@ import Cafe, {
 } from '../../entities/cafe';
 import CafeImageCount from '../../entities/cafeImageCount';
 import CafeStatistic from '../../entities/cafeStatistic';
+import Place from '../../entities/place';
 import { KoaRouteHandler, VariablesMap } from '../../types/koa';
 import { enumKeyStrings } from '../../util';
 import Exception, { ExceptionCode } from '../../util/error';
@@ -72,9 +74,98 @@ export const getOne: KoaRouteHandler<
   }
 );
 
-export const getFeed = handler(() => {
-  throw new Exception(ExceptionCode.notImplemented);
-});
+export const getFeed: KoaRouteHandler<
+  VariablesMap,
+  {
+    limit: number;
+    cursor?: string;
+    identifier?: string;
+  }
+> = handler(
+  async (ctx) => {
+    const { limit, cursor, identifier: _identifier } = ctx.query;
+
+    await ctx.state.connection();
+
+    const identifier = _identifier ?? ctx.state.uid ?? uuid.v4();
+
+    /**
+     * TODO:  The following query sweeps through the entire table,
+     *        which is necessary because of the computed column md5(concat("cafe"."id", :identifier::text)).
+     *        This is inevitable due to the feature design, which required to show
+     *        different cafe order for every users.
+     *        If this ever becomes an issue, we should drop the feature and use indexed columns for ordering,
+     *        or use caches (redis-like) for caching the results.
+     */
+
+    let query = getRepository(Cafe)
+      .createQueryBuilder('cafe')
+      .select()
+      .addSelect(`md5(concat("cafe"."id", :identifier::text)) AS "cursor"`)
+      .leftJoinAndSelect('cafe.place', 'place')
+      .leftJoinAndSelect('cafe.statistic', 'cafe_statistic')
+      .leftJoinAndSelect('cafe.imageCount', 'cafe_image_count')
+      .setParameter('identifier', identifier)
+      .where(`"cafe"."state" IS DISTINCT FROM :hidden`, {
+        hidden: CafeState.hidden,
+      })
+      .andWhere(`"cafe"."state" IS DISTINCT FROM :deleted`, {
+        deleted: CafeState.deleted,
+      });
+
+    if (cursor) {
+      query = query.andWhere(
+        `md5(concat("cafe"."id", :identifier::text)) > :cursor`,
+        {
+          cursor,
+        }
+      );
+    }
+
+    query = query.orderBy(`"cursor"`, 'ASC').limit(limit);
+
+    const { cafes, cursor: nextCursor } = await query
+      .getRawMany()
+      .then((rows: (Record<string, unknown> & { cursor: string })[]) => ({
+        cafes: rows.map((row) => {
+          const cafe = Cafe.fromRawColumns(row, { alias: 'cafe' });
+          cafe.place = Place.fromRawColumns(row, { alias: 'place' });
+          cafe.statistic = CafeStatistic.fromRawColumns(row, {
+            alias: 'cafe_statistic',
+          });
+          cafe.imageCount = CafeImageCount.fromRawColumns(row, {
+            alias: 'cafe_image_count',
+          });
+
+          return cafe;
+        }),
+        cursor: rows[rows.length - 1]?.cursor,
+      }));
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      cafe: {
+        list: cafes.map((cafe) =>
+          cafe.toJsonObject({ showHiddenImages: false })
+        ),
+      },
+      cursor: nextCursor,
+      identifier,
+    };
+  },
+  {
+    schema: {
+      query: joi
+        .object()
+        .keys({
+          limit: joi.number().min(1).max(64).required(),
+          cursor: joi.string(),
+          identifier: joi.string().uuid({ version: 'uuidv4' }),
+        })
+        .required(),
+    },
+  }
+);
 
 export const getCount: KoaRouteHandler<
   VariablesMap,
