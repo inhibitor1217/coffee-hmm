@@ -9,6 +9,14 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+export enum EventCategory {
+  CAFE = 'CAFE',
+}
+
+export enum EventName {
+  VIEW = 'VIEW',
+}
+
 @Entity('events')
 export default class Event {
   @PrimaryGeneratedColumn('uuid', { name: 'id' })
@@ -24,10 +32,10 @@ export default class Event {
   userId!: string | null;
 
   @Column({ type: 'varchar', name: 'category', length: 255 })
-  category!: string;
+  category!: EventCategory;
 
   @Column({ type: 'varchar', name: 'name', length: 255 })
-  name!: string;
+  name!: EventName;
 
   @Column({ type: 'varchar', name: 'label', length: 255, nullable: true })
   label!: string | null;
