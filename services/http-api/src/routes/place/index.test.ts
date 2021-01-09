@@ -165,7 +165,7 @@ describe('Place - PUT /place/:placeId', () => {
       .expect(HTTP_BAD_REQUEST);
   });
 
-  test('Throws 404 if cafe does not exist', async () => {
+  test('Throws 404 if place does not exist', async () => {
     await Promise.all(['양재', '성수동'].map((name) => setupPlace({ name })));
 
     await request
