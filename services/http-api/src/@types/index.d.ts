@@ -25,6 +25,10 @@ interface ObjectConstructor {
   filterUndefinedKeys(object: { [key: string]: AnyJson | undefined }): JsonMap;
 }
 
+interface PromiseConstructor {
+  chain<T>(promises: ((value: T) => Promise<T>)[], initialValue: T): Promise<T>;
+}
+
 declare module 'pg-error-constants' {
   // Class 00 — Successful Completion
   const SUCCESSFUL_COMPLETION = '00000';

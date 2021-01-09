@@ -19,3 +19,9 @@ Object.filterUndefinedKeys = (object: {
   });
   return filtered;
 };
+
+Promise.chain = <T>(promises: ((value: T) => Promise<T>)[], initialValue: T) =>
+  promises.reduce(
+    (prev, cur) => prev.then((value) => cur(value)),
+    Promise.resolve(initialValue)
+  );
