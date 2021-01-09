@@ -543,7 +543,10 @@ export const create: KoaRouteHandler<
           name: joi.string().min(1).max(255).required(),
           placeId: joi.string().uuid({ version: 'uuidv4' }).required(),
           metadata: joi.object(),
-          state: joi.string().valid(...enumKeyStrings(CafeState)),
+          state: joi
+            .string()
+            .valid(...enumKeyStrings(CafeState))
+            .disallow(CafeState[CafeState.deleted]),
         })
         .required(),
     },
@@ -634,7 +637,10 @@ export const updateOne: KoaRouteHandler<
           name: joi.string().min(1).max(255),
           placeId: joi.string().uuid({ version: 'uuidv4' }),
           metadata: joi.object().allow(null),
-          state: joi.string().valid(...enumKeyStrings(CafeState)),
+          state: joi
+            .string()
+            .valid(...enumKeyStrings(CafeState))
+            .disallow(CafeState[CafeState.deleted]),
         })
         .or('name', 'placeId', 'metadata', 'state')
         .required(),
