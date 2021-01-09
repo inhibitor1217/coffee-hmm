@@ -78,9 +78,73 @@ export const create: KoaRouteHandler<
   }
 );
 
-export const updateOne = handler(() => {
-  throw new Exception(ExceptionCode.notImplemented);
-});
+export const updateOne: KoaRouteHandler<
+  { placeId: string },
+  VariablesMap,
+  { name: string }
+> = handler(
+  async (ctx) => {
+    if (!ctx.request.body) {
+      throw new Exception(ExceptionCode.badRequest);
+    }
+
+    const { placeId } = ctx.params;
+    const { name } = ctx.request.body;
+
+    const connection = await ctx.state.connection();
+
+    const place = await connection.transaction(async (manager) =>
+      manager
+        .createQueryBuilder(Place, 'place')
+        .update()
+        .set({ name })
+        .where({ id: placeId })
+        .returning(Place.columns)
+        .execute()
+        .then((updatedResult) => {
+          if (!updatedResult.affected) {
+            throw new Exception(ExceptionCode.notFound);
+          }
+
+          return Place.fromRawColumns(
+            (updatedResult.raw as Record<string, unknown>[])[0]
+          );
+        })
+        .catch((e: { code: string }) => {
+          if (e.code === UNIQUE_VIOLATION) {
+            throw new Exception(
+              ExceptionCode.badRequest,
+              `duplicate place name: ${name}`
+            );
+          }
+          throw e;
+        })
+    );
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      place: place.toJsonObject(),
+    };
+  },
+  {
+    schema: {
+      params: joi
+        .object()
+        .keys({ placeId: joi.string().uuid({ version: 'uuidv4' }).required() })
+        .required(),
+      body: joi
+        .object()
+        .keys({ name: joi.string().min(1).max(255).required() })
+        .required(),
+    },
+    requiredRules: (ctx) =>
+      new OperationSchema({
+        operationType: OperationType.mutation,
+        operation: 'api.place',
+        resource: ctx.params.placeId,
+      }),
+  }
+);
 
 export const deleteList = handler(() => {
   throw new Exception(ExceptionCode.notImplemented);
