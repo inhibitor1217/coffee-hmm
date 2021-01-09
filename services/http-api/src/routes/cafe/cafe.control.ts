@@ -11,6 +11,7 @@ import Cafe, {
 import CafeImageCount from '../../entities/cafeImageCount';
 import CafeStatistic from '../../entities/cafeStatistic';
 import Place from '../../entities/place';
+import { SortOrder, SortOrderStrings } from '../../types';
 import { KoaRouteHandler, VariablesMap } from '../../types/koa';
 import { enumKeyStrings } from '../../util';
 import Exception, { ExceptionCode } from '../../util/error';
@@ -158,7 +159,7 @@ export const getFeed: KoaRouteHandler<
       query: joi
         .object()
         .keys({
-          limit: joi.number().min(1).max(64).required(),
+          limit: joi.number().integer().min(1).max(64).required(),
           cursor: joi.string(),
           identifier: joi.string().uuid({ version: 'uuidv4' }),
         })
@@ -225,9 +226,234 @@ export const getCount: KoaRouteHandler<
   }
 );
 
-export const getList = handler(() => {
-  throw new Exception(ExceptionCode.notImplemented);
-});
+enum CafeListOrder {
+  updatedAt = 0,
+  name = 1,
+  place = 2,
+  state = 3,
+  numImages = 4,
+}
+
+type CafeListOrderStrings = keyof typeof CafeListOrder;
+
+export const getList: KoaRouteHandler<
+  VariablesMap,
+  {
+    limit: number;
+    cursor?: string;
+    orderBy?: CafeListOrderStrings;
+    order?: SortOrderStrings;
+    keyword?: string;
+    showHidden?: boolean;
+    showHiddenImages?: boolean;
+  }
+> = handler(
+  async (ctx) => {
+    const {
+      limit,
+      cursor,
+      orderBy: orderByString = 'updatedAt',
+      order: orderString = 'asc',
+      keyword,
+      showHidden = false,
+      showHiddenImages = false,
+    } = ctx.query;
+    const orderBy = CafeListOrder[orderByString];
+    const order = SortOrder[orderString];
+
+    await ctx.state.connection();
+
+    let query = getRepository(Cafe)
+      .createQueryBuilder('cafe')
+      .select()
+      .leftJoinAndSelect('cafe.place', 'place')
+      .leftJoinAndSelect('cafe.statistic', 'cafe_statistic')
+      .leftJoinAndSelect('cafe.imageCount', 'cafe_image_count');
+
+    switch (orderBy) {
+      case CafeListOrder.updatedAt:
+        query = query.addSelect(
+          `CONCAT(cafe.updated_at, '.', cafe.id) AS cursor`
+        );
+        break;
+      case CafeListOrder.name:
+        query = query.addSelect(`CONCAT(cafe.name, '.', cafe.id) AS cursor`);
+        break;
+      case CafeListOrder.place:
+        query = query.addSelect(
+          `CONCAT(cafe.fk_place_id, '.', cafe.id) AS cursor`
+        );
+        break;
+      case CafeListOrder.state:
+        query = query.addSelect(
+          `CONCAT(LPAD((cafe.state + 32768)::text, 5, '0'), '.', cafe.id) AS cursor`
+        );
+        break;
+      case CafeListOrder.numImages:
+        query = query.addSelect(
+          `CONCAT(LPAD(cafe_image_count.total::text, 12, '0'), '.', cafe.id) AS cursor`
+        );
+        break;
+      default:
+        throw Error('invalid CafeListOrder');
+    }
+
+    query = query.where(`TRUE`);
+
+    if (cursor) {
+      const comparator = order === SortOrder.asc ? '>' : '<';
+      switch (orderBy) {
+        case CafeListOrder.updatedAt: {
+          const splitPos = cursor.lastIndexOf('.');
+          const cursorUpdatedAt = cursor.slice(0, splitPos);
+          const cursorId = cursor.slice(splitPos + 1);
+          query = query.andWhere(
+            `(cafe.updatedAt, cafe.id) ${comparator} (:updatedAt, :id)`,
+            {
+              updatedAt: cursorUpdatedAt,
+              id: cursorId,
+            }
+          );
+          break;
+        }
+        case CafeListOrder.name: {
+          const splitPos = cursor.lastIndexOf('.');
+          const cursorName = cursor.slice(0, splitPos);
+          const cursorId = cursor.slice(splitPos + 1);
+          query = query.andWhere(
+            `(cafe.name, cafe.id) ${comparator} (:name, :id)`,
+            { name: cursorName, id: cursorId }
+          );
+          break;
+        }
+        case CafeListOrder.place: {
+          query = query.andWhere(
+            `CONCAT(cafe.fk_place_id, '.', cafe.id) ${comparator} :cursor`,
+            { cursor }
+          );
+          break;
+        }
+        case CafeListOrder.state: {
+          query = query.andWhere(
+            `CONCAT(LPAD((cafe.state + 32768)::text, 5, '0'), '.', cafe.id) ${comparator} :cursor`,
+            { cursor }
+          );
+          break;
+        }
+        case CafeListOrder.numImages: {
+          query = query.andWhere(
+            `CONCAT(LPAD(cafe_image_count.total::text, 12, '0'), '.', cafe.id) ${comparator} :cursor`,
+            { cursor }
+          );
+          break;
+        }
+        default:
+          throw Error('invalid CafeListOrder');
+      }
+    }
+
+    query = query.andWhere(`cafe.state IS DISTINCT FROM :deleted`, {
+      deleted: CafeState.deleted,
+    });
+
+    if (!showHidden) {
+      query = query.andWhere(`cafe.state is DISTINCT FROM :hidden`, {
+        hidden: CafeState.hidden,
+      });
+    }
+
+    if (keyword) {
+      query = query.andWhere(`cafe.name LIKE :keyword`, {
+        keyword: `%${keyword}%`,
+      });
+    }
+
+    switch (orderBy) {
+      case CafeListOrder.updatedAt:
+        query = query.orderBy({ 'cafe.updatedAt': order });
+        break;
+      case CafeListOrder.name:
+        query = query.orderBy({ 'cafe.name': order });
+        break;
+      case CafeListOrder.place:
+        query = query.orderBy({ 'cafe.fk_place_id': order });
+        break;
+      case CafeListOrder.state:
+        query = query.orderBy({ 'cafe.state': order });
+        break;
+      case CafeListOrder.numImages:
+        query = query.orderBy({ 'cafe_image_count.total': order });
+        break;
+      default:
+        throw Error('invalid CafeListOrder');
+    }
+    query = query.addOrderBy('cafe.id', order);
+
+    query = query.limit(limit);
+
+    const { cafes, cursor: nextCursor } = await query
+      .getRawMany()
+      .then((rows: (Record<string, unknown> & { cursor: string })[]) => ({
+        cafes: rows.map((row) => {
+          const cafe = Cafe.fromRawColumns(row, { alias: 'cafe' });
+          cafe.place = Place.fromRawColumns(row, { alias: 'place' });
+          cafe.statistic = CafeStatistic.fromRawColumns(row, {
+            alias: 'cafe_statistic',
+          });
+          cafe.imageCount = CafeImageCount.fromRawColumns(row, {
+            alias: 'cafe_image_count',
+          });
+
+          return cafe;
+        }),
+        cursor: rows[rows.length - 1]?.cursor,
+      }));
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      cafe: {
+        list: cafes.map((cafe) => cafe.toJsonObject({ showHiddenImages })),
+      },
+      cursor: nextCursor,
+    };
+  },
+  {
+    schema: {
+      query: joi
+        .object()
+        .keys({
+          limit: joi.number().integer().min(1).max(64),
+          cursor: joi.string(),
+          orderBy: joi.string().valid(...enumKeyStrings(CafeListOrder)),
+          order: joi.string().valid(...enumKeyStrings(SortOrder)),
+          keyword: joi.string().min(1).max(255),
+          showHidden: joi.boolean(),
+          showHiddenImages: joi.boolean(),
+        })
+        .required(),
+    },
+    requiredRules: (ctx) => [
+      ...(ctx.query.showHidden ?? false
+        ? [
+            new OperationSchema({
+              operationType: OperationType.query,
+              operation: 'api.cafe.hidden',
+              resource: '*',
+            }),
+          ]
+        : []),
+      ...(ctx.query.showHiddenImages ?? false
+        ? [
+            new OperationSchema({
+              operationType: OperationType.query,
+              operation: 'api.cafe.image.hidden',
+              resource: '*',
+            }),
+          ]
+        : []),
+    ],
+  }
+);
 
 export const create: KoaRouteHandler<
   VariablesMap,
