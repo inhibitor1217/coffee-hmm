@@ -146,9 +146,75 @@ export const updateOne: KoaRouteHandler<
   }
 );
 
-export const deleteList = handler(() => {
-  throw new Exception(ExceptionCode.notImplemented);
-});
+export const deleteList: KoaRouteHandler<
+  VariablesMap,
+  VariablesMap,
+  {
+    list: string[];
+  }
+> = handler(
+  async (ctx) => {
+    if (!ctx.request.body) {
+      throw new Exception(ExceptionCode.badRequest);
+    }
+
+    const { list } = ctx.request.body;
+
+    const connection = await ctx.state.connection();
+
+    await connection.transaction((manager) =>
+      manager
+        .createQueryBuilder(Place, 'place')
+        .delete()
+        .whereInIds(list)
+        .execute()
+        .then((deleteResult) => {
+          if ((deleteResult.affected ?? 0) < list.length) {
+            throw new Exception(ExceptionCode.notFound);
+          }
+        })
+        .catch((e: { code: string }) => {
+          if (e.code === FOREIGN_KEY_VIOLATION) {
+            throw new Exception(
+              ExceptionCode.badRequest,
+              `one of given places has connected cafe to it`
+            );
+          }
+          throw e;
+        })
+    );
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      place: {
+        list: list.map((id) => ({ id })),
+      },
+    };
+  },
+  {
+    schema: {
+      body: joi
+        .object()
+        .keys({
+          list: joi
+            .array()
+            .items(joi.string().uuid({ version: 'uuidv4' }))
+            .required(),
+        })
+        .required(),
+    },
+    requiredRules: (ctx) =>
+      ctx.request.body?.list?.map(
+        (placeId) =>
+          new OperationSchema({
+            operationType: OperationType.mutation,
+            operation: 'api.place',
+            resource: placeId,
+          })
+      ) ?? [],
+  }
+);
+
 export const deleteOne: KoaRouteHandler<{ placeId: string }> = handler(
   async (ctx) => {
     const { placeId } = ctx.params;
@@ -170,7 +236,7 @@ export const deleteOne: KoaRouteHandler<{ placeId: string }> = handler(
           if (e.code === FOREIGN_KEY_VIOLATION) {
             throw new Exception(
               ExceptionCode.badRequest,
-              `place ${placeId} has cafe connected to itself`
+              `place ${placeId} has cafe connected to it`
             );
           }
           throw e;
