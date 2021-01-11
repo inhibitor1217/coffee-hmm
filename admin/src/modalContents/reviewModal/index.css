@@ -1,0 +1,64 @@
+.modal-content-container{
+    font-size: 12px;
+    padding-top: 48px;
+}
+
+.review-close-button {
+    padding: 8px;
+    display: block;
+    position: absolute;
+    right: 0px;
+}
+
+.modal-content-wrapper div {
+    padding-bottom: 12px;
+}
+
+.modal-content-wrapper span {
+    display: block;
+    padding-left: 36px;
+}
+
+.modal-content-wrapper select {
+    margin-left: 12px;
+}
+
+.review-category {
+    font-weight: bold;
+    padding-bottom: 4px;
+    margin-left: 12px;
+}
+
+.review-content {
+    height: 100px;
+    max-height: 120px;
+    overflow-y: auto;
+    padding: 12px;
+    margin: 12px 36px;
+    border: 1px solid #d2d2d2;
+}
+
+.review-image-box {
+    width: 320px;
+    height: 240px;
+    margin: 36px auto;
+    background-color: aliceblue;
+}
+
+.modal-content-wrapper i {
+    font-size: 18px;
+    padding: 0px 2px;
+    color: #2E3559;
+}
+
+.review-edit-button {
+    height: 24px;
+    font-size: 12px;
+    border: 1px solid #d2d2d2;
+    border-radius: 8px;
+    padding: 2px 4px; 
+    margin: 12px;
+    cursor: pointer;
+    position: absolute;
+    right: 36px;
+}

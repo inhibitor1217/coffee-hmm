@@ -1,0 +1,50 @@
+.register-board-container {
+    width: 1200px;
+    height: 600px;
+    background-color: #ffffff;
+    outline: 1px solid #D2D2D2;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.register-title-button-wrapper {
+    width: 100%;
+    padding: 24px 0px;
+    outline: 1px solid #d2d2d2;
+    position: relative;
+}
+
+.register-title-button-wrapper h3 {
+    padding-left: 24px;
+}
+
+.register-title-button-wrapper button {
+    width: 90px;
+    height: 28px;
+    border: 1px solid #d2d2d2;
+    border-radius: 8px;
+    padding: 0px; 
+    margin: 4px 8px;
+    cursor: pointer;
+    background-color: #2E3559;
+    color: #ffffff;
+
+    position: absolute;
+    bottom: 14px;
+    right: 36px;
+}
+
+.register-title-button-wrapper span {
+    font-size: 12px;
+    font-weight: bold;
+    padding-top: 2px;
+}
+
+.register-basic-wrapper {
+    padding: 24px 24px;
+}
+
+.register-basic-wrapper h4 {
+    padding-left: 12px;
+    padding-bottom: 12px;
+}
+

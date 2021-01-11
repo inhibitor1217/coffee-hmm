@@ -1,0 +1,16 @@
+.cafe-pagination-wrapper {
+    position: absolute;
+    top: 32px;
+    right: 32px;
+}
+
+.cafe-pagination-wrapper i {
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.cafe-pagination-wrapper span {
+    font-size: 14px;
+    margin: 0px 4px;
+    vertical-align: top;
+}

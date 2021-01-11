@@ -1,0 +1,38 @@
+.search-bar-wrapper {
+    padding-bottom: 18px;
+    position: relative;
+}
+
+.search-bar-wrapper form {
+    padding-top: 36px;
+    padding-left: 36px;
+}
+
+.search-bar-wrapper input {
+    width: 600px;
+    min-height: 24px;  
+    padding: 0px 24px;
+    margin-right: 12px;
+}
+
+.search-bar-wrapper input::placeholder {
+    font-size: 12px;
+    color: #AAB7B8;
+}
+
+.search-bar-wrapper button {
+    width: 48px;
+    height: 28px;
+    border: 1px solid #000000;
+    border-radius: 4px;
+
+    font-size: 12px;
+}
+
+.search-icon {
+    font-size: 18px;
+    color: #2C2C2C;
+    position: absolute;
+    top: 40px;
+    left: 40px;
+}
