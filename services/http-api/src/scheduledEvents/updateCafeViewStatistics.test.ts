@@ -11,7 +11,7 @@ import Cafe from '../entities/cafe';
 
 let connection: Connection;
 
-jest.setTimeout(30000);
+jest.setTimeout(60000);
 // eslint-disable-next-line no-console
 console.log = jest.fn();
 
