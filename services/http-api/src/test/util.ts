@@ -45,7 +45,7 @@ export const setupCafe = async (
       state: CafeImageState;
       metadata?: AnyJson;
     }[];
-    mainImageIndex?: number;
+    mainImageIndex?: number | null;
     views?: {
       daily?: number;
       weekly?: number;
@@ -92,7 +92,10 @@ export const setupCafe = async (
             .values({
               fkCafeId: cafe.id,
               index,
-              isMain: index === (mainImageIndex ?? 0),
+              isMain:
+                mainImageIndex !== null
+                  ? index === (mainImageIndex ?? 0)
+                  : false,
               metadata: JSON.stringify(image.metadata),
               relativeUri: image.uri,
               state: image.state,
