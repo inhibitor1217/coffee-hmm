@@ -1,11 +1,12 @@
 import joi from 'joi';
 import { FOREIGN_KEY_VIOLATION } from 'pg-error-constants';
-import { EntityManager, getManager } from 'typeorm';
+import { EntityManager } from 'typeorm';
 import { HTTP_CREATED, HTTP_OK } from '../../../const';
 import CafeImage, {
   CafeImageState,
   CafeImageStateStrings,
 } from '../../../entities/cafeImage';
+import CafeImageCount from '../../../entities/cafeImageCount';
 import { KoaRouteHandler, VariablesMap } from '../../../types/koa';
 import { enumKeyStrings } from '../../../util';
 import Exception, { ExceptionCode } from '../../../util/error';
@@ -30,57 +31,72 @@ export const create: KoaRouteHandler<
     const { uri, metadata, state: stateString = 'hidden' } = ctx.request.body;
     const state = CafeImageState[stateString];
 
-    await ctx.state.connection();
+    const connection = await ctx.state.connection();
 
-    const cafeImages = await getManager()
-      .createQueryBuilder(CafeImage, 'cafe_image')
-      .select()
-      .where(`cafe_image.fk_cafe_id = :cafeId`, { cafeId })
-      .andWhere(`cafe_image.state IS DISTINCT FROM :deleted`, {
-        deleted: CafeImageState.deleted,
-      })
-      .orderBy(`cafe_image.index`, 'DESC')
-      .getMany();
+    const cafeImage = await connection.transaction(async (manager) => {
+      const cafeImages = await manager
+        .createQueryBuilder(CafeImage, 'cafe_image')
+        .select()
+        .where(`cafe_image.fk_cafe_id = :cafeId`, { cafeId })
+        .andWhere(`cafe_image.state IS DISTINCT FROM :deleted`, {
+          deleted: CafeImageState.deleted,
+        })
+        .orderBy(`cafe_image.index`, 'DESC')
+        .getMany();
 
-    const nextIndex = (cafeImages[0]?.index ?? -1) + 1;
-    const hasMainImage = cafeImages.reduce(
-      (acc, cur) => acc || cur.isMain,
-      false
-    );
+      const nextIndex = (cafeImages[0]?.index ?? -1) + 1;
+      const hasMainImage = cafeImages.reduce(
+        (acc, cur) => acc || cur.isMain,
+        false
+      );
 
-    const created = await getManager()
-      .createQueryBuilder(CafeImage, 'cafe_image')
-      .insert()
-      .values({
-        fkCafeId: cafeId,
-        index: nextIndex,
-        isMain: !hasMainImage,
-        metadata: metadata ? JSON.stringify(metadata) : null,
-        relativeUri: uri,
-        state,
-      })
-      .returning(CafeImage.columns)
-      .execute()
-      .then((insertResult) =>
-        CafeImage.fromRawColumns(
-          (insertResult.raw as Record<string, unknown>[])[0]
+      const created = await manager
+        .createQueryBuilder(CafeImage, 'cafe_image')
+        .insert()
+        .values({
+          fkCafeId: cafeId,
+          index: nextIndex,
+          isMain: !hasMainImage,
+          metadata: metadata ? JSON.stringify(metadata) : null,
+          relativeUri: uri,
+          state,
+        })
+        .returning(CafeImage.columns)
+        .execute()
+        .then((insertResult) =>
+          CafeImage.fromRawColumns(
+            (insertResult.raw as Record<string, unknown>[])[0]
+          )
         )
-      )
-      .catch((e: { code: string }) => {
-        if (e.code === FOREIGN_KEY_VIOLATION) {
-          throw new Exception(
-            ExceptionCode.notFound,
-            `cafe ${cafeId} does not exist`
-          );
-        }
-        throw e;
-      });
+        .catch((e: { code: string }) => {
+          if (e.code === FOREIGN_KEY_VIOLATION) {
+            throw new Exception(
+              ExceptionCode.notFound,
+              `cafe ${cafeId} does not exist`
+            );
+          }
+          throw e;
+        });
+
+      await manager
+        .createQueryBuilder()
+        .update(CafeImageCount)
+        .set({
+          total: () => `"total" + 1`,
+          active: () =>
+            state === CafeImageState.active ? `"active" + 1` : `"active"`,
+        })
+        .where(`cafe_image_counts.fk_cafe_id = :cafeId`, { cafeId })
+        .execute();
+
+      return created;
+    });
 
     ctx.status = HTTP_CREATED;
     ctx.body = {
       cafe: {
         id: cafeId,
-        image: created?.toJsonObject(),
+        image: cafeImage?.toJsonObject(),
       },
     };
   },
@@ -164,7 +180,7 @@ const checkConsistency = async (manager: EntityManager, cafeId: string) => {
     }
   });
 
-  return images;
+  return { images, total: images.length, active: activeImages.length };
 };
 
 export const updateList: KoaRouteHandler<
@@ -190,7 +206,7 @@ export const updateList: KoaRouteHandler<
 
     const connection = await ctx.state.connection();
 
-    const cafeImages = await connection.transaction(async (manager) => {
+    const images = await connection.transaction(async (manager) => {
       const [, affected] = (await manager.query(
         `UPDATE "cafe_images" SET
   "index" = COALESCE("cafe_images_updated"."index"::smallint, "cafe_images"."index"),
@@ -221,7 +237,19 @@ export const updateList: KoaRouteHandler<
         throw new Exception(ExceptionCode.notFound);
       }
 
-      return checkConsistency(manager, cafeId);
+      const { images: cafeImages, total, active } = await checkConsistency(
+        manager,
+        cafeId
+      );
+
+      await manager
+        .createQueryBuilder()
+        .update(CafeImageCount)
+        .set({ total, active })
+        .where(`cafe_image_counts.fk_cafe_id = :cafeId`, { cafeId })
+        .execute();
+
+      return cafeImages;
     });
 
     ctx.status = HTTP_OK;
@@ -229,8 +257,8 @@ export const updateList: KoaRouteHandler<
       cafe: {
         id: cafeId,
         image: {
-          count: cafeImages.length,
-          list: cafeImages.map((cafe) => cafe.toJsonObject()),
+          count: images.length,
+          list: images.map((cafe) => cafe.toJsonObject()),
         },
       },
     };
@@ -336,7 +364,14 @@ export const updateOne: KoaRouteHandler<
           );
         });
 
-      await checkConsistency(manager, cafeId);
+      const { total, active } = await checkConsistency(manager, cafeId);
+
+      await manager
+        .createQueryBuilder()
+        .update(CafeImageCount)
+        .set({ total, active })
+        .where(`cafe_image_counts.fk_cafe_id = :cafeId`, { cafeId })
+        .execute();
 
       return updatedCafeImage;
     });
@@ -451,7 +486,14 @@ export const deleteList: KoaRouteHandler<
       }
 
       await reassignIndices(manager, cafeId);
-      await checkConsistency(manager, cafeId);
+      const { total, active } = await checkConsistency(manager, cafeId);
+
+      await manager
+        .createQueryBuilder()
+        .update(CafeImageCount)
+        .set({ total, active })
+        .where(`cafe_image_counts.fk_cafe_id = :cafeId`, { cafeId })
+        .execute();
     });
 
     ctx.status = HTTP_OK;
@@ -522,7 +564,14 @@ export const deleteOne: KoaRouteHandler<{
         });
 
       await reassignIndices(manager, cafeId);
-      await checkConsistency(manager, cafeId);
+      const { total, active } = await checkConsistency(manager, cafeId);
+
+      await manager
+        .createQueryBuilder()
+        .update(CafeImageCount)
+        .set({ total, active })
+        .where(`cafe_image_counts.fk_cafe_id = :cafeId`, { cafeId })
+        .execute();
 
       return deletedImage.id;
     });
