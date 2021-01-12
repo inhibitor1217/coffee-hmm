@@ -287,6 +287,91 @@ export const deleteList = handler(() => {
   throw new Exception(ExceptionCode.notImplemented);
 });
 
-export const deleteOne = handler(() => {
-  throw new Exception(ExceptionCode.notImplemented);
-});
+export const deleteOne: KoaRouteHandler<{
+  cafeId: string;
+  cafeImageId: string;
+}> = handler(
+  async (ctx) => {
+    const { cafeId, cafeImageId } = ctx.params;
+
+    const connection = await ctx.state.connection();
+
+    const deletedImageId = await connection.transaction(async (manager) => {
+      const deletedImage = await manager
+        .createQueryBuilder()
+        .update(CafeImage)
+        .set({
+          state: CafeImageState.deleted,
+        })
+        .where(`cafe_images.id = :cafeImageId`, { cafeImageId })
+        .andWhere(`cafe_images.fk_cafe_id = :cafeId`, { cafeId })
+        .andWhere(`cafe_images.state IS DISTINCT FROM :deleted`, {
+          deleted: CafeImageState.deleted,
+        })
+        .returning(CafeImage.columns)
+        .execute()
+        .then((updateResult) => {
+          if (!updateResult.affected) {
+            throw new Exception(ExceptionCode.notFound);
+          }
+          return CafeImage.fromRawColumns(
+            (updateResult.raw as Record<string, unknown>[])[0]
+          );
+        });
+
+      const cafeImages = await manager
+        .createQueryBuilder(CafeImage, 'cafe_image')
+        .select()
+        .where(`cafe_image.fk_cafe_id = :cafeId`, { cafeId })
+        .andWhere(`cafe_image.state IS DISTINCT FROM :deleted`, {
+          deleted: CafeImageState.deleted,
+        })
+        .orderBy(`cafe_image.index`, 'ASC')
+        .getMany();
+
+      await manager.query(
+        `UPDATE "cafe_images" SET
+  "index" = "cafe_images_updated"."index"
+  FROM (VALUES ${cafeImages
+    .map((image, index) => `('${image.id}'::uuid, ${index})`)
+    .join(', ')}) AS "cafe_images_updated"("id", "index")
+  WHERE "cafe_images_updated"."id" = "cafe_images"."id"`
+      );
+
+      await checkConsistency(manager, cafeId);
+
+      return deletedImage.id;
+    });
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      cafe: {
+        id: cafeId,
+        image: {
+          list: [
+            {
+              id: deletedImageId,
+            },
+          ],
+        },
+      },
+    };
+  },
+  {
+    schema: {
+      params: joi
+        .object()
+        .keys({
+          cafeId: joi.string().uuid({ version: 'uuidv4' }).required(),
+          cafeImageId: joi.string().uuid({ version: 'uuidv4' }).required(),
+        })
+        .required(),
+    },
+    requiredRules: (ctx) =>
+      new OperationSchema({
+        operationType: OperationType.mutation,
+        operation: 'api.cafe.image',
+        resource: ctx.params.cafeImageId,
+      }),
+  }
+);
