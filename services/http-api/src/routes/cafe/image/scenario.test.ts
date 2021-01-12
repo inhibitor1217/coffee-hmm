@@ -2,6 +2,7 @@ import { SuperTest, Test } from 'supertest';
 import { Connection, createConnection } from 'typeorm';
 import * as uuid from 'uuid';
 import { HTTP_CREATED, HTTP_OK } from '../../../const';
+import { CafeState } from '../../../entities/cafe';
 import {
   cleanDatabase,
   closeServer,
@@ -74,6 +75,7 @@ describe('Integrated endpoint test for cafe image mutation', () => {
     const { cafe } = await setupCafe(connection, {
       name: '알레그리아',
       placeId: place.id,
+      state: CafeState.active,
     });
 
     const responses = [];
@@ -84,7 +86,11 @@ describe('Integrated endpoint test for cafe image mutation', () => {
         'x-debug-user-id': uuid.v4(),
         'x-debug-iam-policy': adminerPolicyString,
       })
-      .send({ uri: '/images/0.png', metadata: ['이미지 1'], state: 'active' })
+      .send({
+        uri: '/images/0.png',
+        metadata: { tags: ['이미지 1'] },
+        state: 'active',
+      })
       .expect(HTTP_CREATED);
 
     await request
@@ -93,7 +99,11 @@ describe('Integrated endpoint test for cafe image mutation', () => {
         'x-debug-user-id': uuid.v4(),
         'x-debug-iam-policy': adminerPolicyString,
       })
-      .send({ uri: '/images/1.png', metadata: ['이미지 2'], state: 'active' })
+      .send({
+        uri: '/images/1.png',
+        metadata: { tags: ['이미지 2'] },
+        state: 'active',
+      })
       .expect(HTTP_CREATED);
 
     await request
@@ -102,7 +112,11 @@ describe('Integrated endpoint test for cafe image mutation', () => {
         'x-debug-user-id': uuid.v4(),
         'x-debug-iam-policy': adminerPolicyString,
       })
-      .send({ uri: '/images/2.png', metadata: ['이미지 3'], state: 'hidden' })
+      .send({
+        uri: '/images/2.png',
+        metadata: { tags: ['이미지 3'] },
+        state: 'hidden',
+      })
       .expect(HTTP_CREATED);
 
     responses.push(await request.get(`/cafe/${cafe.id}`).expect(HTTP_OK));
@@ -152,7 +166,11 @@ describe('Integrated endpoint test for cafe image mutation', () => {
         'x-debug-user-id': uuid.v4(),
         'x-debug-iam-policy': adminerPolicyString,
       })
-      .send({ uri: '/images/3.png', metadata: ['이미지 3'], state: 'active' })
+      .send({
+        uri: '/images/3.png',
+        metadata: { tags: ['이미지 3'] },
+        state: 'active',
+      })
       .expect(HTTP_CREATED);
 
     await request
@@ -165,7 +183,7 @@ describe('Integrated endpoint test for cafe image mutation', () => {
         'x-debug-user-id': uuid.v4(),
         'x-debug-iam-policy': adminerPolicyString,
       })
-      .send({ metadata: ['이미지 2', '메인'] });
+      .send({ metadata: { tags: ['이미지 2', '메인'] } });
 
     responses.push(await request.get(`/cafe/${cafe.id}`).expect(HTTP_OK));
 
@@ -208,7 +226,7 @@ describe('Integrated endpoint test for cafe image mutation', () => {
     expect(
       (responses[2].body as GetSingleCafeResponseBody).cafe.image.list[0]
         .metadata
-    ).toEqual(['이미지 2', '메인']);
+    ).toEqual({ tags: ['이미지 2', '메인'] });
     expect(
       (responses[2].body as GetSingleCafeResponseBody).cafe.image.list[1]
         .relativeUri
