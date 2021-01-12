@@ -1172,7 +1172,7 @@ describe('Cafe Image - DELETE /cafe/:cafeId/image/:cafeImageId', () => {
     expect(updatedImages[2].toJsonObject()).toMatchObject({
       id: cafeImages[3].id,
       index: 2,
-      isMain: true,
+      isMain: false,
       state: 'active',
     });
   });
