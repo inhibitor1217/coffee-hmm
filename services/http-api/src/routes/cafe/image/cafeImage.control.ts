@@ -163,11 +163,108 @@ const checkConsistency = async (manager: EntityManager, cafeId: string) => {
       );
     }
   });
+
+  return images;
 };
 
-export const updateList = handler(() => {
-  throw new Exception(ExceptionCode.notImplemented);
-});
+export const updateList: KoaRouteHandler<
+  {
+    cafeId: string;
+  },
+  VariablesMap,
+  {
+    list: {
+      id: string;
+      index?: number;
+      isMain?: boolean;
+    }[];
+  }
+> = handler(
+  async (ctx) => {
+    if (!ctx.request.body) {
+      throw new Exception(ExceptionCode.badRequest);
+    }
+
+    const { cafeId } = ctx.params;
+    const { list } = ctx.request.body;
+
+    const connection = await ctx.state.connection();
+
+    const cafeImages = await connection.transaction(async (manager) => {
+      const [, affected] = (await manager.query(
+        `UPDATE "cafe_images" SET
+  "index" = COALESCE("cafe_images_updated"."index"::smallint, "cafe_images"."index"),
+  "is_main" = COALESCE("cafe_images_updated"."is_main"::boolean, "cafe_images"."is_main")
+  FROM (VALUES ${list
+    .map(
+      ({ id, index, isMain }) =>
+        `('${id}'::uuid, ${index ?? 'NULL'}, ${((
+          value: boolean | undefined
+        ) => {
+          switch (value) {
+            case true:
+              return 'TRUE';
+            case false:
+              return 'FALSE';
+            default:
+              return 'NULL';
+          }
+        })(isMain)})`
+    )
+    .join(', ')}) AS "cafe_images_updated"("id", "index", "is_main")
+  WHERE "cafe_images_updated"."id" = "cafe_images"."id"
+    AND "cafe_images"."state" IS DISTINCT FROM ${CafeImageState.deleted}
+    AND "cafe_images"."fk_cafe_id" = '${cafeId}'::uuid`
+      )) as [never[], number];
+
+      if (affected < list.length) {
+        throw new Exception(ExceptionCode.notFound);
+      }
+
+      return checkConsistency(manager, cafeId);
+    });
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      cafe: {
+        id: cafeId,
+        image: {
+          count: cafeImages.length,
+          list: cafeImages.map((cafe) => cafe.toJsonObject()),
+        },
+      },
+    };
+  },
+  {
+    schema: {
+      params: joi
+        .object()
+        .keys({ cafeId: joi.string().uuid({ version: 'uuidv4' }).required() })
+        .required(),
+      body: joi
+        .object()
+        .keys({
+          list: joi
+            .array()
+            .items(
+              joi.object().keys({
+                id: joi.string().uuid({ version: 'uuidv4' }).required(),
+                index: joi.number().integer().min(0),
+                isMain: joi.boolean(),
+              })
+            )
+            .required(),
+        })
+        .required(),
+    },
+    requiredRules: (ctx) =>
+      new OperationSchema({
+        operationType: OperationType.mutation,
+        operation: 'api.cafe.image',
+        resource: ctx.params.cafeId,
+      }),
+  }
+);
 
 export const updateOne: KoaRouteHandler<
   {
