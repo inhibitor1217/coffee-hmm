@@ -339,16 +339,16 @@ describe('Cafe Image - PUT /cafe/:cafeId/image', () => {
       .send({
         list: [
           {
-            id: cafeImages[1],
+            id: cafeImages[1].id,
             index: 0,
             isMain: true,
           },
           {
-            id: cafeImages[0],
+            id: cafeImages[0].id,
             index: 3,
           },
           {
-            id: cafeImages[3],
+            id: cafeImages[3].id,
             index: 1,
             isMain: false,
           },
@@ -782,7 +782,7 @@ describe('Cafe Image - PUT /cafe/:cafeId/image', () => {
             isMain: true,
           },
           {
-            id: cafeImages[1],
+            id: cafeImages[1].id,
             isMain: false,
           },
         ],
