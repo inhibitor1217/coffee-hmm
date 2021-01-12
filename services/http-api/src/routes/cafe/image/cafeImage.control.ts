@@ -283,9 +283,114 @@ export const updateOne: KoaRouteHandler<
   }
 );
 
-export const deleteList = handler(() => {
-  throw new Exception(ExceptionCode.notImplemented);
-});
+const reassignIndices = async (manager: EntityManager, cafeId: string) => {
+  const cafeImages = await manager
+    .createQueryBuilder(CafeImage, 'cafe_image')
+    .select()
+    .where(`cafe_image.fk_cafe_id = :cafeId`, { cafeId })
+    .andWhere(`cafe_image.state IS DISTINCT FROM :deleted`, {
+      deleted: CafeImageState.deleted,
+    })
+    .orderBy(`cafe_image.index`, 'ASC')
+    .getMany();
+
+  await manager.query(
+    `UPDATE "cafe_images" SET
+  "index" = "cafe_images_updated"."index"
+  FROM (VALUES ${cafeImages
+    .map((image, index) => `('${image.id}'::uuid, ${index})`)
+    .join(', ')}) AS "cafe_images_updated"("id", "index")
+  WHERE "cafe_images_updated"."id" = "cafe_images"."id"`
+  );
+};
+
+export const deleteList: KoaRouteHandler<
+  {
+    cafeId: string;
+  },
+  VariablesMap,
+  {
+    list: string[];
+  }
+> = handler(
+  async (ctx) => {
+    if (!ctx.request.body) {
+      throw new Exception(ExceptionCode.badRequest);
+    }
+
+    const { cafeId } = ctx.params;
+    const { list } = ctx.request.body;
+
+    const connection = await ctx.state.connection();
+
+    await connection.transaction(async (manager) => {
+      const deletedImages = await manager
+        .createQueryBuilder()
+        .update(CafeImage)
+        .set({
+          state: CafeImageState.deleted,
+        })
+        .whereInIds(list)
+        .andWhere(`cafe_images.fk_cafe_id = :cafeId`, { cafeId })
+        .andWhere(`cafe_images.state IS DISTINCT FROM :deleted`, {
+          deleted: CafeImageState.deleted,
+        })
+        .returning(CafeImage.columns)
+        .execute()
+        .then((updateResult) => {
+          if ((updateResult.affected ?? 0) < list.length) {
+            throw new Exception(ExceptionCode.notFound);
+          }
+          return (updateResult.raw as Record<string, unknown>[]).map((raw) =>
+            CafeImage.fromRawColumns(raw)
+          );
+        });
+
+      if (deletedImages.some((image) => image.isMain)) {
+        throw new Exception(
+          ExceptionCode.badRequest,
+          `cannot delete main image of a cafe`
+        );
+      }
+
+      await reassignIndices(manager, cafeId);
+      await checkConsistency(manager, cafeId);
+    });
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      cafe: {
+        id: cafeId,
+        image: {
+          list: list.map((id) => ({ id })),
+        },
+      },
+    };
+  },
+  {
+    schema: {
+      params: joi
+        .object()
+        .keys({ cafeId: joi.string().uuid({ version: 'uuidv4' }).required() })
+        .required(),
+      body: joi
+        .object()
+        .keys({
+          list: joi
+            .array()
+            .items(joi.string().uuid({ version: 'uuidv4' }))
+            .required(),
+        })
+        .required(),
+    },
+    requiredRules: (ctx) =>
+      new OperationSchema({
+        operationType: OperationType.mutation,
+        operation: 'api.cafe.image',
+        resource: ctx.params.cafeId,
+      }),
+  }
+);
 
 export const deleteOne: KoaRouteHandler<{
   cafeId: string;
@@ -319,25 +424,7 @@ export const deleteOne: KoaRouteHandler<{
           );
         });
 
-      const cafeImages = await manager
-        .createQueryBuilder(CafeImage, 'cafe_image')
-        .select()
-        .where(`cafe_image.fk_cafe_id = :cafeId`, { cafeId })
-        .andWhere(`cafe_image.state IS DISTINCT FROM :deleted`, {
-          deleted: CafeImageState.deleted,
-        })
-        .orderBy(`cafe_image.index`, 'ASC')
-        .getMany();
-
-      await manager.query(
-        `UPDATE "cafe_images" SET
-  "index" = "cafe_images_updated"."index"
-  FROM (VALUES ${cafeImages
-    .map((image, index) => `('${image.id}'::uuid, ${index})`)
-    .join(', ')}) AS "cafe_images_updated"("id", "index")
-  WHERE "cafe_images_updated"."id" = "cafe_images"."id"`
-      );
-
+      await reassignIndices(manager, cafeId);
       await checkConsistency(manager, cafeId);
 
       return deletedImage.id;
