@@ -10,9 +10,8 @@ import {
   createUserPolicyLoader,
   createUserProfileLoader,
 } from '../entities/user';
-import { AppStage } from '../types/env';
 import { KoaContextState } from '../types/koa';
-import { appStage, env } from '../util';
+import { env } from '../util';
 import entities from '../entities';
 
 const createDataLoaders = (context: KoaContextState) => ({
@@ -65,10 +64,6 @@ const db = (): Middleware<KoaContextState> => {
     ctx.state.loaders = createDataLoaders(ctx.state);
 
     await next();
-
-    if (appStage() !== AppStage.local) {
-      await connection?.close();
-    }
   };
 };
 
