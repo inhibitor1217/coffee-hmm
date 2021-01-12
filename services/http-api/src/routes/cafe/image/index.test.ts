@@ -916,7 +916,7 @@ describe('Cafe Image - PUT /cafe/:cafeId/image/:cafeImageId', () => {
     };
 
     expect(id).toBe(cafe.id);
-    expect(imageId).toBe(cafeImages[1].id);
+    expect(imageId).toBe(cafeImages[0].id);
     expect(index).toBe(0);
     expect(isMain).toBe(true);
     expect(metadata).toBe(null);
