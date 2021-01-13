@@ -4,8 +4,7 @@ import path from 'path';
 import { Connection, ConnectionOptions, createConnection } from 'typeorm';
 import { KoaContextState } from '../types/koa';
 import entities from '../entities';
-import { appStage, env } from '../util';
-import { AppStage } from '../types/env';
+import { env } from '../util';
 import { createCafeLoader, createCafeWithImagesLoader } from '../entities/cafe';
 
 const createDataLoaders = (ctx: ParameterizedContext<KoaContextState>) => {
@@ -66,10 +65,6 @@ const db = (): Middleware<KoaContextState> => {
     ctx.state.loaders = createDataLoaders(ctx);
 
     await next();
-
-    if (appStage() !== AppStage.local) {
-      await connection?.close();
-    }
   };
 };
 
