@@ -104,6 +104,47 @@ Retrieve an access token, which the client can use for other services to access 
 }
 ```
 
+### `GET /me`
+
+Retrieve information about myself, authenticated by the provided id token.
+
+**Required Rule**
+
+```
+(none)
+```
+
+**Query Parameters**
+
+| **Name**   | **Type**     | **Required?** | **Description**                                                                                                                               |
+| ---------- | ------------ | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id_token` | string (JWT) | yes           | This token will be used to verify and identify the user. The firebase user should have invoked `POST /register` endpoint to retrieve a token. |
+
+**Request Example**
+
+```
+(empty)
+```
+
+**Response Example**
+
+```
+{
+  "user": {
+    "id": "11111111-1111-1111-111111111111",
+    "createdAt": "2020-01-01T00:00:00.000Z",
+    "updatedAt": "2020-01-01T00:00:00.000Z",
+    "lastSignedAt": "2020-01-01T00:00:00.000Z",           // nullable
+    "userProfileId": "11111111-1111-1111-111111111111",
+    "policyId": "11111111-1111-1111-111111111111",
+    "state": "active",                                    // "active" | "deleted"
+    "provider": "google",                                 // "google"
+    "providerUserId": "<provider-id>"                     // a unique id from login provider.
+    "providerUserEmail": "<provider-user-email>"          // nullable, an email address given by the login provider.
+  }
+}
+```
+
 <a name="user"></a>
 
 ## User
