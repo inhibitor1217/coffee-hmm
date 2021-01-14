@@ -238,3 +238,54 @@ export const token: KoaRouteHandler<
     },
   }
 );
+
+export const me: KoaRouteHandler<
+  VariablesMap,
+  {
+    id_token: string;
+  }
+> = handler(
+  async (ctx) => {
+    await ctx.state.connection();
+
+    const { id_token: idToken } = ctx.query;
+    const { provider, providerUserId } = await verifyFirebaseIdToken(idToken);
+
+    const user = await getManager()
+      .createQueryBuilder(User, 'user')
+      .select()
+      .where({ provider, providerUserId })
+      .getOne();
+
+    if (!user) {
+      throw new Exception(ExceptionCode.forbidden, {
+        message: 'firebase user is not registered to service',
+        provider: AuthProvider[provider],
+        providerUserId,
+      });
+    }
+
+    await getManager()
+      .createQueryBuilder(User, 'user')
+      .update()
+      .set({ lastSignedAt: new Date(Date.now()) })
+      .where({ id: user.id })
+      .execute();
+
+    if (user.state === UserState.deleted) {
+      throw new Exception(ExceptionCode.forbidden, {
+        message: `user ${user.id} is deleted`,
+      });
+    }
+
+    ctx.status = HTTP_OK;
+    ctx.body = { user: user.toJsonObject() };
+  },
+  {
+    schema: {
+      query: Joi.object()
+        .keys({ id_token: Joi.string().required() })
+        .required(),
+    },
+  }
+);
