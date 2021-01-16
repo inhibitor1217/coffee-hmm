@@ -1,0 +1,72 @@
+.board-container {
+    width: 1200px;
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+    background-color: #ffffff;
+    border: 1px solid #D2D2D2;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.detail-title-button-wrapper {
+    width: 100%;
+    padding: 24px 0px;
+    outline: 1px solid #d2d2d2;
+    position: relative;
+}
+
+.detail-title-button-wrapper button {
+    width: 90px;
+    height: 28px;
+    border: 1px solid #d2d2d2;
+    border-radius: 8px;
+    padding: 0px; 
+    margin: 4px 8px;
+    cursor: pointer;
+
+    position: absolute;
+    bottom: 14px;
+    right: 36px;
+}
+
+.detail-title-button-wrapper span {
+    font-size: 12px;
+    font-weight: bold;
+    padding-top: 2px;
+}
+
+.detail-title-button-wrapper h3 {
+    padding-left: 24px;
+}
+
+.detail-basic-wrapper {
+    padding: 24px 24px;
+    border-bottom: 1px solid #d2d2d2;
+}
+
+.detail-basic-wrapper h4 {
+    padding-left: 12px;
+    padding-bottom: 12px;
+}
+
+.edit-on button {
+    background-color: #2E3559;
+    color: #ffffff;
+}
+
+.image-title-table-wrapper {
+    padding-top: 36px;
+}
+
+.image-title-table-wrapper h4 {
+    padding-left: 36px;
+    padding-bottom: 12px;
+}
+
+.review-title-table-wrapper {
+    padding-top: 36px;
+}
+
+.review-title-table-wrapper h4 {
+    padding-left: 36px;
+    padding-bottom: 12px;
+}

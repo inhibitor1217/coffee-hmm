@@ -1,0 +1,35 @@
+.list-button-wrapper {
+    position: absolute;
+    right: 36px;
+}
+
+.list-button-wrapper button{
+    border: 1px solid #d2d2d2;
+    border-radius: 8px;
+    padding: 0px; 
+    margin: 4px 8px;
+    cursor: pointer;
+}
+
+.list-button-wrapper i {
+    font-size: 18px;
+    color: #414750;
+    padding-top: 4px;
+}
+
+.cafe-register-button {
+    width: 90px;
+    height: 28px;
+}
+
+.cafe-register-button span {
+    font-size: 12px;
+    font-weight: bold;
+    padding-top: 2px;
+}
+
+.cafe-visible-button,
+.cafe-refresh-button {
+    width: 28px;
+    height: 28px;
+}

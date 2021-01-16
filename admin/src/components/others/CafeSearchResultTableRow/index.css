@@ -1,0 +1,14 @@
+.cafe-row-wrapper {
+    list-style: none;
+    display: flex;
+    padding: 0px;
+}
+
+.cafe-row-wrapper li {
+    float: left;
+    
+    min-width: 100px;
+    min-height: 24px;
+    padding-right: 60px;
+    font-size: 12px;
+}

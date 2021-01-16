@@ -1,0 +1,28 @@
+.review-column-wrapper {
+    list-style: none;
+    padding-left: 36px;
+    margin: 0px;
+}
+
+
+.review-column-wrapper li{
+    float: left;
+   
+    min-width: 100px;
+    min-height: 24px;
+    padding-top: 8px;
+    padding-right: 60px;
+    font-size: 12px;
+    font-weight: bold;
+
+    position: relative;
+}
+
+.review-column-wrapper li i {
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px;
+
+    position: absolute;
+    bottom: 4px;
+}
