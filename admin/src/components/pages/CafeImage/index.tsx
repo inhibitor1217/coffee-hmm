@@ -23,7 +23,7 @@ const CafeImage = () => {
     const [isCheckedAll, setCheckedAll] = useState<boolean>(false);
     const [isEditOn, setEditOn] = useState<boolean>(false);
     const [isUploadImage, setUploadImage] = useState<boolean>(false);
-    const {isModalOpen, setModalOpen} = useContext(ModalContext);
+    const {setModalOpen} = useContext(ModalContext);
 
     useEffect(() => {
 //      async function fetchReviewData(){
@@ -56,16 +56,17 @@ const CafeImage = () => {
                                                         setUploadImage={setUploadImage}/>
                         </StyledFlexColumn>
                         <form onSubmit={handleSubmit}>
-                            <Modal isModalOpen={isModalOpen}>
+                            <Modal>
                                 <ImageModal setModalOpen={setModalOpen} image={image.image} isEditOn={isEditOn} setEditOn={setEditOn}/>
                             </Modal>
                         </form>
-
-                        <form onSubmit={handleUpload}>
-                            <Modal isModalOpen={isModalOpen && isUploadImage}>
-                                <UploadImageModal setModalOpen={setModalOpen} setUploadImage={setUploadImage}/>
-                            </Modal>
-                        </form>
+                        <div style={{display: isUploadImage? "block":"none"}}>
+                            <form onSubmit={handleUpload}>
+                                <Modal>
+                                    <UploadImageModal setModalOpen={setModalOpen} setUploadImage={setUploadImage}/>
+                                </Modal>
+                            </form>
+                        </div>
                     </div>
                 )
             }}

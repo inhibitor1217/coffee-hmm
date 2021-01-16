@@ -32,6 +32,11 @@ const ViewAlbum = ({ setViewAlbum, photoList, addPhoto, deletePhoto }: ViewAlbum
         addPhoto(album, files);
     }
 
+    const handleDeleteClick = (photoKey: string | undefined) => {
+        if(! photoKey) return;
+        deletePhoto(album, photoKey)
+    }
+
     return(
         <div>
             <button onClick={() => setViewAlbum(false)}><i className="material-icons">arrow_back</i></button>
@@ -46,7 +51,7 @@ const ViewAlbum = ({ setViewAlbum, photoList, addPhoto, deletePhoto }: ViewAlbum
                     return(
                         <div key={index}>
                             <img src={photo.photoUrl} alt="" style={{width: "128px", height: "128px"}}/>
-                            <span onClick={() => deletePhoto(album, photo.photoKey === undefined? "":photo.photoKey)}>DELETE</span>
+                            <span onClick={() => handleDeleteClick(photo.photoKey)}>DELETE</span>
                             <span>{photo.photoKey?.replace(photo.albumPhotosKey, "")}</span>
                         </div>
                     )

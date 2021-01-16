@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/aws-sdk": "^2.7.0",
     "aws-sdk": "^2.820.0",
     "firebase": "^8.2.2",
     "react": "^17.0.1",
@@ -24,7 +23,8 @@
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.6",
-    "@types/styled-components": "^5.1.7"
+    "@types/styled-components": "^5.1.7",
+    "@types/aws-sdk": "^2.7.0"
   },
   "scripts": {
     "start": "react-scripts start",

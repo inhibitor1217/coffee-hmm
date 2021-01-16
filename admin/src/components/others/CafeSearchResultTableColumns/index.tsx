@@ -2,40 +2,40 @@ import React, { useState } from 'react';
 import './index.css';
 
 const CafeSearchResultTableColumns = () => {
-    const [isSortByCreatedAt, setSortByCreatedAt] = useState<boolean>(false);
-    const [isSortByImages, setSortByImages] = useState<boolean>(false);
-    const [isSortByReviews, setSortByReviews] = useState<boolean>(false);
+    const [sortBy, setSortBy] = useState<string>();
+    const [ascending, setAscending] = useState<boolean>(false);
 
-    const handleClick = (sortBy: string) => {
-        switch(sortBy){
+    
+    const handleClick = (sortClicked: string) => {
+        if(sortClicked !== sortBy){
+            setAscending(false);
+        }
+        switch(sortClicked){
             case "createdAt" :
-                if(isSortByCreatedAt){
-                    setSortByCreatedAt(false);
+                if(ascending){
+                    setAscending(false);
                 }else{
-                    setSortByCreatedAt(true);
-                    setSortByImages(false);
-                    setSortByReviews(false);
+                   setAscending(true);
                 }
+                setSortBy("createdAt");
                 break;
 
             case "images" :
-                if(isSortByImages){
-                    setSortByImages(false);
+                if(ascending){
+                    setAscending(false);
                 }else{
-                    setSortByCreatedAt(false);
-                    setSortByImages(true);
-                    setSortByReviews(false);
+                   setAscending(true);
                 }
+                setSortBy("images");
                 break;
 
             case "reviews" :
-                if(isSortByReviews){
-                    setSortByReviews(false);
+                if(ascending){
+                    setAscending(false);
                 }else{
-                    setSortByCreatedAt(false);
-                    setSortByImages(false);
-                    setSortByReviews(true); 
+                   setAscending(true);
                 }
+                setSortBy("reviews");
                 break;   
         }
     }
@@ -46,9 +46,9 @@ const CafeSearchResultTableColumns = () => {
             <li>PLACE</li>
             <li>HOUR</li>
             <li>STATUS</li>
-            <li>CREATED AT <i className="material-icons-round" onClick={() => handleClick("createdAt")}>{isSortByCreatedAt? `arrow_drop_up` : `arrow_drop_down`}</i></li>
-            <li>IMAGES <i className="material-icons-round" onClick={() => handleClick("images")}>{isSortByImages? `arrow_drop_up` : `arrow_drop_down`}</i></li>
-            <li>REVIEWS <i className="material-icons-round" onClick={() => handleClick("reviews")}>{isSortByReviews? `arrow_drop_up` : `arrow_drop_down`}</i></li>
+            <li>CREATED AT <i className="material-icons-round" onClick={() => handleClick("createdAt")}>{(sortBy === "createdAt") && ascending? `arrow_drop_up` : `arrow_drop_down`}</i></li>
+            <li>IMAGES <i className="material-icons-round" onClick={() => handleClick("images")}>{(sortBy === "images") && ascending? `arrow_drop_up` : `arrow_drop_down`}</i></li>
+            <li>REVIEWS <i className="material-icons-round" onClick={() => handleClick("reviews")}>{(sortBy === "reviews") && ascending? `arrow_drop_up` : `arrow_drop_down`}</i></li>
         </ul>
     )
 }

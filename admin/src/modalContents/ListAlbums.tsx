@@ -39,7 +39,7 @@ const ListAlbums = ({imageFolderList, createAlbum, deleteAlbum, viewAlbum, setVi
         <div>
             {imageFolderList.CommonPrefixes.map((commonPrefix: AWS.S3.CommonPrefix, index) => {
                 let prefix = commonPrefix.Prefix;
-                let albumName = decodeURIComponent((prefix === undefined? "" : prefix).replace("/", ""));
+                let albumName = decodeURIComponent((prefix || '').replace("/", ""));
                 return(
                     <div key={index}>
                         <li onClick={() => deleteAlbum(albumName)}><span>DELETE</span></li>

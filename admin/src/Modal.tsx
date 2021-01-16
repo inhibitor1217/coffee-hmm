@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-
-const XPos = window.innerWidth;
+import { ModalContext } from './context';
 
 const ModalWrapper = styled.div`
   position: absolute;
@@ -16,15 +15,34 @@ const ModalWrapper = styled.div`
   outline: 1px solid #d2d2d2;
 `;
 
-type ModalProps = {
-  isModalOpen: boolean;
-}
+const Modal: React.FC = ({children}) => {
+  const [width, setWidth] = useState<number | null>(null);
+  const modalSizeRef = useRef<HTMLDivElement>(null);
+  const {isModalOpen} = useContext(ModalContext);
 
-const Modal: React.FC<ModalProps> = ({isModalOpen, children}) => {
+  const updateWidth = () => {
+    if(modalSizeRef.current){
+      setWidth(modalSizeRef.current.clientWidth);
+    }
+  }
+
+  useEffect(() => {
+    updateWidth();
+  }, [])
+
+  useEffect(() => {
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
+  }, [])
+
   return createPortal(
-    <ModalWrapper style={{transform: isModalOpen? `translate(${XPos - 480}px, 0px)` : `translate(${XPos + 480}px,0)`}}>
-      <div>{children}</div>
-    </ModalWrapper>,
+    <div ref={modalSizeRef}>
+      {width && 
+        <ModalWrapper style={{transform: isModalOpen? `translate(${width - 480}px, 0px)` : `translate(${width + 480}px,0)`}}>
+          <div>{children}</div>
+        </ModalWrapper>
+      }
+    </div>,
     document.body
   );
 }

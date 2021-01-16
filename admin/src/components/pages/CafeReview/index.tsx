@@ -30,7 +30,7 @@ const CafeReview = () => {
     const [reviewLoading, setReviewLoading] = useState(false);
     const [isCheckedAll, setCheckedAll] = useState<boolean>(false);
     const [isEditOn, setEditOn] = useState<boolean>(false);
-    const {isModalOpen, setModalOpen} = useContext(ModalContext);
+    const {setModalOpen} = useContext(ModalContext);
    
     useEffect(() => {
 //      async function fetchReviewData(){
@@ -56,7 +56,7 @@ const CafeReview = () => {
                                             isCheckedAll={isCheckedAll} setCheckedAll={setCheckedAll}/>
                         </StyledFlexColumn>
                         <form onSubmit={handleSubmit}>
-                            <Modal isModalOpen={isModalOpen}>
+                            <Modal>
                                 <ReviewModal setModalOpen={setModalOpen} review={review.review} isEditOn={isEditOn} setEditOn={setEditOn}/>
                             </Modal>
                         </form>
