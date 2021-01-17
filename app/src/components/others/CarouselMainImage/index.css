@@ -1,10 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Alef&family=Modak&family=Poor+Story&display=swap');
 
-.cafe-box img{
+.carousel-img img{
+    width: 80%;
+    height: 80%;
     box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
     object-fit: cover;
     border-radius: 12px;
-    transition: all 0.5s ease 0s;
+    transition: all 1s ease 0s;
 }
 
 .cafe-detail {
@@ -23,7 +25,7 @@
     height: 32px;
     background: rgba(82, 79, 74, 0.8);
     border-radius: 0px 0px 12px 12px;
-    transition: all 0.5s ease 0s;
+    transition: all 1s ease 0s;
 
     position: absolute;
     bottom: 12px;

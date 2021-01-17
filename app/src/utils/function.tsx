@@ -60,11 +60,11 @@ export const moveDownOrRight = (current: number, setIndex:(index: number)=>void,
 }
 
 export const slideImageSize = (index: number, current: number) => {
-    if(index === current){
-        return true;
-    }else{
-        return false;
-    }
+  if (index === current){
+    return true;
+  }else{
+    return false;
+  }
 }
 
 export const openSearch = (searchedData: string, searchEngine: string) => {
