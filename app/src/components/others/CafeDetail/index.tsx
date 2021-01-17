@@ -9,16 +9,16 @@ import './index.css';
 
 type CafeDetailProps = {
     cafe: CafeInfo;
-    setIsClicked: (click: boolean) => void;
+    setCafe: (cafe: CafeInfo | null) => void;
 }
 
-const CafeDetail = ({ cafe, setIsClicked}: CafeDetailProps) => {
+const CafeDetail = ({ cafe, setCafe}: CafeDetailProps) => {
     const [isWebSearchClicked, setWebSearchClicked] = useState<boolean>(false);
     const currentCopyLink = `https://coffee-hmm.inhibitor.io/cafe/${cafe.id}`;
 
     return(
         <div>
-            <button className="detail-close-button" onClick={() => setIsClicked(false)}><i className="material-icons">cancel</i></button>
+            <button className="detail-close-button" onClick={() => setCafe(null)}><i className="material-icons">cancel</i></button>
             <CafeImageSlide cafe={cafe}/>
 
             <StyledColumnFlex>
