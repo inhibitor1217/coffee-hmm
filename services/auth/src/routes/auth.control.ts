@@ -10,7 +10,7 @@ import User, {
   UserState,
 } from '../entities/user';
 import UserProfile from '../entities/userProfile';
-import { KoaRouteHandler, VariablesMap } from '../types/koa';
+import { VariablesMap } from '../types/koa';
 import Exception, { ExceptionCode } from '../util/error';
 import { generateDefaultUserPolicy } from '../util/iam';
 import { generateToken, TokenSubject } from '../util/token';
@@ -42,7 +42,7 @@ const verifyFirebaseIdToken = async (idToken: string) => {
   }
 };
 
-export const register: KoaRouteHandler<
+export const register = handler<
   VariablesMap,
   {
     id_token: string;
@@ -53,7 +53,7 @@ export const register: KoaRouteHandler<
       email?: string;
     };
   }
-> = handler(
+>(
   async (ctx) => {
     if (!ctx.request.body) {
       throw new Exception(ExceptionCode.badRequest);
@@ -169,12 +169,12 @@ export const register: KoaRouteHandler<
   }
 );
 
-export const token: KoaRouteHandler<
+export const token = handler<
   VariablesMap,
   {
     id_token: string;
   }
-> = handler(
+>(
   async (ctx) => {
     await ctx.state.connection();
 
@@ -239,12 +239,12 @@ export const token: KoaRouteHandler<
   }
 );
 
-export const me: KoaRouteHandler<
+export const me = handler<
   VariablesMap,
   {
     id_token: string;
   }
-> = handler(
+>(
   async (ctx) => {
     await ctx.state.connection();
 

@@ -7,15 +7,15 @@ import { HTTP_OK } from '../../const';
 import User, { UserState, UserStateStrings } from '../../entities/user';
 import UserProfile from '../../entities/userProfile';
 import { SortOrder, SortOrderStrings } from '../../types';
-import { KoaRouteHandler, VariablesMap } from '../../types/koa';
+import { VariablesMap } from '../../types/koa';
 import { enumKeyStrings } from '../../util';
 import Exception, { ExceptionCode } from '../../util/error';
 import { OperationSchema, OperationType } from '../../util/iam';
 import handler from '../handler';
 
-export const getSingleUser: KoaRouteHandler<{
+export const getSingleUser = handler<{
   userId: string;
-}> = handler(
+}>(
   async (ctx) => {
     await ctx.state.connection();
 
@@ -49,7 +49,7 @@ export const getSingleUser: KoaRouteHandler<{
   }
 );
 
-export const getUserCount: KoaRouteHandler = handler(
+export const getUserCount = handler(
   async (ctx) => {
     await ctx.state.connection();
 
@@ -82,7 +82,7 @@ enum UserListOrder {
 
 type UserListOrderStrings = keyof typeof UserListOrder;
 
-export const getUserList: KoaRouteHandler<
+export const getUserList = handler<
   VariablesMap,
   {
     limit: number;
@@ -90,7 +90,7 @@ export const getUserList: KoaRouteHandler<
     orderBy?: UserListOrderStrings;
     order?: SortOrderStrings;
   }
-> = handler(
+>(
   async (ctx) => {
     const {
       limit,
@@ -212,7 +212,7 @@ export const getUserList: KoaRouteHandler<
   }
 );
 
-export const putUserState: KoaRouteHandler<
+export const putUserState = handler<
   {
     userId: string;
   },
@@ -220,7 +220,7 @@ export const putUserState: KoaRouteHandler<
   {
     state: UserStateStrings;
   }
-> = handler(
+>(
   async (ctx) => {
     if (!ctx.request.body) {
       throw new Exception(ExceptionCode.badRequest);
@@ -272,9 +272,9 @@ export const putUserState: KoaRouteHandler<
   }
 );
 
-export const getUserProfile: KoaRouteHandler<{
+export const getUserProfile = handler<{
   userId: string;
-}> = handler(
+}>(
   async (ctx) => {
     const { userId } = ctx.params;
 
@@ -306,7 +306,7 @@ export const getUserProfile: KoaRouteHandler<{
   }
 );
 
-export const putUserProfile: KoaRouteHandler<
+export const putUserProfile = handler<
   {
     userId: string;
   },
@@ -315,7 +315,7 @@ export const putUserProfile: KoaRouteHandler<
     name?: string;
     email?: string | null;
   }
-> = handler(
+>(
   async (ctx) => {
     if (!ctx.request.body) {
       throw new Exception(ExceptionCode.badRequest);
@@ -372,9 +372,9 @@ export const putUserProfile: KoaRouteHandler<
   }
 );
 
-export const getUserPolicy: KoaRouteHandler<{
+export const getUserPolicy = handler<{
   userId: string;
-}> = handler(
+}>(
   async (ctx) => {
     const { userId } = ctx.params;
 
@@ -410,7 +410,7 @@ export const getUserPolicy: KoaRouteHandler<{
   }
 );
 
-export const putUserPolicy: KoaRouteHandler<
+export const putUserPolicy = handler<
   {
     userId: string;
   },
@@ -418,7 +418,7 @@ export const putUserPolicy: KoaRouteHandler<
   {
     policyId: string;
   }
-> = handler(
+>(
   async (ctx) => {
     if (!ctx.request.body) {
       throw new Exception(ExceptionCode.badRequest);

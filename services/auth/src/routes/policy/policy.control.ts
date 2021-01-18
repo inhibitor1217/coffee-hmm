@@ -4,20 +4,20 @@ import { FOREIGN_KEY_VIOLATION, UNIQUE_VIOLATION } from 'pg-error-constants';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
 import Policy from '../../entities/policy';
 import { SortOrder, SortOrderStrings } from '../../types';
-import { KoaRouteHandler, VariablesMap } from '../../types/koa';
+import { VariablesMap } from '../../types/koa';
 import { enumKeyStrings } from '../../util';
 import Exception, { ExceptionCode } from '../../util/error';
 import { IamPolicy, OperationSchema, OperationType } from '../../util/iam';
 import handler from '../handler';
 
-export const postPolicy: KoaRouteHandler<
+export const postPolicy = handler<
   VariablesMap,
   VariablesMap,
   {
     name: string;
     value: string;
   }
-> = handler(
+>(
   async (ctx) => {
     if (!ctx.request.body) {
       throw new Exception(ExceptionCode.badRequest);
@@ -77,9 +77,9 @@ export const postPolicy: KoaRouteHandler<
   }
 );
 
-export const getSinglePolicy: KoaRouteHandler<{
+export const getSinglePolicy = handler<{
   policyId: string;
-}> = handler(
+}>(
   async (ctx) => {
     const { policyId } = ctx.params;
 
@@ -113,7 +113,7 @@ export const getSinglePolicy: KoaRouteHandler<{
   }
 );
 
-export const getPolicyCount: KoaRouteHandler = handler(
+export const getPolicyCount = handler(
   async (ctx) => {
     await ctx.state.connection();
 
@@ -144,7 +144,7 @@ enum PolicyListOrder {
 
 type PolicyListOrderStrings = keyof typeof PolicyListOrder;
 
-export const getPolicyList: KoaRouteHandler<
+export const getPolicyList = handler<
   VariablesMap,
   {
     limit: number;
@@ -152,7 +152,7 @@ export const getPolicyList: KoaRouteHandler<
     orderBy?: PolicyListOrderStrings;
     order?: SortOrderStrings;
   }
-> = handler(
+>(
   async (ctx) => {
     const {
       limit,
@@ -254,7 +254,7 @@ export const getPolicyList: KoaRouteHandler<
   }
 );
 
-export const putPolicy: KoaRouteHandler<
+export const putPolicy = handler<
   {
     policyId: string;
   },
@@ -263,7 +263,7 @@ export const putPolicy: KoaRouteHandler<
     name?: string;
     value?: string;
   }
-> = handler(
+>(
   async (ctx) => {
     if (!ctx.request.body) {
       throw new Exception(ExceptionCode.badRequest);
@@ -341,9 +341,9 @@ export const putPolicy: KoaRouteHandler<
   }
 );
 
-export const deletePolicy: KoaRouteHandler<{
+export const deletePolicy = handler<{
   policyId: string;
-}> = handler(
+}>(
   async (ctx) => {
     const { policyId } = ctx.params;
 

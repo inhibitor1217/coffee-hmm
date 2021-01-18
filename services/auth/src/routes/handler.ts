@@ -8,7 +8,7 @@ import Exception, { ExceptionCode } from '../util/error';
 import { OperationSchema } from '../util/iam';
 
 const normalizeRequiredRules = <
-  ParamsT = VariablesMap,
+  ParamsT extends VariablesMap = VariablesMap,
   QueryT = VariablesMap,
   BodyT = AnyJson
 >(
@@ -33,13 +33,13 @@ const normalizeRequiredRules = <
 };
 
 const handler = <
-  ParamsT = VariablesMap,
+  ParamsT extends VariablesMap = VariablesMap,
   QueryT = VariablesMap,
   BodyT = AnyJson
 >(
   routeHandler: KoaRouteHandler<ParamsT, QueryT, BodyT>,
   options?: KoaRouteHandlerOptions<ParamsT, QueryT, BodyT>
-): KoaRouteHandler<ParamsT, QueryT, BodyT> => async (ctx) => {
+): KoaRouteHandler<Record<string, string>, QueryT, BodyT> => async (ctx) => {
   if (options?.schema?.params) {
     const validation = options.schema.params.validate(ctx.params);
     if (validation.error) {
@@ -71,7 +71,7 @@ const handler = <
   }
 
   const requiredRules = normalizeRequiredRules<ParamsT, QueryT, BodyT>(
-    ctx,
+    ctx as KoaContext<ParamsT, QueryT, BodyT>,
     options?.requiredRules
   );
 
@@ -85,7 +85,7 @@ const handler = <
     });
   }
 
-  await routeHandler(ctx);
+  await routeHandler(ctx as KoaContext<ParamsT, QueryT, BodyT>);
 };
 
 export default handler;
