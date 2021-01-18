@@ -3,12 +3,12 @@ import { FOREIGN_KEY_VIOLATION, UNIQUE_VIOLATION } from 'pg-error-constants';
 import { getRepository } from 'typeorm';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
 import Place from '../../entities/place';
-import { KoaRouteHandler, VariablesMap } from '../../types/koa';
+import { VariablesMap } from '../../types/koa';
 import Exception, { ExceptionCode } from '../../util/error';
 import { OperationSchema, OperationType } from '../../util/iam';
 import handler from '../handler';
 
-export const getList: KoaRouteHandler = handler(async (ctx) => {
+export const getList = handler(async (ctx) => {
   await ctx.state.connection();
 
   const places = await getRepository(Place)
@@ -25,11 +25,7 @@ export const getList: KoaRouteHandler = handler(async (ctx) => {
   };
 });
 
-export const create: KoaRouteHandler<
-  VariablesMap,
-  VariablesMap,
-  { name: string }
-> = handler(
+export const create = handler<VariablesMap, VariablesMap, { name: string }>(
   async (ctx) => {
     if (!ctx.request.body) {
       throw new Exception(ExceptionCode.badRequest);
@@ -78,11 +74,11 @@ export const create: KoaRouteHandler<
   }
 );
 
-export const updateOne: KoaRouteHandler<
+export const updateOne = handler<
   { placeId: string },
   VariablesMap,
   { name: string }
-> = handler(
+>(
   async (ctx) => {
     if (!ctx.request.body) {
       throw new Exception(ExceptionCode.badRequest);
@@ -146,13 +142,13 @@ export const updateOne: KoaRouteHandler<
   }
 );
 
-export const deleteList: KoaRouteHandler<
+export const deleteList = handler<
   VariablesMap,
   VariablesMap,
   {
     list: string[];
   }
-> = handler(
+>(
   async (ctx) => {
     if (!ctx.request.body) {
       throw new Exception(ExceptionCode.badRequest);
@@ -215,7 +211,7 @@ export const deleteList: KoaRouteHandler<
   }
 );
 
-export const deleteOne: KoaRouteHandler<{ placeId: string }> = handler(
+export const deleteOne = handler<{ placeId: string }>(
   async (ctx) => {
     const { placeId } = ctx.params;
 

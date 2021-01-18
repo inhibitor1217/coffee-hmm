@@ -7,13 +7,13 @@ import CafeImage, {
   CafeImageStateStrings,
 } from '../../../entities/cafeImage';
 import CafeImageCount from '../../../entities/cafeImageCount';
-import { KoaRouteHandler, VariablesMap } from '../../../types/koa';
+import { VariablesMap } from '../../../types/koa';
 import { enumKeyStrings } from '../../../util';
 import Exception, { ExceptionCode } from '../../../util/error';
 import { OperationSchema, OperationType } from '../../../util/iam';
 import handler from '../../handler';
 
-export const create: KoaRouteHandler<
+export const create = handler<
   { cafeId: string },
   VariablesMap,
   {
@@ -21,7 +21,7 @@ export const create: KoaRouteHandler<
     metadata?: AnyJson;
     state?: CafeImageStateStrings;
   }
-> = handler(
+>(
   async (ctx) => {
     if (!ctx.request.body) {
       throw new Exception(ExceptionCode.badRequest);
@@ -183,7 +183,7 @@ const checkConsistency = async (manager: EntityManager, cafeId: string) => {
   return { images, total: images.length, active: activeImages.length };
 };
 
-export const updateList: KoaRouteHandler<
+export const updateList = handler<
   {
     cafeId: string;
   },
@@ -195,7 +195,7 @@ export const updateList: KoaRouteHandler<
       isMain?: boolean;
     }[];
   }
-> = handler(
+>(
   async (ctx) => {
     if (!ctx.request.body) {
       throw new Exception(ExceptionCode.badRequest);
@@ -294,7 +294,7 @@ export const updateList: KoaRouteHandler<
   }
 );
 
-export const updateOne: KoaRouteHandler<
+export const updateOne = handler<
   {
     cafeId: string;
     cafeImageId: string;
@@ -305,7 +305,7 @@ export const updateOne: KoaRouteHandler<
     metadata?: AnyJson | null;
     state?: CafeImageStateStrings;
   }
-> = handler(
+>(
   async (ctx) => {
     if (!ctx.request.body) {
       throw new Exception(ExceptionCode.badRequest);
@@ -436,7 +436,7 @@ const reassignIndices = async (manager: EntityManager, cafeId: string) => {
   );
 };
 
-export const deleteList: KoaRouteHandler<
+export const deleteList = handler<
   {
     cafeId: string;
   },
@@ -444,7 +444,7 @@ export const deleteList: KoaRouteHandler<
   {
     list: string[];
   }
-> = handler(
+>(
   async (ctx) => {
     if (!ctx.request.body) {
       throw new Exception(ExceptionCode.badRequest);
@@ -531,10 +531,10 @@ export const deleteList: KoaRouteHandler<
   }
 );
 
-export const deleteOne: KoaRouteHandler<{
+export const deleteOne = handler<{
   cafeId: string;
   cafeImageId: string;
-}> = handler(
+}>(
   async (ctx) => {
     const { cafeId, cafeImageId } = ctx.params;
 

@@ -12,13 +12,13 @@ import CafeImageCount from '../../entities/cafeImageCount';
 import CafeStatistic from '../../entities/cafeStatistic';
 import Place from '../../entities/place';
 import { SortOrder, SortOrderStrings } from '../../types';
-import { KoaRouteHandler, VariablesMap } from '../../types/koa';
+import { VariablesMap } from '../../types/koa';
 import { enumKeyStrings } from '../../util';
 import Exception, { ExceptionCode } from '../../util/error';
 import { OperationSchema, OperationType } from '../../util/iam';
 import handler from '../handler';
 
-export const getOne: KoaRouteHandler<
+export const getOne = handler<
   {
     cafeId: string;
   },
@@ -26,7 +26,7 @@ export const getOne: KoaRouteHandler<
     showHiddenImages?: boolean;
   },
   AnyJson
-> = handler(
+>(
   async (ctx) => {
     const { cafeId } = ctx.params;
     const { showHiddenImages = false } = ctx.query;
@@ -75,14 +75,14 @@ export const getOne: KoaRouteHandler<
   }
 );
 
-export const getFeed: KoaRouteHandler<
+export const getFeed = handler<
   VariablesMap,
   {
     limit: number;
     cursor?: string;
     identifier?: string;
   }
-> = handler(
+>(
   async (ctx) => {
     const { limit, cursor, identifier: _identifier } = ctx.query;
 
@@ -168,13 +168,13 @@ export const getFeed: KoaRouteHandler<
   }
 );
 
-export const getCount: KoaRouteHandler<
+export const getCount = handler<
   VariablesMap,
   {
     keyword?: string;
     showHidden?: boolean;
   }
-> = handler(
+>(
   async (ctx) => {
     const { keyword, showHidden = false } = ctx.query;
 
@@ -236,7 +236,7 @@ enum CafeListOrder {
 
 type CafeListOrderStrings = keyof typeof CafeListOrder;
 
-export const getList: KoaRouteHandler<
+export const getList = handler<
   VariablesMap,
   {
     limit: number;
@@ -247,7 +247,7 @@ export const getList: KoaRouteHandler<
     showHidden?: boolean;
     showHiddenImages?: boolean;
   }
-> = handler(
+>(
   async (ctx) => {
     const {
       limit,
@@ -455,7 +455,7 @@ export const getList: KoaRouteHandler<
   }
 );
 
-export const create: KoaRouteHandler<
+export const create = handler<
   VariablesMap,
   VariablesMap,
   {
@@ -464,7 +464,7 @@ export const create: KoaRouteHandler<
     metadata?: AnyJson;
     state?: CafeStateStrings;
   }
-> = handler(
+>(
   async (ctx) => {
     if (!ctx.request.body) {
       throw new Exception(ExceptionCode.badRequest);
@@ -558,7 +558,7 @@ export const create: KoaRouteHandler<
   }
 );
 
-export const updateOne: KoaRouteHandler<
+export const updateOne = handler<
   { cafeId: string },
   { showHiddenImages?: boolean },
   {
@@ -567,7 +567,7 @@ export const updateOne: KoaRouteHandler<
     metadata?: AnyJson;
     state?: CafeStateStrings;
   }
-> = handler(
+>(
   async (ctx) => {
     if (!ctx.request.body) {
       throw new Exception(ExceptionCode.badRequest);

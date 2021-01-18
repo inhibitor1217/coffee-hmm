@@ -2,12 +2,12 @@ import joi from 'joi';
 import { getRepository } from 'typeorm';
 import { HTTP_OK } from '../../const';
 import Event, { EventCategory, EventName } from '../../entities/event';
-import { KoaRouteHandler, VariablesMap } from '../../types/koa';
+import { VariablesMap } from '../../types/koa';
 import { enumKeyStrings } from '../../util';
 import Exception, { ExceptionCode } from '../../util/error';
 import handler from '../handler';
 
-export const create: KoaRouteHandler<
+export const create = handler<
   VariablesMap,
   VariablesMap,
   {
@@ -16,7 +16,7 @@ export const create: KoaRouteHandler<
     label?: string;
     value?: string;
   }
-> = handler(
+>(
   async (ctx) => {
     if (!ctx.request.body) {
       throw new Exception(ExceptionCode.badRequest);
