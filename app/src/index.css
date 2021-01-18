@@ -18,9 +18,8 @@ header {
 
 main {
   overflow-x: hidden;
-  overflow-y: auto;
-  padding-top: 48px;
-  padding-bottom: 56px;
+  overflow-y: hidden;
+  padding-top: 6vh;
 }
 
 footer {

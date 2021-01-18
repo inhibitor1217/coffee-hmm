@@ -1,27 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { CafeInfo } from '../../../utils/type';
 import { getAllCafesByName } from '../../api';
 import CafeDetail from '../CafeDetail';
 import CafeCarousel from '../CafeCarousel';
 import NoSearchResult from '../NoSearchResult';
 import './index.css';
+import { SearchValueCtx } from '../../../context';
 
-type CafeListProps = {
-    searchValue: string;
-}
-
-const CafeList = ({searchValue}: CafeListProps) => {
+const CafeList = () => {
     const [cafes, setCafes] = useState<CafeInfo[]>([])
     const [cafe, setCafe] = useState<CafeInfo | null>(null);
+    const { searchValueCtx } = useContext(SearchValueCtx);
 
     useEffect(() => {
         async function fetchData(){
-            await getAllCafesByName(searchValue).then(data => {
+            await getAllCafesByName(searchValueCtx).then(data => {
                 setCafes(data);
             });
         }
         fetchData();
-    },[searchValue])
+    },[searchValueCtx])
 
     const isEmptyArray = (array: CafeInfo[]) => {
         return (! Array.isArray(array) || !array.length );
@@ -29,13 +27,13 @@ const CafeList = ({searchValue}: CafeListProps) => {
 
     if(isEmptyArray(cafes)){
         return(
-            <NoSearchResult searchValue={searchValue}/>
+            <NoSearchResult searchValue={searchValueCtx}/>
         )
     }
 
     return(
         <div className="search-container">
-            <div className="search-header">{searchValue} 카페 검색 결과 <span>{cafes?.length}</span></div>  
+            <div className="search-header">카페 검색 결과 <span>{cafes?.length}</span></div>  
             <div className="search-wrapper">
                 <CafeCarousel cafes={cafes} setCafe={setCafe}/>
             </div>   

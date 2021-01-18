@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import { SearchValueCtx } from '../../../context';
 import './index.css';
 
 
@@ -7,19 +8,19 @@ interface HeaderProps {
     location: {
       pathname: string;
     };
-    searchValue: string;
 }
   
 
-const Header = ({location, searchValue}: HeaderProps) => {
+const Header = ({location}: HeaderProps) => {
     const history = useHistory();
+    const { searchValueCtx } = useContext(SearchValueCtx);
 
     switch(location.pathname){
         case "/search" : 
             return(
                 <header>
-                    <button className="back-button" onClick={() => history.goBack()}><span className="material-icons">keyboard_arrow_left</span></button>
-                    <span className="header-searchvalue">{searchValue}</span>
+                    <button className="back-button" onClick={() => history.goBack()}><i className="material-icons">keyboard_arrow_left</i></button>
+                    <span className="header-searchvalue">{searchValueCtx}</span>
                 </header>
             )
     }

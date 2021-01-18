@@ -1,5 +1,7 @@
 .carousel-wrapper {
     width: 100%;
     height: 100%;
+    max-width: 376px;
+    margin: 0 auto;
     overflow: hidden;
 }

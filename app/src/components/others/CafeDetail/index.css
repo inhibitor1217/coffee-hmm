@@ -1,16 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Alef&family=Modak&family=Poor+Story&display=swap');
 
 .detail-close-button {
-    color: #F2D6A2;
-    padding: 4px;
+    color: #555555;
+    padding: 2px;
     position: absolute;
-    top: 4px;
-    right: 4px;
+    top: 1%;
+    left: 1%;
     z-index: 9;
 }
 
 .detail-info {
-    padding: 10px 20px;
+    min-width: 300px;
+    padding-top: 12px;
+    margin: 0 auto;
 }
 
 .detail-info img {
@@ -25,7 +27,7 @@
     font-weight: normal;
     font-size: 16px;
     padding-right: 10px;
-    color: #ffffff;
+    color: #000000;
 }
 
 .detail-button-wrapper {
@@ -50,23 +52,38 @@
     font-style: normal;
     font-weight: normal;
     font-size: 12px;
-    color: #ffffff;
+    color: #000000;
 }
 
 .detail-like {
     border: 1px solid #E7C7D6; 
+}
+.detail-like i{
+    color: #E7C7D6; 
 }
 
 .detail-share {
     border: 1px solid #B7D996;
 }
 
+.detail-share i {
+    color: #B7D996;
+}
+
 .detail-review {
     border: 1px solid #84D9D0;
 }
 
+.detail-review i {
+    color: #84D9D0;
+}
+
 .detail-photo {
     border: 1px solid #CAE5E1;
+}
+
+.detail-photo i {
+    color: #CAE5E1;
 }
 
 .detail-more {
@@ -77,7 +94,7 @@
     font-family: 'Poor Story', cursive;
     font-style: normal;
     font-weight: normal;
-    color: #ffffff;
+    color: #000000;
     padding: 20px 0px;
 }
 
@@ -96,7 +113,6 @@
 
 .detail-button i {
     font-size: 20px;
-    color: #ffffff;
 }
 
 .detail-container {

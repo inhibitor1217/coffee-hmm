@@ -7,7 +7,7 @@ div {
 }
 
 .search-container {
-    height: 80vh;
+    height: 100%;
 }
 
 .search-header{
@@ -16,7 +16,7 @@ div {
 
 .search-wrapper {
     width: 100%;
-    height: 80vh;
+    height: 90vh;
     overflow: hidden;
     margin: 0 auto;
     position: relative;
@@ -25,7 +25,7 @@ div {
 .cafe-detail {
     width: 100%;
     height: 100%;
-    background-color: rgba(82, 79, 74, 0.9);
+    background-color: #ffffff;
     position: fixed;
     top: 0;
     bottom: 0;

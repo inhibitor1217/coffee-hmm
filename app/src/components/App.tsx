@@ -17,7 +17,7 @@ function App() {
             searchValueCtx: target,
             setSearchValueCtx: (data: string) => setTarget(data)}}>
          
-            <PageTemplate searchValue={target}/>
+            <PageTemplate/>
 
           </SearchValueCtx.Provider>
         </BrowserRouter>
