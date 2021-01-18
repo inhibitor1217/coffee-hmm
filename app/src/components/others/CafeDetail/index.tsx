@@ -3,7 +3,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import { copyLink} from '../../../utils/function';
 import { StyledColumnFlex, StyledRowFlexCenter } from '../../../utils/styled';
 import { CafeInfo } from '../../../utils/type';
-import CafeImageSlide from '../CafeImageSlide';
+import CafeDetailImageCarousel from '../CafeDetailImageCarousel';
 import WebSearchBottomPopup from '../WebSearchBottomPopup';
 import './index.css';
 
@@ -15,11 +15,17 @@ type CafeDetailProps = {
 const CafeDetail = ({ cafe, setCafe}: CafeDetailProps) => {
     const [isWebSearchClicked, setWebSearchClicked] = useState<boolean>(false);
     const currentCopyLink = `https://coffee-hmm.inhibitor.io/cafe/${cafe.id}`;
+    
+    const handleClick = () => {
+        setTimeout(() => {
+            setCafe(null);
+        }, 100) // resolve to react state update on an unmounted component in CarouselRow
+    }
 
     return(
         <div>
-            <button className="detail-close-button" onClick={() => setCafe(null)}><i className="material-icons">cancel</i></button>
-            <CafeImageSlide cafe={cafe}/>
+            <button className="detail-close-button" onClick={handleClick}><i className="material-icons">cancel</i></button>
+            <CafeDetailImageCarousel cafe={cafe}/>
 
             <StyledColumnFlex>
                 <div className="detail-info">

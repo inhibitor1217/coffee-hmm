@@ -1,17 +1,19 @@
 import React, { useReducer } from 'react';
 import { useSwipeable } from 'react-swipeable';
-import { NEXT, PREV } from '../../../utils/constant';
-import { StyledCarouselBox, StyledCarouselSlot } from '../../../utils/styled';
+import { DOWN, UP, LEFT, RIGHT } from '../../../utils/constant';
+import { StyledColCarouselBox, StyledCarouselSlot } from '../../../utils/styled';
 import './index.css';
 
-const initialState = { pos: 0, sliding: false, dir: NEXT };
 const getOrder = (index: number, pos: number, numItems:number) => {
     return (index - pos < 0 ? numItems - Math.abs(index - pos) : index - pos);
 }
 
-const Carousel = (props: any) => {
+const initialState = { pos: 0, sliding: false, dir: UP };
+
+const CarouselCol = (props: any) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const numItems = React.Children.count(props.children);
+
     const slide = (dir: string) => {
         dispatch({type: dir, numItems});
         setTimeout(() => {
@@ -19,8 +21,8 @@ const Carousel = (props: any) => {
         }, 50);
     }
     const handlers = useSwipeable({
-        onSwipedUp: () => slide(NEXT),
-        onSwipedDown: () => slide(PREV),
+        onSwipedUp: () => slide(UP),
+        onSwipedDown: () => slide(DOWN),
         preventDefaultTouchmoveEvent: true,
         trackMouse: true
     })
@@ -28,13 +30,13 @@ const Carousel = (props: any) => {
     return(
         <div {...handlers}> 
             <div className="carousel-wrapper">
-                <StyledCarouselBox dir={state.dir} sliding={state.sliding}>
+                <StyledColCarouselBox dir={state.dir} sliding={state.sliding}>
                     {React.Children.map(props.children, (child, index) => (
                         <StyledCarouselSlot key={index} order={getOrder(index, state.pos, numItems)}>
                             {child}
                         </StyledCarouselSlot>
                     ))}
-                </StyledCarouselBox>
+                </StyledColCarouselBox>
             </div>
         </div>
     )
@@ -44,17 +46,32 @@ const reducer = (state: any, {type, numItems}: any) => {
     switch(type){
         case "reset":
             return initialState;
-        case PREV:
+
+        case DOWN:
             return {
                 ...state,
-                dir: PREV,
+                dir: DOWN,
                 sliding: true,
                 pos: state.pos === 0? numItems - 1 : state.pos - 1
             }
-        case NEXT:
+        case UP:
             return {
                 ...state,
-                dir: NEXT,
+                dir: UP,
+                sliding: true,
+                pos: state.pos === numItems - 1? 0 : state.pos + 1
+            }
+        case LEFT:
+            return {
+                ...state,
+                dir: LEFT,
+                sliding: true,
+                pos: state.pos === 0? numItems - 1 : state.pos -1
+            }
+        case RIGHT:
+            return {
+                ...state,
+                dir: RIGHT,
                 sliding: true,
                 pos: state.pos === numItems - 1? 0 : state.pos + 1
             }
@@ -68,4 +85,4 @@ const reducer = (state: any, {type, numItems}: any) => {
     }
 }
 
-export default Carousel;
+export default CarouselCol;

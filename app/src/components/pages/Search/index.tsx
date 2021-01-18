@@ -1,16 +1,16 @@
 import React from 'react';
-import SearchValueContext from '../../../context';
+import { SearchValueCtx } from '../../../context';
 import CafeList from '../../others/CafeList';
 
 const Search = () => {
     return( 
-    <SearchValueContext.Consumer>
+    <SearchValueCtx.Consumer>
     {context => {
         return(
-            <CafeList searchValue={context.searchValue}/>
+            <CafeList searchValue={context.searchValueCtx}/>
         )
     }}
-    </SearchValueContext.Consumer>
+    </SearchValueCtx.Consumer>
     )
 }
 

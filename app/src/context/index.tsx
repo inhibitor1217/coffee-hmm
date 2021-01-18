@@ -1,8 +1,6 @@
 import {createContext} from 'react';
 
-const SearchValueContext = createContext({
-    searchValue: "",
-    setSearchValue:(data: string)=>{}
+export const SearchValueCtx = createContext({
+    searchValueCtx: "",
+    setSearchValueCtx: (data: string) => {}
 })
-
-export default SearchValueContext;

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import SearchValueContext from '../../../context';
+import { SearchValueCtx } from '../../../context';
 import { StyledRowFlex, StyledColumnFlex, StyledSpinnerContainer } from '../../../utils/styled';
 import Spinner from '../../common/Spinner';
 import './index.css';
@@ -9,7 +9,7 @@ const places: string[] =["성수", "연남", "한남", "판교", "잠실"];
 
 const PlaceSlide = () => {
     const location = useHistory();
-    const { searchValue, setSearchValue} = useContext(SearchValueContext);
+    const { searchValueCtx, setSearchValueCtx} = useContext(SearchValueCtx);
     const [isClicked, setClicked] = useState<boolean>(false);
     const [target, setTarget]  = useState<string>("");
     const [isImageReady, setIsImageReady] = useState<boolean>(false);
@@ -19,7 +19,7 @@ const PlaceSlide = () => {
 
     useEffect(() => {
         async function setContext(){
-            await setSearchValue(target);
+            await setSearchValueCtx(target);
         }
         if(isClicked){
             setContext();
@@ -27,7 +27,7 @@ const PlaceSlide = () => {
             setClicked(false);
             location.push("/search");
         }
-    }, [searchValue, setSearchValue, target, location, isClicked])
+    }, [searchValueCtx, setSearchValueCtx, target, location, isClicked])
 
  
     return(

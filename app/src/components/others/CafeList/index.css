@@ -11,8 +11,7 @@ div {
 }
 
 .search-header{
-    padding-left: 24px;
-    padding-top: 12px;
+    padding: 4px 24px;
 }
 
 .search-wrapper {

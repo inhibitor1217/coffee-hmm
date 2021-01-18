@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { PREV } from "./constant";
+import { DOWN, LEFT } from "./constant";
 
 export const StyledMainScale = styled.div`
     width: 100%;
@@ -34,26 +34,36 @@ export const StyledSpinnerContainer = styled.div<{ visible: boolean, size: numbe
     ${(props) => props.visible && "display: flex;"}
 `;
 
-export const StyledCarouselBox = styled.div<{dir?: string, sliding?: boolean}>`
+export const StyledColCarouselBox = styled.div<{dir?: string, sliding?: boolean}>`
     display: flex;
     flex-direction: column;
     transition: ${(props) => props.sliding? "none" : "all 1s ease 0s"};
     transform: ${(props) => {
-        if (!props.sliding) return "translateY(calc(-10%))";
-        if (props.dir === PREV) return "translateY(calc(2 * (-10%)))";
-        return "translateY(5%)";
-    }}
+        if (!props.sliding) return "translateY(calc(-14%))";
+        if (props.dir === DOWN) return "translateY(calc(-22%))";
+        return "translateY(calc(-2%))";
+    }};
+`;
+
+export const StyledRowCarouselBox = styled.div<{dir?: string, sliding?: boolean}>`
+    display: flex;
+    flex-direction: "row";
+    transition: ${(props) => props.sliding? "none" : "all 1s ease 0s"};
+    transform: ${(props) => {
+        if (!props.sliding) return "translateX(calc(6%))";
+        if (props.dir === LEFT) return "translateX(calc(12%))";
+        return "translateX(calc(-6%))";
+    }};
 `;
 
 export const StyledCarouselSlot = styled.div<{order?: number}>`
     flex: 1 0 100%;
-    flex-basis: 80%;
-    margin-right: 20px;
+    flex-basis: 100%;
     order: ${(props) => props.order};
-    padding-bottom: 24px;
 `;
 
 export const StyledCarouselImage = styled.div`
+    width: 100%;
+    height: 100%;
     text-align: center;
-    padding-left: 24px;
 `;
