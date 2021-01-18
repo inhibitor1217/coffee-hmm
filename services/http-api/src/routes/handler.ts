@@ -77,6 +77,7 @@ const handler = <
 
   if (
     requiredRules &&
+    requiredRules.length > 0 &&
     !ctx.state.policy?.canExecuteOperations(ctx, requiredRules)
   ) {
     throw new Exception(ExceptionCode.forbidden, {

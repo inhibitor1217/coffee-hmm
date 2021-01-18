@@ -50,3 +50,16 @@ functions:
       APP_VERSION: ${self:custom.version}
       APP_STAGE: ${self:custom.stage}
       LOG_LEVEL: info
+      AUTH_SERVICE: https://${self:custom.stage}.auth.coffee-hmm.inhibitor.io
+      ORMCONFIG_FILE: ormconfig.json
+  updateEventStatistics:
+    handler: src/scheduledEvents/updateEventStatistics.handler
+    events:
+      - schedule: cron(0 * * * ? *)
+    environment:
+      APP_NAME: ${self:service}
+      APP_VERSION: ${self:custom.version}
+      APP_STAGE: ${self:custom.stage}
+      LOG_LEVEL: info
+      AUTH_SERVICE: https://${self:custom.stage}.auth.coffee-hmm.inhibitor.io
+      ORMCONFIG_FILE: ormconfig.json
