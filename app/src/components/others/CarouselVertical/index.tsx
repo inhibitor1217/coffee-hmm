@@ -10,7 +10,7 @@ const CarouselVertical = (props: any) => {
     const numItems = React.Children.count(props.children);
 
     const slide = (dir: string) => {
-        dispatch({type: dir, numItems});
+        dispatch({type: dir, numItems: numItems});
         setTimeout(() => {
             dispatch({type: "stopSliding"})
         }, 50);

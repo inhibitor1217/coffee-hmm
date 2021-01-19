@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { DOWN, RIGHT } from "./constant";
+import { DOWN, LEFT, RIGHT } from "./constant";
 
 export const StyledMainScale = styled.div`
     width: 100%;
@@ -45,14 +45,25 @@ export const StyledColCarouselBox = styled.div<{dir?: string, sliding?: boolean}
     }};
 `;
 
-export const StyledRowCarouselBox = styled.div<{dir?: string, sliding?: boolean}>`
+export const StyledRowCarouselBox = styled.div<{dir?: string, sliding?: boolean, numItems: number}>`
     display: flex;
     flex-direction: row;
     transition: ${(props) => props.sliding? "none" : "all 1s ease 0s"};
     transform: ${(props) => {
+        // #image = 1
+        if (props.numItems === 1) return "translateX(0%)"; 
+        // #image = 2
+        if (props.numItems === 2){ 
+            if (!props.sliding && props.dir === LEFT) return "translateX(calc(-92%))";
+            if(props.dir === LEFT) return "translateX(calc(7%))";
+
+            if (!props.sliding && props.dir === RIGHT) return "translateX(calc(7%))";
+            if(props.dir === RIGHT) return "translateX(calc(-92%))";
+        }
+        // #image > 2
         if (!props.sliding) return "translateX(calc(-92%))";
         if (props.dir === RIGHT) return "translateX(calc(2 * (-92%)))";
-        return "translateX(0%)";
+        return "translateX(0%)";     
     }};
 `;
 

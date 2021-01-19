@@ -125,38 +125,37 @@ export const copyLink = (cafeName: string | undefined) => {
     window.confirm(cafeName + "\n흠 링크가 복사되었습니다.");
 };
 
-export const reducerCarousel = (state: any, {type, numItems}: any) => {
-  switch(type){
+export const reducerCarousel = (state: any, action: any) => {
+  switch(action.type){
       case "reset":
           return initialCarouselState;
-
       case DOWN:
           return {
               ...state,
               dir: DOWN,
               sliding: true,
-              pos: state.pos === 0? numItems - 1 : state.pos - 1
+              pos: state.pos === 0? action.numItems - 1 : state.pos - 1
           }
       case UP:
           return {
               ...state,
               dir: UP,
               sliding: true,
-              pos: state.pos === numItems - 1? 0 : state.pos + 1
+              pos: state.pos === action.numItems - 1? 0 : state.pos + 1
           }
       case RIGHT:
           return {
               ...state,
               dir: RIGHT,
               sliding: true,
-              pos: state.pos === 0? numItems - 1 : state.pos -1
+              pos: state.pos === 0? action.numItems - 1 : state.pos -1
           }
       case LEFT:
           return {
               ...state,
               dir: LEFT,
               sliding: true,
-              pos: state.pos === numItems - 1? 0 : state.pos + 1
+              pos: state.pos === action.numItems - 1? 0 : state.pos + 1
           }
       case "stopSliding":
           return {

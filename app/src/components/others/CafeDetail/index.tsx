@@ -17,9 +17,7 @@ const CafeDetail = ({ cafe, setCafe}: CafeDetailProps) => {
     const currentCopyLink = `https://coffee-hmm.inhibitor.io/cafe/${cafe.id}`;
     
     const handleClick = () => {
-        setTimeout(() => {
-            setCafe(null);
-        }, 100) // resolve to react state update on an unmounted component in CarouselRow
+        setCafe(null);
     }
 
     return(
@@ -52,4 +50,4 @@ const CafeDetail = ({ cafe, setCafe}: CafeDetailProps) => {
     )
 }
 
-export default CafeDetail;
+export default React.memo(CafeDetail);

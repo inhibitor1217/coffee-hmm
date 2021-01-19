@@ -22,7 +22,7 @@ const CarouselHorizontal = (props: any) => {
     },)
 
     const slide =  (dir: string) => {
-        dispatch({type: dir, numItems});
+        dispatch({type: dir, numItems: numItems});
         setTimeout(() => {
             dispatch({type: "stopSliding"})
         }, 50);
@@ -37,7 +37,7 @@ const CarouselHorizontal = (props: any) => {
     return(
         <div {...handlers}> 
             <div className="carousel-wrapper">
-                <StyledRowCarouselBox dir={state.dir} sliding={state.sliding}>
+                <StyledRowCarouselBox dir={state.dir} sliding={state.sliding} numItems={numItems}>
                     {React.Children.map(props.children, (child, index) => (
                         <StyledCarouselSlot key={index} order={getOrder(index, state.pos, numItems)} ref={divRef}>
                             {child}

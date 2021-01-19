@@ -14,7 +14,7 @@ type CafeDetailImageCarouselProps = {
 const CafeDetailImageCarousel = ({cafe}: CafeDetailImageCarouselProps) => {
     const { carouselIndexCtx } = useContext(CarouselIndexCtx);
     const imageNum = cafe.imageUris.length;
-
+    
     return(
         <div className="detail-carousel-dot-wrapper">
             <div className="detail-carousel-container">
