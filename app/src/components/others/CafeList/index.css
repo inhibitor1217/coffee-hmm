@@ -12,6 +12,7 @@ div {
 
 .search-header{
     padding: 4px 24px;
+    position: relative;
 }
 
 .search-wrapper {
@@ -33,4 +34,12 @@ div {
     right: 0;
     z-index: 10;
     overflow: hidden;
+}
+
+.search-header button {
+    font-size: 14px;
+    border-radius: 4px;
+    background-color: rgb(247, 246, 243);
+    position: absolute;
+    right: 24px;
 }

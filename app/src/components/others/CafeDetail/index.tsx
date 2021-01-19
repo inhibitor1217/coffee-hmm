@@ -29,8 +29,9 @@ const CafeDetail = ({ cafe, setCafe}: CafeDetailProps) => {
 
             <StyledColumnFlex>
                 <div className="detail-info">
-                    <span>{cafe.name}</span>
-                    <span>open 9:00 ~ 19:00</span>
+                    <span className="detail-name">{cafe.name}</span>
+                    <span className="detail-place">{cafe.place}</span>
+                    <span className="detail-time">open 9:00 ~ 19:00</span>
                 </div>
 
                 <StyledRowFlexCenter className="detail-button-wrapper">
@@ -41,9 +42,9 @@ const CafeDetail = ({ cafe, setCafe}: CafeDetailProps) => {
                 </StyledRowFlexCenter>
 
                 <div className="detail-more">
-                    <h5>카페의 구체적인 정보가 필요하신가요?</h5>
-                    <div className="detail-more-button"><button onClick={() => setWebSearchClicked(true)}>네이버, 인스타 검색 바로가기</button></div>
-                  
+                    <h5>카페의 구체적인 정보가 필요하신가요&#63;</h5>
+                    <div className="detail-more-button"><button onClick={() => setWebSearchClicked(true)}>네이버, 인스타 검색 바로가기 &#10154;</button></div>
+                    <div className="detail-map-button"><button>지도 바로가기 &#10154;</button></div>
                     <WebSearchBottomPopup cafe={cafe} isWebSearchClicked={isWebSearchClicked} setWebSearchClicked={setWebSearchClicked}/>
                 </div>
             </StyledColumnFlex>

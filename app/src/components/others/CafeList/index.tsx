@@ -33,10 +33,16 @@ const CafeList = () => {
 
     return(
         <div className="search-container">
-            <div className="search-header">카페 검색 결과 <span>{cafes?.length}</span></div>  
+            <div className="search-header">
+                <span>카페 검색 결과 </span>
+                <span>{cafes?.length}</span>
+                <button>&#x2b; Add New</button>
+            </div>  
             <div className="search-wrapper">
                 <CafeCarousel cafes={cafes} setCafe={setCafe}/>
             </div>   
+     
+
             {cafe && 
             <div className="cafe-detail">
                 <CafeDetail cafe={cafe} setCafe={setCafe}/>

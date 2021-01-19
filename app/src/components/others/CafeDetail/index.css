@@ -26,7 +26,7 @@
     font-style: normal;
     font-weight: normal;
     font-size: 16px;
-    padding-right: 10px;
+    margin-right: 10px;
     color: #000000;
 }
 
@@ -99,16 +99,27 @@
 }
 
 .detail-more-button button {
-    width: 180px;
-    height: 36px;
-    border: 1px solid #F2D6A2;
     box-sizing: border-box;
-    border-radius: 8px;
+    border-radius: 4px;
+    background-color:#00E7FF;
 
     font-family: 'Poor Story', cursive;
     font-style: normal;
     font-weight: normal;
-    color: #F2D6A2;
+    font-size: 14px;
+    color: #000000;
+}
+
+.detail-map-button button {
+    box-sizing: border-box;
+    border-radius: 4px;
+    background-color: #00FFB5;
+
+    font-family: 'Poor Story', cursive;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    color: #000000;
 }
 
 .detail-button i {
@@ -118,3 +129,18 @@
 .detail-container {
     padding-bottom: 20px;
 }
+
+.detail-name {
+    border-radius: 4px;
+    background-color:#E6ED63;
+}
+
+.detail-place {
+    border-radius: 4px;
+    background-color:#9FE4E0;
+}
+
+.detail-time {
+    display: block;
+}
+

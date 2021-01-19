@@ -61,17 +61,17 @@ const reducer = (state: any, {type, numItems}: any) => {
                 sliding: true,
                 pos: state.pos === numItems - 1? 0 : state.pos + 1
             }
-        case LEFT:
-            return {
-                ...state,
-                dir: LEFT,
-                sliding: true,
-                pos: state.pos === 0? numItems - 1 : state.pos -1
-            }
         case RIGHT:
             return {
                 ...state,
                 dir: RIGHT,
+                sliding: true,
+                pos: state.pos === 0? numItems - 1 : state.pos -1
+            }
+        case LEFT:
+            return {
+                ...state,
+                dir: LEFT,
                 sliding: true,
                 pos: state.pos === numItems - 1? 0 : state.pos + 1
             }
