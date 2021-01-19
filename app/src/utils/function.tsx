@@ -1,4 +1,5 @@
 import { isMobile, isAndroid, isIOS } from "react-device-detect";
+import { DOWN, initialCarouselState, LEFT, RIGHT, UP } from "./constant";
 
 export const letterValidation = (data: string) => {
     let Korean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
@@ -123,3 +124,50 @@ export const openSearch = (searchedData: string, searchEngine: string) => {
 export const copyLink = (cafeName: string | undefined) => {
     window.confirm(cafeName + "\n흠 링크가 복사되었습니다.");
 };
+
+export const reducerCarousel = (state: any, {type, numItems}: any) => {
+  switch(type){
+      case "reset":
+          return initialCarouselState;
+
+      case DOWN:
+          return {
+              ...state,
+              dir: DOWN,
+              sliding: true,
+              pos: state.pos === 0? numItems - 1 : state.pos - 1
+          }
+      case UP:
+          return {
+              ...state,
+              dir: UP,
+              sliding: true,
+              pos: state.pos === numItems - 1? 0 : state.pos + 1
+          }
+      case RIGHT:
+          return {
+              ...state,
+              dir: RIGHT,
+              sliding: true,
+              pos: state.pos === 0? numItems - 1 : state.pos -1
+          }
+      case LEFT:
+          return {
+              ...state,
+              dir: LEFT,
+              sliding: true,
+              pos: state.pos === numItems - 1? 0 : state.pos + 1
+          }
+      case "stopSliding":
+          return {
+              ...state,
+              sliding: false
+          }
+      default:
+          return state;
+  }
+}
+
+export const getOrder = (index: number, pos: number, numItems:number) => {
+  return (index - pos < 0 ? numItems - Math.abs(index - pos) : index - pos);
+}
