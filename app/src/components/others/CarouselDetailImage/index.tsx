@@ -17,8 +17,6 @@ const CarouselDetailImage = ({image}: CarouselDetailImageProps) => {
             <StyledSpinnerContainer visible={!isImageReady} size={360}>
                 <Spinner size={24}/>
             </StyledSpinnerContainer>
-            <button className="prev-button">prev</button>
-            <button className="next-button">next</button>
         </div>
     )
 }

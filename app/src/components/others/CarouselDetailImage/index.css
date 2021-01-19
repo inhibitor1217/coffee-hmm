@@ -13,15 +13,3 @@
     border-radius: 8px;
     transition: all 1s ease 0s;
 }
-
-.prev-button {
-    position: absolute;
-    left: 0px;
-    bottom: 8px;
-}
-
-.next-button {
-    position: absolute;
-    right: 0px;
-    bottom: 8px;
-}

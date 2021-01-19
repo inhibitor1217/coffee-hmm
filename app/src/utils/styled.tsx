@@ -47,7 +47,7 @@ export const StyledColCarouselBox = styled.div<{dir?: string, sliding?: boolean}
 
 export const StyledRowCarouselBox = styled.div<{dir?: string, sliding?: boolean}>`
     display: flex;
-    flex-direction: "row";
+    flex-direction: row;
     transition: ${(props) => props.sliding? "none" : "all 1s ease 0s"};
     transform: ${(props) => {
         if (!props.sliding) return "translateX(calc(-92%))";
