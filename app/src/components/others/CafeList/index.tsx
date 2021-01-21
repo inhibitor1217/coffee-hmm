@@ -41,13 +41,12 @@ const CafeList = () => {
             <div className="search-wrapper">
                 <CafeCarousel cafes={cafes} setCafe={setCafe}/>
             </div>   
-     
 
-    
-            <div className="cafe-detail" style={{display: cafe !== null? "block" : "none"}}>
-                <CafeDetail cafe={cafe || null} setCafe={setCafe}/>
-            </div>
-            
+        {cafe && 
+         <div className="cafe-detail">
+            <CafeDetail cafe={cafe} setCafe={setCafe}/>
+        </div>
+        }    
         </div>       
     )
 }
