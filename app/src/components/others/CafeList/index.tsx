@@ -43,11 +43,11 @@ const CafeList = () => {
             </div>   
      
 
-            {cafe && 
-            <div className="cafe-detail">
-                <CafeDetail cafe={cafe} setCafe={setCafe}/>
+    
+            <div className="cafe-detail" style={{display: cafe !== null? "block" : "none"}}>
+                <CafeDetail cafe={cafe || null} setCafe={setCafe}/>
             </div>
-            }  
+            
         </div>       
     )
 }

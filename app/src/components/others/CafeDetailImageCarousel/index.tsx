@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StyledCarouselImage } from '../../../utils/styled';
 import { CafeInfo } from '../../../utils/type';
 import CarouselHorizontal from '../CarouselHorizontal';
@@ -8,18 +8,23 @@ import './index.css';
 import { CarouselIndexCtx } from '../../../context';
 
 type CafeDetailImageCarouselProps = {
-    cafe: CafeInfo;
+    cafe: CafeInfo | null;
 }
 
 const CafeDetailImageCarousel = ({cafe}: CafeDetailImageCarouselProps) => {
+    const [images, setImages] = useState<string[]>([]);
     const { carouselIndexCtx } = useContext(CarouselIndexCtx);
-    const imageNum = cafe.imageUris.length;
+    const imageNum = cafe?.imageUris.length;
+
+    useEffect(() => {
+        setImages(cafe?.imageUris || []);
+    },[cafe?.imageUris])
     
     return(
         <div className="detail-carousel-dot-wrapper">
             <div className="detail-carousel-container">
                 <CarouselHorizontal title="Carousel">
-                {cafe.imageUris.map((image, index) => {   
+                {images.sort().map((image, index) => {   
                     return(
                         <StyledCarouselImage key={index}>
                             <CarouselDetailImage image={image}/>
@@ -28,7 +33,7 @@ const CafeDetailImageCarousel = ({cafe}: CafeDetailImageCarouselProps) => {
                 })}
                 </CarouselHorizontal>
             </div>
-            <PositionDotHorizontal dotNum={imageNum} currentIndex={carouselIndexCtx}/>
+            <PositionDotHorizontal dotNum={imageNum || 0} currentIndex={carouselIndexCtx}/>
         </div>
        
     )

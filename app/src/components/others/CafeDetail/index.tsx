@@ -8,13 +8,13 @@ import WebSearchBottomPopup from '../WebSearchBottomPopup';
 import './index.css';
 
 type CafeDetailProps = {
-    cafe: CafeInfo;
+    cafe: CafeInfo | null;
     setCafe: (cafe: CafeInfo | null) => void;
 }
 
 const CafeDetail = ({ cafe, setCafe}: CafeDetailProps) => {
     const [isWebSearchClicked, setWebSearchClicked] = useState<boolean>(false);
-    const currentCopyLink = `https://coffee-hmm.inhibitor.io/cafe/${cafe.id}`;
+    const currentCopyLink = `https://coffee-hmm.inhibitor.io/cafe/${cafe?.id}`;
     
     const handleClick = () => {
         setCafe(null);
@@ -27,14 +27,14 @@ const CafeDetail = ({ cafe, setCafe}: CafeDetailProps) => {
 
             <StyledColumnFlex>
                 <div className="detail-info">
-                    <span className="detail-name">{cafe.name}</span>
-                    <span className="detail-place">{cafe.place}</span>
+                    <span className="detail-name">{cafe?.name}</span>
+                    <span className="detail-place">{cafe?.place}</span>
                     <span className="detail-time">open 9:00 ~ 19:00</span>
                 </div>
 
                 <StyledRowFlexCenter className="detail-button-wrapper">
                     <div className="detail-button"><button className="detail-like"><i className="material-icons-round">favorite</i></button><span>좋아요</span></div>
-                    <div className="detail-button"> <CopyToClipboard text={currentCopyLink}><button className="detail-share" onClick={() => copyLink(cafe.name)}><i className="material-icons-round">share</i></button></CopyToClipboard><span>링크 공유</span></div>
+                    <div className="detail-button"> <CopyToClipboard text={currentCopyLink}><button className="detail-share" onClick={() => copyLink(cafe?.name)}><i className="material-icons-round">share</i></button></CopyToClipboard><span>링크 공유</span></div>
                     <div className="detail-button"><button className="detail-review"><i className="material-icons-round">create</i></button><span>카페 리뷰</span></div>
                     <div className="detail-button"><button className="detail-photo"><i className="material-icons-round">photo_library</i></button><span>사진 업로드</span></div>  
                 </StyledRowFlexCenter>
