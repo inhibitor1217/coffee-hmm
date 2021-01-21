@@ -9,3 +9,14 @@ export const LEFT = "LEFT";
 export const RIGHT = "RIGHT";
 
 export const initialCarouselState = { pos: 0, sliding: false, dir: null };
+
+export const initialCafe = {
+    id: 0,
+    name: "",
+    place: "",
+    imageUris: [""],
+    mainImageUri: "",
+    americanoPrice: 0,
+    floor: 0,
+    viewCount: 0
+}

@@ -7,6 +7,7 @@ interface RouterProps {
 
 const IntroPage = lazy(() => import("./pages/Intro"));
 const SearchPage = lazy(() => import("./pages/Search"));
+const DetailPage = lazy(() => import("./pages/Detail"));
 
 const Router = (props: RouterProps) => {
 return(
@@ -14,6 +15,7 @@ return(
     <Switch location={props.location}>    
         <Route path="/" exact render={() => <IntroPage />}/>
         <Route path="/search" exact render={() => <SearchPage/>}/>
+        <Route path="/cafe/:cafeId" exact render={() => <DetailPage/>}/>
       <Redirect to="/" />
     </Switch>
     </React.Suspense>  

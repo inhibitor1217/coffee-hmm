@@ -1,5 +1,5 @@
 export type CafeInfo = {
-    id: string;
+    id: number;
     name: string;
     place: string;
     imageUris: string[];

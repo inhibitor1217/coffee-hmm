@@ -7,17 +7,16 @@ import { StyledCarouselImage } from '../../../utils/styled';
 
 type CafeImageCarouselProps = {
     cafes: CafeInfo[];
-    setCafe: (cafe: CafeInfo | null) => void;
 }
 
-const CafeCarousel = ({cafes, setCafe}: CafeImageCarouselProps) => {
+const CafeCarousel = ({cafes}: CafeImageCarouselProps) => {
     return(
         <div className="carousel-container">
             <CarouselVertical title="Carousel">
             {cafes?.map((cafe, index) => {
                 return(
                     <StyledCarouselImage key={index}>
-                        <CarouselMainImage cafe={cafe} setCafe={setCafe}/>
+                        <CarouselMainImage cafe={cafe}/>
                     </StyledCarouselImage>
             )})}
             </CarouselVertical>

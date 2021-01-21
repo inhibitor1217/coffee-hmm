@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import { useHistory } from 'react-router-dom';
 import { copyLink} from '../../../utils/function';
 import { StyledColumnFlex, StyledRowFlexCenter } from '../../../utils/styled';
 import { CafeInfo } from '../../../utils/type';
@@ -9,15 +10,15 @@ import './index.css';
 
 type CafeDetailProps = {
     cafe: CafeInfo;
-    setCafe: (cafe: CafeInfo | null) => void;
 }
 
-const CafeDetail = ({ cafe, setCafe}: CafeDetailProps) => {
+const CafeDetail = ({ cafe }: CafeDetailProps) => {
     const [isWebSearchClicked, setWebSearchClicked] = useState<boolean>(false);
     const currentCopyLink = `https://coffee-hmm.inhibitor.io/cafe/${cafe.id}`;
+    const history = useHistory();
     
     const handleClick = () => {
-        setCafe(null);
+        history.goBack();
     }
 
     return(
