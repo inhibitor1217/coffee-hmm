@@ -2,3 +2,10 @@ export const serverUrl = "https://ird14dr4ze.execute-api.ap-northeast-2.amazonaw
 
 export const BIG_CAFE_IMAGE_SIZE = 320;
 export const SMALL_CAFE_IMAGE_SIZE = 260;
+
+export const UP = "UP";
+export const DOWN = "DOWN";
+export const LEFT = "LEFT";
+export const RIGHT = "RIGHT";
+
+export const initialCarouselState = { pos: 0, sliding: false, dir: null };

@@ -1,17 +1,17 @@
 import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import SearchValueContext from '../../../context';
+import { SearchValueCtx } from '../../../context';
 import { letterValidation } from '../../../utils/function';
 import './index.css';
 
 const SearchBar = () => {
     const location = useHistory();
     const [target, setTarget] = useState<string>("");
-    const {setSearchValue} = useContext(SearchValueContext)
+    const {setSearchValueCtx} = useContext(SearchValueCtx)
 
     async function setContext(){
         const targetProcessed = target.replace(/\s+/g, ''); 
-        await setSearchValue(targetProcessed);
+        await setSearchValueCtx(targetProcessed);
         setTarget("");
     }
 

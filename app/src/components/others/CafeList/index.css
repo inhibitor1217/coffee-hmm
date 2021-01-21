@@ -6,60 +6,40 @@ div {
     font-weight: normal;
 }
 
-.search-header{
-    padding-left: 24px;
-    padding-top: 12px;
+.search-container {
+    height: 100%;
 }
 
-.search-result {
+.search-header{
+    padding: 4px 24px;
+    position: relative;
+}
+
+.search-wrapper {
     width: 100%;
-    height: 76vh;
+    height: 90vh;
     overflow: hidden;
     margin: 0 auto;
     position: relative;
 }
 
-.cafe {
-    position: absolute;
-    left: 20px;
-    transition: all 0.5s ease 0s;
-    padding: 10px 0px;
+.cafe-detail {
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    overflow: hidden;
 }
 
-.result-button-wrapper {
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-}
-
-.result-button-wrapper button {
-    color: #000000;
-    padding: 4px 16px;
-    font-family: 'Poor Story', cursive;
-    font-style: normal;
-    font-weight: normal;
+.search-header button {
     font-size: 14px;
-}
-
-.result-button-wrapper button img {
-    width: 24px;
-    height: 24px;
-    object-fit: cover;
-}
-
-.search-bottom {
-    padding-right: 20px;
-    padding-top: 4px;
-    text-align: right;
-    font-size: 12px;
-}
-
-.search-bottom span {
-    padding-left: 4px;
-}
-
-.search-bottom span img {
-    width: 18px;
-    height: 18px;
-    object-fit: cover;
+    border-radius: 4px;
+    background-color: rgb(247, 246, 243);
+    position: absolute;
+    right: 24px;
 }

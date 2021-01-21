@@ -1,0 +1,16 @@
+.dot-list {
+    list-style: none;
+    padding-inline-start: 0px;
+    display: table;
+    margin: 12px auto;
+}
+
+.dot-list li {
+    position: relative;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #fefefe;
+    float: left;
+    margin-left: 8px;
+}

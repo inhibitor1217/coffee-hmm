@@ -1,7 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router";
 import { animated, useTransition } from "react-spring";
-import Footer from "./common/Footer";
 import Header from "./common/Header";
 import Router from "./Router";
 
@@ -23,12 +22,7 @@ function getPageTransition(pathname: string){
   };
 }
 
-type props = {
-  searchValue: string;
-}
-
-
-const PageTemplate = ({searchValue}: props) => {
+const PageTemplate = () => {
   const location = useLocation();
   const routeTransition = useTransition(
     location,
@@ -58,11 +52,10 @@ const PageTemplate = ({searchValue}: props) => {
             ...springProps,
           }}
         >
-          <Header location={item} searchValue={searchValue}/>
+          <Header location={item}/>
           <main>
             <Router location={item}/>
           </main>
-          <Footer location={item} />
         </animated.div>
       ))}
     </div>

@@ -1,8 +1,11 @@
 import {createContext} from 'react';
 
-const SearchValueContext = createContext({
-    searchValue: "",
-    setSearchValue:(data: string)=>{}
+export const SearchValueCtx = createContext({
+    searchValueCtx: "",
+    setSearchValueCtx: (data: string) => {}
 })
 
-export default SearchValueContext;
+export const CarouselIndexCtx = createContext({
+    carouselIndexCtx: 0,
+    setCarouselIndexCtx: (index: number) => {}
+})

@@ -1,33 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { moveDownOrRight, moveUpOrLeft, slideImageSize, slidePosition } from '../../../utils/function';
-import { StyledColumnFlex } from '../../../utils/styled';
+import React, { useContext, useEffect, useState } from 'react';
 import { CafeInfo } from '../../../utils/type';
 import { getAllCafesByName } from '../../api';
-import CafeListOneCafe from '../CafeListOneCafe';
+import CafeDetail from '../CafeDetail';
+import CafeCarousel from '../CafeCarousel';
 import NoSearchResult from '../NoSearchResult';
 import './index.css';
+import { SearchValueCtx } from '../../../context';
 
-type CafeListProps = {
-    searchValue: string;
-}
-
-const CENTER = 40;
-const TOP = -260;
-const BOTTOM = 400;
-
-const CafeList = ({searchValue}: CafeListProps) => {
+const CafeList = () => {
     const [cafes, setCafes] = useState<CafeInfo[]>([])
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const [cafe, setCafe] = useState<CafeInfo | null>(null);
+    const { searchValueCtx } = useContext(SearchValueCtx);
 
     useEffect(() => {
         async function fetchData(){
-            await getAllCafesByName(searchValue).then(data => {
+            await getAllCafesByName(searchValueCtx).then(data => {
                 setCafes(data);
             });
         }
         fetchData();
-    },[searchValue])
-
+    },[searchValueCtx])
 
     const isEmptyArray = (array: CafeInfo[]) => {
         return (! Array.isArray(array) || !array.length );
@@ -35,28 +27,27 @@ const CafeList = ({searchValue}: CafeListProps) => {
 
     if(isEmptyArray(cafes)){
         return(
-            <NoSearchResult searchValue={searchValue}/>
+            <NoSearchResult searchValue={searchValueCtx}/>
         )
     }
 
     return(
-        <div>
-            <div className="search-header">{searchValue} 카페 검색 결과 <span>{cafes?.length}</span></div>
-            <div className="search-result">
-                {cafes?.map((cafe, index) => {
-                    return(
-                        <div key={cafe.id}  className="cafe" style={{
-                                                top: currentIndex === index? slidePosition(index, currentIndex, CENTER, TOP, BOTTOM): slidePosition(index, currentIndex, CENTER, TOP, BOTTOM)
-                                            }}>
-                            <CafeListOneCafe index={index} currentIndex={currentIndex} cafe={cafe} isBig={slideImageSize(index, currentIndex)}/>
-                        </div>)
-                })}
-                <StyledColumnFlex className="result-button-wrapper">
-                    <button onClick={()=>moveUpOrLeft(currentIndex, setCurrentIndex)}><img src="/images/icon9.png" alt="up"/>up</button>
-                    <button onClick={()=>moveDownOrRight(currentIndex, setCurrentIndex, cafes.length-1)}> <img src="/images/icon11.png" alt="down"/> down</button>
-                </StyledColumnFlex>
+        <div className="search-container">
+            <div className="search-header">
+                <span>카페 검색 결과 </span>
+                <span>{cafes?.length}</span>
+                <button>&#x2b; Add New</button>
+            </div>  
+            <div className="search-wrapper">
+                <CafeCarousel cafes={cafes} setCafe={setCafe}/>
+            </div>   
+     
+
+    
+            <div className="cafe-detail" style={{display: cafe !== null? "block" : "none"}}>
+                <CafeDetail cafe={cafe || null} setCafe={setCafe}/>
             </div>
-            <div className="search-bottom">버튼을 눌러 카페를 확인하세요<span><img src="/images/arrow.png" alt="arrow"/></span></div>
+            
         </div>       
     )
 }
