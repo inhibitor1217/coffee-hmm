@@ -23,7 +23,7 @@ const CafeDetail = ({ cafe }: CafeDetailProps) => {
 
     return(
         <div>
-            <button className="detail-close-button" onClick={handleClick}><i className="material-icons">keyboard_arrow_left</i></button>
+            <button className="detail-back-button" onClick={handleClick}><i className="material-icons">keyboard_arrow_left</i></button>
             <CafeDetailImageCarousel cafe={cafe}/>
 
             <StyledColumnFlex>

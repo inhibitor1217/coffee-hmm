@@ -7,7 +7,7 @@ import PageTemplate from './PageTemplate';
 
 function App() {
   const [target, setTarget] = useState("");
-  const [carouselIndex, setCarouselIndex] = useState(0);
+  const [carouselIndex, setCarouselIndex] = useState<number | null>(null);
 
   return (
     <div className="App">
@@ -19,7 +19,7 @@ function App() {
             setSearchValueCtx: (data: string) => setTarget(data)}}>
           <CarouselIndexCtx.Provider value={{
             carouselIndexCtx: carouselIndex,
-            setCarouselIndexCtx: (index: number) => setCarouselIndex(index)}}>
+            setCarouselIndexCtx: (index: number | null) => setCarouselIndex(index)}}>
             
             <PageTemplate/>
           
