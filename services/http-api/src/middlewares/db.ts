@@ -1,3 +1,5 @@
+import 'pg';
+
 import { readFile } from 'fs';
 import { Middleware, Next, ParameterizedContext } from 'koa';
 import path from 'path';
