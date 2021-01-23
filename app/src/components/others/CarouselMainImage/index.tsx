@@ -1,6 +1,5 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { CafeCtx } from '../../../context';
 import { onImageLoad } from '../../../utils/function';
 import { StyledSpinnerContainer } from '../../../utils/styled';
 import { CafeInfo } from '../../../utils/type';
@@ -13,11 +12,9 @@ type CarouselMainImageProps = {
 
 const CarouselMainImage = ({cafe}: CarouselMainImageProps) => {
     const [isImageReady, setIsImageReady] = useState<boolean>(false);
-    const { setCafeCtx } = useContext(CafeCtx);
     const history = useHistory();
 
     const handleClick = async () => {
-        await setCafeCtx(cafe);
         history.push({
             pathname: `/cafe/${cafe.id}`,
         })
