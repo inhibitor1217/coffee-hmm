@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Alef&family=Modak&family=Poor+Story&display=swap');
 
-.detail-close-button {
+.detail-back-button {
     color: #555555;
-    padding: 2px;
+    padding: 4px;
     position: absolute;
-    top: 1%;
-    left: 1%;
+    top: 0px;
+    left: 0px;
     z-index: 9;
 }
 

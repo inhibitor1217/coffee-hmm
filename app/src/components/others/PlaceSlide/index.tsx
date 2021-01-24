@@ -25,7 +25,7 @@ const PlaceSlide = () => {
             setContext();
             setTarget("");
             setClicked(false);
-            location.push("/search");
+            location.push("/place");
         }
     }, [searchValueCtx, setSearchValueCtx, target, location, isClicked])
 

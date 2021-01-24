@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { onImageLoad } from '../../../utils/function';
 import { StyledSpinnerContainer } from '../../../utils/styled';
 import { CafeInfo } from '../../../utils/type';
@@ -7,11 +8,17 @@ import './index.css';
 
 type CarouselMainImageProps = {
     cafe: CafeInfo;
-    setCafe: (cafe: CafeInfo | null) => void;
 }
 
-const CarouselMainImage = ({cafe, setCafe}: CarouselMainImageProps) => {
+const CarouselMainImage = ({cafe}: CarouselMainImageProps) => {
     const [isImageReady, setIsImageReady] = useState<boolean>(false);
+    const history = useHistory();
+
+    const handleClick = async () => {
+        history.push({
+            pathname: `/cafe/${cafe.id}`,
+        })
+    }
 
     return(
         <div>
@@ -19,7 +26,7 @@ const CarouselMainImage = ({cafe, setCafe}: CarouselMainImageProps) => {
                 <img src={`https://${cafe.mainImageUri}`} alt="img" style={{
                     display: isImageReady ? "initial" : "none"}} 
                     onLoad={() => onImageLoad(setIsImageReady)}
-                    onClick={() => setCafe(cafe)}/>
+                    onClick={handleClick}/>
                 <StyledSpinnerContainer visible={!isImageReady} size={360}>
                     <Spinner size={24}/>
                 </StyledSpinnerContainer> 

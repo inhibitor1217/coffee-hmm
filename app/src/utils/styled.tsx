@@ -40,8 +40,8 @@ export const StyledColCarouselBox = styled.div<{dir?: string, sliding?: boolean}
     transition: ${(props) => props.sliding? "none" : "all 1s ease 0s"};
     transform: ${(props) => {
         if (!props.sliding) return "translateY(calc(-14%))";
-        if (props.dir === DOWN) return "translateY(calc(-22%))";
-        return "translateY(calc(-2%))";
+        if (props.dir === DOWN) return "translateY(calc(2*(-14%)))";
+        return "translateY(calc(0%))";
     }};
 `;
 
@@ -62,8 +62,8 @@ export const StyledRowCarouselBox = styled.div<{dir?: string, sliding?: boolean,
         }
         // #image > 2
         if (!props.sliding) return "translateX(calc(-92%))";
-        if (props.dir === RIGHT) return "translateX(calc(2 * (-92%)))";
-        return "translateX(0%)";     
+        if (props.dir === RIGHT) return "translateX(calc(2 * (-92% - 4%)))";
+        return "translateX(8%)";     
     }};
 `;
 

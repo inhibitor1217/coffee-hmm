@@ -5,7 +5,10 @@ export const SearchValueCtx = createContext({
     setSearchValueCtx: (data: string) => {}
 })
 
-export const CarouselIndexCtx = createContext({
+export const CarouselIndexCtx = createContext<{
+    carouselIndexCtx: number | null
+    setCarouselIndexCtx: (index: number | null) => void;
+}>({
     carouselIndexCtx: 0,
-    setCarouselIndexCtx: (index: number) => {}
+    setCarouselIndexCtx: (index: number | null) => {}
 })

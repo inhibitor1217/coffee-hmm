@@ -10,7 +10,7 @@ const CarouselHorizontal = (props: any) => {
     const [state, dispatch] = useReducer(reducerCarousel, {pos: 0, sliding: false, dir: RIGHT});
     const numItems = React.Children.count(props.children);
     const divRef = useRef<HTMLDivElement>(null);
-    const { setCarouselIndexCtx } = useContext(CarouselIndexCtx);
+    const { setCarouselIndexCtx } = useContext(CarouselIndexCtx); 
 
     useEffect(() => {
         if(divRef.current !== null){
@@ -19,7 +19,7 @@ const CarouselHorizontal = (props: any) => {
                 setCarouselIndexCtx(parseInt(order));
             } 
         }
-    },)
+    },[setCarouselIndexCtx, state])
 
     const slide =  (dir: string) => {
         dispatch({type: dir, numItems: numItems});
