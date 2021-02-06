@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import './index.css';
 
 type PageTitleProps = { 
-    cafeId: number;
+    cafeId: string;
     name: string;
 }
 

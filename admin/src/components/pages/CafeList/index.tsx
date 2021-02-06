@@ -28,7 +28,7 @@ const CafeList = () => {
         <div>
             {cafes.length > 0 && 
              <StyledFlexColumn className="main-container">
-                <PageTitle cafeId={0} name=""/>
+                <PageTitle cafeId={"0"} name=""/>
                 <CafeListBoard cafes={cafes} pageLoading={pageLoading} setPageLoading={setPageLoading}/>
             </StyledFlexColumn>
             }

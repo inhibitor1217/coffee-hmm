@@ -40,7 +40,7 @@ export type TypeCafe = {
     updatedAt: string,
     name: string,
     place: TypePlace,
-    metadata: TypeCafeMetadata,
+    metadata?: TypeCafeMetadata,
     state: string,
     image: TypeCafeImageList,
     views: TypeCafeViews,
@@ -56,7 +56,7 @@ export type TypePlace = {
 
 export type TypeCafeImageList = {
     count: number,
-    list: TypeCafeImage[]
+    list: TypeCafeImage[] | []
 }
 
 export type TypeCafeImage = {
@@ -66,7 +66,7 @@ export type TypeCafeImage = {
     cafeId: string,
     index: number,
     isMain: boolean,
-    metadata: {
+    metadata?: {
         tag: string,
         width: number,
         height: number

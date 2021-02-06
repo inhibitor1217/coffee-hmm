@@ -7,7 +7,7 @@ import './index.css';
 const CafeRegister = () => {
     return(
         <StyledFlexColumn className="register-container">
-            <PageTitle cafeId={0} name=""/>
+            <PageTitle cafeId={"0"} name=""/>
             <CafeRegisterBoard/>
         </StyledFlexColumn>
     )

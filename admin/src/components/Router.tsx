@@ -25,9 +25,9 @@ const Router = (props: RouterProps) => {
         <Switch location={props.location}>    
             <Route path="/" exact render={() => <Intro />}/>
             <Route path="/cafes" exact render={() => <CafeList/>}/>
-            <Route path="/cafes/:cafeId" exact render={() => <CafeDetail/>}/>
-            <Route path="/cafes/:cafeId/review" exact render={() => <CafeReview/>}/>
-            <Route path="/cafes/:cafeId/image" exact render={() => <CafeImage/>}/>
+            <Route path="/cafe/:cafeId" exact render={() => <CafeDetail/>}/>
+            <Route path="/cafe/:cafeId/review" exact render={() => <CafeReview/>}/>
+            <Route path="/cafe/:cafeId/image" exact render={() => <CafeImage/>}/>
             <Route path="/register" exact render={() => <CafeRegister/>}/>
             <Redirect to="/" />
         </Switch>
