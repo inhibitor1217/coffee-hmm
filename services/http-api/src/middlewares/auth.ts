@@ -2,9 +2,9 @@ import { Middleware, Next, ParameterizedContext } from 'koa';
 import service from '../services';
 import { AppStage } from '../types/env';
 import { KoaContextState } from '../types/koa';
-import { appStage } from '../util';
+import { appStage, env } from '../util';
 import Exception, { ExceptionCode } from '../util/error';
-import { IamPolicy, IamPolicyObject } from '../util/iam';
+import { generateRootPolicy, IamPolicy, IamPolicyObject } from '../util/iam';
 import { TokenSubject, verifyToken } from '../util/token';
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -87,6 +87,21 @@ const auth = (): Middleware<KoaContextState> => {
 
     ctx.state.uid = uid;
     ctx.state.policy = policy;
+
+    try {
+      /* try to override with root policy if root uid feature is enabled */
+      const rootUid =
+        appStage() === AppStage.local
+          ? env('ROOT_UID')
+          : await service().secret().get('ROOT_UID');
+
+      if (rootUid === uid) {
+        ctx.state.policy = generateRootPolicy();
+        ctx.state.logger.info(`user ${uid} executing as root policy`);
+      }
+    } catch (e) {
+      /* pass */
+    }
 
     await next();
   };
