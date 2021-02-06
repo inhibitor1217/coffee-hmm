@@ -1,12 +1,12 @@
 import React from 'react';
-import { CafeInfo } from '../../../utils/type';
+import { TypeCafe } from '../../../utils/type';
 import CarouselMainImage from '../CarouselMainImage';
 import './index.css';
 import CarouselVertical from '../CarouselVertical';
 import { StyledCarouselImage } from '../../../utils/styled';
 
 type CafeImageCarouselProps = {
-    cafes: CafeInfo[];
+    cafes: TypeCafe[];
 }
 
 const CafeCarousel = ({cafes}: CafeImageCarouselProps) => {

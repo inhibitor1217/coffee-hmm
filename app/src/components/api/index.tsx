@@ -16,34 +16,41 @@ export const getAllCafesByName = async (place: string) => {
     return cafes;
 }
 
-export const getCafeById = async (id: string) => {
-    let cafe = await fetch(serverUrl+`/cafe/${id}`, {
+export const getAllCafes = async () => {
+    let cafes = await fetch(serverUrl+`/cafe/list?limit=20`, {
         headers:{
-            "Content-Type": "application/json",
+        "Content-Type": "application/json"
         },
         method: "GET"
     }).then(response => response.json())
-    .then(dataJSON => JSON.stringify(dataJSON))
-    .then(dataStr => JSON.parse(dataStr))
     .then(data => {return data})
-    .catch((error) => console.log("Error: ", error));
-
-    return cafe;
-}
-
-
-// Place
-export const getAllCafesByPlace = async (name: string) => {
-    let cafes = await fetch(serverUrl+`/?place=${name}`, {
-        headers:{
-            "Content-Type": "application/json",
-        },
-        method: "GET"
-    }).then(response => response.json())
-    .then(dataJSON => JSON.stringify(dataJSON))
-    .then(dataStr => JSON.parse(dataStr))
-    .then(data => {return data})
-    .catch((error) => console.log("Error: ", error));
+    .catch(error => console.log("Error: ", error));
 
     return cafes;
+}
+
+export const getPlaceList = async () => {
+    let places = await fetch(serverUrl + `/place/list`, {
+        headers:{
+            "Content-Type": "application/json"
+        },
+        method: "GET"
+    }).then(response => response.json())
+    .then(data => {return data})
+    .catch(error => console.log(error));
+
+    return places;
+}
+
+export const getCafeById = async (cafeId: string) => {
+    let cafe = await fetch(serverUrl+`/cafe/${cafeId}`, {
+        headers:{
+            "Content-Type": "application/json"
+            },
+            method: "GET"
+    }).then(response => response.json())
+    .then(data => {return data})
+    .catch(error => console.log(error));
+
+    return cafe;
 }

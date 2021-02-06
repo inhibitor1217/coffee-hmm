@@ -1,5 +1,6 @@
-import React, { lazy } from "react";
+import React, { lazy, useState } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
+import { CarouselIndexCtx } from "../context";
 
 interface RouterProps {
   location?: any;
@@ -7,18 +8,26 @@ interface RouterProps {
 
 const IntroPage = lazy(() => import("./pages/Intro"));
 const CafesByPlacePage = lazy(() => import("./pages/CafesByPlace"));
-const DetailPage = lazy(() => import("./pages/Detail"));
+const CafeDetailPage = lazy(() => import("./pages/Detail"));
 
 const Router = (props: RouterProps) => {
-return(
-    <React.Suspense fallback={<div>Loading...</div>}>
-    <Switch location={props.location}>    
-        <Route path="/" exact render={() => <IntroPage />}/>
-        <Route path="/place" exact render={() => <CafesByPlacePage/>}/>
-        <Route path="/cafe/:cafeId" exact render={() => <DetailPage/>}/>
-      <Redirect to="/" />
-    </Switch>
-    </React.Suspense>  
+  const [carouselIndex, setCarouselIndex] = useState<number | null>(0);
+
+  return(
+    <CarouselIndexCtx.Provider value={{
+      carouselIndexCtx: carouselIndex,
+      setCarouselIndexCtx: (index: number | null) => setCarouselIndex(index)}}>
+
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <Switch location={props.location}>    
+            <Route path="/" exact render={() => <IntroPage />}/>
+            <Route path="/place/:place" exact render={() => <CafesByPlacePage/>}/>
+            <Route path="/cafe/:cafeId" exact render={() => <CafeDetailPage/>}/>
+          <Redirect to="/" />
+        </Switch>
+      </React.Suspense>
+
+    </CarouselIndexCtx.Provider>    
   );
 };
 

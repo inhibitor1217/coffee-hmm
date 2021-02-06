@@ -1,11 +1,11 @@
 import React from 'react';
 import { openSearch } from '../../../utils/function';
 import { StyledRowFlexCenter } from '../../../utils/styled';
-import { CafeInfo } from '../../../utils/type';
+import { TypeCafe } from '../../../utils/type';
 import './index.css';
 
 type WebSearchBottomPopupProps = {
-    cafe: CafeInfo | null;
+    cafe: TypeCafe | null;
     isWebSearchClicked: boolean;
     setWebSearchClicked: (type: boolean) => void;
 }

@@ -1,33 +1,32 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { CarouselIndexCtx, SearchValueCtx } from '../../../context';
-import { CafeInfo } from '../../../utils/type';
-import { getAllCafesByName } from '../../api';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { TypeCafe } from '../../../utils/type';
+import { getAllCafes } from '../../api';
 import CafeList from '../../others/CafeList';
+import NoSearchResult from '../../others/NoSearchResult';
 
 const CafesByPlace = () => {
-    // const location = useLocation();
-    // const place = location.pathname.slice(6);
-    const { setCarouselIndexCtx } = useContext(CarouselIndexCtx);
-    const { searchValueCtx } = useContext(SearchValueCtx); //FIX: parameter 이용으로 대체
-    const [cafes, setCafes] = useState<CafeInfo[]>([])
+    const { place } = useParams<{place: string}>();
+    const [cafes, setCafes] = useState<TypeCafe[]>([])
 
     useEffect(() => {
-        setCarouselIndexCtx(null);
         async function fetchData(){
-            await getAllCafesByName(searchValueCtx).then(data => {
-                if(data){
-                    setCafes(data);
-                }        
+            await getAllCafes().then(data => {
+                setCafes(data.cafe.list);
             });
-
-            // await getAllCafesByPlace(place).then(data => {
-            //     if(data){
-            //         setCafes(data);
-            //     }
-            // })
         }
         fetchData();
-    },[searchValueCtx, setCarouselIndexCtx])
+    },[place])
+
+    const isEmptyArray = (array: TypeCafe[]) => {
+        return (! Array.isArray(array) || !array.length );
+    }
+
+    if(isEmptyArray(cafes)){
+        return(
+            <NoSearchResult searchValue={place}/>
+        )
+    }
 
     return(
         <CafeList cafes={cafes}/>

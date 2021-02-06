@@ -1,29 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { initialCafe } from '../../../utils/constant';
+import { useParams } from 'react-router-dom';
+import { TypeCafe } from '../../../utils/type';
 import { getCafeById } from '../../api';
 import CafeDetail from '../../others/CafeDetail';
 import './index.css';
 
 const Detail = () => {
-    const location = useLocation();
-    const id = location.pathname.slice(6);
-    const [cafe, setCafe] = useState(initialCafe);
+    const { cafeId } = useParams<{cafeId: string}>();
+    const [cafe, setCafe] = useState<TypeCafe | null>(null);
 
     useEffect(() => {
         async function fetchData(){
-            await getCafeById(id).then(data => {
+            await getCafeById(cafeId).then(data => {
                 if(data){
-                    setCafe(data);
+                    setCafe(data.cafe);
                 }
             });
         }
         fetchData();
-    }, [id])
+    }, [cafeId])
 
     return(
         <div className="cafe-detail">
-            <CafeDetail cafe={cafe}/>
+            {cafe && <CafeDetail cafe={cafe} setCafe={setCafe}/>}
         </div>
     )
 }
