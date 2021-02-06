@@ -8,7 +8,6 @@ import './index.css';
 
 const CafeRegisterBoard = () => {
     const [newCafe, setNewCafe] = useState<Cafe>(InitialCafeInfo);
-
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if(CafeRegisterValidation(newCafe)){

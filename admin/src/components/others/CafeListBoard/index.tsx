@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyledFlexRow } from '../../../utils/Styled';
-import { Cafe } from '../../../utils/Type';
+import { TypeCafe } from '../../../utils/Type';
 import CafeListButtons from '../CafeListButtons';
 import CafeSearchResultTable from '../CafeSearchResultTable';
 import CafeTablePagination from '../CafeTablePagination';
@@ -8,15 +8,15 @@ import SearchBar from '../SearchBar';
 import './index.css';
 
 type CafeListBoardProps = {
-    cafes: Cafe[];
+    cafes: TypeCafe[];
     pageLoading: boolean;
     setPageLoading: (pageLoading: boolean) => void;
 }
 
-const CafeListBoard = ({cafes, pageLoading, setPageLoading}: CafeListBoardProps) => {
+const CafeListBoard = ({cafes, pageLoading, setPageLoading}: CafeListBoardProps) => {    
     const [searchTarget, setSearchTarget] = useState<string>("");
-    const [searchResults, setSearchResults] = useState<Cafe[]>(cafes);
-    const [searchResultsVisible, setSearchResultsVisible] = useState<Cafe[]>([]);
+    const [searchResults, setSearchResults] = useState<TypeCafe[]>(cafes);
+    const [searchResultsVisible, setSearchResultsVisible] = useState<TypeCafe[]>([]);
     const [isVisibleOnly, setVisibleOnly] = useState<boolean>(false);
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -25,21 +25,17 @@ const CafeListBoard = ({cafes, pageLoading, setPageLoading}: CafeListBoardProps)
     const indexOfFirstRow = indexOfLastRow - rowsPerPage;
     const rowsOnCurrentPage = (isVisibleOnly? searchResultsVisible : searchResults).slice(indexOfFirstRow, indexOfLastRow);
     const endingPage = (isVisibleOnly? searchResultsVisible : searchResults).length / rowsPerPage;
-
-    useEffect(() => {
-        async function filter(){
-            if(searchTarget === "") return cafes;
     
-            const filteredCafes: Cafe[] = cafes.filter(cafe => (cafe.name === searchTarget));
-            return filteredCafes;
+    useEffect(() => {
+        if(searchTarget !== "") {      
+            const filteredCafes: TypeCafe[] = cafes.filter(cafe => (cafe.name === searchTarget));
+            setSearchResults(filteredCafes);
         }
-
-        filter().then(cafes => setSearchResults(cafes));
     }, [cafes, searchTarget]);
 
     useEffect(() => {
         async function clickVisibleOnly(){
-            const filteredVisibleCafes: Cafe[] = searchResults.filter(cafe => (cafe.status === "visible"));
+            const filteredVisibleCafes: TypeCafe[] = searchResults.filter(cafe => (cafe.state === "active"));
             setSearchResultsVisible(filteredVisibleCafes);
         }
 
