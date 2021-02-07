@@ -456,7 +456,7 @@ export const deleteList = handler<
     const connection = await ctx.state.connection();
 
     await connection.transaction(async (manager) => {
-      const deletedImages = await manager
+      await manager
         .createQueryBuilder()
         .update(CafeImage)
         .set({
@@ -477,13 +477,6 @@ export const deleteList = handler<
             CafeImage.fromRawColumns(raw)
           );
         });
-
-      if (deletedImages.some((image) => image.isMain)) {
-        throw new Exception(
-          ExceptionCode.badRequest,
-          `cannot delete main image of a cafe`
-        );
-      }
 
       await reassignIndices(manager, cafeId);
       const { total, active } = await checkConsistency(manager, cafeId);
