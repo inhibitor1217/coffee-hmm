@@ -20,12 +20,10 @@ const CarouselMainImage = ({cafe}: CarouselMainImageProps) => {
         })
     }
 
-   // cafelist 에 main image uri 추가
-
     return(
         <div>
             <div className="carousel-img">
-                <img src={"/images/coffee.png"} alt="img" style={{
+                <img src={cafe.image.count > 0 ? cafe.image.list[0].relativeUri : "/images/coffee.png"} alt="img" style={{
                     display: isImageReady ? "initial" : "none"}} 
                     onLoad={() => onImageLoad(setIsImageReady)}
                     onClick={handleClick}/>

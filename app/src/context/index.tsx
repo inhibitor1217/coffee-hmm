@@ -1,6 +1,6 @@
 import {createContext} from 'react';
 
-export const CarouselIndexCtx = createContext<{carouselIndexCtx: number | null, setCarouselIndexCtx: (index: number | null) => void}>({
+export const CarouselIndexCtx = createContext({
     carouselIndexCtx: 0,
-    setCarouselIndexCtx: (index: number | null) => {}
+    setCarouselIndexCtx: (index: number) => {}
 })

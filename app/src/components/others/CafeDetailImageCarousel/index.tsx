@@ -17,7 +17,7 @@ const CafeDetailImageCarousel = ({cafe}: CafeDetailImageCarouselProps) => {
     useEffect(() => {
         setImages(cafe?.image.list || []);
     },[cafe?.image.list])
-    
+
     return(
         <div className="detail-carousel-dot-wrapper">
             <div className="detail-carousel-container">

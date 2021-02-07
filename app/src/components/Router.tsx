@@ -11,12 +11,12 @@ const CafesByPlacePage = lazy(() => import("./pages/CafesByPlace"));
 const CafeDetailPage = lazy(() => import("./pages/Detail"));
 
 const Router = (props: RouterProps) => {
-  const [carouselIndex, setCarouselIndex] = useState<number | null>(0);
+  const [carouselIndex, setCarouselIndex] = useState<number>(0);
 
   return(
     <CarouselIndexCtx.Provider value={{
       carouselIndexCtx: carouselIndex,
-      setCarouselIndexCtx: (index: number | null) => setCarouselIndex(index)}}>
+      setCarouselIndexCtx: (index: number) => setCarouselIndex(index)}}>
 
       <React.Suspense fallback={<div>Loading...</div>}>
         <Switch location={props.location}>    

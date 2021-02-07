@@ -13,7 +13,7 @@ const PositionDotHorizontal = ({dotNum}: PositionDotHorizontalProps) => {
     return(
         <ul className="dot-list">
             {array.map((order, index) => {
-                return <li style={{backgroundColor: (carouselIndexCtx === null?  dotNum-1 : carouselIndexCtx) === Math.abs(index-dotNum+1)? "#595959" : "#D9D9D9"}} key={index}></li>
+                return <li style={{backgroundColor: carouselIndexCtx === Math.abs(index-dotNum+1)? "#595959" : "#D9D9D9"}} key={index}></li>
             })}
         </ul>
     )

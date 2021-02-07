@@ -17,9 +17,13 @@ const CarouselHorizontal = (props: any) => {
             const order = divRef.current.getAttribute("order");
             if(order !== null){
                 setCarouselIndexCtx(parseInt(order));
-            } 
+                
+                if(parseInt(order) === numItems) {
+                    setCarouselIndexCtx(0);
+                }
+            }            
         }
-    },[setCarouselIndexCtx, state])
+    },[numItems, setCarouselIndexCtx, state])
 
     const slide =  (dir: string) => {
         dispatch({type: dir, numItems: numItems});
