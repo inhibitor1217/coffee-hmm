@@ -248,7 +248,8 @@ Retrieves a list of cafe as a feed, which is selected randomly (for now), among 
         },
         "state": "active",
         "image": {
-          "count": 0
+          "count": 0,
+          "list": []
         },
         "views": {
           "daily": 12,
