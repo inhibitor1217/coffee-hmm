@@ -1,6 +1,6 @@
 import joi from 'joi';
 import { FOREIGN_KEY_VIOLATION } from 'pg-error-constants';
-import { getManager, getRepository, Not } from 'typeorm';
+import { getManager, getRepository, In, Not } from 'typeorm';
 import * as uuid from 'uuid';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
 import Cafe, {
@@ -8,6 +8,7 @@ import Cafe, {
   CafeStateStrings,
   createCafeWithImagesLoader,
 } from '../../entities/cafe';
+import CafeImage, { CafeImageState } from '../../entities/cafeImage';
 import CafeImageCount from '../../entities/cafeImageCount';
 import CafeStatistic from '../../entities/cafeStatistic';
 import Place from '../../entities/place';
@@ -137,11 +138,27 @@ export const getFeed = handler<
           cafe.imageCount = CafeImageCount.fromRawColumns(row, {
             alias: 'cafe_image_count',
           });
+          cafe.images = [];
 
           return cafe;
         }),
         cursor: rows[rows.length - 1]?.cursor,
       }));
+
+    const cafeImages = await getRepository(CafeImage)
+      .createQueryBuilder('cafe_image')
+      .select()
+      .where({
+        fkCafeId: In(cafes.map((cafe) => cafe.id)),
+        state: Not(In([CafeImageState.hidden, CafeImageState.deleted])),
+      })
+      .orderBy({ index: 'ASC' })
+      .getMany();
+
+    cafeImages.forEach((cafeImage) => {
+      const cafe = cafes.find((item) => item.id === cafeImage.fkCafeId);
+      cafe?.images.push(cafeImage);
+    });
 
     ctx.status = HTTP_OK;
     ctx.body = {
@@ -403,11 +420,32 @@ export const getList = handler<
           cafe.imageCount = CafeImageCount.fromRawColumns(row, {
             alias: 'cafe_image_count',
           });
+          cafe.images = [];
 
           return cafe;
         }),
         cursor: rows[rows.length - 1]?.cursor,
       }));
+
+    const cafeImages = await getRepository(CafeImage)
+      .createQueryBuilder('cafe_image')
+      .select()
+      .where({
+        fkCafeId: In(cafes.map((cafe) => cafe.id)),
+        state: Not(
+          In([
+            ...(showHiddenImages ? [] : [CafeImageState.hidden]),
+            CafeImageState.deleted,
+          ])
+        ),
+      })
+      .orderBy({ index: 'ASC' })
+      .getMany();
+
+    cafeImages.forEach((cafeImage) => {
+      const cafe = cafes.find((item) => item.id === cafeImage.fkCafeId);
+      cafe?.images.push(cafeImage);
+    });
 
     ctx.status = HTTP_OK;
     ctx.body = {
