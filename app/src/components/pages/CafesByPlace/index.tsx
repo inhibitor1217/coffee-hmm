@@ -8,7 +8,7 @@ import NoSearchResult from '../../others/NoSearchResult';
 const CafesByPlace = () => {
     const { place } = useParams<{place: string}>();
     const [cafes, setCafes] = useState<TypeCafe[]>([])
-
+   
     useEffect(() => {
         async function fetchData(){
             await getCafeListByPlace(place).then(data => {

@@ -15,9 +15,8 @@ h2 {
 }
 
 h3 {
-    padding-top: 24px;
-    padding-left: 40px;
-    padding-bottom: 4px;
+    padding: 20px;
+    text-align: center;
 
     font-family: 'Poor Story', cursive;
     font-style: normal;

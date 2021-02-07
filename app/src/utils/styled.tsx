@@ -1,6 +1,19 @@
 import styled from "styled-components";
 import { DOWN, LEFT, RIGHT } from "./constant";
 
+export const StyledColor = [
+    "#CCCBA4",
+    "#B1A6D4",
+    "#5C73F2",
+    "#FFC7E7",
+    "#FFC4CB",
+    "#A6F2E9",
+    "#E0FFAE",
+    "#FFF8B4",
+    "#BEC9FF",
+    "#66A3D9"
+];
+
 export const StyledMainScale = styled.div`
     width: 100%;
     height: 100%;
@@ -77,4 +90,10 @@ export const StyledCarouselImage = styled.div`
     width: 100%;
     height: 100%;
     text-align: center;
+`;
+
+export const StyledChessDiv = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
 `;

@@ -1,37 +1,55 @@
 @import url('https://fonts.googleapis.com/css2?family=Alef&family=Poor+Story&display=swap');
 
 .card-container {
-    width: 320px;
-    height: 90px;
-    overflow-x: auto;
-    padding-left: 40px;
-}
-
-.card-wrapper {
-    padding-right : 8px;
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+    padding-top: 10px;
 }
 
 .card-box {
-    width: 80px;
-    height: 80px;
+    min-width: 100px;
+    min-height: 60px;
     background: #FFFFFF;
 
     font-family: 'Poor Story', cursive;
     font-size: 14px;
     color: #524F4A;
     text-align: center;
+
+    animation-duration: 10s;
+    animation-name: movementSwing;
+    animation-iteration-count: infinite;
 }
 
 .card-box span {
     display: block;
 }
 
-.card-box img {
-    width: 32px;
-    height: 32px;
-    padding: 10px;
+.place-color-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin: 0 auto;
 }
 
-.place-eng {
-    font-size: 12px;
+@keyframes movementSwing {
+    10% {
+            transform: rotate(20deg);
+    }
+    50% {
+            transform: rotate(-20deg);
+    }
+    60% {
+            transform: scale(1.1) rotate(0deg);
+    }
+    70% {
+            transform: rotate(10deg);
+    }
+    80% {
+            transform: rotate(0deg) scale(.9);
+    }
+    100% {
+            transform: rotate(-10deg);
+    }
 }
