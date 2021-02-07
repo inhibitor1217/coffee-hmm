@@ -192,7 +192,37 @@ Retrieves a list of cafe as a feed, which is selected randomly (for now), among 
         },
         "state": "active",
         "image": {
-          "count": 2
+          "count": 2,
+          "list": [
+            {
+              "id": "11111111-1111-1111-1111-111111111111",
+              "createdAt": "2020-01-01T00:00:00.000Z",
+              "updatedAt": "2020-01-01T00:00:00.000Z",
+              "cafeId": "11111111-1111-1111-1111-111111111111",
+              "index": 0,
+              "isMain": true,
+              "metadata": {
+                "tag": "입구",
+                "width": 1024,
+                "height": 1920
+              }
+              "relativeUri": "/images/11111111-1111-1111-1111-111111111111",
+              "state": "active"
+            },
+            {
+              "id": "11111111-1111-1111-1111-111111111111",
+              "createdAt": "2020-01-01T00:00:00.000Z",
+              "updatedAt": "2020-01-01T00:00:00.000Z",
+              "cafeId": "11111111-1111-1111-1111-111111111111",
+              "index": 1,
+              "isMain": false,
+              "metadata": {
+                "tag": "메뉴"
+              }
+              "relativeUri": "/images/11111111-1111-1111-1111-111111111111",
+              "state": "active"
+            }
+          ]
         },
         "views": {
           "daily": 12,
@@ -218,7 +248,7 @@ Retrieves a list of cafe as a feed, which is selected randomly (for now), among 
         },
         "state": "active",
         "image": {
-          "count": 2
+          "count": 0
         },
         "views": {
           "daily": 12,
@@ -306,7 +336,37 @@ Retrieve a list of cafes.
         },
         "state": "active",
         "image": {
-          "count": 2
+          "count": 2,
+          "list": [
+            {
+              "id": "11111111-1111-1111-1111-111111111111",
+              "createdAt": "2020-01-01T00:00:00.000Z",
+              "updatedAt": "2020-01-01T00:00:00.000Z",
+              "cafeId": "11111111-1111-1111-1111-111111111111",
+              "index": 0,
+              "isMain": true,
+              "metadata": {
+                "tag": "입구",
+                "width": 1024,
+                "height": 1920
+              }
+              "relativeUri": "/images/11111111-1111-1111-1111-111111111111",
+              "state": "active"
+            },
+            {
+              "id": "11111111-1111-1111-1111-111111111111",
+              "createdAt": "2020-01-01T00:00:00.000Z",
+              "updatedAt": "2020-01-01T00:00:00.000Z",
+              "cafeId": "11111111-1111-1111-1111-111111111111",
+              "index": 1,
+              "isMain": false,
+              "metadata": {
+                "tag": "메뉴"
+              }
+              "relativeUri": "/images/11111111-1111-1111-1111-111111111111",
+              "state": "active"
+            }
+          ]
         },
         "views": {
           "daily": 12,
@@ -332,7 +392,24 @@ Retrieve a list of cafes.
         },
         "state": "active",
         "image": {
-          "count": 2
+          "count": 1,
+          "list": [
+            {
+              "id": "11111111-1111-1111-1111-111111111111",
+              "createdAt": "2020-01-01T00:00:00.000Z",
+              "updatedAt": "2020-01-01T00:00:00.000Z",
+              "cafeId": "11111111-1111-1111-1111-111111111111",
+              "index": 0,
+              "isMain": true,
+              "metadata": {
+                "tag": "입구",
+                "width": 1024,
+                "height": 1920
+              }
+              "relativeUri": "/images/11111111-1111-1111-1111-111111111111",
+              "state": "active"
+            }
+          ]
         },
         "views": {
           "daily": 12,
