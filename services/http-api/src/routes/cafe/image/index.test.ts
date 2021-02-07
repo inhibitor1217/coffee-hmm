@@ -1325,6 +1325,52 @@ describe('Cafe Image - DELETE /cafe/:cafeId/image/:cafeImageId', () => {
       .send()
       .expect(HTTP_BAD_REQUEST);
   });
+
+  test('Can delete a main image, if no active images are left after deletion', async () => {
+    const place = await setupPlace(connection, { name: '연남동' });
+    const { cafe, cafeImages } = await setupCafe(connection, {
+      name: '커피밀',
+      placeId: place.id,
+      state: CafeState.active,
+      mainImageIndex: 0,
+      images: [
+        {
+          uri: '/image/0',
+          state: CafeImageState.active,
+        },
+        {
+          uri: '/image/1',
+          state: CafeImageState.hidden,
+        },
+      ],
+    });
+
+    await request
+      .delete(`/cafe/${cafe.id}/image/${cafeImages[0].id}`)
+      .set({
+        'x-debug-user-id': uuid.v4(),
+        'x-debug-iam-policy': adminerPolicyString,
+      })
+      .expect(HTTP_OK);
+
+    const updatedImages = await connection
+      .getRepository(CafeImage)
+      .createQueryBuilder('cafe_image')
+      .select()
+      .where({ fkCafeId: cafe.id })
+      .andWhere(`cafe_image.state IS DISTINCT FROM :deleted`, {
+        deleted: CafeImageState.deleted,
+      })
+      .orderBy({ index: 'ASC' })
+      .getMany();
+
+    expect(updatedImages.length).toBe(1);
+    expect(updatedImages[0].toJsonObject()).toMatchObject({
+      id: cafeImages[1].id,
+      state: 'hidden',
+      index: 0,
+    });
+  });
 });
 
 describe('Cafe Image - DELETE /cafe/:cafeId/image', () => {
@@ -1607,7 +1653,54 @@ describe('Cafe Image - DELETE /cafe/:cafeId/image', () => {
         'x-debug-user-id': uuid.v4(),
         'x-debug-iam-policy': adminerPolicyString,
       })
-      .send({ list: [cafeImages[0].id, cafeImages[3].id, cafeImages[2].id] })
+      .send({ list: [cafeImages[0].id, cafeImages[2].id] })
       .expect(HTTP_BAD_REQUEST);
+  });
+
+  test('Can delete a main image, if no active images are left after deletion', async () => {
+    const place = await setupPlace(connection, { name: '연남동' });
+    const { cafe, cafeImages } = await setupCafe(connection, {
+      name: '커피밀',
+      placeId: place.id,
+      state: CafeState.active,
+      mainImageIndex: 0,
+      images: [
+        {
+          uri: '/image/0',
+          state: CafeImageState.active,
+        },
+        {
+          uri: '/image/1',
+          state: CafeImageState.hidden,
+        },
+      ],
+    });
+
+    await request
+      .delete(`/cafe/${cafe.id}/image`)
+      .set({
+        'x-debug-user-id': uuid.v4(),
+        'x-debug-iam-policy': adminerPolicyString,
+      })
+      .send({ list: [cafeImages[0].id] })
+      .expect(HTTP_OK);
+
+    const updatedImages = await connection
+      .getRepository(CafeImage)
+      .createQueryBuilder('cafe_image')
+      .select()
+      .where({ fkCafeId: cafe.id })
+      .andWhere(`cafe_image.state IS DISTINCT FROM :deleted`, {
+        deleted: CafeImageState.deleted,
+      })
+      .orderBy({ index: 'ASC' })
+      .getMany();
+
+    expect(updatedImages.length).toBe(1);
+    expect(updatedImages[0].toJsonObject()).toMatchObject({
+      id: cafeImages[1].id,
+      state: 'hidden',
+      index: 0,
+    });
   });
 });
