@@ -163,6 +163,8 @@ Retrieves a list of cafe as a feed, which is selected randomly (for now), among 
 | `limit`      | `int`    | yes           | Max number of items to be retrieved by this query. Max value is 64.                                                                                                                                                                                                                    |
 | `cursor`     | `string` | no            | If `cursor` is provided, this query will fetch items after the `cursor`. Use `cursor` for pagination. Initially fetch the feed with no `cursor`, then set the `cursor` from the last request as query parameter to fetch next page.                                                    |
 | `identifier` | `string` | no            | `identifier` is used to identify the **unsigned** requester among requests for different pages. If the requester is unsigend, initially fetch the feed with no `identifier`, then set the `identifier` from the first request as the query parameter for fetching the following pages. |
+| `placeId`    | `string` | no            | If `placeId` is provided, the resulting list will be filetered which consists of cafe with given place. Cannot use together with `placeName` parameter.                                                                                                                                |
+| `placeName`  | `string` | no            | If `placeName` is provided, the resulting list will be filtered which consists of cafes with place of given name. Cannot use together with `placeId` query parameter.                                                                                                                  |
 
 **Request Example**
 
