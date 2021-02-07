@@ -4,7 +4,10 @@ import { Connection, createConnection } from 'typeorm';
 import * as uuid from 'uuid';
 import { HTTP_OK } from '../../const';
 import { CafeState, CafeStateStrings } from '../../entities/cafe';
-import { CafeImageState } from '../../entities/cafeImage';
+import {
+  CafeImageState,
+  CafeImageStateStrings,
+} from '../../entities/cafeImage';
 import { cleanDatabase, closeServer, openServer, ormConfigs } from '../../test';
 import { setupCafe, setupPlace } from '../../test/util';
 import { KoaServer } from '../../types/koa';
@@ -86,6 +89,12 @@ type SimpleCafe = {
   state: CafeStateStrings;
   image: {
     count: number;
+    list: {
+      id: string;
+      index: number;
+      state: CafeImageStateStrings;
+      relativeUri: string;
+    }[];
   };
 };
 
@@ -280,6 +289,36 @@ describe('Cafe - GET /cafe/feed', () => {
 
     expect(todayCafeIds).not.toEqual(tomorrowCafeIds);
   });
+
+  test('Cafe item contains its images', async () => {
+    const response = await request
+      .get('/cafe/feed')
+      .query({ limit: 10 })
+      .expect(HTTP_OK);
+
+    const {
+      cafe: { list: cafeList },
+    } = response.body as { cafe: { list: SimpleCafe[] } };
+
+    cafeList.forEach((cafe) => {
+      const {
+        id,
+        image: { count, list: imageList },
+      } = cafe;
+
+      const index = cafeIds.findIndex((item) => id === item);
+      expect(index).toBeGreaterThanOrEqual(0);
+      expect(index).toBeLessThan(NUM_TEST_CAFES);
+
+      expect(count).toBe(Math.ceil((index % 5) * 0.5));
+      expect(imageList.length).toBe(count);
+      imageList.forEach((image, imageIndex) => {
+        expect(image.index).toBe(imageIndex);
+        expect(image.state).toBe('active');
+        expect(image.relativeUri).toBe(`/image/${index}/${2 * image.index}`);
+      });
+    });
+  });
 });
 
 describe('Cafe - GET /cafe/count', () => {
@@ -388,6 +427,74 @@ describe('Cafe - GET /cafe/list', () => {
       const reference = cafeIds.findIndex((id) => cafe.id === id);
       expect(reference).toBeGreaterThanOrEqual(0);
       expect(cafe.image.count).toBe(reference % 5);
+    });
+  });
+
+  test('Cafe item contains its images', async () => {
+    const response = await request
+      .get('/cafe/list')
+      .query({ limit: 10 })
+      .expect(HTTP_OK);
+
+    const {
+      cafe: { list: cafeList },
+    } = response.body as { cafe: { list: SimpleCafe[] } };
+
+    cafeList.forEach((cafe) => {
+      const {
+        id,
+        image: { count, list: imageList },
+      } = cafe;
+
+      const index = cafeIds.findIndex((item) => id === item);
+      expect(index).toBeGreaterThanOrEqual(0);
+      expect(index).toBeLessThan(NUM_TEST_CAFES);
+
+      expect(count).toBe(Math.ceil((index % 5) * 0.5));
+      expect(imageList.length).toBe(count);
+      imageList.forEach((image, imageIndex) => {
+        expect(image.index).toBe(imageIndex);
+        expect(image.state).toBe('active');
+        expect(image.relativeUri).toBe(`/image/${index}/${2 * image.index}`);
+      });
+    });
+  });
+
+  test('showHiddenImages=true retrieves hidden images', async () => {
+    const response = await request
+      .get('/cafe/list')
+      .query({ limit: 10, showHiddenImages: true })
+      .set({
+        'x-debug-user-id': uuid.v4(),
+        'x-debug-iam-policy': adminerPolicyString,
+      })
+      .expect(HTTP_OK);
+
+    const {
+      cafe: { list: cafeList },
+    } = response.body as { cafe: { list: SimpleCafe[] } };
+
+    cafeList.forEach((cafe) => {
+      const {
+        id,
+        image: { count, list: imageList },
+      } = cafe;
+
+      const index = cafeIds.findIndex((item) => id === item);
+      expect(index).toBeGreaterThanOrEqual(0);
+      expect(index).toBeLessThan(NUM_TEST_CAFES);
+
+      expect(count).toBe(index % 5);
+      expect(imageList.length).toBe(count);
+      imageList.forEach((image, imageIndex) => {
+        expect(image.index).toBe(imageIndex);
+        expect(image.relativeUri).toBe(`/image/${index}/${image.index}`);
+        if (imageIndex % 2 === 0) {
+          expect(image.state).toBe('active');
+        } else {
+          expect(image.state).toBe('hidden');
+        }
+      });
     });
   });
 });
