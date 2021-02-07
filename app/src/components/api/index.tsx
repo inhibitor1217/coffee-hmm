@@ -1,22 +1,20 @@
 import { serverUrl } from "../../utils/constant";
 
 // Cafe
-export const getAllCafesByName = async (place: string) => {
-    let cafes = await fetch(serverUrl+`/cafe/?place=${place}`, {
+export const getCafeListByPlace = async (place: string) => {
+    let cafes = await fetch(serverUrl+`/cafe/feed?limit=10&placeName=${place}`, {
         headers:{
         "Content-Type": "application/json"
     },
     method: "GET"
     }).then(response => response.json())
-    .then(dataJSON => JSON.stringify(dataJSON))
-    .then(dataStr => JSON.parse(dataStr))
     .then(data => {return data})
     .catch((error) => console.log("Error: ", error));
 
     return cafes;
 }
 
-export const getAllCafes = async () => {
+export const getCafeList = async () => {
     let cafes = await fetch(serverUrl+`/cafe/list?limit=20`, {
         headers:{
         "Content-Type": "application/json"

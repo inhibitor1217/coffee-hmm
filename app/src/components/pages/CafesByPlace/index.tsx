@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { TypeCafe } from '../../../utils/type';
-import { getAllCafes } from '../../api';
+import { getCafeListByPlace } from '../../api';
 import CafeList from '../../others/CafeList';
 import NoSearchResult from '../../others/NoSearchResult';
 
@@ -11,8 +11,10 @@ const CafesByPlace = () => {
 
     useEffect(() => {
         async function fetchData(){
-            await getAllCafes().then(data => {
-                setCafes(data.cafe.list);
+            await getCafeListByPlace(place).then(data => {
+                if(data.cafe) {
+                    setCafes(data.cafe.list);
+                }
             });
         }
         fetchData();

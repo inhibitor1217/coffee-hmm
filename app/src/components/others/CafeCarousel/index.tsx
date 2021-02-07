@@ -10,12 +10,21 @@ type CafeImageCarouselProps = {
 }
 
 const CafeCarousel = ({cafes}: CafeImageCarouselProps) => {
+    if(cafes.length === 1) {
+        return (
+            <div>
+                <StyledCarouselImage>
+                    <CarouselMainImage cafe={cafes[0]}/>
+                </StyledCarouselImage>
+            </div>
+        )
+    }
     return(
         <div className="carousel-container">
             <CarouselVertical title="Carousel">
-            {cafes?.map((cafe, index) => {
+            {cafes?.map((cafe) => {
                 return(
-                    <StyledCarouselImage key={index}>
+                    <StyledCarouselImage key={cafe.id}>
                         <CarouselMainImage cafe={cafe}/>
                     </StyledCarouselImage>
             )})}
