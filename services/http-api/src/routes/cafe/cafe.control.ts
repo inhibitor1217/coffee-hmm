@@ -82,10 +82,18 @@ export const getFeed = handler<
     limit: number;
     cursor?: string;
     identifier?: string;
+    placeId?: string;
+    placeName?: string;
   }
 >(
   async (ctx) => {
-    const { limit, cursor, identifier: _identifier } = ctx.query;
+    const {
+      limit,
+      cursor,
+      identifier: _identifier,
+      placeId,
+      placeName,
+    } = ctx.query;
 
     await ctx.state.connection();
 
@@ -122,6 +130,14 @@ export const getFeed = handler<
           cursor,
         }
       );
+    }
+
+    if (placeId) {
+      query = query.andWhere('place.id = :placeId', { placeId });
+    }
+
+    if (placeName) {
+      query = query.andWhere('place.name = :placeName', { placeName });
     }
 
     query = query.orderBy(`"cursor"`, 'ASC').limit(limit);
@@ -179,7 +195,10 @@ export const getFeed = handler<
           limit: joi.number().integer().min(1).max(64).required(),
           cursor: joi.string(),
           identifier: joi.string().uuid({ version: 'uuidv4' }),
+          placeId: joi.string().uuid({ version: 'uuidv4' }),
+          placeName: joi.string().min(1).max(255),
         })
+        .oxor('placeId', 'placeName')
         .required(),
     },
   }

@@ -2,12 +2,13 @@ import pLimit from 'p-limit';
 import { SuperTest, Test } from 'supertest';
 import { Connection, createConnection } from 'typeorm';
 import * as uuid from 'uuid';
-import { HTTP_OK } from '../../const';
+import { HTTP_BAD_REQUEST, HTTP_OK } from '../../const';
 import { CafeState, CafeStateStrings } from '../../entities/cafe';
 import {
   CafeImageState,
   CafeImageStateStrings,
 } from '../../entities/cafeImage';
+import Place from '../../entities/place';
 import { cleanDatabase, closeServer, openServer, ormConfigs } from '../../test';
 import { setupCafe, setupPlace } from '../../test/util';
 import { KoaServer } from '../../types/koa';
@@ -318,6 +319,67 @@ describe('Cafe - GET /cafe/feed', () => {
         expect(image.relativeUri).toBe(`/image/${index}/${2 * image.index}`);
       });
     });
+  });
+
+  test('Can filter cafes with place id', async () => {
+    const place = await connection
+      .getRepository(Place)
+      .findOne({ where: { name: '판교' } });
+
+    expect(place).toBeTruthy();
+
+    const {
+      cafe: { list: nonEmptyList },
+    } = (
+      await request
+        .get('/cafe/feed')
+        .query({ limit: 10, placeId: place?.id })
+        .expect(HTTP_OK)
+    ).body as { cafe: { list: SimpleCafe[] } };
+
+    expect(nonEmptyList.length).toBeGreaterThan(1);
+
+    const {
+      cafe: { list: emptyList },
+    } = (
+      await request
+        .get('/cafe/feed')
+        .query({ limit: 10, placeId: uuid.v4() })
+        .expect(HTTP_OK)
+    ).body as { cafe: { list: SimpleCafe[] } };
+
+    expect(emptyList.length).toBe(0);
+  });
+
+  test('Can filter cafes with place name', async () => {
+    const {
+      cafe: { list: nonEmptyList },
+    } = (
+      await request
+        .get('/cafe/feed')
+        .query({ limit: 10, placeName: '판교' })
+        .expect(HTTP_OK)
+    ).body as { cafe: { list: SimpleCafe[] } };
+
+    expect(nonEmptyList.length).toBeGreaterThan(1);
+
+    const {
+      cafe: { list: emptyList },
+    } = (
+      await request
+        .get('/cafe/feed')
+        .query({ limit: 10, placeName: '성수동' })
+        .expect(HTTP_OK)
+    ).body as { cafe: { list: SimpleCafe[] } };
+
+    expect(emptyList.length).toBe(0);
+  });
+
+  test('Cannot use both placeId and placeName parameters', async () => {
+    await request
+      .get('/cafe/feed')
+      .query({ limit: 10, placeId: uuid.v4(), placeName: 'name' })
+      .expect(HTTP_BAD_REQUEST);
   });
 });
 
