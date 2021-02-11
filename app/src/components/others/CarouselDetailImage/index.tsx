@@ -13,8 +13,10 @@ const CarouselDetailImage = ({image}: CarouselDetailImageProps) => {
 
     return(
         <div className="detail-carousel-img">
-            <img src={image} alt="img" onLoad={() => onImageLoad(setIsImageReady)}/>
-            <StyledSpinnerContainer visible={!isImageReady} size={360}>
+            <img src={image} alt="img" 
+                style={{display: isImageReady ? "initial" : "none"}}
+                onLoad={() => onImageLoad(setIsImageReady)}/>
+            <StyledSpinnerContainer visible={!isImageReady} size={document.body.clientWidth}>
                 <Spinner size={24}/>
             </StyledSpinnerContainer>
         </div>

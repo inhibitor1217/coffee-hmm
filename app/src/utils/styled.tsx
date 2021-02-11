@@ -67,16 +67,16 @@ export const StyledRowCarouselBox = styled.div<{dir?: string, sliding?: boolean,
         if (props.numItems === 1) return "translateX(0%)"; 
         // #image = 2
         if (props.numItems === 2){ 
-            if (!props.sliding && props.dir === LEFT) return "translateX(calc(-92%))";
-            if(props.dir === LEFT) return "translateX(calc(7%))";
+            if (!props.sliding && props.dir === LEFT) return "translateX(calc(-100%))";
+            if(props.dir === LEFT) return "translateX(calc(0%))";
 
-            if (!props.sliding && props.dir === RIGHT) return "translateX(calc(7%))";
-            if(props.dir === RIGHT) return "translateX(calc(-92%))";
+            if (!props.sliding && props.dir === RIGHT) return "translateX(calc(0%))";
+            if(props.dir === RIGHT) return "translateX(calc(-100%))";
         }
         // #image > 2
-        if (!props.sliding) return "translateX(calc(-92%))";
-        if (props.dir === RIGHT) return "translateX(calc(2 * (-92% - 4%)))";
-        return "translateX(8%)";     
+        if (!props.sliding) return "translateX(calc(-100%))";
+        if (props.dir === RIGHT) return "translateX(calc(2 * (-100%)))";
+        return "translateX(0%)";     
     }};
 `;
 

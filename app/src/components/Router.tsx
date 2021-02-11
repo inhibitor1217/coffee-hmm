@@ -7,7 +7,6 @@ interface RouterProps {
 }
 
 const IntroPage = lazy(() => import("./pages/Intro"));
-const CafesByPlacePage = lazy(() => import("./pages/CafesByPlace"));
 const CafeDetailPage = lazy(() => import("./pages/Detail"));
 
 const Router = (props: RouterProps) => {
@@ -21,7 +20,6 @@ const Router = (props: RouterProps) => {
       <React.Suspense fallback={<div>Loading...</div>}>
         <Switch location={props.location}>    
             <Route path="/" exact render={() => <IntroPage />}/>
-            <Route path="/place/:place" exact render={() => <CafesByPlacePage/>}/>
             <Route path="/cafe/:cafeId" exact render={() => <CafeDetailPage/>}/>
           <Redirect to="/" />
         </Switch>

@@ -12,6 +12,9 @@ interface HeaderProps {
 
 const Header = ({location}: HeaderProps) => {
     const history = useHistory();
+    if(location.pathname === "/"){
+        return(<header><div className="header-title">coffee hmm</div></header>)
+    }
 
     if(location.pathname !== "/") {
         return(

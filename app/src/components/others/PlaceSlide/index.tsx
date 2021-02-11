@@ -1,48 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { StyledColor, StyledChessDiv, StyledSpinnerContainer } from '../../../utils/styled';
+import React from 'react';
+import { StyledRowFlex } from '../../../utils/styled';
 import { TypePlace } from '../../../utils/type';
-import { getPlaceList } from '../../api';
-import Spinner from '../../common/Spinner';
 import './index.css';
 
-const PlaceSlide = () => {
-    const location = useHistory();
-    const [places, setPlaces] = useState<TypePlace[]>([]);
-    const [placeLoading, setPlaceLoadint] = useState<boolean>(false);
+type PlaceSlideProps = {
+    places: TypePlace[];
+    currentPlace: TypePlace;
+    setCurrentPlace: (currentPlace: TypePlace) => void;
+}
 
-    useEffect(() => {
-        const fetchData = async () => {  
-            await getPlaceList().then(data => {
-                if(data) {
-                    setPlaces(data.place.list)
-                }
-                setPlaceLoadint(true);
-            })   
-        }
-        fetchData();  
-    }, [])
-
-    const handleClick = (place: string) => {
-        location.push(`/place/${place}`);
-    }
-
-
+const PlaceSlide = ({places, currentPlace, setCurrentPlace}: PlaceSlideProps) => {
+    const handleClick = (place: TypePlace) => {
+        setCurrentPlace(place);
+;    }
  
     return(
-        <StyledChessDiv className="card-container">
-            <StyledSpinnerContainer visible={!placeLoading} size={200}>
-                <Spinner size={24}/>
-            </StyledSpinnerContainer> 
-            {placeLoading && places.map((place, index) => {
+        <StyledRowFlex className="place-container">
+            {places.map((place) => {
                 return(
-                    <div key={place.id} className="card-box" onClick={() => handleClick(place.name)}>
-                        <span className="place-color-dot" style={{backgroundColor: StyledColor[index%10+1]}}></span>
-                        <span>{place.name}</span>
+                    <div key={place.id} className="place-wrapper" onClick={() => handleClick(place)}>
+                        <span className="place-box" style={{backgroundColor:(currentPlace.name === place.name)? 'rgba(196, 196, 196, 0.3' : 'transparent'}}>{place.name}</span>
+                        <span className="place-dot" style={{backgroundColor: (currentPlace.name === place.name)? '#ED6161' : 'transparent'}}></span>
                     </div>
-            )
+                )
             })}
-        </StyledChessDiv>
+        </StyledRowFlex>
     );
 }
 
