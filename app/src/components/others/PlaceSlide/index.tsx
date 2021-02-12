@@ -5,22 +5,22 @@ import './index.css';
 
 type PlaceSlideProps = {
     places: TypePlace[];
-    currentPlace: TypePlace;
-    setCurrentPlace: (currentPlace: TypePlace) => void;
+    currentPlaceIndex: number;
+    setCurrentPlaceIndex: (index: number) => void;
 }
 
-const PlaceSlide = ({places, currentPlace, setCurrentPlace}: PlaceSlideProps) => {
-    const handleClick = (place: TypePlace) => {
-        setCurrentPlace(place);
+const PlaceSlide = ({places, currentPlaceIndex, setCurrentPlaceIndex}: PlaceSlideProps) => {
+    const handleClick = (index: number) => {
+        setCurrentPlaceIndex(index);
 ;    }
  
     return(
         <StyledRowFlex className="place-container">
-            {places.map((place) => {
+            {places.map((place, index) => {
                 return(
-                    <div key={place.id} className="place-wrapper" onClick={() => handleClick(place)}>
-                        <span className="place-box" style={{backgroundColor:(currentPlace.name === place.name)? 'rgba(196, 196, 196, 0.3' : 'transparent'}}>{place.name}</span>
-                        <span className="place-dot" style={{backgroundColor: (currentPlace.name === place.name)? '#ED6161' : 'transparent'}}></span>
+                    <div key={place.id} className="place-wrapper" onClick={() => handleClick(index)}>
+                        <span className="place-box" style={{backgroundColor:(currentPlaceIndex === index)? 'rgba(196, 196, 196, 0.3' : 'transparent'}}>{place.name}</span>
+                        <span className="place-dot" style={{backgroundColor: (currentPlaceIndex === index)? '#ED6161' : 'transparent'}}></span>
                     </div>
                 )
             })}

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StyledCarouselImage } from '../../../utils/styled';
-import { TypeCafe, TypeCafeImage } from '../../../utils/type';
+import { TypeCafe } from '../../../utils/type';
 import CarouselHorizontal from '../CarouselHorizontal';
 import CarouselDetailImage from '../CarouselDetailImage';
 import PositionDotHorizontal from '../PositionDotHorizontal';
@@ -11,27 +11,23 @@ type CafeDetailImageCarouselProps = {
 }
 
 const CafeDetailImageCarousel = ({cafe}: CafeDetailImageCarouselProps) => {
-    const [images, setImages] = useState<TypeCafeImage[]>([]);
     const imageNum = cafe?.image.count;
-
-    useEffect(() => {
-        setImages(cafe?.image.list || []);
-    },[cafe?.image.list])
+    const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 
     return(
         <div className="detail-carousel-dot-wrapper">
             <div className="detail-carousel-container">
-                <CarouselHorizontal title="Carousel">
-                {images.sort().map((image, index) => {   
+                <CarouselHorizontal title="Carousel" setCurrentIndex={setCurrentImageIndex}>
+                {cafe?.image.list.sort().map((image) => {   
                     return(
-                        <StyledCarouselImage key={index}>
+                        <StyledCarouselImage key={image.id}>
                             <CarouselDetailImage image={image.relativeUri}/>
                         </StyledCarouselImage>
                     )
                 })}
                 </CarouselHorizontal>
             </div>
-            <PositionDotHorizontal dotNum={imageNum? imageNum : 0}/>
+            <PositionDotHorizontal dotNum={imageNum? imageNum : 0} currentIndex={currentImageIndex}/>
         </div>
        
     )
