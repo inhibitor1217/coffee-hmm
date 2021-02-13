@@ -15,7 +15,11 @@ const Intro = () => {
     
     const adminLogin = async (googleAccessToken: string) => {
         await getToken(googleAccessToken || "").then(data => {
-            setHmmAdminTokenCtx(data.token)
+            if(data) {
+                setHmmAdminTokenCtx(data.token)
+            }else {
+                alert('로그인 실패')
+            }   
         })
     }
 
@@ -31,7 +35,6 @@ const Intro = () => {
                     const token = await firebase.auth().currentUser?.getIdToken();
 
                     if(token) {
-                        console.log(token)
                         adminLogin(token)
                     }       
                 }).catch((error) => {

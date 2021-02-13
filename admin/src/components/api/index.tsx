@@ -13,10 +13,10 @@ export const getToken = async (googleAccessToken: string) => {
     return token;
 }
 
-export const getAllCafes = async () => {
-    let cafes = await fetch(serverUrl+`/cafe/list?limit=20`, {
+export const getAllCafes = async (token: string, showHidden: string) => {
+    let cafes = await fetch(serverUrl+`/cafe/list?limit=20&showHidden=${showHidden}`, {
         headers:{
-        "Content-Type": "application/json"
+            "Authorization": "Bearer " + token
         },
         method: "GET"
     }).then(response => response.json())
@@ -30,8 +30,8 @@ export const getCafeById = async (cafeId: string) => {
     let cafe = await fetch(serverUrl+`/cafe/${cafeId}`, {
         headers:{
             "Content-Type": "application/json"
-            },
-            method: "GET"
+        },
+        method: "GET"
     }).then(response => response.json())
     .then(data => {return data})
     .catch(error => console.log(error));
