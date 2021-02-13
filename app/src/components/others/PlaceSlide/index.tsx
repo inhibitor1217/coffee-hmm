@@ -1,49 +1,46 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { SearchValueCtx } from '../../../context';
 import { StyledRowFlex, StyledColumnFlex, StyledSpinnerContainer } from '../../../utils/styled';
+import { TypePlace } from '../../../utils/type';
+import { getPlaceList } from '../../api';
 import Spinner from '../../common/Spinner';
 import './index.css';
 
-const places: string[] =["성수", "연남", "한남", "판교", "잠실"];
-
 const PlaceSlide = () => {
     const location = useHistory();
-    const { searchValueCtx, setSearchValueCtx} = useContext(SearchValueCtx);
-    const [isClicked, setClicked] = useState<boolean>(false);
-    const [target, setTarget]  = useState<string>("");
+    const [places, setPlaces] = useState<TypePlace[]>([]);
+
     const [isImageReady, setIsImageReady] = useState<boolean>(false);
     const onImageLoad = () => {
       setIsImageReady(true);
     };
 
     useEffect(() => {
-        async function setContext(){
-            await setSearchValueCtx(target);
+        const fetchData = async () => {
+            await getPlaceList().then(data => {
+                if(data) {
+                    setPlaces(data.place.list)
+                }
+            })
         }
-        if(isClicked){
-            setContext();
-            setTarget("");
-            setClicked(false);
-            location.push("/place");
-        }
-    }, [searchValueCtx, setSearchValueCtx, target, location, isClicked])
+        fetchData();
+    }, [])
 
+    const handleClick = (place: string) => {
+        location.push(`/place/${place}`);
+    }
  
     return(
         <StyledRowFlex className="card-container">
-        {places.map((place, index) => {
+        {places.length > 0 && places.map((place, index) => {
             return(
-            <StyledColumnFlex className="card-wrapper" key={place}>
-                <div className="card-box" onClick={() => {
-                    setTarget(place);
-                    setClicked(true);
-                }}>
+            <StyledColumnFlex className="card-wrapper" key={place.id}>
+                <div className="card-box" onClick={() => handleClick(place.name)}>
                     <StyledSpinnerContainer visible={!isImageReady} size={40}>
                         <Spinner size={18}/>
                     </StyledSpinnerContainer>
                     <img src={`/images/icon${index%10+1}.png`} alt="icon" onLoad={onImageLoad}/>
-                    <span>#{place}카페</span>
+                    <span>#{place.name}카페</span>
                 </div>
             </StyledColumnFlex>)
         })}

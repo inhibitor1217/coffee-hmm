@@ -1,21 +1,30 @@
 import React from 'react';
-import { CafeInfo } from '../../../utils/type';
+import { TypeCafe } from '../../../utils/type';
 import CarouselMainImage from '../CarouselMainImage';
 import './index.css';
 import CarouselVertical from '../CarouselVertical';
 import { StyledCarouselImage } from '../../../utils/styled';
 
 type CafeImageCarouselProps = {
-    cafes: CafeInfo[];
+    cafes: TypeCafe[];
 }
 
 const CafeCarousel = ({cafes}: CafeImageCarouselProps) => {
+    if(cafes.length === 1) {
+        return (
+            <div>
+                <StyledCarouselImage>
+                    <CarouselMainImage cafe={cafes[0]}/>
+                </StyledCarouselImage>
+            </div>
+        )
+    }
     return(
         <div className="carousel-container">
             <CarouselVertical title="Carousel">
-            {cafes?.map((cafe, index) => {
+            {cafes?.map((cafe) => {
                 return(
-                    <StyledCarouselImage key={index}>
+                    <StyledCarouselImage key={cafe.id}>
                         <CarouselMainImage cafe={cafe}/>
                     </StyledCarouselImage>
             )})}

@@ -50,7 +50,7 @@ const CafeImage = () => {
                 return(
                     <div>
                         <StyledFlexColumn className="image-container">
-                            <PageTitle cafeId={cafe.id} name={cafe.name}/>
+                            <PageTitle cafeId={"0"} name={cafe.name}/>
                             <CafeImageBoard name={cafe.name} images={images} imageLoading={imageLoading} 
                                                         isCheckedAll={isCheckedAll} setCheckedAll={setCheckedAll}
                                                         setUploadImage={setUploadImage}/>

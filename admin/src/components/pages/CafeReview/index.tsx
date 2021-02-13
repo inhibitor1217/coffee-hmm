@@ -51,7 +51,7 @@ const CafeReview = () => {
                 return(
                     <div>
                         <StyledFlexColumn className="review-container">
-                            <PageTitle cafeId={cafe.id} name={cafe.name}/>
+                            <PageTitle cafeId={"0"} name={cafe.name}/>
                             <CafeReviewBoard name={cafe.name} reviews={reviews} reviewLoading={reviewLoading} 
                                             isCheckedAll={isCheckedAll} setCheckedAll={setCheckedAll}/>
                         </StyledFlexColumn>

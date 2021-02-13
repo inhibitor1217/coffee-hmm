@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyledFlexColumn } from '../../../utils/Styled';
-import { Cafe } from '../../../utils/Type';
+import { TypeCafe } from '../../../utils/Type';
 import Loading from '../../common/loading';
 import CafeSearchResultTableColumns from '../CafeSearchResultTableColumns';
 import CafeSearchResultTableRow from '../CafeSearchResultTableRow';
 import './index.css';
 
 type CafeSearchResultTableProps = {
-    cafes: Cafe[];
+    cafes: TypeCafe[];
     pageLoading: boolean;
 }
 
@@ -22,7 +22,7 @@ const CafeSearchResultTable = ({cafes, pageLoading}: CafeSearchResultTableProps)
         <StyledFlexColumn className="cafe-search-result">
             <CafeSearchResultTableColumns/>
             <div className="cafe-list-wrapper">
-            {cafes.map(cafe => {
+            {cafes.map((cafe) => {
                 return(
                     <CafeSearchResultTableRow key={cafe.id} cafe={cafe}/>
                 )

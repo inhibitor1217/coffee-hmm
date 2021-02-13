@@ -1,19 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { SearchValueCtx } from '../../../context';
 import { letterValidation } from '../../../utils/function';
 import './index.css';
 
 const SearchBar = () => {
     const location = useHistory();
     const [target, setTarget] = useState<string>("");
-    const {setSearchValueCtx} = useContext(SearchValueCtx)
-
-    async function setContext(){
-        const targetProcessed = target.replace(/\s+/g, ''); 
-        await setSearchValueCtx(targetProcessed);
-        setTarget("");
-    }
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTarget(e.target.value);
@@ -23,8 +15,7 @@ const SearchBar = () => {
         e.preventDefault();
         const targetProcessed = target.replace(/\s+/g, ''); 
         if(targetProcessed !== undefined && letterValidation(targetProcessed)){
-            setContext();
-            location.push("/search");
+            location.push(`/place/${targetProcessed}`);
         }
     };
 

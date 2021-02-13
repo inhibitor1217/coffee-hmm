@@ -16,3 +16,8 @@ export const ImageContext = createContext({
     image: InitialImage,
     setImage: (image: TypeImage) => {}
 })
+
+export const TokenCtx = createContext({
+    hmmAdminTokenCtx: "",
+    setHmmAdminTokenCtx: (token: string) => {}
+})

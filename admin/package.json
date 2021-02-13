@@ -27,7 +27,7 @@
     "@types/aws-sdk": "^2.7.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "export PORT=9000 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

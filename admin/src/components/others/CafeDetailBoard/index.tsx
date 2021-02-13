@@ -1,22 +1,20 @@
 import React, { useState } from 'react';
 import { StyledFlexColumn, StyledFlexRow } from '../../../utils/Styled';
-import { Cafe, TypeImage, TypeReview } from '../../../utils/Type';
+import { TypeCafe, TypeImage, TypeReview } from '../../../utils/Type';
 import CafeDetailBasicInfo from '../CafeDetailBasicInfo';
 import CafeDetailImageTable from '../CafeDetailImageTable';
-import CafeDetailReviewTable from '../CafeDetailReviewTable';
 import CafeRegisterForm from '../CafeRegisterForm';
 import './index.css';
 
 type CafeDetailBoardProps = {
-    cafe: Cafe;
+    cafe: TypeCafe;
     images: TypeImage[];
-    imageLoading: boolean;
     reviews: TypeReview[];
-    reviewLoading: boolean;
+    cafeLoading: boolean;
 }
 
-const CafeDetailBoard = ({cafe, images, imageLoading, reviews, reviewLoading}: CafeDetailBoardProps) => {
-    const [updatedCafe, setUpdatedCafe] = useState<Cafe>(cafe);
+const CafeDetailBoard = ({cafe, images, reviews, cafeLoading}: CafeDetailBoardProps) => {
+    const [updatedCafe, setUpdatedCafe] = useState<TypeCafe>(cafe);
     const [isEditOn, setEditOn] = useState<boolean>(false);
    
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -43,23 +41,23 @@ const CafeDetailBoard = ({cafe, images, imageLoading, reviews, reviewLoading}: C
                 <div className="detail-basic-wrapper">
                     <h4>카페 기본 정보</h4>
                     {isEditOn ? 
-                        <CafeRegisterForm cafe={updatedCafe} setCafe={setUpdatedCafe}/> :
-                        <CafeDetailBasicInfo cafe={cafe}/>}
+                        <CafeRegisterForm cafe={updatedCafe} setCafe={setUpdatedCafe}/> 
+                        : <CafeDetailBasicInfo cafe={cafe}/>}
                 </div>
             </form>
             
             <div className="image-title-table-wrapper">
                 <h4>이미지</h4>
-                <CafeDetailImageTable images={images} imageLoading={imageLoading} isPreview={true} 
+                <CafeDetailImageTable images={images} imageLoading={cafeLoading} isPreview={true} 
                                         deletedImages={[]} setDeletedImages={() => []}
                                         isCheckedAll={false} setCheckedAll={() => false}/>
             </div>
-            <div className="review-title-table-wrapper">
+            {/* <div className="review-title-table-wrapper">
                 <h4>리뷰</h4>
-                <CafeDetailReviewTable reviews={reviews} reviewLoading={reviewLoading} isPreview={true} 
+                <CafeDetailReviewTable reviews={reviews} reviewLoading={cafeLoading} isPreview={true} 
                                         deletedReviews={[]} setDeletedReviews={() => []}
                                         isCheckedAll={false} setCheckedAll={() => false}/>
-            </div>
+            </div> */}
         </StyledFlexColumn>
     )
 }

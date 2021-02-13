@@ -1,27 +1,13 @@
-import React, { useContext } from 'react';
-import { SearchValueCtx } from '../../../context';
-import { CafeInfo } from '../../../utils/type';
+import React from 'react';
+import { TypeCafe } from '../../../utils/type';
 import CafeCarousel from '../CafeCarousel';
-import NoSearchResult from '../NoSearchResult';
 import './index.css';
 
 type CafeListProps = {
-    cafes: CafeInfo[];
+    cafes: TypeCafe[];
 }
 
 const CafeList = ({cafes}: CafeListProps) => {
-    const { searchValueCtx } = useContext(SearchValueCtx); // FIX: props 로 대체
-
-    const isEmptyArray = (array: CafeInfo[]) => {
-        return (! Array.isArray(array) || !array.length );
-    }
-
-    if(isEmptyArray(cafes)){
-        return(
-            <NoSearchResult searchValue={searchValueCtx}/>
-        )
-    }
-
     return(
         <div className="search-container">
             <div className="search-header">
@@ -30,7 +16,7 @@ const CafeList = ({cafes}: CafeListProps) => {
                 <button>&#x2b; Add New</button>
             </div>  
             <div className="search-wrapper">
-                <CafeCarousel cafes={cafes} />
+                <CafeCarousel cafes={cafes}/>
             </div>   
         </div>       
     )

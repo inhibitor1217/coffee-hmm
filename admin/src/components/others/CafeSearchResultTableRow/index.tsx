@@ -1,21 +1,22 @@
 import React from 'react';
-import { Cafe } from '../../../utils/Type';
+import { Link } from 'react-router-dom';
+import { TypeCafe } from '../../../utils/Type';
 import './index.css';
 
 type CafeSearchResultTableProps = {
-    cafe: Cafe;
+    cafe: TypeCafe;
 }
 
 const CafeSearchResultTableRow = ({cafe}: CafeSearchResultTableProps) => {
     return(
         <ul className="cafe-row-wrapper">
-            <li>{cafe.name}</li>
-            <li>{cafe.place}</li>
-            <li>{cafe.openHour}~{cafe.closeHour}</li>
-            <li>{cafe.status}</li>
+            <li><Link to={`/cafe/${cafe.id}`}>{cafe.name}</Link></li>
+            <li>{cafe.place.name}</li>
+            <li>{cafe.metadata?.hour}</li>
+            <li>{cafe.state}</li>
             <li>{cafe.createdAt}</li>
-            <li>{cafe.images}</li>
-            <li>{cafe.reviews}</li>
+            <li>{cafe.image.count}</li>
+            {/* <li>{cafe.reviews}</li> */}
         </ul>
     )
 }

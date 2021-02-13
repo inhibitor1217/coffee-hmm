@@ -1,27 +1,23 @@
 import { ImagePreviewNumber, ReviewPreviewNumber } from "./Const";
-import { Cafe, TypeImage, TypeReview } from "./Type";
+import { TypeCafe, TypeImage, TypeReview } from "./Type";
 
-export const CafeRegisterValidation = (cafe: Cafe) => {
+export const CafeRegisterValidation = (cafe: TypeCafe) => {
     let letter = /^[가-힣a-zA-Z]+$/;
-    let time = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+    // let time = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
 
     if(! letter.test(cafe.name)){
         return false;
     }
 
-    if(cafe.place === ""){
+    if(cafe.place.name === ""){
         return false;
     }
 
-    if(! time.test(cafe.openHour)){
+    if(cafe.metadata?.hour === ""){
         return false;
     }
 
-    if(! time.test(cafe.closeHour)){
-        return false;
-    }
-
-    if(cafe.status === ""){
+    if(cafe.state === ""){
         return false;
     }
 

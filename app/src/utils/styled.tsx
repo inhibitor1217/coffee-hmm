@@ -39,8 +39,8 @@ export const StyledColCarouselBox = styled.div<{dir?: string, sliding?: boolean}
     flex-direction: column;
     transition: ${(props) => props.sliding? "none" : "all 1s ease 0s"};
     transform: ${(props) => {
-        if (!props.sliding) return "translateY(calc(-14%))";
-        if (props.dir === DOWN) return "translateY(calc(2*(-14%)))";
+        if (!props.sliding) return "translateY(-400px)";
+        if (props.dir === DOWN) return "translateY(-800px)";
         return "translateY(calc(0%))";
     }};
 `;
