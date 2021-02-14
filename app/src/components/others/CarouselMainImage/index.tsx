@@ -2,17 +2,19 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { onImageLoad } from '../../../utils/function';
 import { StyledSpinnerContainer } from '../../../utils/styled';
-import { CafeInfo } from '../../../utils/type';
+import { TypeCafe } from '../../../utils/type';
 import Spinner from '../../common/Spinner';
 import './index.css';
 
 type CarouselMainImageProps = {
-    cafe: CafeInfo;
+    cafe: TypeCafe;
 }
 
 const CarouselMainImage = ({cafe}: CarouselMainImageProps) => {
     const [isImageReady, setIsImageReady] = useState<boolean>(false);
     const history = useHistory();
+
+    const mainImage = cafe.image.list.find((image) => image.isMain);
 
     const handleClick = async () => {
         history.push({
@@ -21,23 +23,15 @@ const CarouselMainImage = ({cafe}: CarouselMainImageProps) => {
     }
 
     return(
-        <div>
-            <div className="carousel-img">
-                <img src={`https://${cafe.mainImageUri}`} alt="img" style={{
-                    display: isImageReady ? "initial" : "none"}} 
-                    onLoad={() => onImageLoad(setIsImageReady)}
-                    onClick={handleClick}/>
-                <StyledSpinnerContainer visible={!isImageReady} size={360}>
-                    <Spinner size={24}/>
-                </StyledSpinnerContainer> 
-
-                <div className="bottom-box">
-                    <span className="count">999</span><span className="word">개의 좋아요</span>
-                    <span className="count">{cafe.viewCount}</span>
-                    <span className="word">명이 봤어요</span>
-                </div>
-            </div>
-        </div>       
+        <div className="carousel-img">
+            {mainImage && <img src={cafe.image.count > 0 ? mainImage.relativeUri : "/images/coffee.png"} alt="img" 
+                style={{display: isImageReady ? "initial" : "none"}} 
+                onLoad={() => onImageLoad(setIsImageReady)}
+                onClick={handleClick}/>}
+            <StyledSpinnerContainer visible={!isImageReady} size={document.body.clientWidth}>
+                <Spinner size={24}/>
+            </StyledSpinnerContainer> 
+        </div>     
     )
 }
 

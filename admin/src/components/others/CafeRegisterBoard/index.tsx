@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
-import { InitialCafeInfo } from '../../../utils/Const';
 import { CafeRegisterValidation } from '../../../utils/Function';
 import { StyledFlexRow } from '../../../utils/Styled';
-import { Cafe } from '../../../utils/Type';
+import { TypeCafe } from '../../../utils/Type';
 import CafeRegisterForm from '../CafeRegisterForm';
 import './index.css';
 
 const CafeRegisterBoard = () => {
-    const [newCafe, setNewCafe] = useState<Cafe>(InitialCafeInfo);
-
+    const [newCafe, setNewCafe] = useState<TypeCafe | null>(null);
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if(CafeRegisterValidation(newCafe)){
-            // fetch data CREATE a new cafe
+        if(newCafe){
+            if(CafeRegisterValidation(newCafe)){
+                // fetch data CREATE a new cafe
+            }
         }else{
             window.alert("카페 기본 정보를 모두 입력해주세요.")
         }
+       
     }
 
     return(
@@ -27,7 +28,7 @@ const CafeRegisterBoard = () => {
                 </StyledFlexRow>
                 <div className="register-basic-wrapper">
                     <h4>카페 기본 정보</h4>
-                    <CafeRegisterForm cafe={newCafe} setCafe={setNewCafe}/>
+                    {newCafe && <CafeRegisterForm cafe={newCafe} setCafe={setNewCafe}/>}
                 </div>
             </form>
         </div>

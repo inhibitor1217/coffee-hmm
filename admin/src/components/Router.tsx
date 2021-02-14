@@ -1,5 +1,6 @@
-import React, { lazy } from "react";
+import React, { lazy, useState } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
+import { TokenCtx } from "../context";
 
 interface RouterProps {
   location?: any;
@@ -13,18 +14,26 @@ const CafeReview = lazy(() => import("./pages/CafeReview"));
 const CafeImage = lazy(() => import("./pages/CafeImage"));
 
 const Router = (props: RouterProps) => {
-return(
-    <React.Suspense fallback={<div>Loading...</div>}>
-      <Switch location={props.location}>    
-          <Route path="/" exact render={() => <Intro />}/>
-          <Route path="/cafes" exact render={() => <CafeList/>}/>
-          <Route path="/cafes/:cafeId" exact render={() => <CafeDetail/>}/>
-          <Route path="/cafes/:cafeId/review" exact render={() => <CafeReview/>}/>
-          <Route path="/cafes/:cafeId/image" exact render={() => <CafeImage/>}/>
-          <Route path="/register" exact render={() => <CafeRegister/>}/>
-          <Redirect to="/" />
-      </Switch>
-    </React.Suspense>  
+  const [hmmAdminToken, setHmmAdminToken] = useState<string>("");
+
+  return(
+    <TokenCtx.Provider value={{
+      hmmAdminTokenCtx: hmmAdminToken,
+      setHmmAdminTokenCtx: (token: string) => setHmmAdminToken(token)
+    }}>
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <Switch location={props.location}>    
+            <Route path="/" exact render={() => <Intro />}/>
+            <Route path="/cafes" exact render={() => <CafeList/>}/>
+            <Route path="/cafe/:cafeId" exact render={() => <CafeDetail/>}/>
+            <Route path="/cafe/:cafeId/review" exact render={() => <CafeReview/>}/>
+            <Route path="/cafe/:cafeId/image" exact render={() => <CafeImage/>}/>
+            <Route path="/register" exact render={() => <CafeRegister/>}/>
+            <Redirect to="/" />
+        </Switch>
+      </React.Suspense>  
+    </TokenCtx.Provider>
+   
   );
 };
 

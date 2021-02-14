@@ -1,3 +1,6 @@
+export const serverUrl = "https://beta.api.coffee-hmm.inhibitor.io"
+export const authServerUrl = "https://beta.auth.coffee-hmm.inhibitor.io"
+
 export const InitialCafeInfo = {
     id: 0,
     name: "",

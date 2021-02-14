@@ -1,27 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Alef&display=swap');
-
-h2 {
-    padding-top: 112px;
-    padding-bottom: 20px;
-    text-align: center;
-
-    font-family: 'Alef', sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 24px;
-    line-height: 24px;
-    color: #ffffff;
-    text-shadow: -1px 0 #524F4A, 0 1px #524F4A, 1px 0 #524F4A, 0 -1px #524F4A;
+.cafe-preview-info {
+    padding-left: 20px;
 }
-
-h3 {
-    padding-top: 24px;
-    padding-left: 40px;
-    padding-bottom: 4px;
-
-    font-family: 'Poor Story', cursive;
-    font-style: normal;
-    font-weight: bold;
-    line-height: 16px;
-    color: #524F4A;
+.cafe-preview-info span {
+    display: block;
+}
+.cafe-preview-info-list {
+    font-size: 14px;
+}
+.cafe-preview-info-by {
+    text-align: end;
+    font-size: 12px;
+    padding-top: 8px;
+    padding-right: 8px;
+}
+.cafe-preview-websearch span {
+    flex: 1;
+    text-align: center;
+    font-size: 12px;
+    padding: 12px 0px;
 }
