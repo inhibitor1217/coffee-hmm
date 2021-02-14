@@ -14,6 +14,8 @@ const CarouselMainImage = ({cafe}: CarouselMainImageProps) => {
     const [isImageReady, setIsImageReady] = useState<boolean>(false);
     const history = useHistory();
 
+    const mainImage = cafe.image.list.find((image) => image.isMain);
+
     const handleClick = async () => {
         history.push({
             pathname: `/cafe/${cafe.id}`,
@@ -21,24 +23,15 @@ const CarouselMainImage = ({cafe}: CarouselMainImageProps) => {
     }
 
     return(
-        <div>
-            <div className="carousel-img">
-                <img src={cafe.image.count > 0 ? cafe.image.list[0].relativeUri : "/images/coffee.png"} alt="img" style={{
-                    display: isImageReady ? "initial" : "none"}} 
-                    onLoad={() => onImageLoad(setIsImageReady)}
-                    onClick={handleClick}/>
-                <StyledSpinnerContainer visible={!isImageReady} size={360}>
-                    <Spinner size={24}/>
-                </StyledSpinnerContainer> 
-
-                <div className="bottom-box">
-                    <span className="count">{cafe.numLikes}</span>
-                    <span className="word">개의 좋아요</span>
-                    <span className="count">{cafe.views.total}</span>
-                    <span className="word">명이 봤어요</span>
-                </div>
-            </div>
-        </div>       
+        <div className="carousel-img">
+            {mainImage && <img src={cafe.image.count > 0 ? mainImage.relativeUri : "/images/coffee.png"} alt="img" 
+                style={{display: isImageReady ? "initial" : "none"}} 
+                onLoad={() => onImageLoad(setIsImageReady)}
+                onClick={handleClick}/>}
+            <StyledSpinnerContainer visible={!isImageReady} size={document.body.clientWidth}>
+                <Spinner size={24}/>
+            </StyledSpinnerContainer> 
+        </div>     
     )
 }
 

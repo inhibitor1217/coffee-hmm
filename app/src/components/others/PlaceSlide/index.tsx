@@ -1,49 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { StyledRowFlex, StyledColumnFlex, StyledSpinnerContainer } from '../../../utils/styled';
+import React from 'react';
+import { StyledRowFlex } from '../../../utils/styled';
 import { TypePlace } from '../../../utils/type';
-import { getPlaceList } from '../../api';
-import Spinner from '../../common/Spinner';
 import './index.css';
 
-const PlaceSlide = () => {
-    const location = useHistory();
-    const [places, setPlaces] = useState<TypePlace[]>([]);
+type PlaceSlideProps = {
+    places: TypePlace[];
+    currentPlaceIndex: number;
+    setCurrentPlaceIndex: (index: number) => void;
+}
 
-    const [isImageReady, setIsImageReady] = useState<boolean>(false);
-    const onImageLoad = () => {
-      setIsImageReady(true);
-    };
-
-    useEffect(() => {
-        const fetchData = async () => {
-            await getPlaceList().then(data => {
-                if(data) {
-                    setPlaces(data.place.list)
-                }
-            })
-        }
-        fetchData();
-    }, [])
-
-    const handleClick = (place: string) => {
-        location.push(`/place/${place}`);
-    }
+const PlaceSlide = ({places, currentPlaceIndex, setCurrentPlaceIndex}: PlaceSlideProps) => {
+    const handleClick = (index: number) => {
+        setCurrentPlaceIndex(index);
+;    }
  
     return(
-        <StyledRowFlex className="card-container">
-        {places.length > 0 && places.map((place, index) => {
-            return(
-            <StyledColumnFlex className="card-wrapper" key={place.id}>
-                <div className="card-box" onClick={() => handleClick(place.name)}>
-                    <StyledSpinnerContainer visible={!isImageReady} size={40}>
-                        <Spinner size={18}/>
-                    </StyledSpinnerContainer>
-                    <img src={`/images/icon${index%10+1}.png`} alt="icon" onLoad={onImageLoad}/>
-                    <span>#{place.name}카페</span>
-                </div>
-            </StyledColumnFlex>)
-        })}
+        <StyledRowFlex className="place-container">
+            {places.map((place, index) => {
+                return(
+                    <div key={place.id} className="place-wrapper" onClick={() => handleClick(index)}>
+                        <span className="place-box" style={{backgroundColor:(currentPlaceIndex === index)? 'rgba(196, 196, 196, 0.3' : 'transparent'}}>{place.name}</span>
+                        <span className="place-dot" style={{backgroundColor: (currentPlaceIndex === index)? '#ED6161' : 'transparent'}}></span>
+                    </div>
+                )
+            })}
         </StyledRowFlex>
     );
 }
