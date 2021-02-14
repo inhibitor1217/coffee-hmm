@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { openSearch } from '../../../utils/function';
 import { StyledColumnFlex, StyledMainScale, StyledRowFlex } from '../../../utils/styled';
 import { TypeCafe, TypePlace } from '../../../utils/type';
@@ -13,7 +13,7 @@ const Intro = () => {
     const [cafes, setCafes] = useState<TypeCafe[] | null>(null)
     const [currentCafeIndex, setCurrentCafeIndex] = useState<number>(0);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         const fetchData = async () => {
             await getPlaceList().then(data => {
                 if(data){
@@ -45,7 +45,6 @@ const Intro = () => {
                         <div className="cafe-preview-info">
                             <h4>{cafes[currentCafeIndex]?.name}</h4>
                             <span className="cafe-preview-info-list">OPEN {cafes[currentCafeIndex]?.metadata?.hour}</span>
-                            <span className="cafe-preview-info-list">{cafes[currentCafeIndex]?.metadata?.tag}</span>
                             <span className="cafe-preview-info-by">jyuunnii님이 올려주신 {cafes[currentCafeIndex]?.name}</span>
                         </div>
                         <CafeByPlace cafes={cafes} setCurrentCafeIndex={setCurrentCafeIndex}/>

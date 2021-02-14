@@ -14,6 +14,7 @@ interface CarouselHorizontalProps {
 const CarouselHorizontal = React.forwardRef<number, CarouselHorizontalProps>((props, ref) => {
     const [state, dispatch] = useReducer(reducerCarousel, {pos: 0, sliding: false, dir: RIGHT});
     const numItems = React.Children.count(props.children);
+    const { setCurrentIndex, children } = props;
 
     useEffect(() => {
         if (typeof ref === 'function') {
@@ -23,10 +24,10 @@ const CarouselHorizontal = React.forwardRef<number, CarouselHorizontalProps>((pr
         React.Children.toArray(props.children).forEach((child, index) => {
             let order = getOrder(index, state.pos, numItems); 
             if(order === 1){
-                props.setCurrentIndex(index);
+                setCurrentIndex(index);
             }
         })
-    }, [numItems, props, props.children, ref, state.pos])
+    }, [numItems, props.children, ref, setCurrentIndex, state.pos])
 
     const slide =  (dir: string) => {
         dispatch({type: dir, numItems: numItems});
@@ -45,7 +46,7 @@ const CarouselHorizontal = React.forwardRef<number, CarouselHorizontalProps>((pr
         <div {...handlers}> 
             <div className="carousel-wrapper">
                 <StyledRowCarouselBox dir={state.dir} sliding={state.sliding} numItems={numItems}>
-                    {React.Children.toArray(props.children).map((child, index) => (
+                    {React.Children.toArray(children).map((child, index) => (
                         <StyledCarouselSlot key={index} order={getOrder(index, state.pos, numItems)}>
                             {child}
                         </StyledCarouselSlot>
