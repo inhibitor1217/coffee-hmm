@@ -25,16 +25,26 @@ export default class Place {
   @Column({ type: 'varchar', name: 'name', length: 255 })
   name!: string;
 
+  @Column({ type: 'boolean', name: 'pinned' })
+  pinned!: boolean;
+
   public toJsonObject(): AnyJson {
     return {
       id: this.id,
       createdAt: this.createdAt.toISOString(),
       updatedAt: this.updatedAt.toISOString(),
       name: this.name,
+      pinned: this.pinned,
     };
   }
 
-  static readonly columns: string[] = ['id', 'createdAt', 'updatedAt', 'name'];
+  static readonly columns: string[] = [
+    'id',
+    'createdAt',
+    'updatedAt',
+    'name',
+    'pinned',
+  ];
 
   static fromRawColumns(
     raw: Record<string, unknown>,
@@ -51,6 +61,7 @@ export default class Place {
       createdAt: raw[rawColumnName('created_at')],
       updatedAt: raw[rawColumnName('updated_at')],
       name: raw[rawColumnName('name')],
+      pinned: raw[rawColumnName('pinned')],
     } as DeepPartial<Place>);
   }
 }
