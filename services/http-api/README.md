@@ -49,7 +49,8 @@ Retrieve data of a single cafe.
       "id": "11111111-1111-1111-1111-111111111111",
       "createdAt": "2020-01-01T00:00:00.000Z",
       "updatedAt": "2020-01-01T00:00:00.000Z",
-      "name": "판교"
+      "name": "판교",
+      "pinned": true
     },
     "metadata": {
       "hour": "09:00 ~ 19:00"
@@ -112,7 +113,8 @@ The follows describe the detailed response schema.
       id: [uuid],
       createdAt: [ISODateString],
       updatedAt: [ISODateString],
-      name: string
+      name: string,
+      pinned: boolean
     },
     metadata: JSON,
     state: "active" | "hidden",
@@ -187,7 +189,8 @@ Retrieves a list of cafe as a feed, which is selected randomly (for now), among 
           "id": "11111111-1111-1111-1111-111111111111",
           "createdAt": "2020-01-01T00:00:00.000Z",
           "updatedAt": "2020-01-01T00:00:00.000Z",
-          "name": "판교"
+          "name": "판교",
+          "pinned": true
         },
         "metadata": {
           "hour": "09:00 ~ 19:00"
@@ -332,7 +335,8 @@ Retrieve a list of cafes.
           "id": "11111111-1111-1111-1111-111111111111",
           "createdAt": "2020-01-01T00:00:00.000Z",
           "updatedAt": "2020-01-01T00:00:00.000Z",
-          "name": "판교"
+          "name": "판교",
+          "pinned": true
         },
         "metadata": {
           "hour": "09:00 ~ 19:00"
@@ -388,7 +392,8 @@ Retrieve a list of cafes.
           "id": "11111111-1111-1111-1111-111111111111",
           "createdAt": "2020-01-01T00:00:00.000Z",
           "updatedAt": "2020-01-01T00:00:00.000Z",
-          "name": "판교"
+          "name": "판교",
+          "pinned": true
         },
         "metadata": {
           "hour": "09:00 ~ 19:00"
@@ -472,7 +477,8 @@ Creates a new cafe.
       "id": "11111111-1111-1111-1111-111111111111",
       "createdAt": "2020-01-01T00:00:00.000Z",
       "updatedAt": "2020-01-01T00:00:00.000Z",
-      "name": "판교"
+      "name": "판교",
+      "pinned": true
     },
     "metadata": {
       "hour": "09:00 ~ 20:00",
@@ -539,7 +545,8 @@ Creates a new cafe.
       "id": "11111111-1111-1111-1111-111111111111",
       "createdAt": "2020-01-01T00:00:00.000Z",
       "updatedAt": "2020-01-01T00:00:00.000Z",
-      "name": "판교"
+      "name": "판교",
+      "pinned": true
     },
     "metadata": {
       "hour": "10:00 ~ 22:00",
