@@ -22,6 +22,7 @@ routes.get(
 
 routes.post('/register', authControl.register);
 routes.get('/token', authControl.token);
+routes.get('/me', authControl.me);
 
 routes.use('/user', user.routes());
 routes.use('/policy', policy.routes());

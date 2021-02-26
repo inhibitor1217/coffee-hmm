@@ -1,0 +1,12 @@
+.serverless/
+coverage/
+node_modules/
+yarn.lock
+yarn-error.log
+
+.env.local
+.env.test
+
+.webpack
+.vscode
+.ormconfig

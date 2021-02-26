@@ -1,0 +1,65 @@
+service: coffee-hmm-http-api
+
+provider:
+  name: aws
+  region: ${opt:region, 'ap-northeast-2'}
+  runtime: nodejs12.x
+  stage: ${self:custom.stage}
+  memorySize: 256
+  role: LambdaRole
+
+resources:
+  Resources:
+    LambdaRole: ${file(./res/LambdaRole.yml)}
+
+plugins:
+  - serverless-webpack
+  - serverless-domain-manager
+
+custom:
+  stage: ${env:APP_STAGE, 'beta'}
+  version: 0.1.0
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules:
+      forceExclude:
+        - aws-sdk
+    packager: yarn
+    excludeFiles: src/**/*.test.ts
+  customDomain:
+    domainName: ${self:custom.stage}.api.coffee-hmm.inhibitor.io
+    stage: ${self:custom.stage}
+    basePath: ''
+    certificateName: '*.api.coffee-hmm.inhibitor.io'
+    createRoute53Record: true
+
+functions:
+  app:
+    handler: src/serverless.handler
+    events:
+      - http:
+          path: /
+          method: ANY
+          cors: true
+      - http:
+          path: /{any+}
+          method: ANY
+          cors: true
+    environment:
+      APP_NAME: ${self:service}
+      APP_VERSION: ${self:custom.version}
+      APP_STAGE: ${self:custom.stage}
+      LOG_LEVEL: info
+      AUTH_SERVICE: https://${self:custom.stage}.auth.coffee-hmm.inhibitor.io
+      ORMCONFIG_FILE: ormconfig.json
+  updateEventStatistics:
+    handler: src/scheduledEvents/updateEventStatistics.handler
+    events:
+      - schedule: cron(0 * * * ? *)
+    environment:
+      APP_NAME: ${self:service}
+      APP_VERSION: ${self:custom.version}
+      APP_STAGE: ${self:custom.stage}
+      LOG_LEVEL: info
+      AUTH_SERVICE: https://${self:custom.stage}.auth.coffee-hmm.inhibitor.io
+      ORMCONFIG_FILE: ormconfig.json

@@ -1,6 +1,6 @@
 {
   "name": "coffee-hmm-auth",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An authentication microservice for coffee-hmm",
   "scripts": {
     "debug": "npx ts-node-dev --respawn --transpile-only --ignore-watch node_modules ./src/server.ts",

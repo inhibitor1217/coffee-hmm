@@ -23,7 +23,7 @@ export const ormConfigs: {
     database: 'postgres',
   }),
   template: () => ({
-    name: 'template',
+    name: 'auth-template',
     type: 'postgres',
     host: 'localhost',
     port: 5000,
@@ -34,7 +34,7 @@ export const ormConfigs: {
     entities,
   }),
   worker: (workerId: number) => ({
-    name: `worker_${workerId}`,
+    name: `auth-worker_${workerId}`,
     type: 'postgres',
     host: 'localhost',
     port: 5000,

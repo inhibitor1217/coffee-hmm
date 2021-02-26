@@ -15,10 +15,12 @@ export interface KoaContextState {
   policy?: IamPolicy;
 }
 
-export type VariablesMap = { [key: string]: string | number | boolean };
+export type VariablesMap = { [key: string]: string };
 
-interface RouteParamContext<ParamsT = VariablesMap, QueryT = VariablesMap>
-  extends Router.RouterParamContext<KoaContextState, Koa.Context> {
+interface RouteParamContext<
+  ParamsT extends VariablesMap = VariablesMap,
+  QueryT = VariablesMap
+> extends Router.RouterParamContext<KoaContextState, Koa.Context> {
   params: ParamsT;
   query: QueryT;
 }
@@ -28,7 +30,7 @@ interface KoaTypedRequest<BodyT = AnyJson> extends Koa.Request {
 }
 
 export interface KoaContext<
-  ParamsT = VariablesMap,
+  ParamsT extends VariablesMap = VariablesMap,
   QueryT = VariablesMap,
   BodyT = AnyJson
 > extends Koa.ParameterizedContext<
@@ -41,13 +43,13 @@ export interface KoaContext<
 }
 
 export type KoaRouteHandler<
-  ParamsT = VariablesMap,
+  ParamsT extends VariablesMap = VariablesMap,
   QueryT = VariablesMap,
   BodyT = AnyJson
 > = (ctx: KoaContext<ParamsT, QueryT, BodyT>) => Promise<void> | void;
 
 export interface KoaRouteHandlerOptions<
-  ParamsT = VariablesMap,
+  ParamsT extends VariablesMap = VariablesMap,
   QueryT = VariablesMap,
   BodyT = AnyJson
 > {

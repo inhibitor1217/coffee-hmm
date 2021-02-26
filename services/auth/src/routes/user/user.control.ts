@@ -1,20 +1,21 @@
 import '../../util/extension';
 
 import Joi from 'joi';
+import { FOREIGN_KEY_VIOLATION } from 'pg-error-constants';
 import { DeepPartial, getManager, getRepository } from 'typeorm';
 import { HTTP_OK } from '../../const';
 import User, { UserState, UserStateStrings } from '../../entities/user';
 import UserProfile from '../../entities/userProfile';
 import { SortOrder, SortOrderStrings } from '../../types';
-import { KoaRouteHandler, VariablesMap } from '../../types/koa';
+import { VariablesMap } from '../../types/koa';
 import { enumKeyStrings } from '../../util';
 import Exception, { ExceptionCode } from '../../util/error';
 import { OperationSchema, OperationType } from '../../util/iam';
 import handler from '../handler';
 
-export const getSingleUser: KoaRouteHandler<{
+export const getSingleUser = handler<{
   userId: string;
-}> = handler(
+}>(
   async (ctx) => {
     await ctx.state.connection();
 
@@ -48,7 +49,7 @@ export const getSingleUser: KoaRouteHandler<{
   }
 );
 
-export const getUserCount: KoaRouteHandler = handler(
+export const getUserCount = handler(
   async (ctx) => {
     await ctx.state.connection();
 
@@ -81,7 +82,7 @@ enum UserListOrder {
 
 type UserListOrderStrings = keyof typeof UserListOrder;
 
-export const getUserList: KoaRouteHandler<
+export const getUserList = handler<
   VariablesMap,
   {
     limit: number;
@@ -89,7 +90,7 @@ export const getUserList: KoaRouteHandler<
     orderBy?: UserListOrderStrings;
     order?: SortOrderStrings;
   }
-> = handler(
+>(
   async (ctx) => {
     const {
       limit,
@@ -211,7 +212,7 @@ export const getUserList: KoaRouteHandler<
   }
 );
 
-export const putUserState: KoaRouteHandler<
+export const putUserState = handler<
   {
     userId: string;
   },
@@ -219,7 +220,7 @@ export const putUserState: KoaRouteHandler<
   {
     state: UserStateStrings;
   }
-> = handler(
+>(
   async (ctx) => {
     if (!ctx.request.body) {
       throw new Exception(ExceptionCode.badRequest);
@@ -271,9 +272,9 @@ export const putUserState: KoaRouteHandler<
   }
 );
 
-export const getUserProfile: KoaRouteHandler<{
+export const getUserProfile = handler<{
   userId: string;
-}> = handler(
+}>(
   async (ctx) => {
     const { userId } = ctx.params;
 
@@ -305,7 +306,7 @@ export const getUserProfile: KoaRouteHandler<{
   }
 );
 
-export const putUserProfile: KoaRouteHandler<
+export const putUserProfile = handler<
   {
     userId: string;
   },
@@ -314,7 +315,7 @@ export const putUserProfile: KoaRouteHandler<
     name?: string;
     email?: string | null;
   }
-> = handler(
+>(
   async (ctx) => {
     if (!ctx.request.body) {
       throw new Exception(ExceptionCode.badRequest);
@@ -371,9 +372,9 @@ export const putUserProfile: KoaRouteHandler<
   }
 );
 
-export const getUserPolicy: KoaRouteHandler<{
+export const getUserPolicy = handler<{
   userId: string;
-}> = handler(
+}>(
   async (ctx) => {
     const { userId } = ctx.params;
 
@@ -403,6 +404,81 @@ export const getUserPolicy: KoaRouteHandler<{
     requiredRules: (ctx) =>
       new OperationSchema({
         operationType: OperationType.query,
+        operation: 'auth.user.policy',
+        resource: ctx.params.userId,
+      }),
+  }
+);
+
+export const putUserPolicy = handler<
+  {
+    userId: string;
+  },
+  VariablesMap,
+  {
+    policyId: string;
+  }
+>(
+  async (ctx) => {
+    if (!ctx.request.body) {
+      throw new Exception(ExceptionCode.badRequest);
+    }
+
+    const { userId } = ctx.params;
+    const { policyId } = ctx.request.body;
+
+    await ctx.state.connection();
+
+    const updated = await getManager()
+      .createQueryBuilder(User, 'user')
+      .update()
+      .set({ fkPolicyId: policyId })
+      .where({ id: userId })
+      .returning(User.columns)
+      .execute()
+      .then((updateResult) => {
+        if (updateResult?.affected) {
+          return User.fromRawColumns(
+            (updateResult.raw as Record<string, unknown>[])[0]
+          );
+        }
+        throw new Exception(ExceptionCode.notFound);
+      })
+      .catch((e: { code: string }) => {
+        if (e.code === FOREIGN_KEY_VIOLATION) {
+          throw new Exception(
+            ExceptionCode.badRequest,
+            `policy not found: ${policyId}`
+          );
+        }
+        throw e;
+      });
+
+    const policy = await ctx.state.loaders.policy.load(updated.fkPolicyId);
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      user: {
+        policy: policy.toJsonObject(),
+      },
+    };
+  },
+  {
+    schema: {
+      params: Joi.object()
+        .keys({
+          userId: Joi.string().uuid({ version: 'uuidv4' }).required(),
+        })
+        .required(),
+      body: Joi.object()
+        .keys({
+          policyId: Joi.string().uuid({ version: 'uuidv4' }).required(),
+        })
+        .required(),
+    },
+    requiredRules: (ctx) =>
+      new OperationSchema({
+        operationType: OperationType.mutation,
         operation: 'auth.user.policy',
         resource: ctx.params.userId,
       }),
