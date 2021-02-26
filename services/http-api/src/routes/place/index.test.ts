@@ -65,41 +65,12 @@ describe('Place - GET /place/list', () => {
     const {
       place: { count, list },
     } = response.body as {
-      place: {
-        count: number;
-        list: { id: string; name: string; pinned: boolean }[];
-      };
+      place: { count: number; list: { id: string; name: string }[] };
     };
     const names = list.map((item) => item.name);
 
     expect(count).toBe(4);
     expect(names.sort()).toEqual(['판교', '연남동', '양재', '성수동'].sort());
-
-    list.forEach(({ pinned }) => expect(pinned).toBe(false));
-  });
-
-  test('Can retrieve a pinned list of places', async () => {
-    await setupPlace(connection, { name: '판교', pinned: true });
-    await setupPlace(connection, { name: '연남동', pinned: false });
-    await setupPlace(connection, { name: '양재', pinned: true });
-    await setupPlace(connection, { name: '성수동', pinned: false });
-
-    const response = await request
-      .get('/place/list')
-      .query({ pinned: true })
-      .expect(HTTP_OK);
-    const {
-      place: { count, list },
-    } = response.body as {
-      place: {
-        count: number;
-        list: { id: string; name: string; pinned: boolean }[];
-      };
-    };
-    const names = list.map((item) => item.name);
-
-    expect(count).toBe(2);
-    expect(names.sort()).toEqual(['판교', '양재'].sort());
   });
 });
 
@@ -111,15 +82,14 @@ describe('Place - POST /place', () => {
         'x-debug-user-id': uuid.v4(),
         'x-debug-iam-policy': adminerPolicyString,
       })
-      .send({ name: '양재', pinned: true })
+      .send({ name: '양재' })
       .expect(HTTP_CREATED);
 
     const {
-      place: { name, pinned },
-    } = response.body as { place: { name: string; pinned: boolean } };
+      place: { name },
+    } = response.body as { place: { name: string } };
 
     expect(name).toBe('양재');
-    expect(pinned).toBe(true);
   });
 
   test('Requires privilege to create a place', async () => {
@@ -179,29 +149,6 @@ describe('Place - PUT /place/:placeId', () => {
       })
       .send({ name: '성수동' })
       .expect(HTTP_BAD_REQUEST);
-  });
-
-  test('Can pin a place', async () => {
-    const place = await setupPlace(connection, { name: '판교', pinned: false });
-
-    const response = await request
-      .put(`/place/${place.id}`)
-      .set({
-        'x-debug-user-id': uuid.v4(),
-        'x-debug-iam-policy': adminerPolicyString,
-      })
-      .send({ pinned: true })
-      .expect(HTTP_OK);
-
-    const {
-      place: { id, name, pinned },
-    } = response.body as {
-      place: { id: string; name: string; pinned: boolean };
-    };
-
-    expect(id).toBe(place.id);
-    expect(name).toBe('판교');
-    expect(pinned).toBe(true);
   });
 
   test('Throws 404 if place does not exist', async () => {

@@ -8,58 +8,37 @@ import Exception, { ExceptionCode } from '../../util/error';
 import { OperationSchema, OperationType } from '../../util/iam';
 import handler from '../handler';
 
-export const getList = handler<VariablesMap, { pinned?: boolean }>(
-  async (ctx) => {
-    const { pinned = false } = ctx.query;
+export const getList = handler(async (ctx) => {
+  await ctx.state.connection();
 
-    await ctx.state.connection();
+  const places = await getRepository(Place)
+    .createQueryBuilder('place')
+    .select()
+    .getMany();
 
-    let query = getRepository(Place).createQueryBuilder('place').select();
-
-    if (pinned) {
-      query = query.where({ pinned: true });
-    }
-
-    const places = await query.getMany();
-
-    ctx.status = HTTP_OK;
-    ctx.body = {
-      place: {
-        count: places.length,
-        list: places.map((place) => place.toJsonObject()),
-      },
-    };
-  },
-  {
-    schema: {
-      query: joi
-        .object()
-        .keys({
-          pinned: joi.boolean(),
-        })
-        .required(),
+  ctx.status = HTTP_OK;
+  ctx.body = {
+    place: {
+      count: places.length,
+      list: places.map((place) => place.toJsonObject()),
     },
-  }
-);
+  };
+});
 
-export const create = handler<
-  VariablesMap,
-  VariablesMap,
-  { name: string; pinned?: boolean }
->(
+export const create = handler<VariablesMap, VariablesMap, { name: string }>(
   async (ctx) => {
     if (!ctx.request.body) {
       throw new Exception(ExceptionCode.badRequest);
     }
 
-    const { name, pinned = false } = ctx.request.body;
+    const { name } = ctx.request.body;
 
     await ctx.state.connection();
 
     const inserted = await getRepository(Place)
       .createQueryBuilder()
       .insert()
-      .values({ name, pinned })
+      .values({ name })
       .returning(Place.columns)
       .execute()
       .then((insertResult) =>
@@ -84,10 +63,7 @@ export const create = handler<
     schema: {
       body: joi
         .object()
-        .keys({
-          name: joi.string().min(1).max(255).required(),
-          pinned: joi.boolean(),
-        })
+        .keys({ name: joi.string().min(1).max(255).required() })
         .required(),
     },
     requiredRules: new OperationSchema({
@@ -101,7 +77,7 @@ export const create = handler<
 export const updateOne = handler<
   { placeId: string },
   VariablesMap,
-  { name?: string; pinned?: boolean }
+  { name: string }
 >(
   async (ctx) => {
     if (!ctx.request.body) {
@@ -109,7 +85,7 @@ export const updateOne = handler<
     }
 
     const { placeId } = ctx.params;
-    const { name, pinned } = ctx.request.body;
+    const { name } = ctx.request.body;
 
     const connection = await ctx.state.connection();
 
@@ -117,7 +93,7 @@ export const updateOne = handler<
       manager
         .createQueryBuilder(Place, 'place')
         .update()
-        .set(Object.filterUndefinedKeys({ name, pinned }))
+        .set({ name })
         .where({ id: placeId })
         .returning(Place.columns)
         .execute()
@@ -134,7 +110,7 @@ export const updateOne = handler<
           if (e.code === UNIQUE_VIOLATION) {
             throw new Exception(
               ExceptionCode.badRequest,
-              `duplicate place name: ${name ?? 'undefined'}`
+              `duplicate place name: ${name}`
             );
           }
           throw e;
@@ -154,8 +130,7 @@ export const updateOne = handler<
         .required(),
       body: joi
         .object()
-        .keys({ name: joi.string().min(1).max(255), pinned: joi.boolean() })
-        .or('name', 'pinned')
+        .keys({ name: joi.string().min(1).max(255).required() })
         .required(),
     },
     requiredRules: (ctx) =>
