@@ -40,6 +40,7 @@ export type TypeCafeImage = {
 }
 
 export type TypeCafeMetadata = {
+    creator?: string,
     hour?: string,
     tag?: string[]
 }
