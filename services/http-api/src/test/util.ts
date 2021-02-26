@@ -7,12 +7,12 @@ import Place from '../entities/place';
 
 export const setupPlace = async (
   connection: Connection,
-  { name }: { name: string }
+  { name, pinned }: { name: string; pinned?: boolean }
 ) => {
   const place = await connection
     .createQueryBuilder(Place, 'place')
     .insert()
-    .values({ name })
+    .values({ name, pinned: pinned ?? false })
     .returning(Place.columns)
     .execute()
     .then((insertResult) =>
