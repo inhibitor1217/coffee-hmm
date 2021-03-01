@@ -4,7 +4,10 @@ import { FOREIGN_KEY_VIOLATION, UNIQUE_VIOLATION } from 'pg-error-constants';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
 import Policy from '../../entities/policy';
 import { SortOrder, SortOrderStrings } from '../../types';
-import { TransformedVariablesMap } from '../../types/koa';
+import {
+  TransformedSchemaTypes,
+  TransformedVariablesMap,
+} from '../../types/koa';
 import { enumKeyStrings } from '../../util';
 import Exception, { ExceptionCode } from '../../util/error';
 import { IamPolicy, OperationSchema, OperationType } from '../../util/iam';
@@ -245,6 +248,9 @@ export const getPolicyList = handler<
           order: Joi.string().valid(...enumKeyStrings(SortOrder)),
         })
         .required(),
+    },
+    transform: {
+      query: [{ key: 'limit', type: TransformedSchemaTypes.integer }],
     },
     requiredRules: new OperationSchema({
       operationType: OperationType.query,

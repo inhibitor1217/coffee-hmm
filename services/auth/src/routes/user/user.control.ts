@@ -7,7 +7,10 @@ import { HTTP_OK } from '../../const';
 import User, { UserState, UserStateStrings } from '../../entities/user';
 import UserProfile from '../../entities/userProfile';
 import { SortOrder, SortOrderStrings } from '../../types';
-import { TransformedVariablesMap } from '../../types/koa';
+import {
+  TransformedSchemaTypes,
+  TransformedVariablesMap,
+} from '../../types/koa';
 import { enumKeyStrings } from '../../util';
 import Exception, { ExceptionCode } from '../../util/error';
 import { OperationSchema, OperationType } from '../../util/iam';
@@ -203,6 +206,9 @@ export const getUserList = handler<
           order: Joi.string().valid(...enumKeyStrings(SortOrder)),
         })
         .required(),
+    },
+    transform: {
+      query: [{ key: 'limit', type: TransformedSchemaTypes.integer }],
     },
     requiredRules: new OperationSchema({
       operationType: OperationType.query,

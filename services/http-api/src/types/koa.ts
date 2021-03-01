@@ -21,6 +21,14 @@ export type TransformedVariablesMap = {
   [key: string]: TransformedVariable | TransformedVariable[] | undefined | null;
 };
 
+export enum TransformedSchemaTypes {
+  integer = 'integer',
+  double = 'double',
+  boolean = 'boolean',
+}
+
+export type TransformedFields = { key: string; type: TransformedSchemaTypes }[];
+
 export type TransformedKoaContext<
   ParamsT extends TransformedVariablesMap = TransformedVariablesMap,
   QueryT extends TransformedVariablesMap = TransformedVariablesMap,
@@ -57,6 +65,10 @@ export interface KoaRouteHandlerOptions<
     params?: Schema;
     query?: Schema;
     body?: Schema;
+  };
+  transform?: {
+    params?: TransformedFields;
+    query?: TransformedFields;
   };
   requiredRules?:
     | OperationSchema

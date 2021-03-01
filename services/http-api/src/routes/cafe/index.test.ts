@@ -489,6 +489,7 @@ describe('Cafe - GET /cafe/:cafeId', () => {
           createdAt: place.createdAt.toISOString(),
           updatedAt: place.updatedAt.toISOString(),
           name: '성수동',
+          pinned: false,
         },
         metadata: {
           hours: '09:00 ~ 20:00',

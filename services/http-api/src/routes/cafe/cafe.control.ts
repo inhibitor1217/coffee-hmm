@@ -13,7 +13,10 @@ import CafeImageCount from '../../entities/cafeImageCount';
 import CafeStatistic from '../../entities/cafeStatistic';
 import Place from '../../entities/place';
 import { SortOrder, SortOrderStrings } from '../../types';
-import { TransformedVariablesMap } from '../../types/koa';
+import {
+  TransformedSchemaTypes,
+  TransformedVariablesMap,
+} from '../../types/koa';
 import { enumKeyStrings } from '../../util';
 import Exception, { ExceptionCode } from '../../util/error';
 import { OperationSchema, OperationType } from '../../util/iam';
@@ -72,6 +75,11 @@ export const getOne = handler<
         .keys({ cafeId: joi.string().uuid({ version: 'uuidv4' }).required() })
         .required(),
       query: joi.object().keys({ showHiddenImages: joi.boolean() }),
+    },
+    transform: {
+      query: [
+        { key: 'showHiddenImages', type: TransformedSchemaTypes.boolean },
+      ],
     },
   }
 );
@@ -201,6 +209,9 @@ export const getFeed = handler<
         .oxor('placeId', 'placeName')
         .required(),
     },
+    transform: {
+      query: [{ key: 'limit', type: TransformedSchemaTypes.integer }],
+    },
   }
 );
 
@@ -247,6 +258,9 @@ export const getCount = handler<
         keyword: joi.string().min(1).max(255),
         showHidden: joi.boolean(),
       }),
+    },
+    transform: {
+      query: [{ key: 'showHidden', type: TransformedSchemaTypes.boolean }],
     },
     requiredRules: (ctx) => [
       ...(ctx.query.showHidden ?? false
@@ -489,6 +503,13 @@ export const getList = handler<
         })
         .required(),
     },
+    transform: {
+      query: [
+        { key: 'limit', type: TransformedSchemaTypes.integer },
+        { key: 'showHidden', type: TransformedSchemaTypes.boolean },
+        { key: 'showHiddenImages', type: TransformedSchemaTypes.boolean },
+      ],
+    },
     requiredRules: (ctx) => [
       ...(ctx.query.showHidden ?? false
         ? [
@@ -701,6 +722,11 @@ export const updateOne = handler<
         })
         .or('name', 'placeId', 'metadata', 'state')
         .required(),
+    },
+    transform: {
+      query: [
+        { key: 'showHiddenImages', type: TransformedSchemaTypes.boolean },
+      ],
     },
     requiredRules: (ctx) =>
       new OperationSchema({
