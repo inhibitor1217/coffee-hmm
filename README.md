@@ -1,5 +1,7 @@
-<h1 align="center"><img alt="logo" src="https://github.com/jyuunnii/coffee-hmm/blob/master/public/images/coffee_hmm_logo.png" width="300"></h1><br>
-
+<h1 align="center">
+  <a href="https://coffee-hmm.inhibitor.io/">
+    <img alt="logo" src="https://github.com/jyuunnii/coffee-hmm/blob/master/public/images/coffee_hmm_logo.png" width="300"></h1><br>
+  </a>
 <p align="center">
   <a href="https://coffee-hmm.inhibitor.io/">
     <img alt="coffee-hmm" src="https://github.com/jyuunnii/coffee-hmm/blob/master/public/images/icon7.png" width="100">
