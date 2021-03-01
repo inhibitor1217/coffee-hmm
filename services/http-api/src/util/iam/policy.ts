@@ -1,4 +1,3 @@
-import { ParameterizedContext } from 'koa';
 import { IamRule, IamRuleObject, OperationSchema, OperationType } from '.';
 import { KoaContextState } from '../../types/koa';
 import Exception, { ExceptionCode } from '../error';
@@ -25,17 +24,17 @@ export default class IamPolicy {
   }
 
   public canExecuteOperation(
-    ctx: ParameterizedContext<KoaContextState>,
+    state: KoaContextState,
     schema: OperationSchema
   ): boolean {
-    return this.rules.some((rule) => rule.canExecuteOperation(ctx, schema));
+    return this.rules.some((rule) => rule.canExecuteOperation(state, schema));
   }
 
   public canExecuteOperations(
-    ctx: ParameterizedContext<KoaContextState>,
+    state: KoaContextState,
     schemas: OperationSchema[]
   ): boolean {
-    return schemas.every((schema) => this.canExecuteOperation(ctx, schema));
+    return schemas.every((schema) => this.canExecuteOperation(state, schema));
   }
 
   static isValidPolicyJsonObject(json: AnyJson): json is IamPolicyObject {

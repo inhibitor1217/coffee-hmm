@@ -75,9 +75,9 @@ export default class Policy {
   }
 }
 
-export const createPolicyLoader = (context: KoaContextState) =>
+export const createPolicyLoader = (state: KoaContextState) =>
   new DataLoader<string, Policy>(async (policyIds) => {
-    await context.connection();
+    await state.connection();
 
     const normalized = await getManager()
       .createQueryBuilder(Policy, 'policy')

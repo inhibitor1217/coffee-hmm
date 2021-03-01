@@ -1,7 +1,6 @@
 import '../util/extension';
 
 import DataLoader from 'dataloader';
-import { ParameterizedContext } from 'koa';
 import {
   Column,
   Connection,
@@ -159,12 +158,12 @@ export default class Cafe {
 }
 
 export const createCafeLoader = (
-  ctx: ParameterizedContext<KoaContextState>,
+  state: KoaContextState,
   options?: { manager?: EntityManager }
 ) =>
   new DataLoader<string, Cafe>(async (cafeIds) => {
     const manager =
-      options?.manager ?? (await ctx.state.connection()).createEntityManager();
+      options?.manager ?? (await state.connection()).createEntityManager();
 
     const normalized = await manager
       .createQueryBuilder(Cafe, 'cafe')
@@ -181,15 +180,15 @@ export const createCafeLoader = (
   });
 
 export const createCafeWithImagesLoader = (
-  ctx: ParameterizedContext<KoaContextState>,
+  state: KoaContextState,
   options?: { manager?: EntityManager; showHiddenImages?: boolean }
 ) =>
   new DataLoader<string, Cafe>(async (cafeIds) => {
     if (options?.showHiddenImages ?? false) {
       if (
         !(
-          ctx.state.policy?.canExecuteOperations(
-            ctx,
+          state.policy?.canExecuteOperations(
+            state,
             cafeIds.map(
               (cafeId) =>
                 new OperationSchema({
@@ -206,7 +205,7 @@ export const createCafeWithImagesLoader = (
     }
 
     const manager =
-      options?.manager ?? (await ctx.state.connection()).createEntityManager();
+      options?.manager ?? (await state.connection()).createEntityManager();
 
     let query = manager
       .createQueryBuilder(Cafe, 'cafe')

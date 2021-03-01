@@ -3,7 +3,7 @@ import { FOREIGN_KEY_VIOLATION, UNIQUE_VIOLATION } from 'pg-error-constants';
 import { getRepository } from 'typeorm';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
 import Place from '../../entities/place';
-import { VariablesMap } from '../../types/koa';
+import { TransformedVariablesMap } from '../../types/koa';
 import Exception, { ExceptionCode } from '../../util/error';
 import { OperationSchema, OperationType } from '../../util/iam';
 import handler from '../handler';
@@ -43,9 +43,9 @@ export const getList = handler<VariablesMap, { pinned?: boolean }>(
 );
 
 export const create = handler<
-  VariablesMap,
-  VariablesMap,
-  { name: string; pinned?: boolean }
+  TransformedVariablesMap,
+  TransformedVariablesMap,
+  { name: string, pinned?: boolean }
 >(
   async (ctx) => {
     if (!ctx.request.body) {
@@ -100,8 +100,8 @@ export const create = handler<
 
 export const updateOne = handler<
   { placeId: string },
-  VariablesMap,
-  { name?: string; pinned?: boolean }
+  TransformedVariablesMap,
+  { name?: string; pinned?: boolean; }
 >(
   async (ctx) => {
     if (!ctx.request.body) {
@@ -168,8 +168,8 @@ export const updateOne = handler<
 );
 
 export const deleteList = handler<
-  VariablesMap,
-  VariablesMap,
+  TransformedVariablesMap,
+  TransformedVariablesMap,
   {
     list: string[];
   }

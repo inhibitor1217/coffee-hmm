@@ -4,15 +4,15 @@ import { FOREIGN_KEY_VIOLATION, UNIQUE_VIOLATION } from 'pg-error-constants';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
 import Policy from '../../entities/policy';
 import { SortOrder, SortOrderStrings } from '../../types';
-import { VariablesMap } from '../../types/koa';
+import { TransformedVariablesMap } from '../../types/koa';
 import { enumKeyStrings } from '../../util';
 import Exception, { ExceptionCode } from '../../util/error';
 import { IamPolicy, OperationSchema, OperationType } from '../../util/iam';
 import handler from '../handler';
 
 export const postPolicy = handler<
-  VariablesMap,
-  VariablesMap,
+  TransformedVariablesMap,
+  TransformedVariablesMap,
   {
     name: string;
     value: string;
@@ -145,7 +145,7 @@ enum PolicyListOrder {
 type PolicyListOrderStrings = keyof typeof PolicyListOrder;
 
 export const getPolicyList = handler<
-  VariablesMap,
+  TransformedVariablesMap,
   {
     limit: number;
     cursor?: string;
@@ -258,7 +258,7 @@ export const putPolicy = handler<
   {
     policyId: string;
   },
-  VariablesMap,
+  TransformedVariablesMap,
   {
     name?: string;
     value?: string;

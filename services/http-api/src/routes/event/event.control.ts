@@ -2,14 +2,14 @@ import joi from 'joi';
 import { getRepository } from 'typeorm';
 import { HTTP_OK } from '../../const';
 import Event, { EventCategory, EventName } from '../../entities/event';
-import { VariablesMap } from '../../types/koa';
+import { TransformedVariablesMap } from '../../types/koa';
 import { enumKeyStrings } from '../../util';
 import Exception, { ExceptionCode } from '../../util/error';
 import handler from '../handler';
 
 export const create = handler<
-  VariablesMap,
-  VariablesMap,
+  TransformedVariablesMap,
+  TransformedVariablesMap,
   {
     category: EventCategory;
     name: EventName;

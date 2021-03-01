@@ -7,7 +7,7 @@ import CafeImage, {
   CafeImageStateStrings,
 } from '../../../entities/cafeImage';
 import CafeImageCount from '../../../entities/cafeImageCount';
-import { VariablesMap } from '../../../types/koa';
+import { TransformedVariablesMap } from '../../../types/koa';
 import { enumKeyStrings } from '../../../util';
 import Exception, { ExceptionCode } from '../../../util/error';
 import { OperationSchema, OperationType } from '../../../util/iam';
@@ -15,7 +15,7 @@ import handler from '../../handler';
 
 export const create = handler<
   { cafeId: string },
-  VariablesMap,
+  TransformedVariablesMap,
   {
     uri: string;
     metadata?: AnyJson;
@@ -187,7 +187,7 @@ export const updateList = handler<
   {
     cafeId: string;
   },
-  VariablesMap,
+  TransformedVariablesMap,
   {
     list: {
       id: string;
@@ -299,7 +299,7 @@ export const updateOne = handler<
     cafeId: string;
     cafeImageId: string;
   },
-  VariablesMap,
+  TransformedVariablesMap,
   {
     uri?: string;
     metadata?: AnyJson | null;
@@ -440,7 +440,7 @@ export const deleteList = handler<
   {
     cafeId: string;
   },
-  VariablesMap,
+  TransformedVariablesMap,
   {
     list: string[];
   }

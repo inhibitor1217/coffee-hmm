@@ -1,23 +1,26 @@
+import { Schema } from 'joi';
+import { HTTP_INTERNAL_SERVER_ERROR } from '../const';
 import {
-  KoaContext,
   KoaRouteHandler,
   KoaRouteHandlerOptions,
-  VariablesMap,
+  TransformedKoaContext,
+  TransformedVariablesMap,
+  TransformedKoaRouteHandler,
 } from '../types/koa';
 import Exception, { ExceptionCode } from '../util/error';
 import { OperationSchema } from '../util/iam';
 
 const normalizeRequiredRules = <
-  ParamsT extends VariablesMap = VariablesMap,
-  QueryT = VariablesMap,
+  ParamsT extends TransformedVariablesMap = TransformedVariablesMap,
+  QueryT extends TransformedVariablesMap = TransformedVariablesMap,
   BodyT = AnyJson
 >(
-  ctx: KoaContext<ParamsT, QueryT, BodyT>,
+  ctx: TransformedKoaContext<ParamsT, QueryT, BodyT>,
   rules?:
     | OperationSchema
     | OperationSchema[]
     | ((
-        ctx: KoaContext<ParamsT, QueryT, BodyT>
+        ctx: TransformedKoaContext<ParamsT, QueryT, BodyT>
       ) => OperationSchema | OperationSchema[])
 ) => {
   if (!rules) {
@@ -32,52 +35,90 @@ const normalizeRequiredRules = <
   return Array.isArray(rules) ? rules : [rules];
 };
 
+class SchemaValidator<T> {
+  raw: unknown;
+
+  schema: Schema | undefined;
+
+  private transformed: T | undefined;
+
+  constructor(raw: unknown, schema?: Schema) {
+    this.raw = raw;
+    this.schema = schema;
+  }
+
+  validate(options?: { errorMessage: string }): SchemaValidator<T> {
+    const { error } = this.schema?.validate(this.raw) || {};
+    if (error) {
+      throw new Exception(ExceptionCode.badRequest, {
+        message: options?.errorMessage,
+        details: error,
+      });
+    }
+    return this;
+  }
+
+  transform(): SchemaValidator<T> {
+    this.transformed = this.raw as T;
+
+    return this;
+  }
+
+  getVariables(options?: { strict: boolean }): T {
+    if (options?.strict) {
+      if (!this.transformed) {
+        throw new Error(
+          'Cannot access getter "variables" prior of calling "transform()"'
+        );
+      }
+
+      return this.transformed;
+    }
+
+    return this.transformed ?? (this.raw as T);
+  }
+}
+
 const handler = <
-  ParamsT extends VariablesMap = VariablesMap,
-  QueryT = VariablesMap,
+  ParamsT extends TransformedVariablesMap = TransformedVariablesMap,
+  QueryT extends TransformedVariablesMap = TransformedVariablesMap,
   BodyT = AnyJson
 >(
-  routeHandler: KoaRouteHandler<ParamsT, QueryT, BodyT>,
+  routeHandler: TransformedKoaRouteHandler<ParamsT, QueryT, BodyT>,
   options?: KoaRouteHandlerOptions<ParamsT, QueryT, BodyT>
-): KoaRouteHandler<Record<string, string>, QueryT, BodyT> => async (ctx) => {
-  if (options?.schema?.params) {
-    const validation = options.schema.params.validate(ctx.params);
-    if (validation.error) {
-      throw new Exception(ExceptionCode.badRequest, {
-        message: 'request params validation failed',
-        details: validation.error,
-      });
-    }
-  }
-
-  if (options?.schema?.query) {
-    const validation = options.schema.query.validate(ctx.query);
-    if (validation.error) {
-      throw new Exception(ExceptionCode.badRequest, {
-        message: 'request query validation failed',
-        details: validation.error,
-      });
-    }
-  }
-
-  if (options?.schema?.body) {
-    const validation = options.schema.body.validate(ctx.request.body);
-    if (validation.error) {
-      throw new Exception(ExceptionCode.badRequest, {
-        message: 'request body validation failed',
-        details: validation.error,
-      });
-    }
-  }
+): KoaRouteHandler => async (ctx) => {
+  const context: TransformedKoaContext<ParamsT, QueryT, BodyT> = {
+    params: new SchemaValidator<ParamsT>(ctx.params, options?.schema?.params)
+      .validate({
+        errorMessage: 'request params validation failed',
+      })
+      .transform()
+      .getVariables({ strict: true }),
+    query: new SchemaValidator<QueryT>(ctx.query, options?.schema?.query)
+      .validate({
+        errorMessage: 'request query validation failed',
+      })
+      .transform()
+      .getVariables({ strict: true }),
+    request: {
+      body: new SchemaValidator<BodyT>(ctx.request.body, options?.schema?.body)
+        .validate({
+          errorMessage: 'request body validation failed',
+        })
+        .getVariables(),
+    },
+    state: ctx.state,
+  };
 
   const requiredRules = normalizeRequiredRules<ParamsT, QueryT, BodyT>(
-    ctx as KoaContext<ParamsT, QueryT, BodyT>,
+    context,
     options?.requiredRules
   );
 
   if (
     requiredRules &&
-    !ctx.state.policy?.canExecuteOperations(ctx, requiredRules)
+    requiredRules.length > 0 &&
+    !ctx.state.policy?.canExecuteOperations(ctx.state, requiredRules)
   ) {
     throw new Exception(ExceptionCode.forbidden, {
       message: 'request context does not have privilege to execute operation',
@@ -85,7 +126,10 @@ const handler = <
     });
   }
 
-  await routeHandler(ctx as KoaContext<ParamsT, QueryT, BodyT>);
+  await routeHandler(context);
+
+  ctx.status = context.status ?? HTTP_INTERNAL_SERVER_ERROR;
+  ctx.body = context.body;
 };
 
 export default handler;

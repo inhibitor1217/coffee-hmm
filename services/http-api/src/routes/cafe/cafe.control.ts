@@ -13,7 +13,7 @@ import CafeImageCount from '../../entities/cafeImageCount';
 import CafeStatistic from '../../entities/cafeStatistic';
 import Place from '../../entities/place';
 import { SortOrder, SortOrderStrings } from '../../types';
-import { VariablesMap } from '../../types/koa';
+import { TransformedVariablesMap } from '../../types/koa';
 import { enumKeyStrings } from '../../util';
 import Exception, { ExceptionCode } from '../../util/error';
 import { OperationSchema, OperationType } from '../../util/iam';
@@ -47,7 +47,7 @@ export const getOne = handler<
       if (
         !(
           ctx.state.policy?.canExecuteOperation(
-            ctx,
+            ctx.state,
             new OperationSchema({
               operationType: OperationType.query,
               operation: 'api.cafe.hidden',
@@ -77,7 +77,7 @@ export const getOne = handler<
 );
 
 export const getFeed = handler<
-  VariablesMap,
+  TransformedVariablesMap,
   {
     limit: number;
     cursor?: string;
@@ -205,7 +205,7 @@ export const getFeed = handler<
 );
 
 export const getCount = handler<
-  VariablesMap,
+  TransformedVariablesMap,
   {
     keyword?: string;
     showHidden?: boolean;
@@ -273,7 +273,7 @@ enum CafeListOrder {
 type CafeListOrderStrings = keyof typeof CafeListOrder;
 
 export const getList = handler<
-  VariablesMap,
+  TransformedVariablesMap,
   {
     limit: number;
     cursor?: string;
@@ -513,8 +513,8 @@ export const getList = handler<
 );
 
 export const create = handler<
-  VariablesMap,
-  VariablesMap,
+  TransformedVariablesMap,
+  TransformedVariablesMap,
   {
     name: string;
     placeId: string;
@@ -584,7 +584,7 @@ export const create = handler<
         })
         .execute();
 
-      return createCafeWithImagesLoader(ctx, { manager }).load(cafe.id);
+      return createCafeWithImagesLoader(ctx.state, { manager }).load(cafe.id);
     });
 
     ctx.status = HTTP_CREATED;
@@ -670,7 +670,7 @@ export const updateOne = handler<
           throw e;
         });
 
-      return createCafeWithImagesLoader(ctx, {
+      return createCafeWithImagesLoader(ctx.state, {
         manager,
         showHiddenImages,
       }).load(updated.id);

@@ -10,7 +10,7 @@ import User, {
   UserState,
 } from '../entities/user';
 import UserProfile from '../entities/userProfile';
-import { VariablesMap } from '../types/koa';
+import { TransformedVariablesMap } from '../types/koa';
 import Exception, { ExceptionCode } from '../util/error';
 import { generateDefaultUserPolicy } from '../util/iam';
 import { generateToken, TokenSubject } from '../util/token';
@@ -43,7 +43,7 @@ const verifyFirebaseIdToken = async (idToken: string) => {
 };
 
 export const register = handler<
-  VariablesMap,
+  TransformedVariablesMap,
   {
     id_token: string;
   },
@@ -170,7 +170,7 @@ export const register = handler<
 );
 
 export const token = handler<
-  VariablesMap,
+  TransformedVariablesMap,
   {
     id_token: string;
   }
@@ -240,7 +240,7 @@ export const token = handler<
 );
 
 export const me = handler<
-  VariablesMap,
+  TransformedVariablesMap,
   {
     id_token: string;
   }
