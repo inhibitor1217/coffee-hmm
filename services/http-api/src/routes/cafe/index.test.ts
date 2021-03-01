@@ -451,6 +451,75 @@ describe('Cafe - GET /cafe/:cafeId', () => {
 
     await request.get(`/cafe/${cafe.id}`).expect(HTTP_NOT_FOUND);
   });
+
+  test('Can interpret query parameter: showHiddenImages=false as it is', async () => {
+    const place = await setupPlace(connection, { name: '성수동' });
+    const { cafe, cafeImages } = await setupCafe(connection, {
+      name: '카페__000',
+      placeId: place.id,
+      metadata: { hours: '09:00 ~ 20:00' },
+      state: CafeState.active,
+      images: [
+        {
+          uri: '/images/0',
+          state: CafeImageState.hidden,
+        },
+        {
+          uri: '/images/1',
+          state: CafeImageState.active,
+          metadata: { tag: '현관' },
+        },
+      ],
+      mainImageIndex: 1,
+    });
+
+    const response = await request
+      .get(`/cafe/${cafe.id}`)
+      .query({ showHiddenImages: false })
+      .expect(HTTP_OK);
+
+    expect(response.body).toEqual({
+      cafe: {
+        id: cafe.id,
+        createdAt: cafe.createdAt.toISOString(),
+        updatedAt: cafe.updatedAt.toISOString(),
+        name: '카페__000',
+        place: {
+          id: place.id,
+          createdAt: place.createdAt.toISOString(),
+          updatedAt: place.updatedAt.toISOString(),
+          name: '성수동',
+        },
+        metadata: {
+          hours: '09:00 ~ 20:00',
+        },
+        state: 'active',
+        image: {
+          count: 1,
+          list: [
+            {
+              id: cafeImages[1].id,
+              createdAt: cafeImages[1].createdAt.toISOString(),
+              updatedAt: cafeImages[1].updatedAt.toISOString(),
+              cafeId: cafe.id,
+              index: 0,
+              isMain: true,
+              metadata: { tag: '현관' },
+              relativeUri: '/images/1',
+              state: 'active',
+            },
+          ],
+        },
+        views: {
+          daily: 0,
+          weekly: 0,
+          monthly: 0,
+          total: 0,
+        },
+        numLikes: 0,
+      },
+    });
+  });
 });
 
 describe('Cafe - POST /cafe', () => {
