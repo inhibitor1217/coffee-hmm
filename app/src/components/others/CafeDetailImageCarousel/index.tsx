@@ -15,7 +15,20 @@ const CafeDetailImageCarousel = ({cafe}: CafeDetailImageCarouselProps) => {
     const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 
     const memoizedSwipeablePanel = useMemo(() => {
-        return cafe && (
+        if (!cafe) {
+            return null;
+        }
+
+        if (cafe.image.list.length === 1) {
+            const image = cafe.image.list[0];
+            return (
+                <StyledCarouselImage>
+                    <CarouselDetailImage image={image.relativeUri}/>
+                </StyledCarouselImage>
+            );
+        }
+
+        return (
             <SwipeablePanel
                 axis={Axis.horizontal}
                 onPageChanged={setCurrentImageIndex}
