@@ -1,20 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Alef&family=Modak&family=Poor+Story&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Alef&family=Modak&family=Poor+Story&display=swap");
 
 .detail-carousel-dot-wrapper {
-    position: relative;
+  position: relative;
 }
 
 .detail-carousel-container {
-    height: 100%;
-    max-height: 320px;
-    padding-top: 6vh;
-    position: relative;
+  height: 100vw;
+  max-height: 320px;
+  padding-top: 6vh;
+  position: relative;
 }
 
 .detail-carousel-container button {
-    font-family: 'Poor Story', cursive;
-    font-weight: normal;
-    font-size: 12px;
-    color: #ffffff;
-    padding: 140px 10px;
+  font-family: "Poor Story", cursive;
+  font-weight: normal;
+  font-size: 12px;
+  color: #ffffff;
+  padding: 140px 10px;
 }
