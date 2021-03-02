@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@inhibitor1217/react-swipeablepanel": "^0.1.5",
     "react": "^17.0.1",
     "react-copy-to-clipboard": "^5.0.2",
     "react-device-detect": "^1.14.0",
