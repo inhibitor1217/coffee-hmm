@@ -45,7 +45,7 @@ const Intro = () => {
                         <div className="cafe-preview-info">
                             <h4>{cafes[currentCafeIndex]?.name}</h4>
                             <span className="cafe-preview-info-list">OPEN {cafes[currentCafeIndex]?.metadata?.hour}</span>
-                            <span className="cafe-preview-info-by">{cafes[currentCafeIndex].metadata?.creator || 'jyuunnii'} 님이 올려주신 {cafes[currentCafeIndex]?.name}</span>
+                            <span className="cafe-preview-info-by">{cafes[currentCafeIndex]?.metadata?.creator || 'jyuunnii'} 님이 올려주신 {cafes[currentCafeIndex]?.name}</span>
                         </div>
                         <CafeByPlace cafes={cafes} setCurrentCafeIndex={setCurrentCafeIndex}/>
                         <StyledRowFlex className="cafe-preview-websearch">
