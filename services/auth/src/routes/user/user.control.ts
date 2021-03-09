@@ -7,7 +7,10 @@ import { HTTP_OK } from '../../const';
 import User, { UserState, UserStateStrings } from '../../entities/user';
 import UserProfile from '../../entities/userProfile';
 import { SortOrder, SortOrderStrings } from '../../types';
-import { VariablesMap } from '../../types/koa';
+import {
+  TransformedSchemaTypes,
+  TransformedVariablesMap,
+} from '../../types/koa';
 import { enumKeyStrings } from '../../util';
 import Exception, { ExceptionCode } from '../../util/error';
 import { OperationSchema, OperationType } from '../../util/iam';
@@ -83,7 +86,7 @@ enum UserListOrder {
 type UserListOrderStrings = keyof typeof UserListOrder;
 
 export const getUserList = handler<
-  VariablesMap,
+  TransformedVariablesMap,
   {
     limit: number;
     cursor?: string;
@@ -204,6 +207,9 @@ export const getUserList = handler<
         })
         .required(),
     },
+    transform: {
+      query: [{ key: 'limit', type: TransformedSchemaTypes.integer }],
+    },
     requiredRules: new OperationSchema({
       operationType: OperationType.query,
       operation: 'auth.user',
@@ -216,7 +222,7 @@ export const putUserState = handler<
   {
     userId: string;
   },
-  VariablesMap,
+  TransformedVariablesMap,
   {
     state: UserStateStrings;
   }
@@ -310,7 +316,7 @@ export const putUserProfile = handler<
   {
     userId: string;
   },
-  VariablesMap,
+  TransformedVariablesMap,
   {
     name?: string;
     email?: string | null;
@@ -414,7 +420,7 @@ export const putUserPolicy = handler<
   {
     userId: string;
   },
-  VariablesMap,
+  TransformedVariablesMap,
   {
     policyId: string;
   }

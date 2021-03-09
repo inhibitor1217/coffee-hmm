@@ -9,16 +9,16 @@ import entities from '../entities';
 import { env } from '../util';
 import { createCafeLoader, createCafeWithImagesLoader } from '../entities/cafe';
 
-const createDataLoaders = (ctx: ParameterizedContext<KoaContextState>) => {
-  const cafeWithAllImages = createCafeWithImagesLoader(ctx, {
+const createDataLoaders = (state: KoaContextState) => {
+  const cafeWithAllImages = createCafeWithImagesLoader(state, {
     showHiddenImages: true,
   });
-  const cafeWithActiveImages = createCafeWithImagesLoader(ctx, {
+  const cafeWithActiveImages = createCafeWithImagesLoader(state, {
     showHiddenImages: false,
   });
 
   return {
-    cafe: createCafeLoader(ctx),
+    cafe: createCafeLoader(state),
     cafeWithImages: (options: { showHiddenImages: boolean }) =>
       options.showHiddenImages ? cafeWithAllImages : cafeWithActiveImages,
   };
@@ -64,7 +64,7 @@ const db = (): Middleware<KoaContextState> => {
       return connection;
     };
 
-    ctx.state.loaders = createDataLoaders(ctx);
+    ctx.state.loaders = createDataLoaders(ctx.state);
 
     await next();
   };

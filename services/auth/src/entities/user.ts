@@ -162,9 +162,9 @@ export default class User {
   }
 }
 
-export const createUserLoader = (context: KoaContextState) =>
+export const createUserLoader = (state: KoaContextState) =>
   new DataLoader<string, User>(async (userIds) => {
-    await context.connection();
+    await state.connection();
 
     const normalized = await getManager()
       .createQueryBuilder(User, 'user')
@@ -175,9 +175,9 @@ export const createUserLoader = (context: KoaContextState) =>
     return userIds.map((id) => normalized[id]);
   });
 
-export const createUserProfileLoader = (context: KoaContextState) =>
+export const createUserProfileLoader = (state: KoaContextState) =>
   new DataLoader<string, UserProfile>(async (userIds) => {
-    await context.connection();
+    await state.connection();
 
     const normalized = await getManager()
       .createQueryBuilder(User, 'user')
@@ -189,9 +189,9 @@ export const createUserProfileLoader = (context: KoaContextState) =>
     return userIds.map((id) => normalized[id]?.profile);
   });
 
-export const createUserPolicyLoader = (context: KoaContextState) =>
+export const createUserPolicyLoader = (state: KoaContextState) =>
   new DataLoader<string, Policy>(async (userIds) => {
-    await context.connection();
+    await state.connection();
 
     const normalized = await getManager()
       .createQueryBuilder(User, 'user')

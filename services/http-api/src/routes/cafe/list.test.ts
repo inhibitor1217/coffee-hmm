@@ -410,6 +410,19 @@ describe('Cafe - GET /cafe/count', () => {
 
     expect(count).toBe(NUM_TEST_CAFES);
   });
+
+  test('Can interpret query parameter: showHidden=false as it is', async () => {
+    const response = await request
+      .get('/cafe/count')
+      .query({ showHidden: false })
+      .expect(HTTP_OK);
+
+    const {
+      cafe: { count },
+    } = response.body as { cafe: { count: number } };
+
+    expect(count).toBe(activeCafeIds.length);
+  });
 });
 
 describe('Cafe - GET /cafe/list', () => {

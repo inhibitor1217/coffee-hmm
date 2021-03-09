@@ -1,4 +1,3 @@
-import { ParameterizedContext } from 'koa';
 import {
   isOperationTypeString,
   OperationSchema,
@@ -69,14 +68,14 @@ export default class IamRule {
   }
 
   public canExecuteOperation(
-    ctx: ParameterizedContext<KoaContextState>,
+    state: KoaContextState,
     schema: OperationSchema
   ): boolean {
     return (
       this.operationType === schema.operationType &&
       this.compareOperation(this.operation, schema.operation) &&
       (this.resource === ANY_WORD ||
-        (this.resource === MATCH_UID && schema.resource === ctx.state.uid) ||
+        (this.resource === MATCH_UID && schema.resource === state.uid) ||
         this.resource === schema.resource)
     );
   }

@@ -13,7 +13,10 @@ import CafeImageCount from '../../entities/cafeImageCount';
 import CafeStatistic from '../../entities/cafeStatistic';
 import Place from '../../entities/place';
 import { SortOrder, SortOrderStrings } from '../../types';
-import { VariablesMap } from '../../types/koa';
+import {
+  TransformedSchemaTypes,
+  TransformedVariablesMap,
+} from '../../types/koa';
 import { enumKeyStrings } from '../../util';
 import Exception, { ExceptionCode } from '../../util/error';
 import { OperationSchema, OperationType } from '../../util/iam';
@@ -47,7 +50,7 @@ export const getOne = handler<
       if (
         !(
           ctx.state.policy?.canExecuteOperation(
-            ctx,
+            ctx.state,
             new OperationSchema({
               operationType: OperationType.query,
               operation: 'api.cafe.hidden',
@@ -73,11 +76,16 @@ export const getOne = handler<
         .required(),
       query: joi.object().keys({ showHiddenImages: joi.boolean() }),
     },
+    transform: {
+      query: [
+        { key: 'showHiddenImages', type: TransformedSchemaTypes.boolean },
+      ],
+    },
   }
 );
 
 export const getFeed = handler<
-  VariablesMap,
+  TransformedVariablesMap,
   {
     limit: number;
     cursor?: string;
@@ -201,11 +209,14 @@ export const getFeed = handler<
         .oxor('placeId', 'placeName')
         .required(),
     },
+    transform: {
+      query: [{ key: 'limit', type: TransformedSchemaTypes.integer }],
+    },
   }
 );
 
 export const getCount = handler<
-  VariablesMap,
+  TransformedVariablesMap,
   {
     keyword?: string;
     showHidden?: boolean;
@@ -248,6 +259,9 @@ export const getCount = handler<
         showHidden: joi.boolean(),
       }),
     },
+    transform: {
+      query: [{ key: 'showHidden', type: TransformedSchemaTypes.boolean }],
+    },
     requiredRules: (ctx) => [
       ...(ctx.query.showHidden ?? false
         ? [
@@ -273,7 +287,7 @@ enum CafeListOrder {
 type CafeListOrderStrings = keyof typeof CafeListOrder;
 
 export const getList = handler<
-  VariablesMap,
+  TransformedVariablesMap,
   {
     limit: number;
     cursor?: string;
@@ -489,6 +503,13 @@ export const getList = handler<
         })
         .required(),
     },
+    transform: {
+      query: [
+        { key: 'limit', type: TransformedSchemaTypes.integer },
+        { key: 'showHidden', type: TransformedSchemaTypes.boolean },
+        { key: 'showHiddenImages', type: TransformedSchemaTypes.boolean },
+      ],
+    },
     requiredRules: (ctx) => [
       ...(ctx.query.showHidden ?? false
         ? [
@@ -513,8 +534,8 @@ export const getList = handler<
 );
 
 export const create = handler<
-  VariablesMap,
-  VariablesMap,
+  TransformedVariablesMap,
+  TransformedVariablesMap,
   {
     name: string;
     placeId: string;
@@ -584,7 +605,7 @@ export const create = handler<
         })
         .execute();
 
-      return createCafeWithImagesLoader(ctx, { manager }).load(cafe.id);
+      return createCafeWithImagesLoader(ctx.state, { manager }).load(cafe.id);
     });
 
     ctx.status = HTTP_CREATED;
@@ -670,7 +691,7 @@ export const updateOne = handler<
           throw e;
         });
 
-      return createCafeWithImagesLoader(ctx, {
+      return createCafeWithImagesLoader(ctx.state, {
         manager,
         showHiddenImages,
       }).load(updated.id);
@@ -701,6 +722,11 @@ export const updateOne = handler<
         })
         .or('name', 'placeId', 'metadata', 'state')
         .required(),
+    },
+    transform: {
+      query: [
+        { key: 'showHiddenImages', type: TransformedSchemaTypes.boolean },
+      ],
     },
     requiredRules: (ctx) =>
       new OperationSchema({

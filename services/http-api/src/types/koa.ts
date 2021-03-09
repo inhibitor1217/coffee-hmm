@@ -1,4 +1,3 @@
-import Router from '@koa/router';
 import * as Koa from 'koa';
 import { Schema } from 'joi';
 import { Connection } from 'typeorm';
@@ -17,40 +16,49 @@ export interface KoaContextState {
 
 export type VariablesMap = { [key: string]: string };
 
-interface RouteParamContext<
-  ParamsT extends VariablesMap = VariablesMap,
-  QueryT = VariablesMap
-> extends Router.RouterParamContext<KoaContextState, Koa.Context> {
+type TransformedVariable = string | number | boolean;
+export type TransformedVariablesMap = {
+  [key: string]: TransformedVariable | TransformedVariable[] | undefined | null;
+};
+
+export enum TransformedSchemaTypes {
+  integer = 'integer',
+  double = 'double',
+  boolean = 'boolean',
+}
+
+export type TransformedFields = { key: string; type: TransformedSchemaTypes }[];
+
+export type TransformedKoaContext<
+  ParamsT extends TransformedVariablesMap = TransformedVariablesMap,
+  QueryT extends TransformedVariablesMap = TransformedVariablesMap,
+  BodyT = AnyJson
+> = {
   params: ParamsT;
   query: QueryT;
-}
+  request: {
+    body?: BodyT;
+  };
+  state: KoaContextState;
+  status?: number;
+  body?: AnyJson;
+};
 
-interface KoaTypedRequest<BodyT = AnyJson> extends Koa.Request {
-  body?: BodyT;
-}
+export type KoaRouteHandler = (
+  ctx: Koa.ParameterizedContext<KoaContextState>
+) => Promise<void> | void;
 
-export interface KoaContext<
-  ParamsT extends VariablesMap = VariablesMap,
-  QueryT = VariablesMap,
+export type TransformedKoaRouteHandler<
+  ParamsT extends TransformedVariablesMap = TransformedVariablesMap,
+  QueryT extends TransformedVariablesMap = TransformedVariablesMap,
   BodyT = AnyJson
-> extends Koa.ParameterizedContext<
-    KoaContextState,
-    RouteParamContext<ParamsT, QueryT>
-  > {
-  params: ParamsT;
-  query: QueryT;
-  request: KoaTypedRequest<BodyT>;
-}
-
-export type KoaRouteHandler<
-  ParamsT extends VariablesMap = VariablesMap,
-  QueryT = VariablesMap,
-  BodyT = AnyJson
-> = (ctx: KoaContext<ParamsT, QueryT, BodyT>) => Promise<void> | void;
+> = (
+  ctx: TransformedKoaContext<ParamsT, QueryT, BodyT>
+) => Promise<void> | void;
 
 export interface KoaRouteHandlerOptions<
-  ParamsT extends VariablesMap = VariablesMap,
-  QueryT = VariablesMap,
+  ParamsT extends TransformedVariablesMap = TransformedVariablesMap,
+  QueryT extends TransformedVariablesMap = TransformedVariablesMap,
   BodyT = AnyJson
 > {
   schema?: {
@@ -58,11 +66,15 @@ export interface KoaRouteHandlerOptions<
     query?: Schema;
     body?: Schema;
   };
+  transform?: {
+    params?: TransformedFields;
+    query?: TransformedFields;
+  };
   requiredRules?:
     | OperationSchema
     | OperationSchema[]
     | ((
-        ctx: KoaContext<ParamsT, QueryT, BodyT>
+        ctx: TransformedKoaContext<ParamsT, QueryT, BodyT>
       ) => OperationSchema | OperationSchema[]);
 }
 

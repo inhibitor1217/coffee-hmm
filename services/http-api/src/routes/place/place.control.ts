@@ -3,12 +3,15 @@ import { FOREIGN_KEY_VIOLATION, UNIQUE_VIOLATION } from 'pg-error-constants';
 import { getRepository } from 'typeorm';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
 import Place from '../../entities/place';
-import { VariablesMap } from '../../types/koa';
+import {
+  TransformedSchemaTypes,
+  TransformedVariablesMap,
+} from '../../types/koa';
 import Exception, { ExceptionCode } from '../../util/error';
 import { OperationSchema, OperationType } from '../../util/iam';
 import handler from '../handler';
 
-export const getList = handler<VariablesMap, { pinned?: boolean }>(
+export const getList = handler<TransformedVariablesMap, { pinned?: boolean }>(
   async (ctx) => {
     const { pinned = false } = ctx.query;
 
@@ -39,12 +42,15 @@ export const getList = handler<VariablesMap, { pinned?: boolean }>(
         })
         .required(),
     },
+    transform: {
+      query: [{ key: 'pinned', type: TransformedSchemaTypes.boolean }],
+    },
   }
 );
 
 export const create = handler<
-  VariablesMap,
-  VariablesMap,
+  TransformedVariablesMap,
+  TransformedVariablesMap,
   { name: string; pinned?: boolean }
 >(
   async (ctx) => {
@@ -100,7 +106,7 @@ export const create = handler<
 
 export const updateOne = handler<
   { placeId: string },
-  VariablesMap,
+  TransformedVariablesMap,
   { name?: string; pinned?: boolean }
 >(
   async (ctx) => {
@@ -168,8 +174,8 @@ export const updateOne = handler<
 );
 
 export const deleteList = handler<
-  VariablesMap,
-  VariablesMap,
+  TransformedVariablesMap,
+  TransformedVariablesMap,
   {
     list: string[];
   }
