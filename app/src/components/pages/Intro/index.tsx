@@ -49,8 +49,8 @@ const Intro = () => {
                         </div>
                         <CafeByPlace cafes={cafes} setCurrentCafeIndex={setCurrentCafeIndex}/>
                         <StyledRowFlex className="cafe-preview-websearch">
-                            <span onClick={() => openSearch((cafes[currentCafeIndex]?.name)+" "+cafes[currentCafeIndex].place.name, "Naver")}>네이버 바로가기</span>
-                            <span onClick={() => openSearch((cafes[currentCafeIndex]?.name), "Instagram")}>인스타그램 바로가기</span>       
+                            <span onClick={() => openSearch((cafes[currentCafeIndex]?.name)+" "+cafes[currentCafeIndex].place.name, "Naver")}><b className="web-naver">N</b> 네이버 바로가기</span>
+                            <span onClick={() => openSearch((cafes[currentCafeIndex]?.name), "Instagram")}><b className="web-instagram">I</b> 인스타그램 바로가기</span>       
                         </StyledRowFlex>
                     </div>
                     <PlaceSlide places={places} currentPlaceIndex={currentPlaceIndex} setCurrentPlaceIndex={setCurrentPlaceIndex}/>
