@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
 .cafe-preview-info {
     padding-left: 20px;
 }
@@ -24,6 +23,8 @@
     color: #03c75a;
 }
 .web-instagram {
+    font-size: 15px;
+    line-height: 0.2em;
     font-family: 'Roboto Mono', monospace;
     color: #D94854;
 }
