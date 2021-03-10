@@ -7,9 +7,11 @@ import CarouselHorizontal from '../../others/CarouselHorizontal';
 type CafeByPlaceProps = {
     cafes: TypeCafe[];
     setCurrentCafeIndex: (index: number) => void;
+    isImageReady: boolean;
+    setIsImageReady: (isImageReady: boolean) => void;
 }
 
-const CafeByPlace = ({cafes, setCurrentCafeIndex}: CafeByPlaceProps) => {
+const CafeByPlace = ({cafes, setCurrentCafeIndex, isImageReady, setIsImageReady}: CafeByPlaceProps) => {
     const ref = useRef<number>(0);
 
     useEffect(() => {
@@ -19,7 +21,7 @@ const CafeByPlace = ({cafes, setCurrentCafeIndex}: CafeByPlaceProps) => {
     }, [cafes.length, setCurrentCafeIndex])
 
     if(cafes.length === 1){
-        return  <CarouselMainImage cafe={cafes[0]}/>
+        return  <CarouselMainImage cafe={cafes[0]} isImageReady={isImageReady} setIsImageReady={setIsImageReady}/>
     }
 
     return(
@@ -27,7 +29,7 @@ const CafeByPlace = ({cafes, setCurrentCafeIndex}: CafeByPlaceProps) => {
         {cafes?.map((cafe) => {
             return(
                 <StyledCarouselImage key={cafe.id}>
-                    <CarouselMainImage cafe={cafe}/>
+                    <CarouselMainImage cafe={cafe} isImageReady={isImageReady} setIsImageReady={setIsImageReady} />
                 </StyledCarouselImage>
         )})}
         </CarouselHorizontal>
