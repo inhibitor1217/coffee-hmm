@@ -1,14 +1,17 @@
 .detail-back-button {
-    color: #555555;
-    padding: 4px;
+    padding: 6px;
     position: absolute;
     top: 4px;
     left: 0px;
     z-index: 9;
 }
+.detail-back-button img {
+    width: 24x;
+    height: 24px;
+    object-fit: contain;
+}
 
 .detail-info {
-    font-family: 'Poor Story', cursive;
     font-style: normal;
     font-weight: normal;
     min-width: 300px;
@@ -22,7 +25,7 @@
 }
 
 .detail-info span{
-    font-size: 16px;
+    font-size: 14px;
     margin-right: 10px;
     color: #000000;
 }
@@ -35,59 +38,59 @@
     padding: 20px;
     text-align: center;
 }
-
 .detail-button button{
     width: 48px;
     height: 48px;
     box-sizing: border-box;
     border-radius: 8px;
 }
+.detail-button span {
+    display: block;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 11px;
+    padding-top: 4px;
+    color: rgba(0,0,0,0.9);
+}
 
-.detail-button button img {
+.detail-like {
+    border: 1px solid #FF7979; 
+}
+.detail-like img {
+    width: 24px;
+    height: 24px;
+}
+
+.detail-share {
+    border: 1px solid #FFCC66;
+}
+.detail-share img {
+    width: 24px;
+    height: 24px;
+}
+
+.detail-naver {
+    border: 1px solid #B7D996;
+}
+.detail-naver img {
     width: 24px;
     height: 24px;
     padding-top: 4px;
     object-fit: cover;
 }
 
-.detail-button span {
-    display: block;
-    font-family: 'Poor Story', cursive;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 12px;
-    color: #000000;
-}
-
-.detail-like {
-    border: 1px solid #E7C7D6; 
-}
-.detail-like i{
-    color: #E7C7D6; 
-}
-
-.detail-share {
-    border: 1px solid #9FE4E0;
-}
-
-.detail-share i {
-    color: #9FE4E0;
-}
-
-.detail-naver {
-    border: 1px solid #B7D996;
-}
-
 .detail-insta {
     border: 1px solid #E7C7D6;
+}
+.detail-insta img {
+    width: 24px;
+    height: 24px;
+    padding-top: 4px;
+    object-fit: cover;
 }
 
 .detail-more {
     text-align: center;
-}
-
-.detail-button i {
-    font-size: 20px;
 }
 
 .detail-container {
@@ -95,15 +98,10 @@
 }
 
 .detail-name {
-    border-radius: 4px;
-    background-color:#E6ED63;
-}
-
-.detail-place {
-    border-radius: 4px;
-    background-color:#9FE4E0;
+   font-weight: bold;
 }
 
 .detail-time {
     display: block;
+    padding-top: 4px;
 }
