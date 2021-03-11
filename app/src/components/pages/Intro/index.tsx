@@ -5,6 +5,7 @@ import { TypeCafe, TypePlace } from '../../../utils/type';
 import { getCafeListByPlace, getPlaceList } from '../../api';
 import PlaceSlide from '../../others/PlaceSlide';
 import CafeByPlace from '../../others/CafeByPlace';
+import InitialLoading from '../../others/InitialLoading';
 import './index.css';
 
 const Intro = () => {
@@ -12,6 +13,7 @@ const Intro = () => {
     const [currentPlaceIndex, setCurrentPlaceIndex] = useState<number>(0);
     const [cafes, setCafes] = useState<TypeCafe[] | null>(null)
     const [currentCafeIndex, setCurrentCafeIndex] = useState<number>(0);
+    const [isImageReady, setIsImageReady] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -39,15 +41,16 @@ const Intro = () => {
 
     return(
         <StyledMainScale>
+            {!isImageReady && <InitialLoading/> }
             {cafes && 
-                <StyledColumnFlex className="intro">
+                <StyledColumnFlex className="intro" style={{display: isImageReady? 'block' : 'none'}}>
                     <div className="carousel-container">
                         <div className="cafe-preview-info">
                             <h4>{cafes[currentCafeIndex]?.name}</h4>
                             <span className="cafe-preview-info-list">OPEN {cafes[currentCafeIndex]?.metadata?.hour}</span>
                             <span className="cafe-preview-info-by">{cafes[currentCafeIndex]?.metadata?.creator || 'jyuunnii'} 님이 올려주신 {cafes[currentCafeIndex]?.name}</span>
                         </div>
-                        <CafeByPlace cafes={cafes} setCurrentCafeIndex={setCurrentCafeIndex}/>
+                        <CafeByPlace cafes={cafes} setCurrentCafeIndex={setCurrentCafeIndex} isImageReady={isImageReady} setIsImageReady={setIsImageReady}/>
                         <StyledRowFlex className="cafe-preview-websearch">
                             <span onClick={() => openSearch((cafes[currentCafeIndex]?.name)+" "+cafes[currentCafeIndex].place.name, "Naver")}><b className="web-naver">N</b> 네이버 바로가기</span>
                             <span onClick={() => openSearch((cafes[currentCafeIndex]?.name), "Instagram")}><b className="web-instagram">I</b> 인스타그램 바로가기</span>       
