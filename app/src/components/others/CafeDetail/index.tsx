@@ -22,7 +22,7 @@ const CafeDetail = ({ cafe }: CafeDetailProps) => {
 
     return(
         <div>
-            <button className="detail-back-button" onClick={handleClick}><i className="material-icons">keyboard_arrow_left</i></button>
+            <button className="detail-back-button" onClick={handleClick}><img src="/icons/baseline_navigate_before_black_18dp.png" alt="back"/></button>
             <CafeDetailImageCarousel cafe={cafe}/>
 
             <StyledColumnFlex>
@@ -33,8 +33,8 @@ const CafeDetail = ({ cafe }: CafeDetailProps) => {
                 </div>
 
                 <StyledRowFlexCenter className="detail-button-wrapper">
-                    <div className="detail-button"><button className="detail-like"><i className="material-icons-round">favorite</i></button><span>좋아요</span></div>
-                    <div className="detail-button"> <CopyToClipboard text={currentCopyLink}><button className="detail-share" onClick={() => copyLink(cafe?.name)}><i className="material-icons-round">share</i></button></CopyToClipboard><span>흠 링크<br/>공유하기</span></div>
+                    <div className="detail-button"><button className="detail-like"><img src="/icons/like-icon.png" alt="like"/></button><span>좋아요</span></div>
+                    <div className="detail-button"> <CopyToClipboard text={currentCopyLink}><button className="detail-share" onClick={() => copyLink(cafe?.name)}><img src="/icons/share-icon.png" alt="share"/></button></CopyToClipboard><span>흠 링크<br/>공유하기</span></div>
                     <div className="detail-button" onClick={() => openSearch((cafe?.name || "")+" "+cafe?.place.name, "Naver")}><button className="detail-naver"><img src="/images/naver-icon.png" alt="naver"/></button><span>네이버 검색<br/>바로가기</span></div>
                     <div className="detail-button" onClick={() => openSearch((cafe?.name || ""), "Instagram")}><button className="detail-insta"><img src="/images/insta-icon.png" alt="insta"/></button><span>인스타그램<br/>바로가기</span></div>  
                 </StyledRowFlexCenter>
