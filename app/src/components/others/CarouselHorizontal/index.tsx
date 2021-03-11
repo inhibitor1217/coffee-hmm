@@ -8,12 +8,21 @@ import './index.css';
 interface CarouselHorizontalProps {
     title: string;
     children?: React.ReactNode;
+    initialIndex?: number;
     setCurrentIndex: (index: number) => void;
 }
 
 const CarouselHorizontal: React.FC<CarouselHorizontalProps> = (props) => {
-    const [state, dispatch] = useReducer(reducerCarousel, {pos: 0, sliding: false, dir: RIGHT});
     const numItems = React.Children.count(props.children);
+    const [state, dispatch] = useReducer(
+        reducerCarousel,
+        {
+            pos: props.initialIndex !== undefined
+                ? (props.initialIndex + numItems - 1) % numItems
+                : 0,
+            sliding: false,
+            dir: RIGHT
+        });
     const { setCurrentIndex, children } = props;
 
     useEffect(() => {
