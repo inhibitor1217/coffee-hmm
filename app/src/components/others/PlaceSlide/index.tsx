@@ -1,19 +1,20 @@
 import React from 'react';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import introNavSlice from '../../../store/modules/intro-nav';
 import { StyledRowFlex } from '../../../utils/styled';
 import { TypePlace } from '../../../utils/type';
 import './index.css';
 
 type PlaceSlideProps = {
     places: TypePlace[];
-    currentPlaceIndex: number;
-    setCurrentPlaceIndex: (index: number) => void;
 }
 
-const PlaceSlide = ({places, currentPlaceIndex, setCurrentPlaceIndex}: PlaceSlideProps) => {
-    const handleClick = (index: number) => {
-        setCurrentPlaceIndex(index);
-;    }
+const PlaceSlide = ({places}: PlaceSlideProps) => {
+    const dispatch = useAppDispatch();
+    const handleClick = (index: number) => dispatch(introNavSlice.actions.navigateToPlace(index));
  
+    const currentPlaceIndex = useAppSelector(state => state.introNav.currentPlaceIndex);
+
     return(
         <StyledRowFlex className="place-container">
             {places.map((place, index) => {

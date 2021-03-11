@@ -6,14 +6,16 @@ import { getCafeListByPlace, getPlaceList } from '../../api';
 import PlaceSlide from '../../others/PlaceSlide';
 import CafeByPlace from '../../others/CafeByPlace';
 import InitialLoading from '../../others/InitialLoading';
+import { useAppSelector } from '../../../store/hooks';
 import './index.css';
 
 const Intro = () => {
     const [places, setPlaces] = useState<TypePlace[]>([]);
-    const [currentPlaceIndex, setCurrentPlaceIndex] = useState<number>(0);
     const [cafes, setCafes] = useState<TypeCafe[] | null>(null)
-    const [currentCafeIndex, setCurrentCafeIndex] = useState<number>(0);
     const [isImageReady, setIsImageReady] = useState<boolean>(false);
+
+    const currentPlaceIndex = useAppSelector(state => state.introNav.currentPlaceIndex);
+    const currentCafeIndex = useAppSelector(state => state.introNav.currentCafeIndex);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -50,13 +52,13 @@ const Intro = () => {
                             <span className="cafe-preview-info-list">OPEN {cafes[currentCafeIndex]?.metadata?.hour}</span>
                             <span className="cafe-preview-info-by">{cafes[currentCafeIndex]?.metadata?.creator || 'jyuunnii'} 님이 올려주신 {cafes[currentCafeIndex]?.name}</span>
                         </div>
-                        <CafeByPlace cafes={cafes} setCurrentCafeIndex={setCurrentCafeIndex} isImageReady={isImageReady} setIsImageReady={setIsImageReady}/>
+                        <CafeByPlace cafes={cafes} isImageReady={isImageReady} setIsImageReady={setIsImageReady}/>
                         <StyledRowFlex className="cafe-preview-websearch">
                             <span onClick={() => openSearch((cafes[currentCafeIndex]?.name)+" "+cafes[currentCafeIndex].place.name, "Naver")}><b className="web-naver">N</b> 네이버 바로가기</span>
                             <span onClick={() => openSearch((cafes[currentCafeIndex]?.name), "Instagram")}><b className="web-instagram">I</b> 인스타그램 바로가기</span>       
                         </StyledRowFlex>
                     </div>
-                    <PlaceSlide places={places} currentPlaceIndex={currentPlaceIndex} setCurrentPlaceIndex={setCurrentPlaceIndex}/>
+                    <PlaceSlide places={places} />
                 </StyledColumnFlex>
             }  
         </StyledMainScale>
