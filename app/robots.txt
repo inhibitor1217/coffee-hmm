@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://coffee-hmm.inhibitor.io/sitemap.xml
