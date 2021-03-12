@@ -5,7 +5,7 @@ import PlaceSlide from '../../others/PlaceSlide';
 import CafeByPlace from '../../others/CafeByPlace';
 import InitialLoading from '../../others/InitialLoading';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { fetchCafesInPlace, fetchPlaces } from '../../../store/modules/cafe';
+import { fetchCafesByPlace, fetchPlaces } from '../../../store/modules/cafe';
 import { currentIntroCafeSelector, currentIntroPlaceSelector } from '../../../store/selectors/cafe';
 import './index.css';
 
@@ -25,7 +25,7 @@ const Intro = () => {
 
     useEffect(() => {
         if (currentPlace) {
-            dispatch(fetchCafesInPlace(currentPlace));
+            dispatch(fetchCafesByPlace(currentPlace));
         }
     }, [dispatch, currentPlace]);
 

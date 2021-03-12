@@ -12,7 +12,7 @@ interface CarouselHorizontalProps {
     setCurrentIndex: (index: number) => void;
 }
 
-const CarouselHorizontal: React.FC<CarouselHorizontalProps> = (props) => {
+const CarouselHorizontal = (props: CarouselHorizontalProps) => {
     const numItems = React.Children.count(props.children);
     const [state, dispatch] = useReducer(
         reducerCarousel,

@@ -35,12 +35,12 @@ export const fetchPlaces = createAsyncThunk<
   },
 );
 
-export const fetchCafesInPlace = createAsyncThunk<
+export const fetchCafesByPlace = createAsyncThunk<
   { placeId: string; list: TypeCafe[]; },
   TypePlace,
   { state: RootState }
 >(
-  'cafe/fetchCafesInPlace',
+  'cafe/fetchCafesByPlace',
   async (place: TypePlace, { getState }) => {
     const cafeRecord = getState().cafe.cafeMap[place.id];
     if (cafeRecord) {
@@ -68,7 +68,7 @@ const cafeSlice = createSlice({
     );
 
     builder.addCase(
-      fetchCafesInPlace.fulfilled,
+      fetchCafesByPlace.fulfilled,
       (state, action) => {
         state.cafeMap[action.payload.placeId] = {
           list: action.payload.list
