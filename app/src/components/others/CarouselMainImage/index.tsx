@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { onImageLoad } from '../../../utils/function';
 import { StyledSpinnerContainer } from '../../../utils/styled';
@@ -8,12 +8,12 @@ import './index.css';
 
 type CarouselMainImageProps = {
     cafe: TypeCafe;
+    isImageReady: boolean;
+    setIsImageReady: (isImageReady: boolean) => void;
 }
 
-const CarouselMainImage = ({cafe}: CarouselMainImageProps) => {
-    const [isImageReady, setIsImageReady] = useState<boolean>(false);
+const CarouselMainImage = ({cafe, isImageReady, setIsImageReady}: CarouselMainImageProps) => {
     const history = useHistory();
-
     const mainImage = cafe.image.list.find((image) => image.isMain);
 
     const handleClick = async () => {

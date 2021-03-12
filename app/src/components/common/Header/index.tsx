@@ -19,7 +19,7 @@ const Header = ({location}: HeaderProps) => {
     if(location.pathname !== "/") {
         return(
             <header>
-                <button className="back-button" onClick={() => history.goBack()}><i className="material-icons">keyboard_arrow_left</i></button>
+                <button className="back-button" onClick={() => history.goBack()}><img src="/icons/baseline_navigate_before_black_18dp.png" alt="back"/></button>
             </header>
         )
     }

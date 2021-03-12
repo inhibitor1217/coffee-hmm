@@ -8,26 +8,31 @@ import './index.css';
 interface CarouselHorizontalProps {
     title: string;
     children?: React.ReactNode;
+    initialIndex?: number;
     setCurrentIndex: (index: number) => void;
 }
 
-const CarouselHorizontal = React.forwardRef<number, CarouselHorizontalProps>((props, ref) => {
-    const [state, dispatch] = useReducer(reducerCarousel, {pos: 0, sliding: false, dir: RIGHT});
+const CarouselHorizontal = (props: CarouselHorizontalProps) => {
     const numItems = React.Children.count(props.children);
+    const [state, dispatch] = useReducer(
+        reducerCarousel,
+        {
+            pos: props.initialIndex !== undefined
+                ? (props.initialIndex + numItems - 1) % numItems
+                : 0,
+            sliding: false,
+            dir: RIGHT
+        });
     const { setCurrentIndex, children } = props;
 
     useEffect(() => {
-        if (typeof ref === 'function') {
-            return;
-        }
-
         React.Children.toArray(props.children).forEach((child, index) => {
             let order = getOrder(index, state.pos, numItems); 
             if(order === 1){
                 setCurrentIndex(index);
             }
         })
-    }, [numItems, props.children, ref, setCurrentIndex, state.pos])
+    }, [numItems, props.children, setCurrentIndex, state.pos])
 
     const slide =  (dir: string) => {
         dispatch({type: dir, numItems: numItems});
@@ -55,6 +60,6 @@ const CarouselHorizontal = React.forwardRef<number, CarouselHorizontalProps>((pr
             </div>
         </div>
     )
-})
+};
 
 export default CarouselHorizontal;

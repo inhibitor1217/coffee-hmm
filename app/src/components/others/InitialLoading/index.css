@@ -1,0 +1,31 @@
+.initial-load-container {
+    padding-top: 160px;
+    font-size: 20px;
+    font-weight: 300;
+    text-align: center;
+}
+.initial-load-row1 {
+    padding-bottom: 8px;
+    animation: appear 0.5s ease-in-out;
+}
+.initial-load-row2 {
+    padding-bottom: 8px;
+    animation: appear 1s ease-in-out;
+}
+.initial-load-container img {
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+    animation: appear 1.5s ease-in-out;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}

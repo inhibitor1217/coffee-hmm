@@ -1,6 +1,6 @@
 header {
     width: 100%;
-    height: 6vh;
+    height: 6.5vh;
     text-align: center;
     background-color: #ffffff;
 }
@@ -10,4 +10,12 @@ header {
 }
 header #home-link {
     text-decoration: none;
+}
+.back-button {
+    padding: 6px;
+}
+.back-button img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
 }

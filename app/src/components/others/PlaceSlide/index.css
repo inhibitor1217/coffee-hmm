@@ -1,9 +1,14 @@
 .place-container {
     width: 100%;
     overflow-x: auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
 }
 .place-wrapper {
-	flex: 1;
+    min-width: 20%;
 	text-align: center;
 }
 .place-wrapper span {
