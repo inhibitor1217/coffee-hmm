@@ -1,32 +1,34 @@
-import React, { useEffect, useRef } from 'react';
-import { TypeCafe } from '../../../utils/type';
+import React from 'react';
 import { StyledCarouselImage } from '../../../utils/styled';
 import CarouselMainImage from '../../others/CarouselMainImage';
 import CarouselHorizontal from '../../others/CarouselHorizontal';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import introNavSlice from '../../../store/modules/intro-nav';
+import { currentIntroCafeListSelector } from '../../../store/selectors/cafe';
 
 type CafeByPlaceProps = {
-    cafes: TypeCafe[];
-    setCurrentCafeIndex: (index: number) => void;
     isImageReady: boolean;
     setIsImageReady: (isImageReady: boolean) => void;
 }
 
-const CafeByPlace = ({cafes, setCurrentCafeIndex, isImageReady, setIsImageReady}: CafeByPlaceProps) => {
-    const ref = useRef<number>(0);
+const CafeByPlace = ({ isImageReady, setIsImageReady }: CafeByPlaceProps) => {
+    const dispatch = useAppDispatch();
+    const setCurrentCafeIndex = (index: number) => dispatch(introNavSlice.actions.navigateToCafe(index));
 
-    useEffect(() => {
-        if(cafes.length === 1){
-            setCurrentCafeIndex(0);
-        }
-    }, [cafes.length, setCurrentCafeIndex])
+    const currentCafeIndex = useAppSelector(state => state.introNav.currentCafeIndex);
+    const cafeList = useAppSelector(currentIntroCafeListSelector);
 
-    if(cafes.length === 1){
-        return  <CarouselMainImage cafe={cafes[0]} isImageReady={isImageReady} setIsImageReady={setIsImageReady}/>
+    if(cafeList?.length === 1){
+        return  <CarouselMainImage cafe={cafeList[0]} isImageReady={isImageReady} setIsImageReady={setIsImageReady}/>
     }
 
     return(
-        <CarouselHorizontal title="Carousel" setCurrentIndex={setCurrentCafeIndex} ref={ref}>
-        {cafes?.map((cafe) => {
+        <CarouselHorizontal
+            title="Carousel"
+            initialIndex={currentCafeIndex}
+            setCurrentIndex={setCurrentCafeIndex}
+        >
+        {cafeList?.map((cafe) => {
             return(
                 <StyledCarouselImage key={cafe.id}>
                     <CarouselMainImage cafe={cafe} isImageReady={isImageReady} setIsImageReady={setIsImageReady} />
