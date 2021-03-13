@@ -2,7 +2,7 @@ import { serverUrl } from "../../utils/constant";
 
 // Cafe
 export const getCafeListByPlace = async (place: string) => {
-    let cafes = await fetch(serverUrl+`/cafe/feed?limit=10&placeName=${place}`, {
+    let cafes = await fetch(serverUrl+`/cafe/feed?limit=64&placeName=${place}`, {
         headers:{
         "Content-Type": "application/json"
     },
