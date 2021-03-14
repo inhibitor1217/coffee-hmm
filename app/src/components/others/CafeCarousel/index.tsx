@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TypeCafe } from '../../../utils/type';
 import CarouselMainImage from '../CarouselMainImage';
 import './index.css';
@@ -10,13 +10,11 @@ type CafeImageCarouselProps = {
 }
 
 const CafeCarousel = ({cafes}: CafeImageCarouselProps) => {
-    const [isImageReady, setIsImageReady] = useState<boolean>(false);
-
     if(cafes.length === 1) {
         return (
             <div>
                 <StyledCarouselImage>
-                    <CarouselMainImage cafe={cafes[0]} isImageReady={isImageReady} setIsImageReady={setIsImageReady}/>
+                    <CarouselMainImage cafe={cafes[0]} index={0} />
                 </StyledCarouselImage>
             </div>
         )
@@ -24,10 +22,10 @@ const CafeCarousel = ({cafes}: CafeImageCarouselProps) => {
     return(
         <div className="carousel-container">
             <CarouselVertical title="Carousel">
-            {cafes?.map((cafe) => {
+            {cafes?.map((cafe, index) => {
                 return(
                     <StyledCarouselImage key={cafe.id}>
-                        <CarouselMainImage cafe={cafe} isImageReady={isImageReady} setIsImageReady={setIsImageReady}/>
+                        <CarouselMainImage cafe={cafe} index={index}/>
                     </StyledCarouselImage>
             )})}
             </CarouselVertical>

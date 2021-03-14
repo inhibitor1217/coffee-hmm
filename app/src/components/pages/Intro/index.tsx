@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { openSearch } from '../../../utils/function';
 import { StyledColumnFlex, StyledMainScale, StyledRowFlex } from '../../../utils/styled';
 import PlaceSlide from '../../others/PlaceSlide';
@@ -11,13 +11,12 @@ import './index.css';
 
 const Intro = () => {
     const dispatch = useAppDispatch();
-
-    const [isImageReady, setIsImageReady] = useState<boolean>(false);
-
     const places = useAppSelector(state => state.cafe.place?.list);
-
     const currentPlace = useAppSelector(currentIntroPlaceSelector);
     const currentCafe = useAppSelector(currentIntroCafeSelector);
+    const isInitialCafeImageReady = useAppSelector(state => state.introNav.isInitialCafeImageReady);
+    const hasInitialClick = useAppSelector(state => state.introNav.hasInitialClick);
+    const isInitialLoading = !hasInitialClick && !isInitialCafeImageReady;
 
     useEffect(() => {
         dispatch(fetchPlaces());
@@ -31,16 +30,16 @@ const Intro = () => {
 
     return(
         <StyledMainScale>
-            {!isImageReady && <InitialLoading/> }
+            {isInitialLoading && <InitialLoading/> }
             {currentCafe && 
-                <StyledColumnFlex className="intro" style={{display: isImageReady? 'block' : 'none'}}>
+                <StyledColumnFlex className="intro" style={{display: isInitialLoading? 'none' : 'block'}}>
                     <div className="carousel-container">
                         <div className="cafe-preview-info">
                             <h4>{currentCafe?.name}</h4>
                             <span className="cafe-preview-info-list">OPEN {currentCafe?.metadata?.hour}</span>
                             <span className="cafe-preview-info-by">{currentCafe?.metadata?.creator || 'jyuunnii'} 님이 올려주신 {currentCafe?.name}</span>
                         </div>
-                        <CafeByPlace isImageReady={isImageReady} setIsImageReady={setIsImageReady}/>
+                        <CafeByPlace/>
                         <StyledRowFlex className="cafe-preview-websearch">
                             <span onClick={() => openSearch((currentCafe?.name)+" "+currentCafe.place.name, "Naver")}><b className="web-naver">N</b> 네이버 바로가기</span>
                             <span onClick={() => openSearch((currentCafe?.name), "Instagram")}><b className="web-instagram">I</b> 인스타그램 바로가기</span>       
