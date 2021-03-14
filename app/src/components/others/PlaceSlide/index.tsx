@@ -7,15 +7,11 @@ import './index.css';
 
 type PlaceSlideProps = {
     places: TypePlace[];
-    setInitialClick: (hasInitialClick: boolean) => void;
 }
 
-const PlaceSlide = ({places, setInitialClick}: PlaceSlideProps) => {
+const PlaceSlide = ({places}: PlaceSlideProps) => {
     const dispatch = useAppDispatch();
-    const handleClick = (index: number) => {
-        setInitialClick(true);
-        dispatch(introNavSlice.actions.navigateToPlace(index))
-    };
+    const handleClick = (index: number) => dispatch(introNavSlice.actions.navigateToPlace(index));
  
     const currentPlaceIndex = useAppSelector(state => state.introNav.currentPlaceIndex);
 

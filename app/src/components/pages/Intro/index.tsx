@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { openSearch } from '../../../utils/function';
 import { StyledColumnFlex, StyledMainScale, StyledRowFlex } from '../../../utils/styled';
 import PlaceSlide from '../../others/PlaceSlide';
@@ -10,12 +10,12 @@ import { currentIntroCafeSelector, currentIntroPlaceSelector } from '../../../st
 import './index.css';
 
 const Intro = () => {
-    const [hasInitialClick, setInitialClick] = useState(false);
     const dispatch = useAppDispatch();
     const places = useAppSelector(state => state.cafe.place?.list);
     const currentPlace = useAppSelector(currentIntroPlaceSelector);
     const currentCafe = useAppSelector(currentIntroCafeSelector);
     const isInitialCafeImageReady = useAppSelector(state => state.introNav.isInitialCafeImageReady);
+    const hasInitialClick = useAppSelector(state => state.introNav.hasInitialClick);
 
     useEffect(() => {
         dispatch(fetchPlaces());
@@ -44,7 +44,7 @@ const Intro = () => {
                             <span onClick={() => openSearch((currentCafe?.name), "Instagram")}><b className="web-instagram">I</b> 인스타그램 바로가기</span>       
                         </StyledRowFlex>
                     </div>
-                    { places && <PlaceSlide places={places} setInitialClick={setInitialClick}/> }
+                    { places && <PlaceSlide places={places} /> }
                 </StyledColumnFlex>
             }  
         </StyledMainScale>

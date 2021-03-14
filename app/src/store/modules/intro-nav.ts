@@ -4,12 +4,14 @@ type IntroNavState = {
   currentPlaceIndex: number;
   currentCafeIndex: number;
   isInitialCafeImageReady: boolean;
+  hasInitialClick: boolean;
 };
 
 const initialState: IntroNavState = {
   currentPlaceIndex: 0,
   currentCafeIndex: 0,
   isInitialCafeImageReady: false,
+  hasInitialClick: false,
 };
 
 const introNavSlice = createSlice({
@@ -17,7 +19,7 @@ const introNavSlice = createSlice({
   initialState,
   reducers: {
     navigateToPlace(state, action: PayloadAction<number>) {
-      state.isInitialCafeImageReady = false;
+      state.hasInitialClick = true;
       state.currentPlaceIndex = action.payload;
       state.currentCafeIndex = 0;
     },
@@ -25,7 +27,7 @@ const introNavSlice = createSlice({
       state.currentCafeIndex = action.payload;
     },
     setImageReady(state, action: PayloadAction<number>) {
-      if(action.payload === 0) {
+      if(action.payload === initialState.currentCafeIndex) {
         state.isInitialCafeImageReady = true;
       }
     }
