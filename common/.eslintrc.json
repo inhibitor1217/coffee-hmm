@@ -1,57 +1,56 @@
 {
-    "env": {
-      "browser": true,
-      "es2020": true
-    },
-    "extends": [
-      "airbnb-base",
-      "eslint:recommended",
-      "plugin:@typescript-eslint/eslint-recommended",
-      "plugin:@typescript-eslint/recommended",
-      "plugin:@typescript-eslint/recommended-requiring-type-checking",
-      "plugin:prettier/recommended",
-      "prettier/@typescript-eslint"
+  "env": {
+    "browser": true,
+    "es2020": true
+  },
+  "extends": [
+    "airbnb-base",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:prettier/recommended",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "ecmaVersion": 2015,
+    "sourceType": "module"
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    ".serverless/",
+    ".webpack/",
+    "_warmup/",
+    ".vscode/"
+  ],
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
     ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-      "project": "./tsconfig.json",
-      "ecmaVersion": 2015,
-      "sourceType": "module"
-    },
-    "ignorePatterns": [
-      "node_modules/",
-      ".serverless/",
-      ".webpack/",
-      "_warmup/",
-      ".vscode/"
-    ],
-    "plugins": ["@typescript-eslint"],
-    "rules": {
-      "import/extensions": [
-        "error",
-        "ignorePackages",
-        {
-          "js": "never",
-          "jsx": "never",
-          "ts": "never",
-          "tsx": "never"
-        }
-      ],
-      "import/prefer-default-export": "off",
-      "no-extend-native": "off",
-      "camelcase": "off",
-      "@typescript-eslint/explicit-module-boundary-types": "off",
-      "no-shadow": "off",
-      "@typescript-eslint/no-shadow": ["error"],
-      "@typescript-eslint/no-unsafe-call": "off"
-    },
-    "settings": {
-      "import/resolver": {
-        "node": {
-          "paths": ["src"],
-          "extensions": [".js", ".jsx", ".ts", ".tsx"]
-        }
+    "import/prefer-default-export": "off",
+    "no-extend-native": "off",
+    "camelcase": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["error"],
+    "@typescript-eslint/no-unsafe-call": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"],
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     }
   }
-  
+}
