@@ -1,3 +1,10 @@
+import {
+  Cafe,
+  CafeState,
+  CafeStateStrings,
+  CafeImageState,
+  Place,
+} from '@coffee-hmm/common';
 import { SuperTest, Test } from 'supertest';
 import { Connection, createConnection } from 'typeorm';
 import * as uuid from 'uuid';
@@ -8,9 +15,6 @@ import {
   HTTP_NOT_FOUND,
   HTTP_OK,
 } from '../../const';
-import Cafe, { CafeState, CafeStateStrings } from '../../entities/cafe';
-import { CafeImageState } from '../../entities/cafeImage';
-import Place from '../../entities/place';
 import { cleanDatabase, closeServer, openServer, ormConfigs } from '../../test';
 import { setupCafe, setupPlace } from '../../test/util';
 import { KoaServer } from '../../types/koa';

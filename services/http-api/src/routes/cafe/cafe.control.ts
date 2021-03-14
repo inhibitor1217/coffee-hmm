@@ -1,17 +1,19 @@
+import {
+  Cafe,
+  CafeState,
+  CafeStateStrings,
+  CafeImage,
+  CafeImageState,
+  CafeImageCount,
+  CafeStatistic,
+  Place,
+} from '@coffee-hmm/common';
 import joi from 'joi';
 import { FOREIGN_KEY_VIOLATION } from 'pg-error-constants';
 import { getManager, getRepository, In, Not } from 'typeorm';
 import * as uuid from 'uuid';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
-import Cafe, {
-  CafeState,
-  CafeStateStrings,
-  createCafeWithImagesLoader,
-} from '../../entities/cafe';
-import CafeImage, { CafeImageState } from '../../entities/cafeImage';
-import CafeImageCount from '../../entities/cafeImageCount';
-import CafeStatistic from '../../entities/cafeStatistic';
-import Place from '../../entities/place';
+import { createCafeWithImagesLoader } from '../../entities/cafe';
 import { SortOrder, SortOrderStrings } from '../../types';
 import {
   TransformedSchemaTypes,
@@ -103,7 +105,7 @@ export const getFeed = handler<
       placeName,
     } = ctx.query;
 
-    await ctx.state.connection();
+    const connection = await ctx.state.connection();
 
     const identifier = _identifier ?? ctx.state.uid ?? uuid.v4();
 
@@ -154,13 +156,18 @@ export const getFeed = handler<
       .getRawMany()
       .then((rows: (Record<string, unknown> & { cursor: string })[]) => ({
         cafes: rows.map((row) => {
-          const cafe = Cafe.fromRawColumns(row, { alias: 'cafe' });
-          cafe.place = Place.fromRawColumns(row, { alias: 'place' });
+          const cafe = Cafe.fromRawColumns(row, { alias: 'cafe', connection });
+          cafe.place = Place.fromRawColumns(row, {
+            alias: 'place',
+            connection,
+          });
           cafe.statistic = CafeStatistic.fromRawColumns(row, {
             alias: 'cafe_statistic',
+            connection,
           });
           cafe.imageCount = CafeImageCount.fromRawColumns(row, {
             alias: 'cafe_image_count',
+            connection,
           });
           cafe.images = [];
 
@@ -311,7 +318,7 @@ export const getList = handler<
     const orderBy = CafeListOrder[orderByString];
     const order = SortOrder[orderString];
 
-    await ctx.state.connection();
+    const connection = await ctx.state.connection();
 
     let query = getRepository(Cafe)
       .createQueryBuilder('cafe')
@@ -445,13 +452,18 @@ export const getList = handler<
       .getRawMany()
       .then((rows: (Record<string, unknown> & { cursor: string })[]) => ({
         cafes: rows.map((row) => {
-          const cafe = Cafe.fromRawColumns(row, { alias: 'cafe' });
-          cafe.place = Place.fromRawColumns(row, { alias: 'place' });
+          const cafe = Cafe.fromRawColumns(row, { alias: 'cafe', connection });
+          cafe.place = Place.fromRawColumns(row, {
+            alias: 'place',
+            connection,
+          });
           cafe.statistic = CafeStatistic.fromRawColumns(row, {
             alias: 'cafe_statistic',
+            connection,
           });
           cafe.imageCount = CafeImageCount.fromRawColumns(row, {
             alias: 'cafe_image_count',
+            connection,
           });
           cafe.images = [];
 
@@ -678,7 +690,8 @@ export const updateOne = handler<
           }
 
           return Cafe.fromRawColumns(
-            (updateResult.raw as Record<string, unknown>[])[0]
+            (updateResult.raw as Record<string, unknown>[])[0],
+            { connection }
           );
         })
         .catch((e: { code: string }) => {

@@ -1,7 +1,7 @@
+import { Event, EventCategory, EventName } from '@coffee-hmm/common';
 import joi from 'joi';
 import { getRepository } from 'typeorm';
 import { HTTP_OK } from '../../const';
-import Event, { EventCategory, EventName } from '../../entities/event';
 import { TransformedVariablesMap } from '../../types/koa';
 import { enumKeyStrings } from '../../util';
 import Exception, { ExceptionCode } from '../../util/error';
@@ -24,7 +24,7 @@ export const create = handler<
 
     const { category, name, label, value } = ctx.request.body;
 
-    await ctx.state.connection();
+    const connection = await ctx.state.connection();
 
     const event = await getRepository(Event)
       .createQueryBuilder('event')
@@ -33,7 +33,10 @@ export const create = handler<
       .returning(Event.columns)
       .execute()
       .then((insertResult) =>
-        Event.fromRawColumns((insertResult.raw as Record<string, unknown>[])[0])
+        Event.fromRawColumns(
+          (insertResult.raw as Record<string, unknown>[])[0],
+          { connection }
+        )
       );
 
     ctx.status = HTTP_OK;

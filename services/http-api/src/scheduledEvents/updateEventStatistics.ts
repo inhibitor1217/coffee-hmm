@@ -1,6 +1,10 @@
+import {
+  CafeStatistic,
+  Event,
+  EventCategory,
+  EventName,
+} from '@coffee-hmm/common';
 import { Connection } from 'typeorm';
-import CafeStatistic from '../entities/cafeStatistic';
-import Event, { EventCategory, EventName } from '../entities/event';
 import scheduledEventHandler from '../util/scheduler';
 
 export const updateCafeViewStatistics = async (

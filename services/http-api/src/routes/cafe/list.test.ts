@@ -1,14 +1,15 @@
+import {
+  CafeState,
+  CafeStateStrings,
+  CafeImageState,
+  CafeImageStateStrings,
+  Place,
+} from '@coffee-hmm/common';
 import pLimit from 'p-limit';
 import { SuperTest, Test } from 'supertest';
 import { Connection, createConnection } from 'typeorm';
 import * as uuid from 'uuid';
 import { HTTP_BAD_REQUEST, HTTP_OK } from '../../const';
-import { CafeState, CafeStateStrings } from '../../entities/cafe';
-import {
-  CafeImageState,
-  CafeImageStateStrings,
-} from '../../entities/cafeImage';
-import Place from '../../entities/place';
 import { cleanDatabase, closeServer, openServer, ormConfigs } from '../../test';
 import { setupCafe, setupPlace } from '../../test/util';
 import { KoaServer } from '../../types/koa';

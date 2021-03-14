@@ -1,3 +1,4 @@
+import { CafeState, CafeImage, CafeImageState } from '@coffee-hmm/common';
 import { SuperTest, Test } from 'supertest';
 import { Connection, createConnection } from 'typeorm';
 import * as uuid from 'uuid';
@@ -7,8 +8,6 @@ import {
   HTTP_NOT_FOUND,
   HTTP_OK,
 } from '../../../const';
-import { CafeState } from '../../../entities/cafe';
-import CafeImage, { CafeImageState } from '../../../entities/cafeImage';
 import {
   cleanDatabase,
   closeServer,

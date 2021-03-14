@@ -1,8 +1,8 @@
+import { CafeState } from '@coffee-hmm/common';
 import { SuperTest, Test } from 'supertest';
 import { Connection, createConnection } from 'typeorm';
 import * as uuid from 'uuid';
 import { HTTP_CREATED, HTTP_OK } from '../../../const';
-import { CafeState } from '../../../entities/cafe';
 import {
   cleanDatabase,
   closeServer,
