@@ -1,15 +1,6 @@
 import { isMobile, isAndroid, isIOS } from "react-device-detect";
 import { DOWN, initialCarouselState, LEFT, RIGHT, UP } from "./constant";
 
-export const letterValidation = (data: string) => {
-    let Korean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
-    let English = /[a-zA-Z]/;
- 
-    if(!Korean.test(data) && !English.test(data)){
-        return false;
-    }
-    return true;
-}
 
 export const onImageLoad = (setReady:(type: boolean) => void) => {
     setReady(true);
