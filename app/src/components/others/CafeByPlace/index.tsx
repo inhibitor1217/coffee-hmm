@@ -6,12 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import introNavSlice from '../../../store/modules/intro-nav';
 import { currentIntroCafeListSelector } from '../../../store/selectors/cafe';
 
-type CafeByPlaceProps = {
-    isImageReady: boolean;
-    setIsImageReady: (isImageReady: boolean) => void;
-}
-
-const CafeByPlace = ({ isImageReady, setIsImageReady }: CafeByPlaceProps) => {
+const CafeByPlace = () => {
     const dispatch = useAppDispatch();
     const setCurrentCafeIndex = (index: number) => dispatch(introNavSlice.actions.navigateToCafe(index));
 
@@ -19,7 +14,7 @@ const CafeByPlace = ({ isImageReady, setIsImageReady }: CafeByPlaceProps) => {
     const cafeList = useAppSelector(currentIntroCafeListSelector);
 
     if(cafeList?.length === 1){
-        return  <CarouselMainImage cafe={cafeList[0]} isImageReady={isImageReady} setIsImageReady={setIsImageReady}/>
+        return  <CarouselMainImage cafe={cafeList[0]} index={0}/>
     }
 
     return(
@@ -28,10 +23,10 @@ const CafeByPlace = ({ isImageReady, setIsImageReady }: CafeByPlaceProps) => {
             initialIndex={currentCafeIndex}
             setCurrentIndex={setCurrentCafeIndex}
         >
-        {cafeList?.map((cafe) => {
+        {cafeList?.map((cafe, index) => {
             return(
                 <StyledCarouselImage key={cafe.id}>
-                    <CarouselMainImage cafe={cafe} isImageReady={isImageReady} setIsImageReady={setIsImageReady} />
+                    <CarouselMainImage cafe={cafe} index={index}/>
                 </StyledCarouselImage>
         )})}
         </CarouselHorizontal>

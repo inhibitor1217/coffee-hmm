@@ -10,7 +10,7 @@ const CafeDetailPage = lazy(() => import("./pages/Detail"));
 
 const Router = (props: RouterProps) => {
   return(
-      <React.Suspense fallback={<div>Loading...</div>}>
+      <React.Suspense fallback={<div></div>}>
         <Switch location={props.location}>    
             <Route path="/" exact render={() => <IntroPage />}/>
             <Route path="/cafe/:cafeId" exact render={() => <CafeDetailPage/>}/>
