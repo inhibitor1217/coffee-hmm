@@ -1,3 +1,11 @@
+import {
+  AuthProvider,
+  generateDefaultUserPolicy,
+  Policy,
+  User,
+  UserProfile,
+  UserState,
+} from '@coffee-hmm/common';
 import { SuperTest, Test } from 'supertest';
 import {
   Connection,
@@ -13,14 +21,10 @@ import {
   HTTP_OK,
   HTTP_UNAUTHORIZED,
 } from '../const';
-import Policy from '../entities/policy';
-import User, { AuthProvider, UserState } from '../entities/user';
-import UserProfile from '../entities/userProfile';
 import { cleanDatabase, closeServer, openServer, ormConfigs } from '../test';
 import { firebaseCustomIdToken } from '../test/util';
 import { KoaServer } from '../types/koa';
 import { buildString, env } from '../util';
-import { generateDefaultUserPolicy } from '../util/iam';
 
 let connection: Connection;
 let server: KoaServer;

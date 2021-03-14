@@ -1,16 +1,21 @@
+import {
+  Policy,
+  Exception,
+  ExceptionCode,
+  IamPolicy,
+  OperationSchema,
+  OperationType,
+} from '@coffee-hmm/common';
 import Joi from 'joi';
 import { DeepPartial, getManager, getRepository } from 'typeorm';
 import { FOREIGN_KEY_VIOLATION, UNIQUE_VIOLATION } from 'pg-error-constants';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
-import Policy from '../../entities/policy';
 import { SortOrder, SortOrderStrings } from '../../types';
 import {
   TransformedSchemaTypes,
   TransformedVariablesMap,
 } from '../../types/koa';
 import { enumKeyStrings } from '../../util';
-import Exception, { ExceptionCode } from '../../util/error';
-import { IamPolicy, OperationSchema, OperationType } from '../../util/iam';
 import handler from '../handler';
 
 export const postPolicy = handler<
@@ -31,7 +36,7 @@ export const postPolicy = handler<
     try {
       IamPolicy.parse(value);
 
-      await ctx.state.connection();
+      const connection = await ctx.state.connection();
 
       const inserted = await getRepository(Policy)
         .createQueryBuilder()
@@ -40,7 +45,10 @@ export const postPolicy = handler<
         .returning(Policy.columns)
         .execute()
         .then((insertResult) =>
-          Policy.fromRawColumns((insertResult.raw as DeepPartial<Policy>[])[0])
+          Policy.fromRawColumns(
+            (insertResult.raw as DeepPartial<Policy>[])[0],
+            { connection }
+          )
         )
         .catch((e: { code: string }) => {
           if (e.code === UNIQUE_VIOLATION) {
@@ -166,7 +174,7 @@ export const getPolicyList = handler<
     const orderBy = PolicyListOrder[orderByString];
     const order = SortOrder[orderString];
 
-    await ctx.state.connection();
+    const connection = await ctx.state.connection();
 
     let queryBuilder = getRepository(Policy)
       .createQueryBuilder('policy')
@@ -225,7 +233,7 @@ export const getPolicyList = handler<
       .getRawMany()
       .then((rows: (DeepPartial<Policy> & { cursor: string })[]) => ({
         policies: rows.map((row) =>
-          Policy.fromRawColumns(row, { alias: 'policy' })
+          Policy.fromRawColumns(row, { alias: 'policy', connection })
         ),
         cursor: rows[rows.length - 1]?.cursor,
       }));
@@ -283,7 +291,7 @@ export const putPolicy = handler<
         IamPolicy.parse(value);
       }
 
-      await ctx.state.connection();
+      const connection = await ctx.state.connection();
 
       const repo = getRepository(Policy);
       const updated = await repo
@@ -299,7 +307,8 @@ export const putPolicy = handler<
           }
 
           return Policy.fromRawColumns(
-            (updateResult.raw as Record<string, unknown>[])[0]
+            (updateResult.raw as Record<string, unknown>[])[0],
+            { connection }
           );
         })
         .catch((e: { code: string }) => {
