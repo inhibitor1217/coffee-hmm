@@ -16,6 +16,7 @@ const Intro = () => {
     const currentCafe = useAppSelector(currentIntroCafeSelector);
     const isInitialCafeImageReady = useAppSelector(state => state.introNav.isInitialCafeImageReady);
     const hasInitialClick = useAppSelector(state => state.introNav.hasInitialClick);
+    const isInitialLoading = !hasInitialClick && !isInitialCafeImageReady;
 
     useEffect(() => {
         dispatch(fetchPlaces());
@@ -29,9 +30,9 @@ const Intro = () => {
 
     return(
         <StyledMainScale>
-            {!hasInitialClick && !isInitialCafeImageReady && <InitialLoading/> }
+            {isInitialLoading && <InitialLoading/> }
             {currentCafe && 
-                <StyledColumnFlex className="intro" style={{display: !hasInitialClick && !isInitialCafeImageReady? 'none' : 'block'}}>
+                <StyledColumnFlex className="intro" style={{display: isInitialLoading? 'none' : 'block'}}>
                     <div className="carousel-container">
                         <div className="cafe-preview-info">
                             <h4>{currentCafe?.name}</h4>
