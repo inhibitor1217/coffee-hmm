@@ -3,7 +3,10 @@ import {
   CafeStateStrings,
   CafeImageState,
   CafeImageStateStrings,
+  IamPolicy,
+  IamRule,
   Place,
+  OperationType,
 } from '@coffee-hmm/common';
 import pLimit from 'p-limit';
 import { SuperTest, Test } from 'supertest';
@@ -14,7 +17,6 @@ import { cleanDatabase, closeServer, openServer, ormConfigs } from '../../test';
 import { setupCafe, setupPlace } from '../../test/util';
 import { KoaServer } from '../../types/koa';
 import { env } from '../../util';
-import { IamPolicy, IamRule, OperationType } from '../../util/iam';
 
 let connection: Connection;
 let server: KoaServer;

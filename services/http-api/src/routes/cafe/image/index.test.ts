@@ -1,4 +1,11 @@
-import { CafeState, CafeImage, CafeImageState } from '@coffee-hmm/common';
+import {
+  CafeState,
+  CafeImage,
+  CafeImageState,
+  IamPolicy,
+  IamRule,
+  OperationType,
+} from '@coffee-hmm/common';
 import { SuperTest, Test } from 'supertest';
 import { Connection, createConnection } from 'typeorm';
 import * as uuid from 'uuid';
@@ -17,7 +24,6 @@ import {
 import { setupCafe, setupPlace } from '../../../test/util';
 import { KoaServer } from '../../../types/koa';
 import { env } from '../../../util';
-import { IamPolicy, IamRule, OperationType } from '../../../util/iam';
 
 let connection: Connection;
 let server: KoaServer;
