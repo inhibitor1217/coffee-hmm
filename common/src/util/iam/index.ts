@@ -1,3 +1,4 @@
+export { PolicyExecutionContext } from './interface';
 export { default as IamRule, IamRuleObject } from './rule';
 export {
   default as IamPolicy,

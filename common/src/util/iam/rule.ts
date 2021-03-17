@@ -4,7 +4,7 @@ import {
   OperationType,
   OperationTypeStrings,
 } from '.';
-import { KoaContextState } from '../../types/koa';
+import { PolicyExecutionContext } from './interface';
 
 type IamRuleParams = {
   operationType: OperationType;
@@ -68,7 +68,7 @@ export default class IamRule {
   }
 
   public canExecuteOperation(
-    state: KoaContextState,
+    state: PolicyExecutionContext,
     schema: OperationSchema
   ): boolean {
     return (

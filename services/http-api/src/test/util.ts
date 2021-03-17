@@ -1,9 +1,13 @@
+import {
+  Cafe,
+  CafeState,
+  CafeImage,
+  CafeImageState,
+  CafeImageCount,
+  CafeStatistic,
+  Place,
+} from '@coffee-hmm/common';
 import { Connection } from 'typeorm';
-import Cafe, { CafeState } from '../entities/cafe';
-import CafeImage, { CafeImageState } from '../entities/cafeImage';
-import CafeImageCount from '../entities/cafeImageCount';
-import CafeStatistic from '../entities/cafeStatistic';
-import Place from '../entities/place';
 
 export const setupPlace = async (
   connection: Connection,

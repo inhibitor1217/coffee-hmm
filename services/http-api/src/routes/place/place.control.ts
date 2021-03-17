@@ -1,14 +1,18 @@
+import {
+  Exception,
+  ExceptionCode,
+  Place,
+  OperationSchema,
+  OperationType,
+} from '@coffee-hmm/common';
 import joi from 'joi';
 import { FOREIGN_KEY_VIOLATION, UNIQUE_VIOLATION } from 'pg-error-constants';
 import { getRepository } from 'typeorm';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
-import Place from '../../entities/place';
 import {
   TransformedSchemaTypes,
   TransformedVariablesMap,
 } from '../../types/koa';
-import Exception, { ExceptionCode } from '../../util/error';
-import { OperationSchema, OperationType } from '../../util/iam';
 import handler from '../handler';
 
 export const getList = handler<TransformedVariablesMap, { pinned?: boolean }>(
@@ -60,7 +64,7 @@ export const create = handler<
 
     const { name, pinned = false } = ctx.request.body;
 
-    await ctx.state.connection();
+    const connection = await ctx.state.connection();
 
     const inserted = await getRepository(Place)
       .createQueryBuilder()
@@ -69,7 +73,10 @@ export const create = handler<
       .returning(Place.columns)
       .execute()
       .then((insertResult) =>
-        Place.fromRawColumns((insertResult.raw as Record<string, unknown>[])[0])
+        Place.fromRawColumns(
+          (insertResult.raw as Record<string, unknown>[])[0],
+          { connection }
+        )
       )
       .catch((e: { code: string }) => {
         if (e.code === UNIQUE_VIOLATION) {
@@ -133,7 +140,8 @@ export const updateOne = handler<
           }
 
           return Place.fromRawColumns(
-            (updatedResult.raw as Record<string, unknown>[])[0]
+            (updatedResult.raw as Record<string, unknown>[])[0],
+            { connection }
           );
         })
         .catch((e: { code: string }) => {

@@ -1,8 +1,8 @@
+import { IamPolicy, OperationSchema } from '@coffee-hmm/common';
 import * as Koa from 'koa';
 import { Schema } from 'joi';
 import { Connection } from 'typeorm';
 import app from '../app';
-import { IamPolicy, OperationSchema } from '../util/iam';
 import Logger from '../util/logger';
 import { DataLoaders } from '../middlewares/db';
 

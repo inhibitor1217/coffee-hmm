@@ -1,5 +1,5 @@
+import { IamPolicy, IamPolicyObject } from '@coffee-hmm/common';
 import { Model } from '.';
-import { IamPolicy, IamPolicyObject } from '../util/iam';
 
 type PolicyModelParams = {
   id: string;

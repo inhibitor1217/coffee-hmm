@@ -1,13 +1,12 @@
 import '../util/extension';
 
+import { Event, EventCategory, EventName, Cafe } from '@coffee-hmm/common';
 import { Connection, createConnection } from 'typeorm';
 import * as uuid from 'uuid';
-import Event, { EventCategory, EventName } from '../entities/event';
 import { cleanDatabase, ormConfigs } from '../test';
 import { setupCafe, setupPlace } from '../test/util';
 import { env } from '../util';
 import { updateCafeViewStatistics } from './updateEventStatistics';
-import Cafe from '../entities/cafe';
 
 let connection: Connection;
 

@@ -1,3 +1,4 @@
+import { Exception } from '@coffee-hmm/common';
 import { Connection } from 'typeorm';
 import { logLevel } from '.';
 import { connect } from '../middlewares/db';
@@ -5,7 +6,6 @@ import {
   ScheduledEventContext,
   ScheduledEventHandler,
 } from '../types/scheduler';
-import Exception from './error';
 import Logger from './logger';
 
 const scheduledEventHandler = (handler: ScheduledEventHandler) => () => {

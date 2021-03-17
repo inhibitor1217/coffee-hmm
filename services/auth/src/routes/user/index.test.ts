@@ -1,3 +1,17 @@
+import {
+  Policy,
+  User,
+  AuthProvider,
+  AuthProviderStrings,
+  UserState,
+  UserStateStrings,
+  UserProfile,
+  generateDefaultUserPolicy,
+  IamPolicy,
+  IamPolicyObject,
+  IamRule,
+  OperationType,
+} from '@coffee-hmm/common';
 import pLimit from 'p-limit';
 import { SuperTest, Test } from 'supertest';
 import { Connection, createConnection, DeepPartial } from 'typeorm';
@@ -8,25 +22,11 @@ import {
   HTTP_NOT_FOUND,
   HTTP_OK,
 } from '../../const';
-import Policy, { DEFAULT_USER_POLICY_NAME } from '../../entities/policy';
-import User, {
-  AuthProvider,
-  AuthProviderStrings,
-  UserState,
-  UserStateStrings,
-} from '../../entities/user';
-import UserProfile from '../../entities/userProfile';
+import { DEFAULT_USER_POLICY_NAME } from '../../entities/policy';
 import { cleanDatabase, closeServer, openServer, ormConfigs } from '../../test';
 import { firebaseCustomIdToken } from '../../test/util';
 import { KoaServer } from '../../types/koa';
 import { env } from '../../util';
-import {
-  generateDefaultUserPolicy,
-  IamPolicy,
-  IamPolicyObject,
-  IamRule,
-  OperationType,
-} from '../../util/iam';
 
 let connection: Connection;
 let server: KoaServer;

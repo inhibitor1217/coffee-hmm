@@ -1,3 +1,4 @@
+import { generateDefaultUserPolicy } from '@coffee-hmm/common';
 import { SuperTest, Test } from 'supertest';
 import { Connection, createConnection } from 'typeorm';
 import * as uuid from 'uuid';
@@ -5,7 +6,6 @@ import { HTTP_OK } from '../../const';
 import { cleanDatabase, closeServer, openServer, ormConfigs } from '../../test';
 import { KoaServer } from '../../types/koa';
 import { env } from '../../util';
-import { generateDefaultUserPolicy } from '../../util/iam';
 
 let connection: Connection;
 let server: KoaServer;

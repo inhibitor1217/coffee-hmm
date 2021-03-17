@@ -1,16 +1,19 @@
+import {
+  CafeImage,
+  CafeImageState,
+  CafeImageStateStrings,
+  CafeImageCount,
+  Exception,
+  ExceptionCode,
+  OperationSchema,
+  OperationType,
+} from '@coffee-hmm/common';
 import joi from 'joi';
 import { FOREIGN_KEY_VIOLATION } from 'pg-error-constants';
 import { EntityManager } from 'typeorm';
 import { HTTP_CREATED, HTTP_OK } from '../../../const';
-import CafeImage, {
-  CafeImageState,
-  CafeImageStateStrings,
-} from '../../../entities/cafeImage';
-import CafeImageCount from '../../../entities/cafeImageCount';
 import { TransformedVariablesMap } from '../../../types/koa';
 import { enumKeyStrings } from '../../../util';
-import Exception, { ExceptionCode } from '../../../util/error';
-import { OperationSchema, OperationType } from '../../../util/iam';
 import handler from '../../handler';
 
 export const create = handler<
@@ -65,7 +68,8 @@ export const create = handler<
         .execute()
         .then((insertResult) =>
           CafeImage.fromRawColumns(
-            (insertResult.raw as Record<string, unknown>[])[0]
+            (insertResult.raw as Record<string, unknown>[])[0],
+            { connection }
           )
         )
         .catch((e: { code: string }) => {
@@ -360,7 +364,8 @@ export const updateOne = handler<
           }
 
           return CafeImage.fromRawColumns(
-            (updateResult.raw as Record<string, unknown>[])[0]
+            (updateResult.raw as Record<string, unknown>[])[0],
+            { connection }
           );
         });
 
@@ -474,7 +479,7 @@ export const deleteList = handler<
             throw new Exception(ExceptionCode.notFound);
           }
           return (updateResult.raw as Record<string, unknown>[]).map((raw) =>
-            CafeImage.fromRawColumns(raw)
+            CafeImage.fromRawColumns(raw, { connection })
           );
         });
 
@@ -552,7 +557,8 @@ export const deleteOne = handler<{
             throw new Exception(ExceptionCode.notFound);
           }
           return CafeImage.fromRawColumns(
-            (updateResult.raw as Record<string, unknown>[])[0]
+            (updateResult.raw as Record<string, unknown>[])[0],
+            { connection }
           );
         });
 
