@@ -229,6 +229,7 @@ export const getCount = handler<
 
     let query = getManager()
       .createQueryBuilder(Cafe, 'cafe')
+      .leftJoinAndSelect('cafe.place', 'place')
       .where(`"cafe"."state" IS DISTINCT FROM :deleted`, {
         deleted: CafeState.deleted,
       });
@@ -240,9 +241,12 @@ export const getCount = handler<
     }
 
     if (keyword) {
-      query = query.andWhere(`"cafe"."name" LIKE :keyword`, {
-        keyword: `%${keyword}%`,
-      });
+      query = query.andWhere(
+        `("cafe"."name" LIKE :keyword OR "place"."name" LIKE :keyword)`,
+        {
+          keyword: `%${keyword}%`,
+        }
+      );
     }
 
     const count = await query.getCount();
@@ -413,9 +417,12 @@ export const getList = handler<
     }
 
     if (keyword) {
-      query = query.andWhere(`cafe.name LIKE :keyword`, {
-        keyword: `%${keyword}%`,
-      });
+      query = query.andWhere(
+        `(cafe.name LIKE :keyword OR place.name LIKE :keyword)`,
+        {
+          keyword: `%${keyword}%`,
+        }
+      );
     }
 
     switch (orderBy) {
