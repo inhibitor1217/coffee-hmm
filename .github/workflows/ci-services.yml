@@ -61,18 +61,6 @@ jobs:
           echo ${{ secrets[env.FIREBASE_SECRET_NAME] }} >> .firebase/encoded
           base64 -d .firebase/encoded > .firebase/${APP_STAGE}.json
         env:
-          FIREBASE_SECRET_NAME: ${{ steps.firebase.outputs.secret_name }}
-      # Start Build @coffee-hmm/common
-      - name: Install dependencies of @coffee-hmm/common.
-        run: make deps
-        working-directory: common
-      - name: Check linting of @coffee-hmm/common.
-        run: make deps
-        working-directory: common
-      - name: Build @coffee-hmm/common module.
-        run: make build
-        working-directory: common
-      # End   Build @coffee-hmm/common
       - name: Install dependencies.
         run: make deps
       - name: Check linting of source.
