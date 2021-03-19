@@ -1,5 +1,5 @@
 {
-  "name": "@coffee-hmm/common",
+  "name": "@inhibitor1217/coffee-hmm-common",
   "version": "0.1.0",
   "description": "A common module for coffee-hmm",
   "main": "dist/index.js",
@@ -12,6 +12,7 @@
   },
   "author": "inhibitor <inhibitor@kaist.ac.kr>",
   "license": "MIT",
+  "files": ["dist"],
   "dependencies": {
     "pg": "^8.5.1",
     "typeorm": "^0.2.31"
