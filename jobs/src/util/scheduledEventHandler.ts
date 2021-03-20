@@ -1,68 +1,45 @@
-import 'pg';
-
-import { readFile } from 'fs';
 import { Exception } from '@coffee-hmm/common';
-import path from 'path';
-import { Connection, ConnectionOptions, createConnection } from 'typeorm';
-import { env, logLevel } from '.';
-import entities from '../entities';
+import { logLevel, buildString } from '.';
 import {
   ScheduledEventContext,
   ScheduledEventHandler,
+  ScheduledEventOptions,
 } from '../types/scheduledEvent';
 import Logger from './logger';
 
-const readOrmConfig = (): Promise<ConnectionOptions> =>
-  new Promise<AnyJson>((resolve, reject) => {
-    if (process.env.TEST_ORMCONFIG) {
-      resolve(JSON.parse(process.env.TEST_ORMCONFIG));
-      return;
-    }
+const formatBody = (body: AnyJson) =>
+  typeof body === 'string' ? body : JSON.stringify(body);
 
-    readFile(
-      path.resolve(process.cwd(), env('ORMCONFIG_FILE')),
-      'utf8',
-      (err, data) => {
-        if (err) {
-          reject(err);
-        } else {
-          const config = JSON.parse(data);
-          resolve(config);
-        }
-      }
-    );
-  }).then((config) => (config as unknown) as ConnectionOptions);
+const formatJobCompleteMessage = (
+  options: ScheduledEventOptions,
+  statusCode: number,
+  body: AnyJson
+): string => {
+  const { name, buildString: version = buildString() } = options;
 
-export const connect = async () =>
-  createConnection({
-    ...(await readOrmConfig()),
-    entities,
-  });
+  return [
+    `job.name: ${name}`,
+    `job.version: ${version}`,
+    `statusCode: ${statusCode}`,
+    formatBody(body),
+  ].join('\n');
+};
 
-const scheduledEventHandler = (handler: ScheduledEventHandler) => () => {
-  let connection: Connection | null = null;
-
+const scheduledEventHandler = (
+  handler: ScheduledEventHandler,
+  options: ScheduledEventOptions
+) => () => {
   const context: ScheduledEventContext = {
-    connection: async () => {
-      if (!connection) {
-        connection = await connect();
-      }
-      return connection;
-    },
     logger: new Logger(logLevel()),
-    status: 501,
-    body: null,
   };
 
   return new Promise((resolve, reject) => {
     handler(context)
-      .then(() => {
+      .then(([status, body]) => {
+        context.logger.info(formatJobCompleteMessage(options, status, body));
         resolve({
-          statusCode: context.status,
-          body:
-            typeof context.body === 'string'
-              ? context.body
-              : JSON.stringify(context.body),
+          statusCode: status ?? 501,
+          body: formatBody(body),
         });
       })
       .catch((e) => {

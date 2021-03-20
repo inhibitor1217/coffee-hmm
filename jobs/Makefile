@@ -12,8 +12,6 @@ SERVERLESS_CONFIG_FILE=serverless.yml
 APP_STAGE=local
 LOG_LEVEL=verbose
 
-ORMCONFIG_FILE=ormconfig.json
-
 help: info
 	@echo
 	@echo "List of commands:"

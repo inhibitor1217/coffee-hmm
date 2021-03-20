@@ -29,7 +29,7 @@ export default class Logger {
   }
 
   public log(level: LogLevel, message: unknown): void {
-    if (this.severity < getSeverity(level)) {
+    if (this.severity <= getSeverity(level)) {
       const prettify = appStage() === AppStage.local;
       const messageStr = (() => {
         switch (typeof message) {

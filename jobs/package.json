@@ -54,8 +54,6 @@
     "@coffee-hmm/common": "npm:@inhibitor1217/coffee-hmm-common",
     "aws-sdk": "^2.868.0",
     "jest": "^26.6.3",
-    "pg": "^8.5.1",
-    "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.2.31"
+    "reflect-metadata": "^0.1.13"
   }
 }
