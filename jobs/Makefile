@@ -21,6 +21,7 @@ help: info
 	@echo "  make info             - display node, npm and yarn versions."
 	@echo "  make deps             - install all dependencies."
 	@echo "  make lint             - run lint."
+	@echo "  make test             - test functions."
 
 info:
 	@[ ! -z "$(NODE)" ] && echo node version: `$(NODE) --version` "$(NODE)"
@@ -39,3 +40,6 @@ lint:
 	@npx eslint ./src/**/*.ts
 	@npx tsc --noEmit
 	@echo "Lint check completed."
+
+test:
+	@APP_NAME=$(APP_NAME) APP_VERSION=$(CURRENT_VERSION) APP_STAGE=$(APP_STAGE) LOG_LEVEL=$(LOG_LEVEL) JEST_WORKERS=4 $(PKM) test

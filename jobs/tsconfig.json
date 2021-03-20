@@ -13,6 +13,7 @@
   },
   "files": ["src/@types/index.d.ts"],
   "compilerOptions": {
+    "target": "ES2015",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   }
