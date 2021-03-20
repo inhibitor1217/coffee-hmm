@@ -1,0 +1,27 @@
+service: coffee-hmm-jobs
+
+provider:
+  name: aws
+  region: ${opt:region, 'ap-northeast-2'}
+  runtime: nodejs12.x
+  stage: ${self:custom.stage}
+  memorySize: 256
+  role: LambdaRole
+
+resources:
+  Resources:
+    LambdaRole: ${file(./res/LambdaRole.yml)}
+
+plugins:
+  - serverless-webpack
+
+custom:
+  stage: ${env:APP_STAGE, 'beta'}
+  version: 0.0.1
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules:
+      forceExclude:
+        - aws-sdk
+    packager: yarn
+    excludeFiles: src/**/*.test.ts
