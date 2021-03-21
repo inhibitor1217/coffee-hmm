@@ -1,19 +1,27 @@
 .cafe-preview-info {
   padding-left: 20px;
 }
+.cafe-preview-info > * + * {
+  margin-top: 8px;
+}
+.cafe-preview-info h4 {
+  height: 21px;
+}
 .cafe-preview-info span {
   display: block;
 }
 .cafe-preview-info-list {
   font-size: 14px;
+  height: 19px;
 }
 .cafe-preview-info-by {
   text-align: end;
   font-size: 12px;
-  padding-top: 8px;
+  height: 16px;
   padding-right: 8px;
 }
 .cafe-preview-carousel-wrapper {
+  margin-top: 8px;
   width: 100%;
   height: calc(100vw + 24px); /* 가로세로 1:1 비율 */
 }

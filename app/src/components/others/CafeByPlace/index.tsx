@@ -12,6 +12,7 @@ import {
 import { openSearch } from '../../../utils/function';
 import { StyledCarouselImage, StyledRowFlex } from '../../../utils/styled';
 import './index.css';
+import { CafeCreatorPlaceholder, CafeInfoPlaceholder, CafeNamePlaceholder, CafePreviewPanelPlaceholder, CafeWebSearchPlaceholder } from './styled';
 
 const CafeByPlace = () => {
     const dispatch = useAppDispatch();
@@ -28,7 +29,7 @@ const CafeByPlace = () => {
 
     const cafeListPanel = React.useMemo(() => {
         if (!cafeList) {
-            return null;
+            return <CafePreviewPanelPlaceholder />;
         }
         
         if (cafeList.length > 1) {
@@ -68,25 +69,37 @@ const CafeByPlace = () => {
     return (
         <div className="carousel-container">
             <div className="cafe-preview-info">
-                <h4>{currentCafe?.name}</h4>
-                <span className="cafe-preview-info-list">
-                    OPEN {currentCafe?.metadata?.hour}
-                </span>
-                <span className="cafe-preview-info-by">
-                    {currentCafe?.metadata?.creator || 'jyuunnii'} 님이 올려주신 {currentCafe?.name}
-                </span>
+                { currentCafe
+                    ? <h4>{currentCafe.name}</h4>
+                    : <CafeNamePlaceholder /> }
+                { currentCafe
+                    ? (
+                        <span className="cafe-preview-info-list">
+                            OPEN {currentCafe.metadata?.hour}
+                        </span>
+                    )
+                    : <CafeInfoPlaceholder /> }
+                { currentCafe
+                    ? (
+                        <span className="cafe-preview-info-by">
+                            {currentCafe.metadata?.creator || 'jyuunnii'} 님이 올려주신 {currentCafe?.name}
+                        </span>
+                    ) : <CafeCreatorPlaceholder /> }
             </div>
             <div className="cafe-preview-carousel-wrapper">
                 { cafeListPanel }
             </div>
-            <StyledRowFlex className="cafe-preview-websearch">
-                <span onClick={() => openSearch(`${currentCafe?.name ?? ''} ${currentCafe?.place.name ?? ''}`, "Naver")}>
-                    <b className="web-naver">N</b> 네이버 바로가기
-                </span>
-                <span onClick={() => openSearch(`${currentCafe?.name ?? ''}`, "Instagram")}>
-                    <b className="web-instagram">I</b> 인스타그램 바로가기
-                </span>       
-            </StyledRowFlex>
+            { currentCafe
+                ? (
+                    <StyledRowFlex className="cafe-preview-websearch">
+                        <span onClick={() => openSearch(`${currentCafe.name} ${currentCafe.place.name}`, "Naver")}>
+                            <b className="web-naver">N</b> 네이버 바로가기
+                        </span>
+                        <span onClick={() => openSearch(currentCafe.name, "Instagram")}>
+                            <b className="web-instagram">I</b> 인스타그램 바로가기
+                        </span>       
+                    </StyledRowFlex>
+                ) : <CafeWebSearchPlaceholder /> }
         </div>
     );
 }
