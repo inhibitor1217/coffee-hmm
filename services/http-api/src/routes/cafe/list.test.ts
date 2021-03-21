@@ -426,6 +426,30 @@ describe('Cafe - GET /cafe/count', () => {
 
     expect(count).toBe(activeCafeIds.length);
   });
+
+  test('Can retrieve number of cafes using place', async () => {
+    const responsePankyo = await request
+      .get('/cafe/count')
+      .query({ keyword: '판교' })
+      .expect(HTTP_OK);
+
+    const {
+      cafe: { count: countPankyo },
+    } = responsePankyo.body as { cafe: { count: number } };
+
+    expect(countPankyo).toBe(activeCafeIds.length);
+
+    const responseGangnam = await request
+      .get('/cafe/count')
+      .query({ keyword: '강남' })
+      .expect(HTTP_OK);
+
+    const {
+      cafe: { count: countGangnam },
+    } = responseGangnam.body as { cafe: { count: number } };
+
+    expect(countGangnam).toBe(0);
+  });
 });
 
 describe('Cafe - GET /cafe/list', () => {
@@ -488,9 +512,13 @@ describe('Cafe - GET /cafe/list', () => {
   });
 
   test('Can list cafes using keyword', async () => {
-    const cafes = await sweepCafes('/cafe/list', { keyword: '성수동' });
+    const cafesEmpty = await sweepCafes('/cafe/list', { keyword: '성수동' });
 
-    expect(cafes.length).toBe(0);
+    expect(cafesEmpty.length).toBe(0);
+
+    const cafes = await sweepCafes('/cafe/list', { keyword: '판교' });
+
+    expect(cafes.length).toBe(activeCafeIds.length);
   });
 
   test('Can count hidden cafe images', async () => {
