@@ -27,6 +27,11 @@ const firebaseConfigs: { [key: string]: Record<string, string> } = {
 
 export default function useFirebase() {
   React.useEffect(() => {
+    if (firebase.apps.length > 0) {
+      /* App already initialized. (skip) */
+      return;
+    }
+
     const firebaseConfig = firebaseConfigs[appStage()];
 
     if (!firebaseConfig) {
