@@ -1,0 +1,34 @@
+.cafe-preview-info {
+  padding-left: 20px;
+}
+.cafe-preview-info span {
+  display: block;
+}
+.cafe-preview-info-list {
+  font-size: 14px;
+}
+.cafe-preview-info-by {
+  text-align: end;
+  font-size: 12px;
+  padding-top: 8px;
+  padding-right: 8px;
+}
+.cafe-preview-carousel-wrapper {
+  width: 100%;
+  height: calc(100vw + 24px); /* 가로세로 1:1 비율 */
+}
+.cafe-preview-websearch span {
+  flex: 1;
+  text-align: center;
+  font-size: 12px;
+  padding-bottom: 12px;
+}
+.web-naver {
+  color: #03c75a;
+}
+.web-instagram {
+  font-size: 15px;
+  line-height: 0.2em;
+  font-family: "Roboto Mono", monospace;
+  color: #d94854;
+}
