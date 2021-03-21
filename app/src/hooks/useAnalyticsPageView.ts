@@ -26,8 +26,6 @@ export default function useAnalyticsPageView() {
         app_name: appName,
         screen_name: location.pathname,
       });
-
-      console.log(location.pathname);
     });
 
     return cleanup;

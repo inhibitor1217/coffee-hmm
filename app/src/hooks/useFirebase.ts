@@ -1,6 +1,6 @@
+import React from 'react';
 import firebase from 'firebase/app';
 import 'firebase/analytics';
-import React from 'react';
 import { appStage, AppStage } from '../utils/function';
 
 const firebaseConfigs: { [key: string]: Record<string, string> } = {
