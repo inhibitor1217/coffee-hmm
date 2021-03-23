@@ -14,7 +14,7 @@ const CafeDetailImageCarousel = ({cafe}: CafeDetailImageCarouselProps) => {
     const imageNum = cafe?.image.count;
     const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 
-    const cafeImageListPanel = React.useMemo(() => {
+    const cafeImagePanelDetail = React.useMemo(() => {
         if (!cafe) {
             return null;
         }
@@ -45,7 +45,7 @@ const CafeDetailImageCarousel = ({cafe}: CafeDetailImageCarouselProps) => {
     return(
         <div className="detail-carousel-dot-wrapper">
             <div className="detail-carousel-container">
-                { cafeImageListPanel }
+                { cafeImagePanelDetail }
             </div>
             <PositionDotHorizontal dotNum={imageNum? imageNum : 0} currentIndex={currentImageIndex}/>
         </div>
