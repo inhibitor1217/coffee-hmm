@@ -3,14 +3,14 @@ import styled from 'styled-components';
 export const CafeNamePlaceholder = styled.div`
   background-color: rgba(0, 0, 0, 0.10);
   width: 120px;
-  height: 21px;
+  height: 22px;
   border-radius: 4px;
 `;
 
 export const CafeInfoPlaceholder = styled.div`
   background-color: rgba(0, 0, 0, 0.05);
   width: 200px;
-  height: 19px;
+  height: 20px;
   border-radius: 4px;
 `;
 
@@ -31,5 +31,5 @@ export const CafePreviewPanelPlaceholder = styled.div`
 
 export const CafeWebSearchPlaceholder = styled.div`
   width: 100%;
-  height: 28px;
+  height: 44px;
 `;

@@ -2,17 +2,17 @@
   padding-left: 20px;
 }
 .cafe-preview-info > * + * {
-  margin-top: 8px;
+  margin-top: 4px;
 }
 .cafe-preview-info h4 {
-  height: 21px;
+  height: 22px;
 }
 .cafe-preview-info span {
   display: block;
 }
 .cafe-preview-info-list {
   font-size: 14px;
-  height: 19px;
+  height: 20px;
 }
 .cafe-preview-info-by {
   text-align: end;
@@ -23,13 +23,16 @@
 .cafe-preview-carousel-wrapper {
   margin-top: 8px;
   width: 100%;
-  height: calc(100vw + 24px); /* 가로세로 1:1 비율 */
+  height: 100vw; /* 가로세로 1:1 비율 */
+}
+.cafe-preview-websearch {
+  height: 44px;
 }
 .cafe-preview-websearch span {
   flex: 1;
   text-align: center;
   font-size: 12px;
-  padding-bottom: 12px;
+  padding: 14px 0px;
 }
 .web-naver {
   color: #03c75a;

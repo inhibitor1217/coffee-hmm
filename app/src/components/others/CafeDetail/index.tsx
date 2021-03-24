@@ -1,6 +1,5 @@
 import React from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { useHistory } from 'react-router-dom';
 import { copyLink, openSearch} from '../../../utils/function';
 import { StyledColumnFlex, StyledRowFlexCenter } from '../../../utils/styled';
 import { TypeCafe } from '../../../utils/type';
@@ -14,15 +13,9 @@ type CafeDetailProps = {
 
 const CafeDetail = ({ cafe }: CafeDetailProps) => {
     const currentCopyLink = `https://coffee-hmm.inhibitor.io/cafe/${cafe?.id}`;
-    const history = useHistory();
-    
-    const handleClick = () => {
-        history.goBack();
-    }
 
     return(
         <div>
-            <button className="detail-back-button" onClick={handleClick}><img src="/icons/baseline_navigate_before_black_18dp.png" alt="back"/></button>
             <CafeDetailImageCarousel cafe={cafe}/>
 
             <StyledColumnFlex>
