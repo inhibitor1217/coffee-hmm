@@ -1,36 +1,67 @@
 import React from 'react';
-import { StyledCarouselImage } from '../../../utils/styled';
-import CarouselMainImage from '../../others/CarouselMainImage';
-import CarouselHorizontal from '../../others/CarouselHorizontal';
+import CafeMainImageCarousel from '../CafeMainImageCarousel';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import introNavSlice from '../../../store/modules/intro-nav';
-import { currentIntroCafeListSelector } from '../../../store/selectors/cafe';
+import { fetchCafesByPlace } from '../../../store/modules/cafe';
+import {
+    currentIntroCafeSelector,
+    currentIntroPlaceSelector,
+} from '../../../store/selectors/cafe';
+import { openSearch } from '../../../utils/function';
+import { StyledRowFlex } from '../../../utils/styled';
+import './index.css';
+import { CafeCreatorPlaceholder, CafeInfoPlaceholder, CafeNamePlaceholder, CafePreviewPanelPlaceholder, CafeWebSearchPlaceholder } from './styled';
 
 const CafeByPlace = () => {
     const dispatch = useAppDispatch();
-    const setCurrentCafeIndex = (index: number) => dispatch(introNavSlice.actions.navigateToCafe(index));
+    const currentPlace = useAppSelector(currentIntroPlaceSelector);
+    const currentCafe = useAppSelector(currentIntroCafeSelector);
 
-    const currentCafeIndex = useAppSelector(state => state.introNav.currentCafeIndex);
-    const cafeList = useAppSelector(currentIntroCafeListSelector);
+    React.useEffect(() => {
+        if (currentPlace) {
+            dispatch(fetchCafesByPlace(currentPlace));
+        }
+    }, [dispatch, currentPlace]);
 
-    if(cafeList?.length === 1){
-        return  <CarouselMainImage cafe={cafeList[0]} index={0}/>
+    if (!currentCafe) {
+        return (
+            <div className="carousel-container">
+                <div className="cafe-preview-info">
+                    <CafeNamePlaceholder />
+                    <CafeInfoPlaceholder />
+                    <CafeCreatorPlaceholder />
+                </div>
+                <div className="cafe-preview-carousel-wrapper">
+                    <CafePreviewPanelPlaceholder />
+                </div>
+                <CafeWebSearchPlaceholder />
+            </div>
+        )
     }
 
-    return(
-        <CarouselHorizontal
-            title="Carousel"
-            initialIndex={currentCafeIndex}
-            setCurrentIndex={setCurrentCafeIndex}
-        >
-        {cafeList?.map((cafe, index) => {
-            return(
-                <StyledCarouselImage key={cafe.id}>
-                    <CarouselMainImage cafe={cafe} index={index}/>
-                </StyledCarouselImage>
-        )})}
-        </CarouselHorizontal>
-    )
+    return (
+        <div className="carousel-container">
+            <div className="cafe-preview-info">
+                <h4>{currentCafe.name}</h4>
+                <span className="cafe-preview-info-list">
+                    OPEN {currentCafe.metadata?.hour}
+                </span>
+                <span className="cafe-preview-info-by">
+                    {currentCafe.metadata?.creator || 'jyuunnii'} 님이 올려주신 {currentCafe?.name}
+                </span>
+            </div>
+            <div className="cafe-preview-carousel-wrapper">
+                <CafeMainImageCarousel />
+            </div>
+            <StyledRowFlex className="cafe-preview-websearch">
+                <span onClick={() => openSearch(`${currentCafe.name} ${currentCafe.place.name}`, "Naver")}>
+                    <b className="web-naver">N</b> 네이버 바로가기
+                </span>
+                <span onClick={() => openSearch(currentCafe.name, "Instagram")}>
+                    <b className="web-instagram">I</b> 인스타그램 바로가기
+                </span>       
+            </StyledRowFlex>
+        </div>
+    );
 }
 
 export default CafeByPlace;
