@@ -4,7 +4,7 @@
 
 .detail-carousel-container {
   height: 100vw; /* 가로세로 1:1 비율 */
-  max-height: 320px;
+  max-height: 360px;
   padding-top: 6.5vh;
   position: relative;
 }
