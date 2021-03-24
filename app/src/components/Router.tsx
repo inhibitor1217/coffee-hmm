@@ -1,5 +1,6 @@
 import React, { lazy } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
+import useAnalyticsPageView from "../hooks/useAnalyticsPageView";
 
 interface RouterProps {
   location?: any;
@@ -9,6 +10,8 @@ const IntroPage = lazy(() => import("./pages/Intro"));
 const CafeDetailPage = lazy(() => import("./pages/Detail"));
 
 const Router = (props: RouterProps) => {
+  useAnalyticsPageView();
+
   return(
       <React.Suspense fallback={<div></div>}>
         <Switch location={props.location}>    

@@ -1,15 +1,6 @@
 import { isMobile, isAndroid, isIOS } from "react-device-detect";
 import { DOWN, initialCarouselState, LEFT, RIGHT, UP } from "./constant";
 
-export const letterValidation = (data: string) => {
-    let Korean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
-    let English = /[a-zA-Z]/;
- 
-    if(!Korean.test(data) && !English.test(data)){
-        return false;
-    }
-    return true;
-}
 
 export const onImageLoad = (setReady:(type: boolean) => void) => {
     setReady(true);
@@ -116,4 +107,15 @@ export const reducerCarousel = (state: any, action: any) => {
 
 export const getOrder = (index: number, pos: number, numItems:number) => {
   return (index - pos < 0 ? numItems - Math.abs(index - pos) : index - pos);
+}
+
+export enum AppStage {
+  development = 'development',
+  production = 'production',
+  test = 'test',
+}
+
+export function appStage(): AppStage {
+  const appStage = process.env.NODE_ENV as AppStage;
+  return appStage;
 }
