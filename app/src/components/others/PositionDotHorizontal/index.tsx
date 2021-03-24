@@ -8,7 +8,7 @@ type PositionDotHorizontalProps = {
 
 const PositionDotHorizontal = ({dotNum, currentIndex}: PositionDotHorizontalProps) => {
     const array = Array(dotNum).fill(null);
-    const coloredDot = (currentIndex+dotNum-1)%dotNum;
+    const coloredDot = (currentIndex+dotNum)%dotNum;
 
     return(
         <ul className="dot-list">

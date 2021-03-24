@@ -20,6 +20,7 @@ const Header = ({location}: HeaderProps) => {
         return(
             <header>
                 <button className="back-button" onClick={() => history.goBack()}><img src="/icons/baseline_navigate_before_black_18dp.png" alt="back"/></button>
+                <div className="header-title">coffee hmm</div>
             </header>
         )
     }

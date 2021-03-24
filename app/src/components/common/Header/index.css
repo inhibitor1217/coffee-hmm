@@ -6,13 +6,16 @@ header {
 }
 .header-title  {
     font-size: 12px;
-    padding-top: 8px;
+    padding-top: 12px;
 }
 header #home-link {
     text-decoration: none;
 }
 .back-button {
     padding: 6px;
+    position: absolute;
+    top: 4px;
+    left: 0px;
 }
 .back-button img {
     width: 24px;

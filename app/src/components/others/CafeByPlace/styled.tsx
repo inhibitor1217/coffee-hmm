@@ -10,7 +10,7 @@ export const CafeNamePlaceholder = styled.div`
 export const CafeInfoPlaceholder = styled.div`
   background-color: rgba(0, 0, 0, 0.05);
   width: 200px;
-  height: 19px;
+  height: 17px;
   border-radius: 4px;
 `;
 
@@ -31,5 +31,5 @@ export const CafePreviewPanelPlaceholder = styled.div`
 
 export const CafeWebSearchPlaceholder = styled.div`
   width: 100%;
-  height: 28px;
+  height: 43px;
 `;
