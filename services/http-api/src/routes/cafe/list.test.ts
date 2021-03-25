@@ -5,7 +5,6 @@ import {
   CafeImageStateStrings,
   IamPolicy,
   IamRule,
-  Place,
   OperationType,
 } from '@coffee-hmm/common';
 import pLimit from 'p-limit';
@@ -25,8 +24,10 @@ let request: SuperTest<Test>;
 let cafeIds: string[];
 let activeCafeIds: string[];
 let activeCafeNames: string[];
+let pankyoId: string;
+let yeonnamId: string;
 let numCafesInPankyo: number;
-let numCafesInYeonNam: number;
+let numCafesInYeonnam: number;
 
 jest.setTimeout(30000);
 // eslint-disable-next-line no-console
@@ -85,6 +86,8 @@ const setupCafes = async (
     activeCafeIds: activeIds,
     cafeNames: names,
     activeCafeNames: activeNames,
+    placeOneId: placeOne.id,
+    placeTwoId: placeTwo.id,
     numActiveCafesWithPlaceOne: range
       .filter((index) => index % 2 === 0)
       .filter((index) => index % 3 === 0).length,
@@ -176,6 +179,8 @@ beforeAll(async () => {
     cafeIds: _cafeIds,
     activeCafeIds: _activeCafeIds,
     activeCafeNames: _activeCafeNames,
+    placeOneId,
+    placeTwoId,
     numActiveCafesWithPlaceOne,
     numActiveCafesWithPlaceTwo,
   } = await setupCafes((i) =>
@@ -188,8 +193,10 @@ beforeAll(async () => {
   cafeIds = _cafeIds;
   activeCafeIds = _activeCafeIds;
   activeCafeNames = _activeCafeNames;
+  pankyoId = placeOneId;
+  yeonnamId = placeTwoId;
   numCafesInPankyo = numActiveCafesWithPlaceOne;
-  numCafesInYeonNam = numActiveCafesWithPlaceTwo;
+  numCafesInYeonnam = numActiveCafesWithPlaceTwo;
 });
 
 afterAll(async () => {
@@ -338,18 +345,12 @@ describe('Cafe - GET /cafe/feed', () => {
   });
 
   test('Can filter cafes with place id', async () => {
-    const place = await connection
-      .getRepository(Place)
-      .findOne({ where: { name: '판교' } });
-
-    expect(place).toBeTruthy();
-
     const {
       cafe: { list: nonEmptyList },
     } = (
       await request
         .get('/cafe/feed')
-        .query({ limit: 10, placeId: place?.id })
+        .query({ limit: 10, placeId: pankyoId })
         .expect(HTTP_OK)
     ).body as { cafe: { list: SimpleCafe[] } };
 
@@ -463,6 +464,96 @@ describe('Cafe - GET /cafe/count', () => {
 
     expect(countGangnam).toBe(0);
   });
+
+  test('Can retrieve number of cafes using place id', async () => {
+    const responsePankyo = await request
+      .get('/cafe/count')
+      .query({ placeId: pankyoId })
+      .expect(HTTP_OK);
+
+    const {
+      cafe: { count: countPankyo },
+    } = responsePankyo.body as { cafe: { count: number } };
+
+    expect(countPankyo).toBe(numCafesInPankyo);
+
+    const responseYeonnam = await request
+      .get('/cafe/count')
+      .query({ placeId: yeonnamId })
+      .expect(HTTP_OK);
+
+    const {
+      cafe: { count: countYeonnam },
+    } = responseYeonnam.body as { cafe: { count: number } };
+
+    expect(countYeonnam).toBe(numCafesInYeonnam);
+
+    const responseInvalid = await request
+      .get('/cafe/count')
+      .query({ placeId: uuid.v4() })
+      .expect(HTTP_OK);
+
+    const {
+      cafe: { count: countInvalid },
+    } = responseInvalid.body as { cafe: { count: number } };
+
+    expect(countInvalid).toBe(0);
+  });
+
+  test('Can retrieve number of cafes using place name', async () => {
+    const responsePankyo = await request
+      .get('/cafe/count')
+      .query({ placeName: '판교' })
+      .expect(HTTP_OK);
+
+    const {
+      cafe: { count: countPankyo },
+    } = responsePankyo.body as { cafe: { count: number } };
+
+    expect(countPankyo).toBe(numCafesInPankyo);
+
+    const responseYeonnam = await request
+      .get('/cafe/count')
+      .query({ placeName: '연남동' })
+      .expect(HTTP_OK);
+
+    const {
+      cafe: { count: countYeonnam },
+    } = responseYeonnam.body as { cafe: { count: number } };
+
+    expect(countYeonnam).toBe(numCafesInYeonnam);
+
+    const responseJamsil = await request
+      .get('/cafe/count')
+      .query({ placeName: '잠실' })
+      .expect(HTTP_OK);
+
+    const {
+      cafe: { count: countJamsil },
+    } = responseJamsil.body as { cafe: { count: number } };
+
+    expect(countJamsil).toBe(0);
+  });
+
+  test('Partial place name does not count cafes', async () => {
+    const responseYeonnamPartial = await request
+      .get('/cafe/count')
+      .query({ placeName: '연남' })
+      .expect(HTTP_OK);
+
+    const {
+      cafe: { count: countYeonnamPartial },
+    } = responseYeonnamPartial.body as { cafe: { count: number } };
+
+    expect(countYeonnamPartial).toBe(0);
+  });
+
+  test('Cannot use place id and place name together', async () => {
+    await request
+      .get('/cafe/count')
+      .query({ placeId: pankyoId, placeName: '판교' })
+      .expect(HTTP_BAD_REQUEST);
+  });
 });
 
 describe('Cafe - GET /cafe/list', () => {
@@ -531,7 +622,7 @@ describe('Cafe - GET /cafe/list', () => {
 
     const cafes = await sweepCafes('/cafe/list', { keyword: '연남' });
 
-    expect(cafes.length).toBe(numCafesInYeonNam);
+    expect(cafes.length).toBe(numCafesInYeonnam);
   });
 
   test('Can count hidden cafe images', async () => {
@@ -615,5 +706,44 @@ describe('Cafe - GET /cafe/list', () => {
         }
       });
     });
+  });
+
+  test('Can list all cafes in place using place id', async () => {
+    const cafesInPankyo = await sweepCafes('/cafe/list', { placeId: pankyoId });
+
+    expect(cafesInPankyo.length).toBe(numCafesInPankyo);
+
+    const cafesInYeonnam = await sweepCafes('/cafe/list', {
+      placeId: yeonnamId,
+    });
+
+    expect(cafesInYeonnam.length).toBe(numCafesInYeonnam);
+  });
+
+  test('Can retrieve number of cafes using place name', async () => {
+    const cafesInPankyo = await sweepCafes('/cafe/list', { placeName: '판교' });
+
+    expect(cafesInPankyo.length).toBe(numCafesInPankyo);
+
+    const cafesInYeonnam = await sweepCafes('/cafe/list', {
+      placeName: '연남동',
+    });
+
+    expect(cafesInYeonnam.length).toBe(numCafesInYeonnam);
+  });
+
+  test('Partial place name does not count cafes', async () => {
+    const cafesInYeonnamPartial = await sweepCafes('/cafe/list', {
+      placeName: '연남',
+    });
+
+    expect(cafesInYeonnamPartial.length).toBe(0);
+  });
+
+  test('Cannot use place id and place name together', async () => {
+    await request
+      .get('/cafe/list')
+      .query({ limit: 10, placeId: pankyoId, placeName: '판교' })
+      .expect(HTTP_BAD_REQUEST);
   });
 });
