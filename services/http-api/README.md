@@ -293,10 +293,12 @@ Retrieve the number of cafes.
 
 **Query Parameters**
 
-| **Name**     | **Type**  | **Required?**           | **Description**                                                                                                                                                                              |
-| ------------ | --------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `keyword`    | `string`  | no                      | If `keyword` is set, the result will return the number of cafes which name or place is similar with given `keyword`.                                                                         |
-| `showHidden` | `boolean` | no (default is `false`) | If `showHidden` is true, then the result includes the cafes which are hidden. Requires `{ "operationType": "query", "operation": "api.cafe.hidden" }` privilege to use this query parameter. |
+| **Name**     | **Type**  | **Required?**           | **Description**                                                                                                                                                                                          |
+| ------------ | --------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `keyword`    | `string`  | no                      | If `keyword` is set, the result will return the number of cafes which name or place is similar with given `keyword`.                                                                                     |
+| `showHidden` | `boolean` | no (default is `false`) | If `showHidden` is true, then the result includes the cafes which are hidden. Requires `{ "operationType": "query", "operation": "api.cafe.hidden" }` privilege to use this query parameter.             |
+| `placeId`    | `string`  | no                      | If `placeId` is provided, the result will return number of cafes satisfying the condition from other parameters, and with given place with `placeId`. Cannot use together with `placeName` parameter.    |
+| `placeName`  | `string`  | no                      | If `placeName` is provided, the result will return number of cafes satisfyiing the condition from other parameters, and with given place with `placeName`. Cannot use together with `placeId` parameter. |
 
 ### `GET /cafe/list`
 
@@ -313,6 +315,8 @@ Retrieve a list of cafes.
 | `keyword`          | `string`                                                     | no                            | If `keyword` is provided, the resulting list will be filetered which consists of cafe with name or place similar with given `keyword`.                                                                                              |
 | `showHidden`       | `boolean`                                                    | no (default is `false`)       | If `showHidden` is true, then the result includes the cafes which are hidden. Requires `{ "operationType": "query", "operation": "api.cafe.hidden" }` privilege to use this query parameter.                                        |
 | `showHiddenImages` | `boolean`                                                    | no (default is `false`)       | If `showHiddenImages` is true, then the result includes hidden cafe images. Requires `{ "operationType": "query", "operation": "api.cafe.image.hidden" }` privilege to use this query parameter as `true`.                          |
+| `placeId`          | `string`                                                     | no                            | If `placeId` is provided, the result will return cafes satisfying the condition from other parameters, and with given place with `placeId`. Cannot use together with `placeName` parameter.                                         |
+| `placeName`        | `string`                                                     | no                            | If `placeName` is provided, the result will return cafes satisfyiing the condition from other parameters, and with given place with `placeName`. Cannot use together with `placeId` parameter.                                      |
 
 **Request Example**
 
