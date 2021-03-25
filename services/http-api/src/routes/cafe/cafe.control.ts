@@ -229,10 +229,12 @@ export const getCount = handler<
   {
     keyword?: string;
     showHidden?: boolean;
+    placeId?: string;
+    placeName?: string;
   }
 >(
   async (ctx) => {
-    const { keyword, showHidden = false } = ctx.query;
+    const { keyword, showHidden = false, placeId, placeName } = ctx.query;
 
     await ctx.state.connection();
 
@@ -258,6 +260,14 @@ export const getCount = handler<
       );
     }
 
+    if (placeId) {
+      query = query.andWhere(`place.id = :placeId`, { placeId });
+    }
+
+    if (placeName) {
+      query = query.andWhere(`place.name = :placeName`, { placeName });
+    }
+
     const count = await query.getCount();
 
     ctx.status = HTTP_OK;
@@ -267,10 +277,15 @@ export const getCount = handler<
   },
   {
     schema: {
-      query: joi.object().keys({
-        keyword: joi.string().min(1).max(255),
-        showHidden: joi.boolean(),
-      }),
+      query: joi
+        .object()
+        .keys({
+          keyword: joi.string().min(1).max(255),
+          showHidden: joi.boolean(),
+          placeId: joi.string().uuid({ version: 'uuidv4' }),
+          placeName: joi.string().min(1).max(255),
+        })
+        .oxor('placeId', 'placeName'),
     },
     transform: {
       query: [{ key: 'showHidden', type: TransformedSchemaTypes.boolean }],
@@ -309,6 +324,8 @@ export const getList = handler<
     keyword?: string;
     showHidden?: boolean;
     showHiddenImages?: boolean;
+    placeId?: string;
+    placeName?: string;
   }
 >(
   async (ctx) => {
@@ -320,6 +337,8 @@ export const getList = handler<
       keyword,
       showHidden = false,
       showHiddenImages = false,
+      placeId,
+      placeName,
     } = ctx.query;
     const orderBy = CafeListOrder[orderByString];
     const order = SortOrder[orderString];
@@ -434,6 +453,14 @@ export const getList = handler<
       );
     }
 
+    if (placeId) {
+      query = query.andWhere(`place.id = :placeId`, { placeId });
+    }
+
+    if (placeName) {
+      query = query.andWhere(`place.name = :placeName`, { placeName });
+    }
+
     switch (orderBy) {
       case CafeListOrder.updatedAt:
         query = query.orderBy({ 'cafe.updatedAt': order });
@@ -521,7 +548,10 @@ export const getList = handler<
           keyword: joi.string().min(1).max(255),
           showHidden: joi.boolean(),
           showHiddenImages: joi.boolean(),
+          placeId: joi.string().uuid({ version: 'uuidv4' }),
+          placeName: joi.string().min(1).max(255),
         })
+        .oxor('placeId', 'placeName')
         .required(),
     },
     transform: {
