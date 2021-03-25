@@ -25,6 +25,8 @@ let request: SuperTest<Test>;
 let cafeIds: string[];
 let activeCafeIds: string[];
 let activeCafeNames: string[];
+let numCafesInPankyo: number;
+let numCafesInYeonNam: number;
 
 jest.setTimeout(30000);
 // eslint-disable-next-line no-console
@@ -55,15 +57,18 @@ const setupCafes = async (
     index: number
   ) => { uri: string; state: CafeImageState; metadata?: AnyJson }[]
 ) => {
-  const place = await setupPlace(connection, { name: '판교' });
+  const placeOne = await setupPlace(connection, { name: '판교' });
+  const placeTwo = await setupPlace(connection, { name: '연남동' });
+
+  const range = [...Array(NUM_TEST_CAFES).keys()];
 
   const throttle = pLimit(16);
   const ids = await Promise.all(
-    [...Array(NUM_TEST_CAFES).keys()]
+    range
       .map((i) => () =>
         setupCafe(connection, {
           name: `카페_${i.toString().padStart(3, '0')}`,
-          placeId: place.id,
+          placeId: i % 3 === 0 ? placeOne.id : placeTwo.id,
           state: i % 2 === 0 ? CafeState.active : CafeState.hidden,
           images: generateImages && generateImages(i),
         }).then(({ cafe }) => cafe.id)
@@ -72,9 +77,7 @@ const setupCafes = async (
   );
 
   const activeIds = ids.filter((_, i) => i % 2 === 0);
-  const names = [...Array(NUM_TEST_CAFES).keys()].map(
-    (i) => `카페_${i.toString().padStart(3, '0')}`
-  );
+  const names = range.map((i) => `카페_${i.toString().padStart(3, '0')}`);
   const activeNames = names.filter((_, i) => i % 2 === 0);
 
   return {
@@ -82,6 +85,12 @@ const setupCafes = async (
     activeCafeIds: activeIds,
     cafeNames: names,
     activeCafeNames: activeNames,
+    numActiveCafesWithPlaceOne: range
+      .filter((index) => index % 2 === 0)
+      .filter((index) => index % 3 === 0).length,
+    numActiveCafesWithPlaceTwo: range
+      .filter((index) => index % 2 === 0)
+      .filter((index) => index % 3 !== 0).length,
   };
 };
 
@@ -167,6 +176,8 @@ beforeAll(async () => {
     cafeIds: _cafeIds,
     activeCafeIds: _activeCafeIds,
     activeCafeNames: _activeCafeNames,
+    numActiveCafesWithPlaceOne,
+    numActiveCafesWithPlaceTwo,
   } = await setupCafes((i) =>
     [...Array(i % 5).keys()].map((j) => ({
       uri: `/image/${i}/${j}`,
@@ -177,6 +188,8 @@ beforeAll(async () => {
   cafeIds = _cafeIds;
   activeCafeIds = _activeCafeIds;
   activeCafeNames = _activeCafeNames;
+  numCafesInPankyo = numActiveCafesWithPlaceOne;
+  numCafesInYeonNam = numActiveCafesWithPlaceTwo;
 });
 
 afterAll(async () => {
@@ -208,7 +221,7 @@ describe('Cafe - GET /cafe/feed', () => {
     list.forEach((item) => {
       expect(activeCafeIds).toContain(item.id);
       expect(activeCafeNames).toContain(item.name);
-      expect(item.place.name).toBe('판교');
+      expect(['판교', '연남동']).toContain(item.place.name);
       expect(item.state).toBe('active');
     });
   });
@@ -220,7 +233,7 @@ describe('Cafe - GET /cafe/feed', () => {
     cafes.forEach((item) => {
       expect(activeCafeIds).toContain(item.id);
       expect(activeCafeNames).toContain(item.name);
-      expect(item.place.name).toBe('판교');
+      expect(['판교', '연남동']).toContain(item.place.name);
       expect(item.state).toBe('active');
     });
   });
@@ -427,7 +440,7 @@ describe('Cafe - GET /cafe/count', () => {
     expect(count).toBe(activeCafeIds.length);
   });
 
-  test('Can retrieve number of cafes using place', async () => {
+  test('Can retrieve number of cafes using place as keyword', async () => {
     const responsePankyo = await request
       .get('/cafe/count')
       .query({ keyword: '판교' })
@@ -437,7 +450,7 @@ describe('Cafe - GET /cafe/count', () => {
       cafe: { count: countPankyo },
     } = responsePankyo.body as { cafe: { count: number } };
 
-    expect(countPankyo).toBe(activeCafeIds.length);
+    expect(countPankyo).toBe(numCafesInPankyo);
 
     const responseGangnam = await request
       .get('/cafe/count')
@@ -516,9 +529,9 @@ describe('Cafe - GET /cafe/list', () => {
 
     expect(cafesEmpty.length).toBe(0);
 
-    const cafes = await sweepCafes('/cafe/list', { keyword: '판교' });
+    const cafes = await sweepCafes('/cafe/list', { keyword: '연남' });
 
-    expect(cafes.length).toBe(activeCafeIds.length);
+    expect(cafes.length).toBe(numCafesInYeonNam);
   });
 
   test('Can count hidden cafe images', async () => {
