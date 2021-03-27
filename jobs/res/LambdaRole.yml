@@ -42,4 +42,12 @@ Properties:
           - Effect: Allow
             Action:
               - s3:*Object
-            Resource: arn:aws:s3:::coffee-hmm.inhibitor.com/*
+            Resource: ${self:custom.spa.s3.arn}/*
+    - PolicyName: CanAccessSPADistribution
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - cloudfront:CreateInvalidation
+            Resource: ${self:custom.spa.cloudfront.arn}

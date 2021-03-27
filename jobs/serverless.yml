@@ -25,17 +25,26 @@ custom:
         - aws-sdk
     packager: yarn
     excludeFiles: src/**/*.test.ts
+  spa:
+    url: https://coffeehmm.com
+    s3:
+      arn: arn:aws:s3:::coffee-hmm.inhibitor.com
+      name: coffee-hmm.inhibitor.com
+    cloudfront:
+      arn: arn:aws:cloudfront::871935403311:distribution/E31ON6KII3D5OF
+      distributionId: E31ON6KII3D5OF
 
 functions:
   generateSitemap:
     handler: src/job/generateSitemap.handler
     events:
-      - schedule: cron(30 12 * * ? *)
+      - schedule: cron(00 13 * * ? *)
     environment:
       APP_NAME: ${self:service}
       APP_VERSION: ${self:custom.version}
       APP_STAGE: ${self:custom.stage}
       LOG_LEVEL: info
       API_SERVICE: https://${self:custom.stage}.api.coffee-hmm.inhibitor.io
-      BASE_APP_URL: https://coffeehmm.com
-      SPA_S3_BUCKET_NAME: coffee-hmm.inhibitor.com
+      BASE_APP_URL: ${self:custom.spa.url}
+      SPA_CLOUDFRONT_DISTRIBUTION_ID: ${self:custom.spa.cloudfront.distributionId}
+      SPA_S3_BUCKET_NAME: ${self:custom.spa.s3.name}

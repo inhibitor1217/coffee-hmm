@@ -1,4 +1,5 @@
 import ApiService from '../services/api';
+import CloudfrontService from '../services/cloudfront';
 import S3Service from '../services/s3';
 import SitemapService from '../services/sitemap';
 import { env } from '../util';
@@ -28,7 +29,18 @@ export const generateSitemap = async (
   });
 
   logger?.info(
-    `Uploaded ${SITEMAP_FILENAME} to S3 bucket ${env('SPA_S3_BUCKET_NAME')}`
+    `Uploaded ${SITEMAP_FILENAME} to S3 bucket ${env('SPA_S3_BUCKET_NAME')}.`
+  );
+
+  await CloudfrontService.invalidateCache(
+    env('SPA_CLOUDFRONT_DISTRIBUTION_ID'),
+    [`/${SITEMAP_FILENAME}`]
+  );
+
+  logger?.info(
+    `Invalidated cache of /${SITEMAP_FILENAME} of cloudfront distribution ${env(
+      'SPA_CLOUDFRONT_DISTRIBUTION_ID'
+    )}.`
   );
 
   return [200, null];
