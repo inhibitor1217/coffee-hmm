@@ -27,12 +27,15 @@ custom:
     excludeFiles: src/**/*.test.ts
 
 functions:
-  sample:
-    handler: src/job/sample.handler
+  generateSitemap:
+    handler: src/job/generateSitemap.handler
     events:
-      - schedule: cron(0/10 * * * ? *)
+      - schedule: cron(30 12 * * ? *)
     environment:
       APP_NAME: ${self:service}
       APP_VERSION: ${self:custom.version}
       APP_STAGE: ${self:custom.stage}
       LOG_LEVEL: info
+      API_SERVICE: https://${self:custom.stage}.api.coffee-hmm.inhibitor.io
+      BASE_APP_URL: https://coffeehmm.com
+      SPA_S3_BUCKET_NAME: coffee-hmm.inhibitor.com

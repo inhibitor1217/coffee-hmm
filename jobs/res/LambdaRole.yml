@@ -35,3 +35,11 @@ Properties:
                     - ':'
                     - Ref: AWS::AccountId
                     - ':parameter/${self:service.name}/${self:custom.stage}'
+    - PolicyName: CanAccessSPABucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - s3:*Object
+            Resource: arn:aws:s3:::coffee-hmm.inhibitor.com/*

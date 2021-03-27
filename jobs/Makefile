@@ -12,6 +12,10 @@ SERVERLESS_CONFIG_FILE=serverless.yml
 APP_STAGE=local
 LOG_LEVEL=verbose
 
+API_SERVICE=https://beta.api.coffee-hmm.inhibitor.io
+BASE_APP_URL=https://coffeehmm.com
+SPA_S3_BUCKET_NAME=coffee-hmm.inhibitor.com
+
 help: info
 	@echo
 	@echo "List of commands:"
@@ -20,6 +24,7 @@ help: info
 	@echo "  make deps             - install all dependencies."
 	@echo "  make lint             - run lint."
 	@echo "  make test             - test functions."
+	@echo "  make deploy           - deploy the service via serverless"
 
 info:
 	@[ ! -z "$(NODE)" ] && echo node version: `$(NODE) --version` "$(NODE)"
@@ -40,4 +45,7 @@ lint:
 	@echo "Lint check completed."
 
 test:
-	@APP_NAME=$(APP_NAME) APP_VERSION=$(CURRENT_VERSION) APP_STAGE=$(APP_STAGE) LOG_LEVEL=$(LOG_LEVEL) JEST_WORKERS=4 $(PKM) test
+	@APP_NAME=$(APP_NAME) APP_VERSION=$(CURRENT_VERSION) APP_STAGE=$(APP_STAGE) LOG_LEVEL=$(LOG_LEVEL) API_SERVICE=$(API_SERVICE) BASE_APP_URL=$(BASE_APP_URL) SPA_S3_BUCKET_NAME=$(SPA_S3_BUCKET_NAME) JEST_WORKERS=4 $(PKM) test
+
+deploy:
+	@AWS_ACCESS_KEY_ID=$(AWS_ACCESS_KEY_ID) AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY) npx serverless deploy --config $(SERVERLESS_CONFIG_FILE)
