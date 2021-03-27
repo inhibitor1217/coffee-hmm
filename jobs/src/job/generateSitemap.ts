@@ -26,6 +26,7 @@ export const generateSitemap = async (
   await S3Service.uploadFile(sitemapStr, {
     bucketName: env('SPA_S3_BUCKET_NAME'),
     fileName: SITEMAP_FILENAME,
+    contentType: 'application/xml',
   });
 
   logger?.info(
