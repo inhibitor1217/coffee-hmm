@@ -20,7 +20,7 @@ jobs:
         run: echo ::set-output name=parsed::${GITHUB_REF#refs/tags/jobs-beta/}
       - name: Parse version.
         id: version
-        run: echo ::set-output name=parsed::${TAG#*@}
+        run: echo ::set-output name=parsed::${TAG#*}
         env:
           TAG: ${{ steps.tag.outputs.parsed }}
   build:
