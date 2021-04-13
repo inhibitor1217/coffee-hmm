@@ -30,3 +30,4 @@ jobs:
           files: ./coverage/eslint.xml
           flags: services/http-api
           verbose: true
+          working-directory: services/http-api
