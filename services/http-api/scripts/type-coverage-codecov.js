@@ -25,7 +25,7 @@ lint('./src', { strict: true, fileCounts: true })
             fs.mkdirSync(outputFileDir)
         }
 
-        fs.writeFile(outputFilePath, JSON.stringify(coverage), (err) => {
+        fs.writeFile(outputFilePath, JSON.stringify({ coverage }), (err) => {
             if (err) {
                 console.error('Error while writing to file', err);
             } else {
