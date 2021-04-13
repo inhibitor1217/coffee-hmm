@@ -2,7 +2,8 @@ const path = require('path');
 const fs = require('fs');
 const { lint } = require('type-coverage-core');
 
-const outputFilePath = path.join(process.cwd(), 'coverage', 'type-coverage.json');
+const outputFileDir = path.join(process.cwd(), 'coverage');
+const outputFilePath = path.join(outputFileDir, 'type-coverage.json');
 
 lint('./src', { strict: true, fileCounts: true })
     .then((result) => {
@@ -19,6 +20,10 @@ lint('./src', { strict: true, fileCounts: true })
                 })
             coverage[fileName] = fileCoverage;
         });
+
+        if (!fs.existsSync(outputFileDir)) {
+            fs.mkdirSync(outputFileDir)
+        }
 
         fs.writeFile(outputFilePath, JSON.stringify(coverage), (err) => {
             if (err) {
