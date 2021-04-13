@@ -22,13 +22,11 @@ jobs:
         run: make deps
       - name: Check linting of source, generating report
         run: make lint-report
-      - name: Check report
-        run: cat ./coverage/eslint.xml
       - name: Upload coverage to codecov.
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
-          files: ./coverage/eslint.xml
+          files: ./coverage/eslint.json
           flags: services/http-api
           verbose: true

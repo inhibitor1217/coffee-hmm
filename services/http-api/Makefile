@@ -50,7 +50,7 @@ lint:
 	@echo "Lint check completed."
 
 lint-report:
-	@npx eslint ./src/**/*.ts -f junit -o coverage/eslint.xml
+	@npx eslint ./src/**/*.ts -f json -o coverage/eslint.json
 
 serve:
 	@echo "Starting $(APP_STAGE)@$(CURRENT_VERSION) server on port $(PORT) ..."
