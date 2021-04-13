@@ -27,5 +27,5 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
-          files: ./coverage/eslint.json
+          files: services/http-api/coverage/eslint.json
           flags: services/http-api
