@@ -1,7 +1,7 @@
 name: coverage
 on:
   pull_request:
-    types: [opened, edited]
+    types: [opened, synchronize]
     branches:
       - dev/server
 defaults:
@@ -22,6 +22,8 @@ jobs:
         run: make deps
       - name: Check linting of source, generating report
         run: make lint-report
+      - name: Check report
+        run: cat ./coverage/eslint.xml
       - name: Upload coverage to codecov.
         uses: codecov/codecov-action@v1
         with:
@@ -30,4 +32,3 @@ jobs:
           files: ./coverage/eslint.xml
           flags: services/http-api
           verbose: true
-          working-directory: services/http-api
