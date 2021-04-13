@@ -20,12 +20,12 @@ jobs:
           node-version: "12"
       - name: Install dependencies.
         run: make deps
-      - name: Check linting of source, generating report
-        run: make lint-report
+      - name: Generate type coverage report.
+        run: make typecheck-report
       - name: Upload coverage to codecov.
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
-          files: services/http-api/coverage/eslint.json
+          files: services/http-api/coverage/type-coverage.json
           flags: services/http-api
