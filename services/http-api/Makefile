@@ -26,6 +26,7 @@ help: info
 	@echo "  make info             - display node, npm and yarn versions."
 	@echo "  make deps             - install all dependencies."
 	@echo "  make lint             - run lint."
+	@echo "  make lint-report      - run lint, with generating report in xml format."
 	@echo "  make serve            - start local server for development."
 	@echo "  make test             - test local server."
 	@echo "  make deploy           - deploy the service via serverless"
@@ -47,6 +48,9 @@ lint:
 	@npx eslint ./src/**/*.ts
 	@npx tsc --noEmit
 	@echo "Lint check completed."
+
+lint-report:
+	@npx eslint ./src/**/*.ts -f junit -o coverage/eslint.xml
 
 serve:
 	@echo "Starting $(APP_STAGE)@$(CURRENT_VERSION) server on port $(PORT) ..."

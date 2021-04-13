@@ -1,0 +1,32 @@
+name: coverage
+on:
+  pull_request:
+    types: [opened, edited]
+    branches:
+      - dev/server
+defaults:
+  run:
+    shell: bash
+jobs:
+  check-lint:
+    runs-on: ubuntu-18.04
+    defaults:
+      run:
+        working-directory: services/http-api
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+          node-version: "12"
+      - name: Install dependencies.
+        run: make deps
+      - name: Check linting of source, generating report
+        run: make lint-report
+      - name: Upload coverage to codecov.
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          files: ./coverage/eslint.xml
+          flags: services/http-api
+          verbose: true
