@@ -1,0 +1,14 @@
+{
+  "name": "@inhibitor1217/coffee-hmm-ci",
+  "version": "1.0.0",
+  "description": "A CI helper module for coffee-hmm",
+  "main": "index.js",
+  "repository": "https://github.com/inhibitor1217/coffee-hmm",
+  "author": "inhibitor <inhibitor@kaist.ac.kr>",
+  "license": "MIT",
+  "devDependencies": {
+    "type-coverage": "^2.17.2",
+    "typescript": "^4.2.4"
+  },
+  "dependencies": {}
+}
