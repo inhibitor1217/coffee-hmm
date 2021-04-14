@@ -25,30 +25,25 @@ jobs:
       - uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
           files: ci/coverage/app.json
           flags: app
       - uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
           files: ci/coverage/common.json
           flags: common
       - uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
           files: ci/coverage/jobs.json
           flags: jobs
       - uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
           files: ci/coverage/services_auth.json
           flags: services_auth
       - uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
           files: ci/coverage/services_http-api.json
           flags: services_http-api

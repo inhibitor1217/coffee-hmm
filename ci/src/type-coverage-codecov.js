@@ -18,7 +18,7 @@ console.log('Generating type coverage report at', coverageModuleSrcPath);
 lint(coverageModuleSrcPath, { strict: true, fileCounts: true, absolutePath: true })
     .then((result) => {
         const percentage = result.correctCount / result.totalCount;
-        console.log('Overall coverage is:', `${Math.floor(percentage * 100)}.${Math.floor(percentage * 100 * 100) % 100}`, '%');
+        console.log('Overall coverage is:', `${Math.floor(percentage * 100)}.${Math.floor(percentage * 100 * 100) % 100}`, '%', `(${result.correctCount}/${result.totalCount})`);
         const coverage = {};
 
         result.fileCounts.forEach((value, key) => {
