@@ -8,11 +8,11 @@ defaults:
   run:
     shell: bash
 jobs:
-  check-lint:
+  type-coverage:
     runs-on: ubuntu-18.04
     defaults:
       run:
-        working-directory: services/http-api
+        working-directory: ci
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@master
@@ -20,12 +20,35 @@ jobs:
           node-version: "12"
       - name: Install dependencies.
         run: make deps
-      - name: Generate type coverage report.
-        run: make typecheck-report
-      - name: Upload coverage to codecov.
-        uses: codecov/codecov-action@v1
+      - name: Generate type coverage reports.
+        run: make report
+      - uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
-          files: services/http-api/coverage/type-coverage.json
-          flags: http-api
+          files: ci/coverage/app.json
+          flags: app
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          files: ci/coverage/common.json
+          flags: common
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          files: ci/coverage/jobs.json
+          flags: jobs
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          files: ci/coverage/services_auth.json
+          flags: services_auth
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          files: ci/coverage/services_http-api.json
+          flags: services_http-api
