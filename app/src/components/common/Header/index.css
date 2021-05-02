@@ -6,19 +6,30 @@ header {
 }
 .header-title  {
     font-size: 12px;
-    padding-top: 12px;
+    padding-top: 14px;
 }
 header #home-link {
     text-decoration: none;
 }
 .back-button {
-    padding: 6px;
+    padding: 12px;
     position: absolute;
-    top: 4px;
+    top: 0px;
     left: 0px;
 }
 .back-button img {
     width: 24px;
     height: 24px;
+    object-fit: contain;
+}
+.airplane-icon {
+    padding: 12px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+.airplane-icon img {
+    width: 20px;
+    height: 20px;
     object-fit: contain;
 }

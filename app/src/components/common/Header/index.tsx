@@ -1,5 +1,6 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { COFFEEHMM_REPORT_URL } from '../../../utils/constant';
 import './index.css';
 
 
@@ -12,20 +13,16 @@ interface HeaderProps {
 
 const Header = ({location}: HeaderProps) => {
     const history = useHistory();
-    if(location.pathname === "/"){
-        return(<header><div className="header-title">coffee hmm</div></header>)
-    }
 
-    if(location.pathname !== "/") {
-        return(
-            <header>
-                <button className="back-button" onClick={() => history.goBack()}><img src="/icons/baseline_navigate_before_black_18dp.png" alt="back"/></button>
-                <div className="header-title">coffee hmm</div>
-            </header>
-        )
-    }
-    
-    return <header></header>
+    return (
+        <header>
+            {location.pathname !== "/" && (
+                <button className="back-button" onClick={() => history.goBack()}><img src="/icons/baseline_navigate_before_black_18dp.png" alt=""/></button>
+            )}
+            <div className="header-title">coffee hmm</div>
+                <Link to={{pathname: COFFEEHMM_REPORT_URL}} target="_blank"><span className="airplane-icon"><img src="/icons/plane.png" alt=""/></span></Link> 
+        </header>
+    )
 }
 
 export default Header;
