@@ -54,11 +54,18 @@ beforeEach(async () => {
 
 describe('Place - GET /place/list', () => {
   test('Can retrieve an entire list of places', async () => {
-    await Promise.all(
+    const places = await Promise.all(
       ['판교', '연남동', '양재', '성수동'].map((name) =>
         setupPlace(connection, { name })
       )
     );
+
+    await setupCafe(connection, { name: 'cafe_000', placeId: places[0].id });
+    await setupCafe(connection, { name: 'cafe_001', placeId: places[0].id });
+    await setupCafe(connection, { name: 'cafe_002', placeId: places[0].id });
+    await setupCafe(connection, { name: 'cafe_003', placeId: places[1].id });
+    await setupCafe(connection, { name: 'cafe_004', placeId: places[1].id });
+    await setupCafe(connection, { name: 'cafe_005', placeId: places[2].id });
 
     const response = await request.get('/place/list').expect(HTTP_OK);
     const {
@@ -66,13 +73,22 @@ describe('Place - GET /place/list', () => {
     } = response.body as {
       place: {
         count: number;
-        list: { id: string; name: string; pinned: boolean }[];
+        list: {
+          id: string;
+          name: string;
+          pinned: boolean;
+          cafeCount: number;
+        }[];
       };
     };
     const names = list.map((item) => item.name);
 
     expect(count).toBe(4);
-    expect(names.sort()).toEqual(['판교', '연남동', '양재', '성수동'].sort());
+    expect(names).toEqual(['판교', '연남동', '양재', '성수동']);
+    expect(list[0].cafeCount).toBe(3);
+    expect(list[1].cafeCount).toBe(2);
+    expect(list[2].cafeCount).toBe(1);
+    expect(list[3].cafeCount).toBe(0);
 
     list.forEach(({ pinned }) => expect(pinned).toBe(false));
   });
@@ -80,8 +96,15 @@ describe('Place - GET /place/list', () => {
   test('Can retrieve a pinned list of places', async () => {
     await setupPlace(connection, { name: '판교', pinned: true });
     await setupPlace(connection, { name: '연남동', pinned: false });
-    await setupPlace(connection, { name: '양재', pinned: true });
+    const { id: placeId } = await setupPlace(connection, {
+      name: '양재',
+      pinned: true,
+    });
     await setupPlace(connection, { name: '성수동', pinned: false });
+
+    await setupCafe(connection, { name: 'cafe_000', placeId });
+    await setupCafe(connection, { name: 'cafe_001', placeId });
+    await setupCafe(connection, { name: 'cafe_002', placeId });
 
     const response = await request
       .get('/place/list')
@@ -92,13 +115,20 @@ describe('Place - GET /place/list', () => {
     } = response.body as {
       place: {
         count: number;
-        list: { id: string; name: string; pinned: boolean }[];
+        list: {
+          id: string;
+          name: string;
+          pinned: boolean;
+          cafeCount: number;
+        }[];
       };
     };
     const names = list.map((item) => item.name);
 
     expect(count).toBe(2);
-    expect(names.sort()).toEqual(['판교', '양재'].sort());
+    expect(names).toEqual(['양재', '판교']);
+    expect(list[0].cafeCount).toBe(3);
+    expect(list[1].cafeCount).toBe(0);
   });
 });
 

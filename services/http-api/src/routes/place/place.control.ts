@@ -1,4 +1,5 @@
 import {
+  Cafe,
   Exception,
   ExceptionCode,
   Place,
@@ -7,7 +8,7 @@ import {
 } from '@coffee-hmm/common';
 import joi from 'joi';
 import { FOREIGN_KEY_VIOLATION, UNIQUE_VIOLATION } from 'pg-error-constants';
-import { getRepository } from 'typeorm';
+import { getRepository, In } from 'typeorm';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
 import {
   TransformedSchemaTypes,
@@ -29,11 +30,37 @@ export const getList = handler<TransformedVariablesMap, { pinned?: boolean }>(
 
     const places = await query.getMany();
 
+    const placeIds = places.map((place) => place.id);
+    const cafeCounts = await getRepository(Cafe)
+      .createQueryBuilder('cafe')
+      .select('cafe.fk_place_id AS "placeId", COUNT(cafe.id) AS "cafeCount"')
+      .where({ fkPlaceId: In(placeIds) })
+      .groupBy('cafe.fk_place_id')
+      .getRawMany()
+      .then((records: { placeId: string; cafeCount: string }[]) =>
+        Array.normalize(
+          records.map(({ placeId, cafeCount }) => ({
+            placeId,
+            cafeCount: parseInt(cafeCount, 10), // NOTE: getRawMany does not further process query result, so cafeCount is retrieved as string
+          })),
+          (record) => record.placeId
+        )
+      );
+
+    // NOTE: sorting could be expensive, so consider doing the work at database instead of lambda instance
+    const placeObjectsWithCafeCount = places
+      .map((place) =>
+        Object.assign(place.toJsonObject(), {
+          cafeCount: cafeCounts[place.id]?.cafeCount ?? 0,
+        })
+      )
+      .sort((one, other) => other.cafeCount - one.cafeCount);
+
     ctx.status = HTTP_OK;
     ctx.body = {
       place: {
         count: places.length,
-        list: places.map((place) => place.toJsonObject()),
+        list: placeObjectsWithCafeCount,
       },
     };
   },

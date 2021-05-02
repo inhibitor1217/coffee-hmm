@@ -900,7 +900,7 @@ Delete an image attached to cafe.
 
 ### `GET /place/list`
 
-Retrieve an entire list of places.
+Retrieve an entire list of places. The list is sorted by number of cafes listed at each place, with descending order.
 
 **Request Example**
 
@@ -926,14 +926,16 @@ Retrieve an entire list of places.
         "createdAt": "2020-01-01T00:00:00.000Z",
         "updatedAt": "2020-01-01T00:00:00.000Z",
         "name": "판교",
-        "pinned": true
+        "pinned": true,
+        "cafeCount": 13
       },
       {
         "id": "11111111-1111-1111-1111-111111111111",
         "createdAt": "2020-01-01T00:00:00.000Z",
         "updatedAt": "2020-01-01T00:00:00.000Z",
         "name": "연남동",
-        "pinned": false
+        "pinned": false,
+        "cafeCount": 5
       }
     ]
   }
