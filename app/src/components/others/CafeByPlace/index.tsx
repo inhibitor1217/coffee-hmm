@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import CafeMainImageCarousel from '../CafeMainImageCarousel';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { fetchCafesByPlace } from '../../../store/modules/cafe';
@@ -7,7 +8,7 @@ import {
     currentIntroPlaceSelector,
 } from '../../../store/selectors/cafe';
 import { openSearch } from '../../../utils/function';
-import { StyledRowFlex } from '../../../utils/styled';
+import { StyledColumnFlex, StyledRowFlex } from '../../../utils/styled';
 import './index.css';
 import { CafeCreatorPlaceholder, CafeInfoPlaceholder, CafeNamePlaceholder, CafePreviewPanelPlaceholder, CafeWebSearchPlaceholder } from './styled';
 
@@ -15,7 +16,13 @@ const CafeByPlace = () => {
     const dispatch = useAppDispatch();
     const currentPlace = useAppSelector(currentIntroPlaceSelector);
     const currentCafe = useAppSelector(currentIntroCafeSelector);
-
+    const history = useHistory();
+    const handleClick = async () => {
+        history.push({
+            pathname: `/cafe/${currentCafe?.id}`,
+        })
+    }
+    
     React.useEffect(() => {
         if (currentPlace) {
             dispatch(fetchCafesByPlace(currentPlace));
@@ -40,17 +47,20 @@ const CafeByPlace = () => {
 
     return (
         <div className="carousel-container">
-            <div className="cafe-preview-info">
-                <h4>{currentCafe.name}</h4>
-                <span className="cafe-preview-info-list">
-                    OPEN {currentCafe.metadata?.hour}
-                </span>
-                <span className="cafe-preview-info-by">
-                    {currentCafe.metadata?.creator || 'jyuunnii'} 님이 올려주신 {currentCafe?.name}
-                </span>
-            </div>
-            <div className="cafe-preview-carousel-wrapper">
-                <CafeMainImageCarousel />
+            <div className="cafe-preview-wrapper" onClick={handleClick}>
+                <StyledColumnFlex className="cafe-preview-info">
+                    <h4>{currentCafe.name}</h4>
+                    <p className="cafe-preview-info-meta">
+                        <span>{currentCafe.place.name}</span>
+                        <span>OPEN {currentCafe.metadata?.hour}</span>
+                    </p>
+                    <p className="cafe-preview-info-by">
+                        {currentCafe.metadata?.creator || 'jyuunnii'} 님이 올려주신 {currentCafe?.name}
+                    </p>
+                </StyledColumnFlex>
+                <div className="cafe-preview-carousel-wrapper">
+                    <CafeMainImageCarousel />
+                </div>
             </div>
             <StyledRowFlex className="cafe-preview-websearch">
                 <span onClick={() => openSearch(`${currentCafe.name} ${currentCafe.place.name}`, "Naver")}>

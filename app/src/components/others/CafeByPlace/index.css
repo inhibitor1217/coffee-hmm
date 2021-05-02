@@ -4,15 +4,19 @@
 .cafe-preview-info > * + * {
   margin-top: 4px;
 }
+.cafe-preview-info p {
+  margin-block-start: 0em;
+  margin-block-end: 0em;
+}
 .cafe-preview-info h4 {
   height: 22px;
 }
-.cafe-preview-info span {
-  display: block;
-}
-.cafe-preview-info-list {
+.cafe-preview-info-meta {
   font-size: 14px;
   height: 20px;
+}
+.cafe-preview-info-meta span {
+  margin-right: 0.5em;
 }
 .cafe-preview-info-by {
   text-align: end;
