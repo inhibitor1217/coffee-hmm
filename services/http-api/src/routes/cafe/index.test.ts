@@ -91,6 +91,7 @@ describe('Cafe - GET /cafe/:cafeId', () => {
           createdAt: place.createdAt.toISOString(),
           updatedAt: place.updatedAt.toISOString(),
           name: '판교',
+          pinned: false,
         },
         metadata: {
           hours: '09:00 ~ 20:00',
@@ -170,6 +171,7 @@ describe('Cafe - GET /cafe/:cafeId', () => {
           createdAt: place.createdAt.toISOString(),
           updatedAt: place.updatedAt.toISOString(),
           name: '성수동',
+          pinned: false,
         },
         metadata: {
           hours: '09:00 ~ 20:00',
@@ -295,6 +297,7 @@ describe('Cafe - GET /cafe/:cafeId', () => {
           createdAt: place.createdAt.toISOString(),
           updatedAt: place.updatedAt.toISOString(),
           name: '성수동',
+          pinned: false,
         },
         metadata: {
           hours: '09:00 ~ 20:00',
@@ -372,6 +375,7 @@ describe('Cafe - GET /cafe/:cafeId', () => {
           createdAt: place.createdAt.toISOString(),
           updatedAt: place.updatedAt.toISOString(),
           name: '성수동',
+          pinned: false,
         },
         metadata: {
           hours: '09:00 ~ 20:00',
@@ -639,6 +643,7 @@ describe('Cafe - PUT /cafe/:cafeId', () => {
       createdAt: newPlace.createdAt.toISOString(),
       updatedAt: newPlace.updatedAt.toISOString(),
       name: '양재',
+      pinned: false,
     });
     expect(metadata).toBe(null);
     expect(state).toBe('active');

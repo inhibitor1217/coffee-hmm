@@ -89,14 +89,14 @@ export const create = handler<
       throw new Exception(ExceptionCode.badRequest);
     }
 
-    const { name } = ctx.request.body;
+    const { name, pinned = false } = ctx.request.body;
 
     const connection = await ctx.state.connection();
 
     const inserted = await getRepository(Place)
       .createQueryBuilder()
       .insert()
-      .values({ name })
+      .values({ name, pinned })
       .returning(Place.columns)
       .execute()
       .then((insertResult) =>
