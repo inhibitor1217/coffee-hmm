@@ -14,11 +14,11 @@ import { KoaContextState } from '../types/koa';
 import { env } from '../util';
 import entities from '../entities';
 
-const createDataLoaders = (context: KoaContextState) => ({
-  user: createUserLoader(context),
-  userProfile: createUserProfileLoader(context),
-  userPolicy: createUserPolicyLoader(context),
-  policy: createPolicyLoader(context),
+const createDataLoaders = (state: KoaContextState) => ({
+  user: createUserLoader(state),
+  userProfile: createUserProfileLoader(state),
+  userPolicy: createUserPolicyLoader(state),
+  policy: createPolicyLoader(state),
 });
 
 export type DataLoaders = ReturnType<typeof createDataLoaders>;

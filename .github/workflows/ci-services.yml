@@ -61,7 +61,6 @@ jobs:
           echo ${{ secrets[env.FIREBASE_SECRET_NAME] }} >> .firebase/encoded
           base64 -d .firebase/encoded > .firebase/${APP_STAGE}.json
         env:
-          FIREBASE_SECRET_NAME: ${{ steps.firebase.outputs.secret_name }}
       - name: Install dependencies.
         run: make deps
       - name: Check linting of source.

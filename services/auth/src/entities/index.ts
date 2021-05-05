@@ -1,6 +1,4 @@
-import Policy from './policy';
-import User from './user';
-import UserProfile from './userProfile';
+import { Policy, User, UserProfile } from '@coffee-hmm/common';
 
 const entities = [Policy, User, UserProfile];
 

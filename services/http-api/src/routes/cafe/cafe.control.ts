@@ -1,22 +1,29 @@
+import {
+  Cafe,
+  CafeState,
+  CafeStateStrings,
+  CafeImage,
+  CafeImageState,
+  CafeImageCount,
+  CafeStatistic,
+  Exception,
+  ExceptionCode,
+  Place,
+  OperationSchema,
+  OperationType,
+} from '@coffee-hmm/common';
 import joi from 'joi';
 import { FOREIGN_KEY_VIOLATION } from 'pg-error-constants';
 import { getManager, getRepository, In, Not } from 'typeorm';
 import * as uuid from 'uuid';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
-import Cafe, {
-  CafeState,
-  CafeStateStrings,
-  createCafeWithImagesLoader,
-} from '../../entities/cafe';
-import CafeImage, { CafeImageState } from '../../entities/cafeImage';
-import CafeImageCount from '../../entities/cafeImageCount';
-import CafeStatistic from '../../entities/cafeStatistic';
-import Place from '../../entities/place';
+import { createCafeWithImagesLoader } from '../../entities/cafe';
 import { SortOrder, SortOrderStrings } from '../../types';
-import { VariablesMap } from '../../types/koa';
+import {
+  TransformedSchemaTypes,
+  TransformedVariablesMap,
+} from '../../types/koa';
 import { enumKeyStrings } from '../../util';
-import Exception, { ExceptionCode } from '../../util/error';
-import { OperationSchema, OperationType } from '../../util/iam';
 import handler from '../handler';
 
 export const getOne = handler<
@@ -47,7 +54,7 @@ export const getOne = handler<
       if (
         !(
           ctx.state.policy?.canExecuteOperation(
-            ctx,
+            ctx.state,
             new OperationSchema({
               operationType: OperationType.query,
               operation: 'api.cafe.hidden',
@@ -73,11 +80,16 @@ export const getOne = handler<
         .required(),
       query: joi.object().keys({ showHiddenImages: joi.boolean() }),
     },
+    transform: {
+      query: [
+        { key: 'showHiddenImages', type: TransformedSchemaTypes.boolean },
+      ],
+    },
   }
 );
 
 export const getFeed = handler<
-  VariablesMap,
+  TransformedVariablesMap,
   {
     limit: number;
     cursor?: string;
@@ -95,7 +107,7 @@ export const getFeed = handler<
       placeName,
     } = ctx.query;
 
-    await ctx.state.connection();
+    const connection = await ctx.state.connection();
 
     const identifier = _identifier ?? ctx.state.uid ?? uuid.v4();
 
@@ -146,13 +158,18 @@ export const getFeed = handler<
       .getRawMany()
       .then((rows: (Record<string, unknown> & { cursor: string })[]) => ({
         cafes: rows.map((row) => {
-          const cafe = Cafe.fromRawColumns(row, { alias: 'cafe' });
-          cafe.place = Place.fromRawColumns(row, { alias: 'place' });
+          const cafe = Cafe.fromRawColumns(row, { alias: 'cafe', connection });
+          cafe.place = Place.fromRawColumns(row, {
+            alias: 'place',
+            connection,
+          });
           cafe.statistic = CafeStatistic.fromRawColumns(row, {
             alias: 'cafe_statistic',
+            connection,
           });
           cafe.imageCount = CafeImageCount.fromRawColumns(row, {
             alias: 'cafe_image_count',
+            connection,
           });
           cafe.images = [];
 
@@ -201,23 +218,29 @@ export const getFeed = handler<
         .oxor('placeId', 'placeName')
         .required(),
     },
+    transform: {
+      query: [{ key: 'limit', type: TransformedSchemaTypes.integer }],
+    },
   }
 );
 
 export const getCount = handler<
-  VariablesMap,
+  TransformedVariablesMap,
   {
     keyword?: string;
     showHidden?: boolean;
+    placeId?: string;
+    placeName?: string;
   }
 >(
   async (ctx) => {
-    const { keyword, showHidden = false } = ctx.query;
+    const { keyword, showHidden = false, placeId, placeName } = ctx.query;
 
     await ctx.state.connection();
 
     let query = getManager()
       .createQueryBuilder(Cafe, 'cafe')
+      .leftJoinAndSelect('cafe.place', 'place')
       .where(`"cafe"."state" IS DISTINCT FROM :deleted`, {
         deleted: CafeState.deleted,
       });
@@ -229,9 +252,20 @@ export const getCount = handler<
     }
 
     if (keyword) {
-      query = query.andWhere(`"cafe"."name" LIKE :keyword`, {
-        keyword: `%${keyword}%`,
-      });
+      query = query.andWhere(
+        `("cafe"."name" LIKE :keyword OR "place"."name" LIKE :keyword)`,
+        {
+          keyword: `%${keyword}%`,
+        }
+      );
+    }
+
+    if (placeId) {
+      query = query.andWhere(`place.id = :placeId`, { placeId });
+    }
+
+    if (placeName) {
+      query = query.andWhere(`place.name = :placeName`, { placeName });
     }
 
     const count = await query.getCount();
@@ -243,10 +277,18 @@ export const getCount = handler<
   },
   {
     schema: {
-      query: joi.object().keys({
-        keyword: joi.string().min(1).max(255),
-        showHidden: joi.boolean(),
-      }),
+      query: joi
+        .object()
+        .keys({
+          keyword: joi.string().min(1).max(255),
+          showHidden: joi.boolean(),
+          placeId: joi.string().uuid({ version: 'uuidv4' }),
+          placeName: joi.string().min(1).max(255),
+        })
+        .oxor('placeId', 'placeName'),
+    },
+    transform: {
+      query: [{ key: 'showHidden', type: TransformedSchemaTypes.boolean }],
     },
     requiredRules: (ctx) => [
       ...(ctx.query.showHidden ?? false
@@ -273,7 +315,7 @@ enum CafeListOrder {
 type CafeListOrderStrings = keyof typeof CafeListOrder;
 
 export const getList = handler<
-  VariablesMap,
+  TransformedVariablesMap,
   {
     limit: number;
     cursor?: string;
@@ -282,6 +324,8 @@ export const getList = handler<
     keyword?: string;
     showHidden?: boolean;
     showHiddenImages?: boolean;
+    placeId?: string;
+    placeName?: string;
   }
 >(
   async (ctx) => {
@@ -293,11 +337,13 @@ export const getList = handler<
       keyword,
       showHidden = false,
       showHiddenImages = false,
+      placeId,
+      placeName,
     } = ctx.query;
     const orderBy = CafeListOrder[orderByString];
     const order = SortOrder[orderString];
 
-    await ctx.state.connection();
+    const connection = await ctx.state.connection();
 
     let query = getRepository(Cafe)
       .createQueryBuilder('cafe')
@@ -399,9 +445,20 @@ export const getList = handler<
     }
 
     if (keyword) {
-      query = query.andWhere(`cafe.name LIKE :keyword`, {
-        keyword: `%${keyword}%`,
-      });
+      query = query.andWhere(
+        `(cafe.name LIKE :keyword OR place.name LIKE :keyword)`,
+        {
+          keyword: `%${keyword}%`,
+        }
+      );
+    }
+
+    if (placeId) {
+      query = query.andWhere(`place.id = :placeId`, { placeId });
+    }
+
+    if (placeName) {
+      query = query.andWhere(`place.name = :placeName`, { placeName });
     }
 
     switch (orderBy) {
@@ -431,13 +488,18 @@ export const getList = handler<
       .getRawMany()
       .then((rows: (Record<string, unknown> & { cursor: string })[]) => ({
         cafes: rows.map((row) => {
-          const cafe = Cafe.fromRawColumns(row, { alias: 'cafe' });
-          cafe.place = Place.fromRawColumns(row, { alias: 'place' });
+          const cafe = Cafe.fromRawColumns(row, { alias: 'cafe', connection });
+          cafe.place = Place.fromRawColumns(row, {
+            alias: 'place',
+            connection,
+          });
           cafe.statistic = CafeStatistic.fromRawColumns(row, {
             alias: 'cafe_statistic',
+            connection,
           });
           cafe.imageCount = CafeImageCount.fromRawColumns(row, {
             alias: 'cafe_image_count',
+            connection,
           });
           cafe.images = [];
 
@@ -486,8 +548,18 @@ export const getList = handler<
           keyword: joi.string().min(1).max(255),
           showHidden: joi.boolean(),
           showHiddenImages: joi.boolean(),
+          placeId: joi.string().uuid({ version: 'uuidv4' }),
+          placeName: joi.string().min(1).max(255),
         })
+        .oxor('placeId', 'placeName')
         .required(),
+    },
+    transform: {
+      query: [
+        { key: 'limit', type: TransformedSchemaTypes.integer },
+        { key: 'showHidden', type: TransformedSchemaTypes.boolean },
+        { key: 'showHiddenImages', type: TransformedSchemaTypes.boolean },
+      ],
     },
     requiredRules: (ctx) => [
       ...(ctx.query.showHidden ?? false
@@ -513,8 +585,8 @@ export const getList = handler<
 );
 
 export const create = handler<
-  VariablesMap,
-  VariablesMap,
+  TransformedVariablesMap,
+  TransformedVariablesMap,
   {
     name: string;
     placeId: string;
@@ -584,7 +656,7 @@ export const create = handler<
         })
         .execute();
 
-      return createCafeWithImagesLoader(ctx, { manager }).load(cafe.id);
+      return createCafeWithImagesLoader(ctx.state, { manager }).load(cafe.id);
     });
 
     ctx.status = HTTP_CREATED;
@@ -657,7 +729,8 @@ export const updateOne = handler<
           }
 
           return Cafe.fromRawColumns(
-            (updateResult.raw as Record<string, unknown>[])[0]
+            (updateResult.raw as Record<string, unknown>[])[0],
+            { connection }
           );
         })
         .catch((e: { code: string }) => {
@@ -670,7 +743,7 @@ export const updateOne = handler<
           throw e;
         });
 
-      return createCafeWithImagesLoader(ctx, {
+      return createCafeWithImagesLoader(ctx.state, {
         manager,
         showHiddenImages,
       }).load(updated.id);
@@ -701,6 +774,11 @@ export const updateOne = handler<
         })
         .or('name', 'placeId', 'metadata', 'state')
         .required(),
+    },
+    transform: {
+      query: [
+        { key: 'showHiddenImages', type: TransformedSchemaTypes.boolean },
+      ],
     },
     requiredRules: (ctx) =>
       new OperationSchema({

@@ -1,18 +1,22 @@
+import {
+  Cafe,
+  CafeState,
+  CafeImage,
+  CafeImageState,
+  CafeImageCount,
+  CafeStatistic,
+  Place,
+} from '@coffee-hmm/common';
 import { Connection } from 'typeorm';
-import Cafe, { CafeState } from '../entities/cafe';
-import CafeImage, { CafeImageState } from '../entities/cafeImage';
-import CafeImageCount from '../entities/cafeImageCount';
-import CafeStatistic from '../entities/cafeStatistic';
-import Place from '../entities/place';
 
 export const setupPlace = async (
   connection: Connection,
-  { name }: { name: string }
+  { name, pinned }: { name: string; pinned?: boolean }
 ) => {
   const place = await connection
     .createQueryBuilder(Place, 'place')
     .insert()
-    .values({ name })
+    .values({ name, pinned: pinned ?? false })
     .returning(Place.columns)
     .execute()
     .then((insertResult) =>

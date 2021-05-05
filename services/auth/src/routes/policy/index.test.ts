@@ -1,3 +1,14 @@
+import {
+  Policy,
+  User,
+  AuthProvider,
+  UserState,
+  UserProfile,
+  IamPolicy,
+  IamPolicyObject,
+  IamRule,
+  OperationType,
+} from '@coffee-hmm/common';
 import pLimit from 'p-limit';
 import { SuperTest, Test } from 'supertest';
 import { Connection, createConnection, DeepPartial } from 'typeorm';
@@ -8,18 +19,9 @@ import {
   HTTP_NOT_FOUND,
   HTTP_OK,
 } from '../../const';
-import Policy from '../../entities/policy';
-import User, { AuthProvider, UserState } from '../../entities/user';
-import UserProfile from '../../entities/userProfile';
 import { cleanDatabase, closeServer, openServer, ormConfigs } from '../../test';
 import { KoaServer } from '../../types/koa';
 import { env } from '../../util';
-import {
-  IamPolicy,
-  IamPolicyObject,
-  IamRule,
-  OperationType,
-} from '../../util/iam';
 
 let connection: Connection;
 let server: KoaServer;

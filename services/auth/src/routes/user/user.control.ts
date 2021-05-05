@@ -1,16 +1,25 @@
 import '../../util/extension';
 
+import {
+  User,
+  UserState,
+  UserStateStrings,
+  UserProfile,
+  Exception,
+  ExceptionCode,
+  OperationSchema,
+  OperationType,
+} from '@coffee-hmm/common';
 import Joi from 'joi';
 import { FOREIGN_KEY_VIOLATION } from 'pg-error-constants';
 import { DeepPartial, getManager, getRepository } from 'typeorm';
 import { HTTP_OK } from '../../const';
-import User, { UserState, UserStateStrings } from '../../entities/user';
-import UserProfile from '../../entities/userProfile';
 import { SortOrder, SortOrderStrings } from '../../types';
-import { VariablesMap } from '../../types/koa';
+import {
+  TransformedSchemaTypes,
+  TransformedVariablesMap,
+} from '../../types/koa';
 import { enumKeyStrings } from '../../util';
-import Exception, { ExceptionCode } from '../../util/error';
-import { OperationSchema, OperationType } from '../../util/iam';
 import handler from '../handler';
 
 export const getSingleUser = handler<{
@@ -83,7 +92,7 @@ enum UserListOrder {
 type UserListOrderStrings = keyof typeof UserListOrder;
 
 export const getUserList = handler<
-  VariablesMap,
+  TransformedVariablesMap,
   {
     limit: number;
     cursor?: string;
@@ -101,7 +110,7 @@ export const getUserList = handler<
     const orderBy = UserListOrder[orderByString];
     const order = SortOrder[orderString];
 
-    await ctx.state.connection();
+    const connection = await ctx.state.connection();
 
     let queryBuilder = getRepository(User).createQueryBuilder('user').select();
 
@@ -181,7 +190,9 @@ export const getUserList = handler<
     const { users, cursor: nextCursor } = await queryBuilder
       .getRawMany()
       .then((rows: (DeepPartial<User> & { cursor: string })[]) => ({
-        users: rows.map((row) => User.fromRawColumns(row, { alias: 'user' })),
+        users: rows.map((row) =>
+          User.fromRawColumns(row, { alias: 'user', connection })
+        ),
         cursor: rows[rows.length - 1]?.cursor,
       }));
 
@@ -204,6 +215,9 @@ export const getUserList = handler<
         })
         .required(),
     },
+    transform: {
+      query: [{ key: 'limit', type: TransformedSchemaTypes.integer }],
+    },
     requiredRules: new OperationSchema({
       operationType: OperationType.query,
       operation: 'auth.user',
@@ -216,7 +230,7 @@ export const putUserState = handler<
   {
     userId: string;
   },
-  VariablesMap,
+  TransformedVariablesMap,
   {
     state: UserStateStrings;
   }
@@ -229,7 +243,7 @@ export const putUserState = handler<
     const { userId } = ctx.params;
     const state = UserState[ctx.request.body.state];
 
-    await ctx.state.connection();
+    const connection = await ctx.state.connection();
 
     const repo = getRepository(User);
     const updated = await repo
@@ -240,7 +254,10 @@ export const putUserState = handler<
       .returning(User.columns)
       .execute()
       .then((updateResult) =>
-        User.fromRawColumns((updateResult.raw as Record<string, unknown>[])[0])
+        User.fromRawColumns(
+          (updateResult.raw as Record<string, unknown>[])[0],
+          { connection }
+        )
       );
 
     ctx.status = HTTP_OK;
@@ -310,7 +327,7 @@ export const putUserProfile = handler<
   {
     userId: string;
   },
-  VariablesMap,
+  TransformedVariablesMap,
   {
     name?: string;
     email?: string | null;
@@ -324,7 +341,7 @@ export const putUserProfile = handler<
     const { userId } = ctx.params;
     const { name, email } = ctx.request.body;
 
-    await ctx.state.connection();
+    const connection = await ctx.state.connection();
 
     const user = await ctx.state.loaders.user.load(userId);
 
@@ -337,7 +354,8 @@ export const putUserProfile = handler<
       .execute()
       .then((updateResult) =>
         UserProfile.fromRawColumns(
-          (updateResult.raw as Record<string, unknown>[])[0]
+          (updateResult.raw as Record<string, unknown>[])[0],
+          { connection }
         )
       );
 
@@ -414,7 +432,7 @@ export const putUserPolicy = handler<
   {
     userId: string;
   },
-  VariablesMap,
+  TransformedVariablesMap,
   {
     policyId: string;
   }
@@ -427,7 +445,7 @@ export const putUserPolicy = handler<
     const { userId } = ctx.params;
     const { policyId } = ctx.request.body;
 
-    await ctx.state.connection();
+    const connection = await ctx.state.connection();
 
     const updated = await getManager()
       .createQueryBuilder(User, 'user')
@@ -439,7 +457,8 @@ export const putUserPolicy = handler<
       .then((updateResult) => {
         if (updateResult?.affected) {
           return User.fromRawColumns(
-            (updateResult.raw as Record<string, unknown>[])[0]
+            (updateResult.raw as Record<string, unknown>[])[0],
+            { connection }
           );
         }
         throw new Exception(ExceptionCode.notFound);

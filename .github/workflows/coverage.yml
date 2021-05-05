@@ -1,0 +1,49 @@
+name: coverage
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches:
+      - dev/server
+defaults:
+  run:
+    shell: bash
+jobs:
+  type-coverage:
+    runs-on: ubuntu-18.04
+    defaults:
+      run:
+        working-directory: ci
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+          node-version: "12"
+      - name: Install dependencies.
+        run: make deps
+      - name: Generate type coverage reports.
+        run: make report
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ci/coverage/app.json
+          flags: app
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ci/coverage/common.json
+          flags: common
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ci/coverage/jobs.json
+          flags: jobs
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ci/coverage/services_auth.json
+          flags: services_auth
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ci/coverage/services_http-api.json
+          flags: services_http-api
