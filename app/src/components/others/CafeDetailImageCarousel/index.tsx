@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
+import { Axis, Duration, SwipeablePanel } from '@inhibitor1217/react-swipeablepanel';
 import { StyledCarouselImage } from '../../../utils/styled';
 import { TypeCafe } from '../../../utils/type';
 import CarouselDetailImage from '../CarouselDetailImage';
 import PositionDotHorizontal from '../PositionDotHorizontal';
 import './index.css';
-import { Axis, SwipeablePanel } from '@inhibitor1217/react-swipeablepanel';
 
 type CafeDetailImageCarouselProps = {
     cafe: TypeCafe | null;
@@ -24,6 +24,8 @@ const CafeDetailImageCarousel = ({cafe}: CafeDetailImageCarouselProps) => {
                 <SwipeablePanel
                     axis={Axis.horizontal}
                     onPageChanged={setCurrentImageIndex}
+                    auto
+                    autoSlideInterval={Duration.from({ seconds: 4.5 })}
                     loop
                 >
                     {cafe.image.list.sort().map((image) => (
