@@ -1,48 +1,109 @@
+import {
+  Cafe,
+  Exception,
+  ExceptionCode,
+  Place,
+  OperationSchema,
+  OperationType,
+} from '@coffee-hmm/common';
 import joi from 'joi';
 import { FOREIGN_KEY_VIOLATION, UNIQUE_VIOLATION } from 'pg-error-constants';
-import { getRepository } from 'typeorm';
+import { getRepository, In } from 'typeorm';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
-import Place from '../../entities/place';
-import { VariablesMap } from '../../types/koa';
-import Exception, { ExceptionCode } from '../../util/error';
-import { OperationSchema, OperationType } from '../../util/iam';
+import {
+  TransformedSchemaTypes,
+  TransformedVariablesMap,
+} from '../../types/koa';
 import handler from '../handler';
 
-export const getList = handler(async (ctx) => {
-  await ctx.state.connection();
+export const getList = handler<TransformedVariablesMap, { pinned?: boolean }>(
+  async (ctx) => {
+    const { pinned = false } = ctx.query;
 
-  const places = await getRepository(Place)
-    .createQueryBuilder('place')
-    .select()
-    .getMany();
+    await ctx.state.connection();
 
-  ctx.status = HTTP_OK;
-  ctx.body = {
-    place: {
-      count: places.length,
-      list: places.map((place) => place.toJsonObject()),
+    let query = getRepository(Place).createQueryBuilder('place').select();
+
+    if (pinned) {
+      query = query.where({ pinned: true });
+    }
+
+    const places = await query.getMany();
+
+    const placeIds = places.map((place) => place.id);
+    const cafeCounts = await getRepository(Cafe)
+      .createQueryBuilder('cafe')
+      .select('cafe.fk_place_id AS "placeId", COUNT(cafe.id) AS "cafeCount"')
+      .where({ fkPlaceId: In(placeIds) })
+      .groupBy('cafe.fk_place_id')
+      .getRawMany()
+      .then((records: { placeId: string; cafeCount: string }[]) =>
+        Array.normalize(
+          records.map(({ placeId, cafeCount }) => ({
+            placeId,
+            cafeCount: parseInt(cafeCount, 10), // NOTE: getRawMany does not further process query result, so cafeCount is retrieved as string
+          })),
+          (record) => record.placeId
+        )
+      );
+
+    // NOTE: sorting could be expensive, so consider doing the work at database instead of lambda instance
+    const placeObjectsWithCafeCount = places
+      .map((place) =>
+        Object.assign(place.toJsonObject(), {
+          cafeCount: cafeCounts[place.id]?.cafeCount ?? 0,
+        })
+      )
+      .sort((one, other) => other.cafeCount - one.cafeCount);
+
+    ctx.status = HTTP_OK;
+    ctx.body = {
+      place: {
+        count: places.length,
+        list: placeObjectsWithCafeCount,
+      },
+    };
+  },
+  {
+    schema: {
+      query: joi
+        .object()
+        .keys({
+          pinned: joi.boolean(),
+        })
+        .required(),
     },
-  };
-});
+    transform: {
+      query: [{ key: 'pinned', type: TransformedSchemaTypes.boolean }],
+    },
+  }
+);
 
-export const create = handler<VariablesMap, VariablesMap, { name: string }>(
+export const create = handler<
+  TransformedVariablesMap,
+  TransformedVariablesMap,
+  { name: string; pinned?: boolean }
+>(
   async (ctx) => {
     if (!ctx.request.body) {
       throw new Exception(ExceptionCode.badRequest);
     }
 
-    const { name } = ctx.request.body;
+    const { name, pinned = false } = ctx.request.body;
 
-    await ctx.state.connection();
+    const connection = await ctx.state.connection();
 
     const inserted = await getRepository(Place)
       .createQueryBuilder()
       .insert()
-      .values({ name })
+      .values({ name, pinned })
       .returning(Place.columns)
       .execute()
       .then((insertResult) =>
-        Place.fromRawColumns((insertResult.raw as Record<string, unknown>[])[0])
+        Place.fromRawColumns(
+          (insertResult.raw as Record<string, unknown>[])[0],
+          { connection }
+        )
       )
       .catch((e: { code: string }) => {
         if (e.code === UNIQUE_VIOLATION) {
@@ -76,8 +137,8 @@ export const create = handler<VariablesMap, VariablesMap, { name: string }>(
 
 export const updateOne = handler<
   { placeId: string },
-  VariablesMap,
-  { name: string }
+  TransformedVariablesMap,
+  { name?: string; pinned?: boolean }
 >(
   async (ctx) => {
     if (!ctx.request.body) {
@@ -103,7 +164,8 @@ export const updateOne = handler<
           }
 
           return Place.fromRawColumns(
-            (updatedResult.raw as Record<string, unknown>[])[0]
+            (updatedResult.raw as Record<string, unknown>[])[0],
+            { connection }
           );
         })
         .catch((e: { code: string }) => {
@@ -143,8 +205,8 @@ export const updateOne = handler<
 );
 
 export const deleteList = handler<
-  VariablesMap,
-  VariablesMap,
+  TransformedVariablesMap,
+  TransformedVariablesMap,
   {
     list: string[];
   }

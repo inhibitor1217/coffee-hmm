@@ -1,10 +1,15 @@
+import {
+  generateRootPolicy,
+  IamPolicy,
+  IamPolicyObject,
+  Exception,
+  ExceptionCode,
+} from '@coffee-hmm/common';
 import { Middleware, Next, ParameterizedContext } from 'koa';
 import service from '../services';
 import { AppStage } from '../types/env';
 import { KoaContextState } from '../types/koa';
 import { appStage, env } from '../util';
-import Exception, { ExceptionCode } from '../util/error';
-import { generateRootPolicy, IamPolicy, IamPolicyObject } from '../util/iam';
 import { TokenSubject, verifyToken } from '../util/token';
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i;

@@ -1,3 +1,4 @@
+import { Exception, ExceptionCode } from '@coffee-hmm/common';
 import { Middleware, Next, ParameterizedContext } from 'koa';
 import {
   HTTP_BAD_REQUEST,
@@ -8,7 +9,6 @@ import {
   HTTP_UNAUTHORIZED,
 } from '../const';
 import { KoaContextState } from '../types/koa';
-import Exception, { ExceptionCode } from '../util/error';
 
 const error = (): Middleware<KoaContextState> => async (
   ctx: ParameterizedContext<KoaContextState>,

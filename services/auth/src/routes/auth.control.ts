@@ -1,18 +1,21 @@
+import {
+  Policy,
+  User,
+  AuthProvider,
+  UserState,
+  Exception,
+  ExceptionCode,
+  generateDefaultUserPolicy,
+  UserProfile,
+} from '@coffee-hmm/common';
 import firebaseAdmin from 'firebase-admin';
 import Joi from 'joi';
 import { UNIQUE_VIOLATION } from 'pg-error-constants';
 import { DeepPartial, getManager } from 'typeorm';
 import { HTTP_CREATED, HTTP_OK } from '../const';
-import Policy, { DEFAULT_USER_POLICY_NAME } from '../entities/policy';
-import User, {
-  AuthProvider,
-  parseFirebaseSignInProvider,
-  UserState,
-} from '../entities/user';
-import UserProfile from '../entities/userProfile';
-import { VariablesMap } from '../types/koa';
-import Exception, { ExceptionCode } from '../util/error';
-import { generateDefaultUserPolicy } from '../util/iam';
+import { DEFAULT_USER_POLICY_NAME } from '../entities/policy';
+import { parseFirebaseSignInProvider } from '../entities/user';
+import { TransformedVariablesMap } from '../types/koa';
 import { generateToken, TokenSubject } from '../util/token';
 import handler from './handler';
 
@@ -43,7 +46,7 @@ const verifyFirebaseIdToken = async (idToken: string) => {
 };
 
 export const register = handler<
-  VariablesMap,
+  TransformedVariablesMap,
   {
     id_token: string;
   },
@@ -84,7 +87,8 @@ export const register = handler<
         .execute()
         .then((insertResult) =>
           UserProfile.fromRawColumns(
-            (insertResult.raw as DeepPartial<UserProfile>[])[0]
+            (insertResult.raw as DeepPartial<UserProfile>[])[0],
+            { connection }
           )
         );
 
@@ -110,7 +114,8 @@ export const register = handler<
           .execute()
           .then((insertResult) =>
             Policy.fromRawColumns(
-              (insertResult.raw as DeepPartial<Policy>[])[0]
+              (insertResult.raw as DeepPartial<Policy>[])[0],
+              { connection }
             )
           );
 
@@ -131,7 +136,9 @@ export const register = handler<
         .returning(User.columns)
         .execute()
         .then((insertResult) =>
-          User.fromRawColumns((insertResult.raw as DeepPartial<User>[])[0])
+          User.fromRawColumns((insertResult.raw as DeepPartial<User>[])[0], {
+            connection,
+          })
         )
         .catch((e: { code: string }) => {
           if (e.code === UNIQUE_VIOLATION) {
@@ -170,7 +177,7 @@ export const register = handler<
 );
 
 export const token = handler<
-  VariablesMap,
+  TransformedVariablesMap,
   {
     id_token: string;
   }
@@ -240,7 +247,7 @@ export const token = handler<
 );
 
 export const me = handler<
-  VariablesMap,
+  TransformedVariablesMap,
   {
     id_token: string;
   }

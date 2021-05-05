@@ -1,3 +1,4 @@
+import { IamPolicy, IamRule, Place, OperationType } from '@coffee-hmm/common';
 import { SuperTest, Test } from 'supertest';
 import { Connection, createConnection } from 'typeorm';
 import * as uuid from 'uuid';
@@ -8,12 +9,10 @@ import {
   HTTP_NOT_FOUND,
   HTTP_OK,
 } from '../../const';
-import Place from '../../entities/place';
 import { cleanDatabase, closeServer, openServer, ormConfigs } from '../../test';
 import { setupCafe, setupPlace } from '../../test/util';
 import { KoaServer } from '../../types/koa';
 import { env } from '../../util';
-import { IamPolicy, IamRule, OperationType } from '../../util/iam';
 
 let connection: Connection;
 let server: KoaServer;
@@ -55,22 +54,81 @@ beforeEach(async () => {
 
 describe('Place - GET /place/list', () => {
   test('Can retrieve an entire list of places', async () => {
-    await Promise.all(
+    const places = await Promise.all(
       ['판교', '연남동', '양재', '성수동'].map((name) =>
         setupPlace(connection, { name })
       )
     );
 
+    await setupCafe(connection, { name: 'cafe_000', placeId: places[0].id });
+    await setupCafe(connection, { name: 'cafe_001', placeId: places[0].id });
+    await setupCafe(connection, { name: 'cafe_002', placeId: places[0].id });
+    await setupCafe(connection, { name: 'cafe_003', placeId: places[1].id });
+    await setupCafe(connection, { name: 'cafe_004', placeId: places[1].id });
+    await setupCafe(connection, { name: 'cafe_005', placeId: places[2].id });
+
     const response = await request.get('/place/list').expect(HTTP_OK);
     const {
       place: { count, list },
     } = response.body as {
-      place: { count: number; list: { id: string; name: string }[] };
+      place: {
+        count: number;
+        list: {
+          id: string;
+          name: string;
+          pinned: boolean;
+          cafeCount: number;
+        }[];
+      };
     };
     const names = list.map((item) => item.name);
 
     expect(count).toBe(4);
-    expect(names.sort()).toEqual(['판교', '연남동', '양재', '성수동'].sort());
+    expect(names).toEqual(['판교', '연남동', '양재', '성수동']);
+    expect(list[0].cafeCount).toBe(3);
+    expect(list[1].cafeCount).toBe(2);
+    expect(list[2].cafeCount).toBe(1);
+    expect(list[3].cafeCount).toBe(0);
+
+    list.forEach(({ pinned }) => expect(pinned).toBe(false));
+  });
+
+  test('Can retrieve a pinned list of places', async () => {
+    await setupPlace(connection, { name: '판교', pinned: true });
+    await setupPlace(connection, { name: '연남동', pinned: false });
+    const { id: placeId } = await setupPlace(connection, {
+      name: '양재',
+      pinned: true,
+    });
+    await setupPlace(connection, { name: '성수동', pinned: false });
+
+    await setupCafe(connection, { name: 'cafe_000', placeId });
+    await setupCafe(connection, { name: 'cafe_001', placeId });
+    await setupCafe(connection, { name: 'cafe_002', placeId });
+
+    const response = await request
+      .get('/place/list')
+      .query({ pinned: true })
+      .expect(HTTP_OK);
+    const {
+      place: { count, list },
+    } = response.body as {
+      place: {
+        count: number;
+        list: {
+          id: string;
+          name: string;
+          pinned: boolean;
+          cafeCount: number;
+        }[];
+      };
+    };
+    const names = list.map((item) => item.name);
+
+    expect(count).toBe(2);
+    expect(names).toEqual(['양재', '판교']);
+    expect(list[0].cafeCount).toBe(3);
+    expect(list[1].cafeCount).toBe(0);
   });
 });
 

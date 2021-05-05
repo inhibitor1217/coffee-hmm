@@ -1,3 +1,6 @@
+github_checks:
+  annotations: false
+
 comment:                  # this is a top-level key
   layout: "diff, flags, files"
   behavior: default
@@ -6,3 +9,4 @@ comment:                  # this is a top-level key
   require_head: yes       # [yes :: must have a head report to post]
   branches:               # branch names that can post comment
     - "dev/server"
+  after_n_builds: 4

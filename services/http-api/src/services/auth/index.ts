@@ -1,8 +1,13 @@
 import axios, { AxiosInstance } from 'axios';
+import {
+  Exception,
+  ExceptionCode,
+  IamPolicy,
+  IamRule,
+  OperationType,
+} from '@coffee-hmm/common';
 import PolicyModel, { PolicyModelObject } from '../../models/Policy';
 import { env, logLevel } from '../../util';
-import Exception, { ExceptionCode } from '../../util/error';
-import { IamPolicy, IamRule, OperationType } from '../../util/iam';
 import Logger from '../../util/logger';
 import { generateToken, TokenSubject } from '../../util/token';
 
