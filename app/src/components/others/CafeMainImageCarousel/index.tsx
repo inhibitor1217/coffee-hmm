@@ -1,5 +1,5 @@
 import React from 'react';
-import { Axis, SwipeablePanel } from '@inhibitor1217/react-swipeablepanel';
+import { Axis, Duration, SwipeablePanel } from '@inhibitor1217/react-swipeablepanel';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import introNavSlice from '../../../store/modules/intro-nav';
 import { currentIntroCafeListSelector, currentIntroPlaceSelector } from '../../../store/selectors/cafe';
@@ -28,6 +28,8 @@ const CafeMainImageCarousel = () => {
           axis={Axis.horizontal}
           initialPage={currentCafeIndex}
           onPageChanged={setCurrentCafeIndex}
+          auto
+          autoSlideInterval={Duration.from({ seconds: 4.5 })}
           loop
         >
           {cafeList?.map((cafe, index) => (
