@@ -10,10 +10,10 @@ function App() {
 
   return (
     <div className="App">
-      {isBrowser && <DesktopFallback/>}
+      {isBrowser && <DesktopFallback />}
       {isMobile && (
-        <BrowserRouter>        
-            <PageTemplate/>        
+        <BrowserRouter>
+          <PageTemplate />
         </BrowserRouter>
       )}
     </div>

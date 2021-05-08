@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const CafeNamePlaceholder = styled.div`
-  background-color: rgba(0, 0, 0, 0.10);
+  background-color: rgba(0, 0, 0, 0.1);
   width: 120px;
   height: 22px;
   border-radius: 4px;
