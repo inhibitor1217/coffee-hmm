@@ -5,7 +5,7 @@ import useFirebase from '../hooks/useFirebase';
 import DesktopFallback from './DesktopFallback';
 import PageTemplate from './PageTemplate';
 
-function App() {
+const App: React.FC = () => {
   useFirebase();
 
   return (
@@ -18,6 +18,6 @@ function App() {
       )}
     </div>
   );
-}
+};
 
 export default App;

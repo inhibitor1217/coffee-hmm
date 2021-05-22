@@ -8,7 +8,9 @@ type CarouselDetailImageProps = {
   image: string;
 };
 
-const CarouselDetailImage = ({ image }: CarouselDetailImageProps) => {
+const CarouselDetailImage: React.FC<CarouselDetailImageProps> = ({
+  image,
+}: CarouselDetailImageProps) => {
   const [isImageReady, setIsImageReady] = useState<boolean>(false);
 
   return (

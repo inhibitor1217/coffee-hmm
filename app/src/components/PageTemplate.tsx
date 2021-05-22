@@ -3,7 +3,7 @@ import { useLocation } from 'react-router';
 import Header from './common/Header';
 import Router from './Router';
 
-const PageTemplate = () => {
+const PageTemplate: React.FC = () => {
   const location = useLocation();
 
   return (

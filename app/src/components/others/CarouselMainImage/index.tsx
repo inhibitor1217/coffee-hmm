@@ -12,7 +12,10 @@ type CarouselMainImageProps = {
   index: number;
 };
 
-const CarouselMainImage = ({ cafe, index }: CarouselMainImageProps) => {
+const CarouselMainImage: React.FC<CarouselMainImageProps> = ({
+  cafe,
+  index,
+}: CarouselMainImageProps) => {
   const [isImageReady, setImageReady] = useState(false);
   const mainImage = cafe.image.list.find((image) => image.isMain);
   const dispatch = useAppDispatch();

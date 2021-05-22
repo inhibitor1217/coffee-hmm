@@ -9,7 +9,7 @@ interface HeaderProps {
   };
 }
 
-const Header = ({ location }: HeaderProps) => {
+const Header: React.FC<HeaderProps> = ({ location }: HeaderProps) => {
   const history = useHistory();
 
   return (

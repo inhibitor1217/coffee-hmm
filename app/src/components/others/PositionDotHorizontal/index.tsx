@@ -6,7 +6,7 @@ type PositionDotHorizontalProps = {
   currentIndex: number;
 };
 
-const PositionDotHorizontal = ({
+const PositionDotHorizontal: React.FC<PositionDotHorizontalProps> = ({
   dotNum,
   currentIndex,
 }: PositionDotHorizontalProps) => {

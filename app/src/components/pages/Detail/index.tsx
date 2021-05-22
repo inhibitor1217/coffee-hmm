@@ -5,7 +5,7 @@ import { getCafeById } from '../../api';
 import CafeDetail from '../../others/CafeDetail';
 import './index.css';
 
-const Detail = () => {
+const Detail: React.FC = () => {
   const { cafeId } = useParams<{ cafeId: string }>();
   const [cafe, setCafe] = useState<TypeCafe | null>(null);
 

@@ -18,7 +18,7 @@ import {
   CafeWebSearchPlaceholder,
 } from './styled';
 
-const CafeByPlace = () => {
+const CafeByPlace: React.FC = () => {
   const dispatch = useAppDispatch();
   const currentPlace = useAppSelector(currentIntroPlaceSelector);
   const currentCafe = useAppSelector(currentIntroCafeSelector);

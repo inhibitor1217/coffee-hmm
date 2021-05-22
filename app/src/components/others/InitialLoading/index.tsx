@@ -1,7 +1,7 @@
 import React from 'react';
 import './index.css';
 
-const InitialLoading = () => {
+const InitialLoading: React.FC = () => {
   return (
     <div className="initial-load-container">
       <div className="initial-load-row1">Your Own Café Guide</div>

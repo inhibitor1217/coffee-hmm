@@ -6,7 +6,7 @@ import InitialLoading from '../../others/InitialLoading';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { fetchPlaces } from '../../../store/modules/cafe';
 
-const Intro = () => {
+const Intro: React.FC = () => {
   const dispatch = useAppDispatch();
   const places = useAppSelector((state) => state.cafe.place?.list);
   const isInitialCafeImageReady = useAppSelector(

@@ -1,15 +1,15 @@
 import React, { lazy } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route, Redirect, RouteProps } from 'react-router-dom';
 import useAnalyticsPageView from '../hooks/useAnalyticsPageView';
 
 interface RouterProps {
-  location?: any;
+  location?: RouteProps['location'];
 }
 
 const IntroPage = lazy(() => import('./pages/Intro'));
 const CafeDetailPage = lazy(() => import('./pages/Detail'));
 
-const Router = (props: RouterProps) => {
+const Router: React.FC<RouterProps> = (props: RouterProps) => {
   useAnalyticsPageView();
 
   return (

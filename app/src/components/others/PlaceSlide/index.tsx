@@ -9,7 +9,7 @@ type PlaceSlideProps = {
   places: TypePlace[];
 };
 
-const PlaceSlide = ({ places }: PlaceSlideProps) => {
+const PlaceSlide: React.FC<PlaceSlideProps> = ({ places }: PlaceSlideProps) => {
   const dispatch = useAppDispatch();
   const handleClick = (index: number) =>
     dispatch(introNavSlice.actions.navigateToPlace(index));

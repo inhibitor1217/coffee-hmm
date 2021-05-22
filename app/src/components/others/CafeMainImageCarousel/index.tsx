@@ -9,7 +9,7 @@ import {
 import CarouselMainImage from '../CarouselMainImage';
 import { StyledCarouselImage } from '../../../utils/styled';
 
-const CafeMainImageCarousel = () => {
+const CafeMainImageCarousel: React.FC = () => {
   const dispatch = useAppDispatch();
   const currentPlace = useAppSelector(currentIntroPlaceSelector);
   const currentCafeIndex = useAppSelector(
