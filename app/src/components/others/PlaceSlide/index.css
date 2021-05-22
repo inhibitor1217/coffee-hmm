@@ -1,28 +1,27 @@
 .place-container {
-    width: 100%;
-    overflow-x: auto;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-content: flex-start;
+  width: 100%;
+  overflow-x: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
 }
 .place-wrapper {
-    min-width: 20%;
-	text-align: center;
+  min-width: 20%;
+  text-align: center;
 }
 .place-wrapper span {
-    font-size: 14px;
-	display: block;
+  font-size: 14px;
+  display: block;
 }
 .place-box {
-    height: 20px;
-    margin: 4px 8px;
-    border-radius: 4px;
+  height: 20px;
+  margin: 4px 8px;
+  border-radius: 4px;
 }
 .place-dot {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    margin: 0px auto;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  margin: 0px auto;
 }

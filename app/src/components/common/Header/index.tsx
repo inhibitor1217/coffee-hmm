@@ -13,11 +13,14 @@ interface HeaderProps {
 
 const Header = ({location}: HeaderProps) => {
     const history = useHistory();
+    const handleClick = () => {
+        history.push("/");
+    }
 
     return (
         <header>
             {location.pathname !== "/" && (
-                <button className="back-button" onClick={() => history.goBack()}><img src="/icons/baseline_navigate_before_black_18dp.png" alt=""/></button>
+                <button className="back-button" onClick={handleClick}><img src="/icons/baseline_navigate_before_black_18dp.png" alt=""/></button>
             )}
             <div className="header-title">coffee hmm</div>
                 <Link to={{pathname: COFFEEHMM_REPORT_URL}} target="_blank"><span className="airplane-icon"><img src="/icons/plane.png" alt=""/></span></Link> 
