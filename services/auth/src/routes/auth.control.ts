@@ -65,11 +65,8 @@ export const register = handler<
     const connection = await ctx.state.connection();
 
     const { id_token: idToken } = ctx.query;
-    const {
-      provider,
-      providerUserId,
-      providerUserEmail,
-    } = await verifyFirebaseIdToken(idToken);
+    const { provider, providerUserId, providerUserEmail } =
+      await verifyFirebaseIdToken(idToken);
 
     const {
       profile: { name: profileName, email: profileEmail },
