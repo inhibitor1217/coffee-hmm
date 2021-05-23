@@ -45,7 +45,7 @@ const readOrmConfig = (): Promise<ConnectionOptions> =>
         }
       }
     );
-  }).then((config) => (config as unknown) as ConnectionOptions);
+  }).then((config) => config as unknown as ConnectionOptions);
 
 export const connect = async () =>
   createConnection({

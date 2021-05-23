@@ -10,46 +10,45 @@ import {
 } from '../const';
 import { KoaContextState } from '../types/koa';
 
-const error = (): Middleware<KoaContextState> => async (
-  ctx: ParameterizedContext<KoaContextState>,
-  next: Next
-) => {
-  try {
-    await next();
-  } catch (e) {
-    if (Exception.isExceptionOf(e, ExceptionCode.badRequest)) {
-      ctx.status = HTTP_BAD_REQUEST;
-      ctx.body = { error: e.payload };
-      return;
-    }
+const error =
+  (): Middleware<KoaContextState> =>
+  async (ctx: ParameterizedContext<KoaContextState>, next: Next) => {
+    try {
+      await next();
+    } catch (e) {
+      if (Exception.isExceptionOf(e, ExceptionCode.badRequest)) {
+        ctx.status = HTTP_BAD_REQUEST;
+        ctx.body = { error: e.payload };
+        return;
+      }
 
-    if (Exception.isExceptionOf(e, ExceptionCode.unauthorized)) {
-      ctx.status = HTTP_UNAUTHORIZED;
-      ctx.body = { error: e.payload };
-      return;
-    }
+      if (Exception.isExceptionOf(e, ExceptionCode.unauthorized)) {
+        ctx.status = HTTP_UNAUTHORIZED;
+        ctx.body = { error: e.payload };
+        return;
+      }
 
-    if (Exception.isExceptionOf(e, ExceptionCode.forbidden)) {
-      ctx.status = HTTP_FORBIDDEN;
-      ctx.body = { error: e.payload };
-      return;
-    }
+      if (Exception.isExceptionOf(e, ExceptionCode.forbidden)) {
+        ctx.status = HTTP_FORBIDDEN;
+        ctx.body = { error: e.payload };
+        return;
+      }
 
-    if (Exception.isExceptionOf(e, ExceptionCode.notFound)) {
-      ctx.status = HTTP_NOT_FOUND;
-      ctx.body = { error: e.payload };
-      return;
-    }
+      if (Exception.isExceptionOf(e, ExceptionCode.notFound)) {
+        ctx.status = HTTP_NOT_FOUND;
+        ctx.body = { error: e.payload };
+        return;
+      }
 
-    if (Exception.isExceptionOf(e, ExceptionCode.notImplemented)) {
-      ctx.status = HTTP_NOT_IMPLEMENTED;
-      ctx.body = { error: e.payload };
-      return;
-    }
+      if (Exception.isExceptionOf(e, ExceptionCode.notImplemented)) {
+        ctx.status = HTTP_NOT_IMPLEMENTED;
+        ctx.body = { error: e.payload };
+        return;
+      }
 
-    ctx.state.logger.error(e);
-    ctx.status = HTTP_INTERNAL_SERVER_ERROR;
-  }
-};
+      ctx.state.logger.error(e);
+      ctx.status = HTTP_INTERNAL_SERVER_ERROR;
+    }
+  };
 
 export default error;

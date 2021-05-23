@@ -12,7 +12,8 @@ import { KoaContextState } from '../types/koa';
 import { appStage, env } from '../util';
 import { TokenSubject, verifyToken } from '../util/token';
 
-const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const uuid =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const bearerToken = /^Bearer ([a-zA-Z0-9\-_.]+)$/i;
 const parseBearerToken = (header: string): string =>
   (bearerToken.exec(header) || [])[1];
