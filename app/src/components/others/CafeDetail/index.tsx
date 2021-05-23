@@ -1,48 +1,39 @@
-import React, { useState } from 'react';
+import React from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { copyLink} from '../../../utils/function';
+import { copyLink, openSearch} from '../../../utils/function';
 import { StyledColumnFlex, StyledRowFlexCenter } from '../../../utils/styled';
-import { CafeInfo } from '../../../utils/type';
-import CafeImageSlide from '../CafeImageSlide';
-import WebSearchBottomPopup from '../WebSearchBottomPopup';
+import { TypeCafe } from '../../../utils/type';
+import CafeDetailImageCarousel from '../CafeDetailImageCarousel';
 import './index.css';
 
 type CafeDetailProps = {
-    cafe: CafeInfo;
-    setIsClicked: (click: boolean) => void;
+    cafe: TypeCafe | null;
+    setCafe: (cafe: TypeCafe | null) => void;
 }
 
-const CafeDetail = ({ cafe, setIsClicked}: CafeDetailProps) => {
-    const [isWebSearchClicked, setWebSearchClicked] = useState<boolean>(false);
-    const currentCopyLink = `https://coffee-hmm.inhibitor.io/cafe/${cafe.id}`;
+const CafeDetail = ({ cafe }: CafeDetailProps) => {
+    const currentCopyLink = `https://coffee-hmm.inhibitor.io/cafe/${cafe?.id}`;
 
     return(
         <div>
-            <button className="detail-close-button" onClick={() => setIsClicked(false)}><i className="material-icons">cancel</i></button>
-            <CafeImageSlide cafe={cafe}/>
+            <CafeDetailImageCarousel cafe={cafe}/>
 
             <StyledColumnFlex>
                 <div className="detail-info">
-                    <span>{cafe.name}</span>
-                    <span>open 9:00 ~ 19:00</span>
+                    <span className="detail-name">{cafe?.name}</span>
+                    <span className="detail-place">{cafe?.place.name}</span>
+                    <span className="detail-time">OPEN {cafe?.metadata?.hour}</span>
                 </div>
 
                 <StyledRowFlexCenter className="detail-button-wrapper">
-                    <div className="detail-button"><button className="detail-like"><i className="material-icons-round">favorite</i></button><span>좋아요</span></div>
-                    <div className="detail-button"> <CopyToClipboard text={currentCopyLink}><button className="detail-share" onClick={() => copyLink(cafe.name)}><i className="material-icons-round">share</i></button></CopyToClipboard><span>링크 공유</span></div>
-                    <div className="detail-button"><button className="detail-review"><i className="material-icons-round">create</i></button><span>카페 리뷰</span></div>
-                    <div className="detail-button"><button className="detail-photo"><i className="material-icons-round">photo_library</i></button><span>사진 업로드</span></div>  
+                    <div className="detail-button"><button className="detail-like"><img src="/icons/like-icon.png" alt="like"/></button><span>좋아요</span></div>
+                    <div className="detail-button"> <CopyToClipboard text={currentCopyLink}><button className="detail-share" onClick={() => copyLink(cafe?.name)}><img src="/icons/share-icon.png" alt="share"/></button></CopyToClipboard><span>흠 링크<br/>공유하기</span></div>
+                    <div className="detail-button" onClick={() => openSearch((cafe?.name || "")+" "+cafe?.place.name, "Naver")}><button className="detail-naver"><img src="/images/naver-icon.png" alt="naver"/></button><span>네이버 검색<br/>바로가기</span></div>
+                    <div className="detail-button" onClick={() => openSearch((cafe?.name || ""), "Instagram")}><button className="detail-insta"><img src="/images/insta-icon.png" alt="insta"/></button><span>인스타그램<br/>바로가기</span></div>  
                 </StyledRowFlexCenter>
-
-                <div className="detail-more">
-                    <h5>카페의 구체적인 정보가 필요하신가요?</h5>
-                    <div className="detail-more-button"><button onClick={() => setWebSearchClicked(true)}>네이버, 인스타 검색 바로가기</button></div>
-                  
-                    <WebSearchBottomPopup cafe={cafe} isWebSearchClicked={isWebSearchClicked} setWebSearchClicked={setWebSearchClicked}/>
-                </div>
             </StyledColumnFlex>
         </div>
     )
 }
 
-export default CafeDetail;
+export default React.memo(CafeDetail);

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-use-before-define */
 
 type AnyJson = boolean | number | string | null | JsonArray | JsonMap;

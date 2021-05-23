@@ -1,0 +1,17 @@
+.detail-carousel-dot-wrapper {
+  position: relative;
+}
+
+.detail-carousel-container {
+  height: 100vw; /* 가로세로 1:1 비율 */
+  max-height: 360px;
+  padding-top: 6.5vh;
+  position: relative;
+}
+
+.detail-carousel-container button {
+  font-weight: normal;
+  font-size: 12px;
+  color: #ffffff;
+  padding: 140px 10px;
+}

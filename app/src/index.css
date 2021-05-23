@@ -18,17 +18,8 @@ header {
 
 main {
   overflow-x: hidden;
-  overflow-y: auto;
-  padding-top: 48px;
-  padding-bottom: 56px;
-}
-
-footer {
-  position: fixed;
-  bottom: 0;
-  left:0;
-  right:0;
-  z-index: 9;
+  overflow-y: hidden;
+  padding-top: 6.5vh;
 }
 
 body {

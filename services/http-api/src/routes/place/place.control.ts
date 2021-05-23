@@ -124,10 +124,7 @@ export const create = handler<
     schema: {
       body: joi
         .object()
-        .keys({
-          name: joi.string().min(1).max(255).required(),
-          pinned: joi.boolean(),
-        })
+        .keys({ name: joi.string().min(1).max(255).required() })
         .required(),
     },
     requiredRules: new OperationSchema({
@@ -149,7 +146,7 @@ export const updateOne = handler<
     }
 
     const { placeId } = ctx.params;
-    const { name, pinned } = ctx.request.body;
+    const { name } = ctx.request.body;
 
     const connection = await ctx.state.connection();
 
@@ -157,7 +154,7 @@ export const updateOne = handler<
       manager
         .createQueryBuilder(Place, 'place')
         .update()
-        .set(Object.filterUndefinedKeys({ name, pinned }))
+        .set({ name })
         .where({ id: placeId })
         .returning(Place.columns)
         .execute()
@@ -175,7 +172,7 @@ export const updateOne = handler<
           if (e.code === UNIQUE_VIOLATION) {
             throw new Exception(
               ExceptionCode.badRequest,
-              `duplicate place name: ${name ?? 'undefined'}`
+              `duplicate place name: ${name}`
             );
           }
           throw e;
@@ -195,8 +192,7 @@ export const updateOne = handler<
         .required(),
       body: joi
         .object()
-        .keys({ name: joi.string().min(1).max(255), pinned: joi.boolean() })
-        .or('name', 'pinned')
+        .keys({ name: joi.string().min(1).max(255).required() })
         .required(),
     },
     requiredRules: (ctx) =>

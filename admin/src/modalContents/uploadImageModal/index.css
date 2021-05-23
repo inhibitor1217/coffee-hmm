@@ -1,0 +1,11 @@
+.modal-content-container{
+    font-size: 12px;
+    padding-top: 48px;
+}
+
+.upload-close-button {
+    padding: 8px;
+    display: block;
+    position: absolute;
+    right: 0px;
+}
