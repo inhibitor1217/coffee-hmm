@@ -49,8 +49,7 @@ Retrieve data of a single cafe.
       "id": "11111111-1111-1111-1111-111111111111",
       "createdAt": "2020-01-01T00:00:00.000Z",
       "updatedAt": "2020-01-01T00:00:00.000Z",
-      "name": "판교",
-      "pinned": true
+      "name": "판교"
     },
     "metadata": {
       "hour": "09:00 ~ 19:00"
@@ -113,8 +112,7 @@ The follows describe the detailed response schema.
       id: [uuid],
       createdAt: [ISODateString],
       updatedAt: [ISODateString],
-      name: string,
-      pinned: boolean
+      name: string
     },
     metadata: JSON,
     state: "active" | "hidden",
@@ -189,8 +187,7 @@ Retrieves a list of cafe as a feed, which is selected randomly (for now), among 
           "id": "11111111-1111-1111-1111-111111111111",
           "createdAt": "2020-01-01T00:00:00.000Z",
           "updatedAt": "2020-01-01T00:00:00.000Z",
-          "name": "판교",
-          "pinned": true
+          "name": "판교"
         },
         "metadata": {
           "hour": "09:00 ~ 19:00"
@@ -339,8 +336,7 @@ Retrieve a list of cafes.
           "id": "11111111-1111-1111-1111-111111111111",
           "createdAt": "2020-01-01T00:00:00.000Z",
           "updatedAt": "2020-01-01T00:00:00.000Z",
-          "name": "판교",
-          "pinned": true
+          "name": "판교"
         },
         "metadata": {
           "hour": "09:00 ~ 19:00"
@@ -396,8 +392,7 @@ Retrieve a list of cafes.
           "id": "11111111-1111-1111-1111-111111111111",
           "createdAt": "2020-01-01T00:00:00.000Z",
           "updatedAt": "2020-01-01T00:00:00.000Z",
-          "name": "판교",
-          "pinned": true
+          "name": "판교"
         },
         "metadata": {
           "hour": "09:00 ~ 19:00"
@@ -481,8 +476,7 @@ Creates a new cafe.
       "id": "11111111-1111-1111-1111-111111111111",
       "createdAt": "2020-01-01T00:00:00.000Z",
       "updatedAt": "2020-01-01T00:00:00.000Z",
-      "name": "판교",
-      "pinned": true
+      "name": "판교"
     },
     "metadata": {
       "hour": "09:00 ~ 20:00",
@@ -549,8 +543,7 @@ Creates a new cafe.
       "id": "11111111-1111-1111-1111-111111111111",
       "createdAt": "2020-01-01T00:00:00.000Z",
       "updatedAt": "2020-01-01T00:00:00.000Z",
-      "name": "판교",
-      "pinned": true
+      "name": "판교"
     },
     "metadata": {
       "hour": "10:00 ~ 22:00",
@@ -908,12 +901,6 @@ Retrieve an entire list of places. The list is sorted by number of cafes listed 
 (empty)
 ```
 
-**Query Parameters**
-
-| **Name** | **Type**  | **Required?**           | **Description**                                                                                                        |
-| -------- | --------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `pinned` | `boolean` | no (default is `false`) | If `pinned` is `true`, then the result will contain only pinned places. Otherwise, the result will contain all places. |
-
 **Response Example**
 
 ```
@@ -964,7 +951,6 @@ Creates a new place. The `name` should not exist among already existing places.
 ```
 {
   "name": "판교"
-  "pinned": false // optional (default is false)
 }
 ```
 
@@ -976,8 +962,7 @@ Creates a new place. The `name` should not exist among already existing places.
     "id": "11111111-1111-1111-1111-111111111111",
     "createdAt": "2020-01-01T00:00:00.000Z",
     "updatedAt": "2020-01-01T00:00:00.000Z",
-    "name": "판교",
-    "pinned": false
+    "name": "판교"
   }
 }
 ```
@@ -1000,8 +985,7 @@ Updates a place. The `name` should not exist among already existing places.
 
 ```
 {
-  "name": "판교", // optional
-  "pinned": true // optional
+  "name": "판교"
 }
 ```
 
@@ -1013,8 +997,7 @@ Updates a place. The `name` should not exist among already existing places.
     "id": "11111111-1111-1111-1111-111111111111",
     "createdAt": "2020-01-01T00:00:00.000Z",
     "updatedAt": "2020-01-01T00:00:00.000Z",
-    "name": "판교",
-    "pinned": true
+    "name": "판교"
   }
 }
 ```

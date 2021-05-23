@@ -1,0 +1,57 @@
+.cafe-preview-wrapper {
+  text-decoration: none;
+  color: inherit;
+}
+.cafe-preview-wrapper:focus, :hover, :visited, :link, :active {
+    text-decoration: none;
+    color: inherit;
+}
+.cafe-preview-info {
+  padding-left: 20px;
+}
+.cafe-preview-info > * + * {
+  margin-top: 4px;
+}
+.cafe-preview-info p {
+  margin-block-start: 0px;
+  margin-block-end: 0px;
+}
+.cafe-preview-info h4 {
+  height: 22px;
+}
+.cafe-preview-info-meta {
+  font-size: 14px;
+  height: 20px;
+}
+.cafe-preview-info-meta span {
+  margin-right: 6px;
+}
+.cafe-preview-info-by {
+  text-align: end;
+  font-size: 12px;
+  height: 16px;
+  padding-right: 8px;
+}
+.cafe-preview-carousel-wrapper {
+  margin-top: 8px;
+  width: 100%;
+  height: 100vw; /* 가로세로 1:1 비율 */
+}
+.cafe-preview-websearch {
+  height: 44px;
+}
+.cafe-preview-websearch span {
+  flex: 1;
+  text-align: center;
+  font-size: 12px;
+  padding: 14px 0px;
+}
+.web-naver {
+  color: #03c75a;
+}
+.web-instagram {
+  font-size: 15px;
+  line-height: 0.2em;
+  font-family: "Roboto Mono", monospace;
+  color: #d94854;
+}

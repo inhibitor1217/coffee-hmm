@@ -1,15 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Alef&family=Modak&family=Poor+Story&display=swap');
-
-.detail-close-button {
-    color: #F2D6A2;
-    padding: 4px;
-    position: absolute;
-    top: 4px;
-    right: 4px;
-}
-
 .detail-info {
-    padding: 10px 20px;
+    font-style: normal;
+    font-weight: normal;
+    min-width: 300px;
+    margin: 0 auto;
 }
 
 .detail-info img {
@@ -19,12 +12,9 @@
 }
 
 .detail-info span{
-    font-family: 'Poor Story', cursive;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
-    padding-right: 10px;
-    color: #ffffff;
+    font-size: 14px;
+    margin-right: 10px;
+    color: #000000;
 }
 
 .detail-button-wrapper {
@@ -32,72 +22,73 @@
 }
 
 .detail-button {
-    padding: 8px 20px;
+    padding: 20px;
     text-align: center;
 }
-
 .detail-button button{
     width: 48px;
     height: 48px;
     box-sizing: border-box;
     border-radius: 8px;
 }
-
 .detail-button span {
     display: block;
-    font-family: 'Poor Story', cursive;
     font-style: normal;
     font-weight: normal;
-    font-size: 12px;
-    color: #ffffff;
+    font-size: 11px;
+    padding-top: 4px;
+    color: rgba(0,0,0,0.9);
 }
 
 .detail-like {
-    border: 1px solid #E7C7D6; 
+    border: 1px solid #FF7979; 
+}
+.detail-like img {
+    width: 24px;
+    height: 24px;
 }
 
 .detail-share {
+    border: 1px solid #FFCC66;
+}
+.detail-share img {
+    width: 24px;
+    height: 24px;
+}
+
+.detail-naver {
     border: 1px solid #B7D996;
 }
-
-.detail-review {
-    border: 1px solid #84D9D0;
+.detail-naver img {
+    width: 24px;
+    height: 24px;
+    padding-top: 4px;
+    object-fit: cover;
 }
 
-.detail-photo {
-    border: 1px solid #CAE5E1;
+.detail-insta {
+    border: 1px solid #E7C7D6;
+}
+.detail-insta img {
+    width: 24px;
+    height: 24px;
+    padding-top: 4px;
+    object-fit: cover;
 }
 
 .detail-more {
     text-align: center;
 }
 
-.detail-more h5{
-    font-family: 'Poor Story', cursive;
-    font-style: normal;
-    font-weight: normal;
-    color: #ffffff;
-    padding: 20px 0px;
-}
-
-.detail-more-button button {
-    width: 180px;
-    height: 36px;
-    border: 1px solid #F2D6A2;
-    box-sizing: border-box;
-    border-radius: 8px;
-
-    font-family: 'Poor Story', cursive;
-    font-style: normal;
-    font-weight: normal;
-    color: #F2D6A2;
-}
-
-.detail-button i {
-    font-size: 20px;
-    color: #ffffff;
-}
-
 .detail-container {
     padding-bottom: 20px;
+}
+
+.detail-name {
+   font-weight: bold;
+}
+
+.detail-time {
+    display: block;
+    padding-top: 4px;
 }

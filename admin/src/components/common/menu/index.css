@@ -1,0 +1,39 @@
+.menu {
+    height: 100%;
+    background-color: #ffffff;
+    transition: all 0.5s ease 0s;
+
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    overflow: hidden;
+}
+
+.menu i{
+    font-size: 24px;
+    color: #000000;
+    transition: all 0.5s ease 0s;
+}
+
+.menu-close{
+    position: absolute;
+    top: 72px;
+    left: 12px;
+}
+
+.menu-open{
+    position: absolute;
+    top: 72px;
+    left: 36px;
+    transform: rotate(90deg);
+}
+
+.business {
+    position: absolute;
+    top: 240px;
+}
+
+.chart {
+    position: absolute;
+    top: 312px;
+}

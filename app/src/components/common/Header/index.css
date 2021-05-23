@@ -1,20 +1,35 @@
-@import url('https://fonts.googleapis.com/css2?family=Alef&family=Poor+Story&display=swap');
-
 header {
     width: 100%;
-    height: 48px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    height: 6.5vh;
+    text-align: center;
+    background-color: #ffffff;
 }
-
+.header-title  {
+    font-size: 12px;
+    padding-top: 14px;
+}
 header #home-link {
     text-decoration: none;
 }
-
-.header-searchvalue {
-    font-family: 'Poor Story', cursive;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
+.back-button {
+    padding: 12px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+.back-button img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+.airplane-icon {
+    padding: 12px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+.airplane-icon img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
 }

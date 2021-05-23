@@ -1,0 +1,9 @@
+{
+  "short_name": "Coffee Hmm Admin",
+  "name": "Coffee Hmm Admin Page",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
