@@ -65,6 +65,7 @@
   },
   "dependencies": {
     "@coffee-hmm/common": "npm:@inhibitor1217/coffee-hmm-common",
+    "@inhibitor1217/coffee-hmm-common": "^0.1.0",
     "@koa/cors": "^3.1.0",
     "@koa/router": "^10.0.0",
     "aws-sdk": "^2.819.0",
