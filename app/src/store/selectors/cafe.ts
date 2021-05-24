@@ -1,24 +1,24 @@
-import { createSelector } from "reselect";
-import { RootState } from "..";
-import { TypeCafe, TypePlace } from "../../utils/type";
+import { createSelector } from 'reselect';
+import { RootState } from '..';
+import { TypeCafe, TypePlace } from '../../utils/type';
 
 export const currentIntroPlaceSelector = createSelector<
-  RootState, 
-  TypePlace[] | undefined, 
-  number, 
+  RootState,
+  TypePlace[] | undefined,
+  number,
   TypePlace | undefined
 >(
   (state) => state.cafe.place?.list,
   (state) => state.introNav.currentPlaceIndex,
   (places, currentPlaceIndex) => {
     return places?.[currentPlaceIndex];
-  }
+  },
 );
 
 export const currentIntroCafeListSelector = createSelector<
   RootState,
   TypePlace | undefined,
-  { [placeId: string]: { list: TypeCafe[]; } },
+  { [placeId: string]: { list: TypeCafe[] } },
   TypeCafe[] | undefined
 >(
   currentIntroPlaceSelector,
@@ -29,7 +29,7 @@ export const currentIntroCafeListSelector = createSelector<
     }
 
     return cafeMap[place.id]?.list;
-  }
+  },
 );
 
 export const currentIntroCafeSelector = createSelector<
@@ -42,5 +42,5 @@ export const currentIntroCafeSelector = createSelector<
   (state) => state.introNav.currentCafeIndex,
   (cafeList, currentCafeIndex) => {
     return cafeList?.[currentCafeIndex];
-  }
+  },
 );

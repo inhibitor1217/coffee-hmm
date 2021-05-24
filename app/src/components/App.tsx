@@ -5,19 +5,19 @@ import useFirebase from '../hooks/useFirebase';
 import DesktopFallback from './DesktopFallback';
 import PageTemplate from './PageTemplate';
 
-function App() {
+const App: React.FC = () => {
   useFirebase();
 
   return (
     <div className="App">
-      {isBrowser && <DesktopFallback/>}
+      {isBrowser && <DesktopFallback />}
       {isMobile && (
-        <BrowserRouter>        
-            <PageTemplate/>        
+        <BrowserRouter>
+          <PageTemplate />
         </BrowserRouter>
       )}
     </div>
   );
-}
+};
 
 export default App;
