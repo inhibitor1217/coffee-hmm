@@ -27,10 +27,10 @@ const introNavSlice = createSlice({
       state.currentCafeIndex = action.payload;
     },
     setImageReady(state, action: PayloadAction<number>) {
-      if(action.payload === initialState.currentCafeIndex) {
+      if (action.payload === initialState.currentCafeIndex) {
         state.isInitialCafeImageReady = true;
       }
-    }
+    },
   },
 });
 
