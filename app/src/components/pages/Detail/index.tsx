@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { TypeCafe } from '../../../utils/type';
-import { getCafeById } from '../../api';
-import CafeDetail from '../../others/CafeDetail';
-import './index.css';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { TypeCafe } from "@types";
+import { getCafeById } from "../../api";
+import CafeDetail from "../../others/CafeDetail";
+import "./index.css";
 
 const Detail: React.FC = () => {
   const { cafeId } = useParams<{ cafeId: string }>();

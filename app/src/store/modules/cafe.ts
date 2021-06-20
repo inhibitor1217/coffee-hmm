@@ -50,7 +50,7 @@ export const fetchCafesByPlace = createAsyncThunk<
 });
 
 const cafeSlice = createSlice({
-  name: 'cafe',
+  name: "cafe",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

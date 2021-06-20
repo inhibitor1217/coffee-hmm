@@ -1,28 +1,27 @@
-.place-container {
-    width: 100%;
-    overflow-x: auto;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-content: flex-start;
+.wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
 }
-.place-wrapper {
-    min-width: 20%;
-	text-align: center;
+.place {
+  margin: 4px 8px;
 }
-.place-wrapper span {
-    font-size: 14px;
-	display: block;
+.text {
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 4px;
 }
-.place-box {
-    height: 20px;
-    margin: 4px 8px;
-    border-radius: 4px;
+.text.active {
+  background-color: rgba(196, 196, 196, 0.3);
 }
-.place-dot {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    margin: 0px auto;
+.dot {
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  margin: 0px auto;
+  margin-top: 5px;
+}
+.dot.active {
+  background-color: #ed6161;
 }

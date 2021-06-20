@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { COFFEEHMM_REPORT_URL } from '../../../utils/constant';
-import './index.css';
+import React from "react";
+import { Link, useHistory } from "react-router-dom";
+import { COFFEEHMM_REPORT_URL } from "../../../constants";
+import "./index.css";
 
 interface HeaderProps {
   location: {
@@ -9,12 +9,12 @@ interface HeaderProps {
   };
 }
 
-const Header: React.FC<HeaderProps> = ({ location }: HeaderProps) => {
+const Header = ({ location }: HeaderProps) => {
   const history = useHistory();
 
   return (
     <header>
-      {location.pathname !== '/' && (
+      {location.pathname !== "/" && (
         <button className="back-button" onClick={() => history.goBack()}>
           <img src="/icons/baseline_navigate_before_black_18dp.png" alt="" />
         </button>

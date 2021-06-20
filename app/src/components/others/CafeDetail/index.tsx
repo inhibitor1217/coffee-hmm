@@ -1,10 +1,10 @@
-import React from 'react';
-import CopyToClipboard from 'react-copy-to-clipboard';
-import { copyLink, openSearch } from '../../../utils/function';
-import { StyledColumnFlex, StyledRowFlexCenter } from '../../../utils/styled';
-import { TypeCafe } from '../../../utils/type';
-import CafeDetailImageCarousel from '../CafeDetailImageCarousel';
-import './index.css';
+import React from "react";
+import CopyToClipboard from "react-copy-to-clipboard";
+import { StyledColumnFlex, StyledRowFlexCenter } from "../../../utils/styled";
+import { TypeCafe } from "@types";
+import CafeDetailImageCarousel from "../CafeDetailImageCarousel";
+import "./index.css";
+import { copyLink, openSearch } from "../../../utils";
 
 type CafeDetailProps = {
   cafe: TypeCafe | null;
@@ -33,7 +33,6 @@ const CafeDetail = ({ cafe }: CafeDetailProps) => {
             <span>좋아요</span>
           </div>
           <div className="detail-button">
-            {' '}
             <CopyToClipboard text={currentCopyLink}>
               <button
                 className="detail-share"
@@ -51,7 +50,7 @@ const CafeDetail = ({ cafe }: CafeDetailProps) => {
           <div
             className="detail-button"
             onClick={() =>
-              openSearch((cafe?.name || '') + ' ' + cafe?.place.name, 'Naver')
+              openSearch((cafe?.name || "") + " " + cafe?.place.name, "Naver")
             }
           >
             <button className="detail-naver">
@@ -65,7 +64,7 @@ const CafeDetail = ({ cafe }: CafeDetailProps) => {
           </div>
           <div
             className="detail-button"
-            onClick={() => openSearch(cafe?.name || '', 'Instagram')}
+            onClick={() => openSearch(cafe?.name || "", "Instagram")}
           >
             <button className="detail-insta">
               <img src="/images/insta-icon.png" alt="insta" />
