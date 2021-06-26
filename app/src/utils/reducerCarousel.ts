@@ -1,4 +1,5 @@
-import { DOWN, initialCarouselState, LEFT, RIGHT, UP } from "../constants";
+import { initialCarouselState } from "constants/initialState";
+import { DOWN, LEFT, RIGHT, UP } from "constants/direction";
 
 export function reducerCarousel(state: any, action: any) {
   switch (action.type) {

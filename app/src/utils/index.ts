@@ -1,4 +1,4 @@
-export { appStage } from "./appStage";
+export { default as appStage } from "./appStage";
 export { copyLink } from "./copyLink";
 export { getOrder } from "./getOrder";
 export { onImageLoad } from "./onImageLoad";

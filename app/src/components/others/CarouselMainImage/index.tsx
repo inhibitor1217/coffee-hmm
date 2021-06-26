@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import { useAppDispatch } from "../../../store/hooks";
-import introNavSlice from "../../../store/modules/intro-nav";
-import { StyledSpinnerContainer } from "../../../utils/styled";
-import { TypeCafe } from "@types";
-import Spinner from "../../common/Spinner";
+
+import { TypeCafe } from "types";
+import { useAppDispatch } from "store/hooks";
+import introNavSlice from "store/modules/intro-nav";
+import { onImageLoad } from "utils";
+import { StyledSpinnerContainer } from "utils/styled";
+
+import Spinner from "components/common/Spinner";
+
 import "./index.css";
-import { onImageLoad } from "../../../utils";
 
 type CarouselMainImageProps = {
   cafe: TypeCafe;

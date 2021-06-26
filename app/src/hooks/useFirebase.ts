@@ -2,8 +2,8 @@ import React from "react";
 import firebase from "firebase/app";
 import "firebase/analytics";
 
-import { AppStage } from "../constants/enums/appStage";
-import { appStage } from "../utils";
+import { AppStage } from "constants/enums/appStage";
+import { appStage } from "utils";
 
 const firebaseConfigs: { [key: string]: Record<string, string> } = {
   [AppStage.development]: {

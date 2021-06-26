@@ -1,13 +1,16 @@
 import React, { useState } from "react";
+
 import {
   Axis,
   Duration,
   SwipeablePanel,
 } from "@inhibitor1217/react-swipeablepanel";
-import { StyledCarouselImage } from "../../../utils/styled";
-import { TypeCafe } from "@types";
+import { StyledCarouselImage } from "utils/styled";
+import { TypeCafe } from "types";
+
 import CarouselDetailImage from "../CarouselDetailImage";
 import PositionDotHorizontal from "../PositionDotHorizontal";
+
 import "./index.css";
 
 type CafeDetailImageCarouselProps = {

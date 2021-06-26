@@ -1,14 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import CafeMainImageCarousel from "../CafeMainImageCarousel";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { fetchCafesByPlace } from "../../../store/modules/cafe";
+
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { fetchCafesByPlace } from "store/modules/cafe";
 import {
   currentIntroCafeSelector,
   currentIntroPlaceSelector,
-} from "../../../store/selectors/cafe";
-import { StyledColumnFlex, StyledRowFlex } from "../../../utils/styled";
-import "./index.css";
+} from "store/selectors/cafe";
+import { openSearch } from "utils";
+import { StyledColumnFlex, StyledRowFlex } from "utils/styled";
+
+import CafeMainImageCarousel from "../CafeMainImageCarousel";
 import {
   CafeCreatorPlaceholder,
   CafeInfoPlaceholder,
@@ -16,7 +18,8 @@ import {
   CafePreviewPanelPlaceholder,
   CafeWebSearchPlaceholder,
 } from "./styled";
-import { openSearch } from "../../../utils";
+
+import "./index.css";
 
 const CafeByPlace = () => {
   const dispatch = useAppDispatch();

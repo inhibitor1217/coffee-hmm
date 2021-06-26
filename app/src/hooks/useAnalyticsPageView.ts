@@ -2,8 +2,9 @@ import React from "react";
 import { useHistory } from "react-router";
 import firebase from "firebase/app";
 import "firebase/analytics";
-import { AppStage } from "../constants/enums/appStage";
-import { appStage } from "../utils";
+
+import { AppStage } from "constants/enums/appStage";
+import { appStage } from "utils";
 
 const appNames: { [key: string]: string } = {
   [AppStage.development]: "coffee-hmm-local",

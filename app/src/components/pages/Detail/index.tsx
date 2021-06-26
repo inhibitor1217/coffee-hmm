@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { TypeCafe } from "@types";
-import { getCafeById } from "../../api";
-import CafeDetail from "../../others/CafeDetail";
+
+import { TypeCafe } from "types";
+
+import { getCafeById } from "components/api";
+import CafeDetail from "components/others/CafeDetail";
+
 import "./index.css";
 
 const Detail: React.FC = () => {

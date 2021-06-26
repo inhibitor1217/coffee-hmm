@@ -1,6 +1,6 @@
-import { createSelector } from 'reselect';
-import { RootState } from '..';
-import { TypeCafe, TypePlace } from '../../utils/type';
+import { createSelector } from "reselect";
+import { RootState } from "store";
+import { TypeCafe, TypePlace } from "types";
 
 export const currentIntroPlaceSelector = createSelector<
   RootState,

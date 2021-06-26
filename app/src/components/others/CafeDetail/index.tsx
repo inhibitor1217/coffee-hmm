@@ -1,10 +1,13 @@
 import React from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { StyledColumnFlex, StyledRowFlexCenter } from "../../../utils/styled";
-import { TypeCafe } from "@types";
+
+import { TypeCafe } from "types";
+import { copyLink, openSearch } from "utils";
+import { StyledColumnFlex } from "utils/styled";
+
 import CafeDetailImageCarousel from "../CafeDetailImageCarousel";
+
 import "./index.css";
-import { copyLink, openSearch } from "../../../utils";
 
 type CafeDetailProps = {
   cafe: TypeCafe | null;
@@ -25,13 +28,7 @@ const CafeDetail = ({ cafe }: CafeDetailProps) => {
           <span className="detail-time">OPEN {cafe?.metadata?.hour}</span>
         </div>
 
-        <StyledRowFlexCenter className="detail-button-wrapper">
-          <div className="detail-button">
-            <button className="detail-like">
-              <img src="/icons/like-icon.png" alt="like" />
-            </button>
-            <span>좋아요</span>
-          </div>
+        <div className="detail-button-wrapper">
           <div className="detail-button">
             <CopyToClipboard text={currentCopyLink}>
               <button
@@ -75,7 +72,7 @@ const CafeDetail = ({ cafe }: CafeDetailProps) => {
               바로가기
             </span>
           </div>
-        </StyledRowFlexCenter>
+        </div>
       </StyledColumnFlex>
     </div>
   );

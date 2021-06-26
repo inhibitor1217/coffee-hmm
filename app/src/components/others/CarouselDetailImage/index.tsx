@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { onImageLoad } from "../../../utils";
 
-import { StyledSpinnerContainer } from "../../../utils/styled";
-import Spinner from "../../common/Spinner";
+import { onImageLoad } from "utils";
+import { StyledSpinnerContainer } from "utils/styled";
+
+import Spinner from "components/common/Spinner";
+
 import "./index.css";
 
 type CarouselDetailImageProps = {

@@ -1,8 +1,9 @@
 import React from "react";
 import classNames from "classnames";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import introNavSlice from "../../../store/modules/intro-nav";
-import { TypePlace } from "@types";
+
+import { TypePlace } from "types";
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import introNavSlice from "store/modules/intro-nav";
 
 import "./index.css";
 
@@ -24,11 +25,7 @@ const PlaceSlide = ({ places }: PlaceSlideProps) => {
       {places.map((place, index) => {
         const isActive = currentPlaceIndex === index;
         return (
-          <div
-            className={classNames("place")}
-            key={place.id}
-            onClick={() => handleClick(index)}
-          >
+          <div key={place.id} onClick={() => handleClick(index)}>
             <span className={classNames("text", isActive && "active")}>
               {place.name}
             </span>

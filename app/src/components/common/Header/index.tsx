@@ -1,6 +1,8 @@
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
-import { COFFEEHMM_REPORT_URL } from "../../../constants";
+import { Link } from "react-router-dom";
+
+import { COFFEEHMM_REPORT_URL } from "constants/url";
+
 import "./index.css";
 
 interface HeaderProps {
@@ -10,12 +12,14 @@ interface HeaderProps {
 }
 
 const Header = ({ location }: HeaderProps) => {
-  const history = useHistory();
+  function handleBackClick() {
+    window.location.assign("https://www.coffeehmm.com");
+  }
 
   return (
     <header>
       {location.pathname !== "/" && (
-        <button className="back-button" onClick={() => history.goBack()}>
+        <button className="back-button" onClick={handleBackClick}>
           <img src="/icons/baseline_navigate_before_black_18dp.png" alt="" />
         </button>
       )}
