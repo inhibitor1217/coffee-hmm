@@ -1,5 +1,5 @@
 import React, { lazy } from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect, RouteProps } from "react-router-dom";
 
 import useAnalyticsPageView from "hooks/useAnalyticsPageView";
 

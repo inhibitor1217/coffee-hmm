@@ -1,1 +1,1 @@
-export const initialCarouselState = { pos: 0, sliding: false, dir: null };
+export const InitialCarouselState = { pos: 0, sliding: false, dir: null };

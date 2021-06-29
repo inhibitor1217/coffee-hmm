@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { LEFT, RIGHT } from './constant';
+import { LEFT, RIGHT } from 'constants/direction';
 
 export const StyledMainScale = styled.div`
   width: 100%;

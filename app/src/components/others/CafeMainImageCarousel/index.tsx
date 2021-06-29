@@ -19,11 +19,7 @@ const CafeMainImageCarousel: React.FC = () => {
   const dispatch = useAppDispatch();
   const currentPlace = useAppSelector(currentIntroPlaceSelector);
   const currentCafeIndex = useAppSelector(
-<<<<<<< HEAD
-    (state) => state.introNav.currentCafeIndex,
-=======
     (state) => state.introNav.currentCafeIndex
->>>>>>> fix: place 정렬 수정 및 백버튼 링크 이동 수정
   );
 
   const setCurrentCafeIndex = React.useCallback(
@@ -61,10 +57,7 @@ const CafeMainImageCarousel: React.FC = () => {
     //       "place"가 업데이트 될 때에만 cafeListPanel 을 다시 그립니다.
     //       currentCafeIndex 수정 시 cafeListPanel 이 업데이트되면,
     //       애니메이션이 정상적으로 실행되지 않습니다.
-<<<<<<< HEAD
-=======
     // eslint-disable-next-line react-hooks/exhaustive-deps
->>>>>>> fix: place 정렬 수정 및 백버튼 링크 이동 수정
   }, [currentPlace, cafeList, setCurrentCafeIndex]);
 
   return carousel;
