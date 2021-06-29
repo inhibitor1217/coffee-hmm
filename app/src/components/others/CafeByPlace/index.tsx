@@ -1,24 +1,27 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import CafeMainImageCarousel from '../CafeMainImageCarousel';
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { fetchCafesByPlace } from '../../../store/modules/cafe';
+import React from "react";
+import { Link } from "react-router-dom";
+
+import { useAppDispatch, useAppSelector } from "store/hooks";
+import { fetchCafesByPlace } from "store/modules/cafe";
 import {
   currentIntroCafeSelector,
   currentIntroPlaceSelector,
-} from '../../../store/selectors/cafe';
-import { openSearch } from '../../../utils/function';
-import { StyledColumnFlex, StyledRowFlex } from '../../../utils/styled';
-import './index.css';
+} from "store/selectors/cafe";
+import { openSearch } from "utils";
+import { StyledColumnFlex, StyledRowFlex } from "utils/styled";
+
+import CafeMainImageCarousel from "../CafeMainImageCarousel";
 import {
   CafeCreatorPlaceholder,
   CafeInfoPlaceholder,
   CafeNamePlaceholder,
   CafePreviewPanelPlaceholder,
   CafeWebSearchPlaceholder,
-} from './styled';
+} from "./styled";
 
-const CafeByPlace: React.FC = () => {
+import "./index.css";
+
+const CafeByPlace = () => {
   const dispatch = useAppDispatch();
   const currentPlace = useAppSelector(currentIntroPlaceSelector);
   const currentCafe = useAppSelector(currentIntroCafeSelector);
@@ -55,7 +58,7 @@ const CafeByPlace: React.FC = () => {
             <span>OPEN {currentCafe.metadata?.hour}</span>
           </p>
           <p className="cafe-preview-info-by">
-            {currentCafe.metadata?.creator || 'jyuunnii'} 님이 올려주신{' '}
+            {currentCafe.metadata?.creator || "jyuunnii"} 님이 올려주신{" "}
             {currentCafe.name}
           </p>
         </StyledColumnFlex>
@@ -66,12 +69,12 @@ const CafeByPlace: React.FC = () => {
       <StyledRowFlex className="cafe-preview-websearch">
         <span
           onClick={() =>
-            openSearch(`${currentCafe.name} ${currentCafe.place.name}`, 'Naver')
+            openSearch(`${currentCafe.name} ${currentCafe.place.name}`, "Naver")
           }
         >
           <b className="web-naver">N</b> 네이버 바로가기
         </span>
-        <span onClick={() => openSearch(currentCafe.name, 'Instagram')}>
+        <span onClick={() => openSearch(currentCafe.name, "Instagram")}>
           <b className="web-instagram">I</b> 인스타그램 바로가기
         </span>
       </StyledRowFlex>

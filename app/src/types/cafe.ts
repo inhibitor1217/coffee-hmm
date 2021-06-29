@@ -1,3 +1,5 @@
+import { TypePlace } from "./place";
+
 export type TypeCafe = {
   id: string;
   createdAt: string;
@@ -9,13 +11,6 @@ export type TypeCafe = {
   image: TypeCafeImageList;
   views: TypeCafeViews;
   numLikes: number;
-};
-
-export type TypePlace = {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  name: string;
 };
 
 export type TypeCafeImageList = {

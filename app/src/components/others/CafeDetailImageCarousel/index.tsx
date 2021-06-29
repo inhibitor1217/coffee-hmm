@@ -1,22 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+
 import {
   Axis,
   Duration,
   SwipeablePanel,
-} from '@inhibitor1217/react-swipeablepanel';
-import { StyledCarouselImage } from '../../../utils/styled';
-import { TypeCafe } from '../../../utils/type';
-import CarouselDetailImage from '../CarouselDetailImage';
-import PositionDotHorizontal from '../PositionDotHorizontal';
-import './index.css';
+} from "@inhibitor1217/react-swipeablepanel";
+import { StyledCarouselImage } from "utils/styled";
+import { TypeCafe } from "types";
+
+import CarouselDetailImage from "../CarouselDetailImage";
+import PositionDotHorizontal from "../PositionDotHorizontal";
+
+import "./index.css";
 
 type CafeDetailImageCarouselProps = {
   cafe: TypeCafe | null;
 };
 
-const CafeDetailImageCarousel: React.FC<CafeDetailImageCarouselProps> = ({
-  cafe,
-}: CafeDetailImageCarouselProps) => {
+const CafeDetailImageCarousel = ({ cafe }: CafeDetailImageCarouselProps) => {
   const imageNum = cafe?.image.count;
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 

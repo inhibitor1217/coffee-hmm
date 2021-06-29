@@ -1,8 +1,10 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { RootState } from '..';
-import { getCafeListByPlace, getPlaceList } from '../../components/api';
-import { TypeCafe, TypePlace } from '../../utils/type';
-import { DataAlreadyLoadedException } from '../exception';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
+import { TypeCafe, TypePlace } from "types";
+import { RootState } from "store";
+import { DataAlreadyLoadedException } from "store/exception";
+
+import { getCafeListByPlace, getPlaceList } from "components/api";
 
 type CafeState = {
   place?: {
@@ -50,7 +52,7 @@ export const fetchCafesByPlace = createAsyncThunk<
 });
 
 const cafeSlice = createSlice({
-  name: 'cafe',
+  name: "cafe",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

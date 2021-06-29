@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
-import { onImageLoad } from '../../../utils/function';
-import { StyledSpinnerContainer } from '../../../utils/styled';
-import Spinner from '../../common/Spinner';
-import './index.css';
+import React, { useState } from "react";
+
+import { onImageLoad } from "utils";
+import { StyledSpinnerContainer } from "utils/styled";
+
+import Spinner from "components/common/Spinner";
+
+import "./index.css";
 
 type CarouselDetailImageProps = {
   image: string;
 };
 
-const CarouselDetailImage: React.FC<CarouselDetailImageProps> = ({
-  image,
-}: CarouselDetailImageProps) => {
+const CarouselDetailImage = ({ image }: CarouselDetailImageProps) => {
   const [isImageReady, setIsImageReady] = useState<boolean>(false);
 
   return (
@@ -18,7 +19,7 @@ const CarouselDetailImage: React.FC<CarouselDetailImageProps> = ({
       <img
         src={image}
         alt="img"
-        style={{ display: isImageReady ? 'initial' : 'none' }}
+        style={{ display: isImageReady ? "initial" : "none" }}
         onLoad={() => onImageLoad(setIsImageReady)}
       />
       <StyledSpinnerContainer

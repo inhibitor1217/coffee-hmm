@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import { useAppDispatch } from '../../../store/hooks';
-import introNavSlice from '../../../store/modules/intro-nav';
-import { onImageLoad } from '../../../utils/function';
-import { StyledSpinnerContainer } from '../../../utils/styled';
-import { TypeCafe } from '../../../utils/type';
-import Spinner from '../../common/Spinner';
-import './index.css';
+import React, { useState } from "react";
+
+import { TypeCafe } from "types";
+import { useAppDispatch } from "store/hooks";
+import introNavSlice from "store/modules/intro-nav";
+import { onImageLoad } from "utils";
+import { StyledSpinnerContainer } from "utils/styled";
+
+import Spinner from "components/common/Spinner";
+
+import "./index.css";
 
 type CarouselMainImageProps = {
   cafe: TypeCafe;
   index: number;
 };
 
-const CarouselMainImage: React.FC<CarouselMainImageProps> = ({
-  cafe,
-  index,
-}: CarouselMainImageProps) => {
+const CarouselMainImage = ({ cafe, index }: CarouselMainImageProps) => {
   const [isImageReady, setImageReady] = useState(false);
   const mainImage = cafe.image.list.find((image) => image.isMain);
   const dispatch = useAppDispatch();
@@ -29,10 +29,10 @@ const CarouselMainImage: React.FC<CarouselMainImageProps> = ({
       {mainImage && (
         <img
           src={
-            cafe.image.count > 0 ? mainImage.relativeUri : '/images/coffee.png'
+            cafe.image.count > 0 ? mainImage.relativeUri : "/images/coffee.png"
           }
           alt="img"
-          style={{ display: isImageReady ? 'initial' : 'none' }}
+          style={{ display: isImageReady ? "initial" : "none" }}
           onLoad={handleLoad}
         />
       )}

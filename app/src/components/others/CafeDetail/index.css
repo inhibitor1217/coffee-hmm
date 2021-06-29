@@ -1,94 +1,97 @@
 .detail-info {
-    font-style: normal;
-    font-weight: normal;
-    min-width: 300px;
-    margin: 0 auto;
+  font-style: normal;
+  font-weight: normal;
+  min-width: 300px;
+  margin: 0 auto;
 }
 
 .detail-info img {
-    width: 36px;
-    height: 36px;
-    padding: 10px;
+  width: 36px;
+  height: 36px;
+  padding: 10px;
 }
 
-.detail-info span{
-    font-size: 14px;
-    margin-right: 10px;
-    color: #000000;
+.detail-info span {
+  font-size: 14px;
+  margin-right: 10px;
+  color: #000000;
 }
 
 .detail-button-wrapper {
-    text-align: center;
+  display: flex;
+  flex: column;
+  justify-content: space-around;
+  text-align: center;
 }
 
 .detail-button {
-    padding: 20px;
-    text-align: center;
+  padding: 20px;
+  text-align: center;
 }
-.detail-button button{
-    width: 48px;
-    height: 48px;
-    box-sizing: border-box;
-    border-radius: 8px;
+.detail-button button {
+  width: 48px;
+  height: 48px;
+  box-sizing: border-box;
+  border-radius: 8px;
 }
 .detail-button span {
-    display: block;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 11px;
-    padding-top: 4px;
-    color: rgba(0,0,0,0.9);
+  display: block;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 11px;
+  padding-top: 4px;
+  color: rgba(0, 0, 0, 0.9);
 }
 
 .detail-like {
-    border: 1px solid #FF7979; 
+  border: 1px solid #ff7979;
 }
 .detail-like img {
-    width: 24px;
-    height: 24px;
+  width: 24px;
+  height: 24px;
 }
 
 .detail-share {
-    border: 1px solid #FFCC66;
+  border: 1px solid #ffcc66;
 }
 .detail-share img {
-    width: 24px;
-    height: 24px;
+  width: 24px;
+  height: 24px;
 }
 
 .detail-naver {
-    border: 1px solid #B7D996;
+  border: 1px solid #b7d996;
 }
 .detail-naver img {
-    width: 24px;
-    height: 24px;
-    padding-top: 4px;
-    object-fit: cover;
+  width: 24px;
+  height: 24px;
+  padding-top: 4px;
+  object-fit: cover;
 }
 
 .detail-insta {
-    border: 1px solid #E7C7D6;
+  border: 1px solid #e7c7d6;
 }
 .detail-insta img {
-    width: 24px;
-    height: 24px;
-    padding-top: 4px;
-    object-fit: cover;
+  width: 24px;
+  height: 24px;
+  padding-top: 4px;
+  object-fit: cover;
 }
 
 .detail-more {
-    text-align: center;
+  text-align: center;
 }
 
 .detail-container {
-    padding-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 .detail-name {
-   font-weight: bold;
+  font-weight: bold;
 }
 
 .detail-time {
-    display: block;
-    padding-top: 4px;
+  display: block;
+  padding-top: 4px;
 }

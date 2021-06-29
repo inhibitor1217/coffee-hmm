@@ -7,9 +7,7 @@ header {
 .header-title  {
     font-size: 12px;
     padding-top: 14px;
-}
-header #home-link {
-    text-decoration: none;
+    color: black;
 }
 .back-button {
     padding: 12px;

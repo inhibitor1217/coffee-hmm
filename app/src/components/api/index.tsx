@@ -1,47 +1,47 @@
-import { serverUrl } from '../../utils/constant';
+import { SERVER_URL } from "constants/url";
 
 // Cafe
 export const getCafeListByPlace = async (place: string) => {
-  const cafes = await fetch(
-    serverUrl + `/cafe/feed?limit=64&placeName=${place}`,
+  let cafes = await fetch(
+    SERVER_URL + `/cafe/feed?limit=64&placeName=${place}`,
     {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      method: 'GET',
-    },
+      method: "GET",
+    }
   )
     .then((response) => response.json())
     .then((data) => {
       return data;
     })
-    .catch((error) => console.log('Error: ', error));
+    .catch((error) => console.log("Error: ", error));
 
   return cafes;
 };
 
 export const getCafeList = async () => {
-  const cafes = await fetch(serverUrl + `/cafe/list?limit=20`, {
+  let cafes = await fetch(SERVER_URL + `/cafe/list?limit=20`, {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    method: 'GET',
+    method: "GET",
   })
     .then((response) => response.json())
     .then((data) => {
       return data;
     })
-    .catch((error) => console.log('Error: ', error));
+    .catch((error) => console.log("Error: ", error));
 
   return cafes;
 };
 
 export const getPlaceList = async () => {
-  const places = await fetch(serverUrl + `/place/list`, {
+  let places = await fetch(SERVER_URL + `/place/list`, {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    method: 'GET',
+    method: "GET",
   })
     .then((response) => response.json())
     .then((data) => {
@@ -53,11 +53,11 @@ export const getPlaceList = async () => {
 };
 
 export const getCafeById = async (cafeId: string) => {
-  const cafe = await fetch(serverUrl + `/cafe/${cafeId}`, {
+  let cafe = await fetch(SERVER_URL + `/cafe/${cafeId}`, {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    method: 'GET',
+    method: "GET",
   })
     .then((response) => response.json())
     .then((data) => {
