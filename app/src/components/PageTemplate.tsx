@@ -1,7 +1,7 @@
-import React from 'react';
-import { useLocation } from 'react-router';
-import Header from './common/Header';
-import Router from './Router';
+import React from "react";
+import { useLocation } from "react-router";
+import Header from "./common/Header";
+import Router from "./Router";
 
 const PageTemplate: React.FC = () => {
   const location = useLocation();

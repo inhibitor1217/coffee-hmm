@@ -1,5 +1,5 @@
-import React from 'react';
-import './index.css';
+import React from "react";
+import "./index.css";
 
 type PositionDotHorizontalProps = {
   dotNum: number;
@@ -18,7 +18,7 @@ const PositionDotHorizontal: React.FC<PositionDotHorizontalProps> = ({
         return (
           <li
             style={{
-              backgroundColor: index === currentIndex ? '#595959' : '#D9D9D9',
+              backgroundColor: index === currentIndex ? "#595959" : "#D9D9D9",
             }}
             key={index}
           ></li>

@@ -17,7 +17,7 @@ const PlaceSlide = ({ places }: PlaceSlideProps) => {
     dispatch(introNavSlice.actions.navigateToPlace(index));
 
   const currentPlaceIndex = useAppSelector(
-    (state) => state.introNav.currentPlaceIndex
+    (state) => state.introNav.currentPlaceIndex,
   );
 
   return (
@@ -26,10 +26,10 @@ const PlaceSlide = ({ places }: PlaceSlideProps) => {
         const isActive = currentPlaceIndex === index;
         return (
           <div key={place.id} onClick={() => handleClick(index)}>
-            <span className={classNames("text", {active: isActive})}>
+            <span className={classNames("text", { active: isActive })}>
               {place.name}
             </span>
-            <span className={classNames("dot", {active: isActive})}></span>
+            <span className={classNames("dot", { active: isActive })}></span>
           </div>
         );
       })}

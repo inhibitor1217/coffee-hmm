@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type IntroNavState = {
   currentPlaceIndex: number;
@@ -15,7 +15,7 @@ const initialState: IntroNavState = {
 };
 
 const introNavSlice = createSlice({
-  name: 'introNav',
+  name: "introNav",
   initialState,
   reducers: {
     navigateToPlace(state, action: PayloadAction<number>) {

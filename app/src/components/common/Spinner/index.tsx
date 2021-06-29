@@ -1,5 +1,5 @@
-import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import React from "react";
+import styled, { keyframes } from "styled-components";
 
 interface SpinnerProps {
   size: number;
@@ -26,9 +26,9 @@ const StyledSpinner = styled.div<Partial<SpinnerProps>>`
     height: ${(props) => props.size}px;
   }
   border: ${(props) => props.size! / 8}px solid
-    ${(props) => (props.inverted ? '#ffffff' : props.pathColor || '#55AEF3')};
+    ${(props) => (props.inverted ? "#ffffff" : props.pathColor || "#55AEF3")};
   border-left: ${(props) => props.size! / 8}px solid
-    ${(props) => (props.inverted ? '#ffffff' : '#fafafa')};
+    ${(props) => (props.inverted ? "#ffffff" : "#fafafa")};
   animation: ${spinnerKeyframes} 1.1s infinite linear;
 `;
 

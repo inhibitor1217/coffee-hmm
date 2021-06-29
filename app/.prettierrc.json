@@ -1,11 +1,11 @@
 {
   "tabWidth": 2,
   "useTabs": false,
-  "singleQuote": true,
+  "singleQuote": false,
   "trailingComma": "all",
   "arrowParens": "always",
   "overrides": [
-      {
+    {
       "files": "*.md",
       "options": {
           "printWidth": 70,
@@ -13,6 +13,6 @@
           "trailingComma": "none",
           "proseWrap": "never"
       }
-      }
+    }
   ]
 }
