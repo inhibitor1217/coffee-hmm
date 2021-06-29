@@ -5,6 +5,7 @@
   "dependencies": {
     "@inhibitor1217/react-swipeablepanel": "^0.1.7",
     "@reduxjs/toolkit": "^1.5.0",
+    "classnames": "^2.3.1",
     "firebase": "^8.3.1",
     "react": "^17.0.1",
     "react-copy-to-clipboard": "^5.0.2",
@@ -31,7 +32,13 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-redux": "^7.1.16",
     "@types/react-router-dom": "^5.1.6",
-    "@types/styled-components": "^5.1.4"
+    "@types/styled-components": "^5.1.4",
+    "@typescript-eslint/eslint-plugin": "^4.22.1",
+    "@typescript-eslint/parser": "^4.22.1",
+    "eslint": "^7.26.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "prettier": "^2.2.1"
   },
   "scripts": {
     "start": "react-scripts start",
