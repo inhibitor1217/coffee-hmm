@@ -14,7 +14,7 @@ interface HeaderProps {
 const Header = ({ location }: HeaderProps) => {
   return (
     <header>
-      {location.pathname !== "/" && (
+      {location.pathname !== COFFEEHMM_MAIN_URL && (
         <Link to={{ pathname: COFFEEHMM_MAIN_URL }}>
           <button className="back-button">
             <img src="/icons/baseline_navigate_before_black_18dp.png" alt="" />

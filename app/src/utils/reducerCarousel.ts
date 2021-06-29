@@ -1,10 +1,10 @@
-import { InitialCarouselState } from "constants/initialState";
+import { INITIAL_CAROUSEL_STATE } from "constants/initialState";
 import { DOWN, LEFT, RIGHT, UP } from "constants/direction";
 
 export default function reducerCarousel(state: any, action: any) {
   switch (action.type) {
     case "reset":
-      return InitialCarouselState;
+      return INITIAL_CAROUSEL_STATE;
     case DOWN:
       return {
         ...state,
