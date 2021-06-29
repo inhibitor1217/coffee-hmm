@@ -1,8 +1,3 @@
-export type {
-  TypeCafe,
-  TypeCafeImageList,
-  TypeCafeImage,
-  TypeCafeMetadata,
-} from "./cafe";
+export * from "./cafe";
 
 export type { TypePlace } from "./place";

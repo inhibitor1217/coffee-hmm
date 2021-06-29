@@ -1,6 +1,6 @@
 import { isAndroid, isIOS, isMobile } from "react-device-detect";
 
-export function openSearch(searchedData: string, searchEngine: string) {
+export default function openSearch(searchedData: string, searchEngine: string) {
   const encodedData = encodeURIComponent(searchedData);
 
   if (isMobile) {

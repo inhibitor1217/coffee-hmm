@@ -8,9 +8,6 @@ header {
     font-size: 12px;
     padding-top: 14px;
 }
-header #home-link {
-    text-decoration: none;
-}
 .back-button {
     padding: 12px;
     position: absolute;

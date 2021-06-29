@@ -1,6 +1,6 @@
 export { default as appStage } from "./appStage";
-export { copyLink } from "./copyLink";
-export { getOrder } from "./getOrder";
-export { onImageLoad } from "./onImageLoad";
-export { openSearch } from "./openSearch";
-export { reducerCarousel } from "./reducerCarousel";
+export { default as copyLink } from "./copyLink";
+export { default as getOrder } from "./getOrder";
+export { default as onImageLoad } from "./onImageLoad";
+export { default as openSearch } from "./openSearch";
+export { default as reducerCarousel } from "./reducerCarousel";

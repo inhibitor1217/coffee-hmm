@@ -26,10 +26,10 @@ const PlaceSlide = ({ places }: PlaceSlideProps) => {
         const isActive = currentPlaceIndex === index;
         return (
           <div key={place.id} onClick={() => handleClick(index)}>
-            <span className={classNames("text", isActive && "active")}>
+            <span className={classNames("text", {active: isActive})}>
               {place.name}
             </span>
-            <span className={classNames("dot", isActive && "active")}></span>
+            <span className={classNames("dot", {active: isActive})}></span>
           </div>
         );
       })}
