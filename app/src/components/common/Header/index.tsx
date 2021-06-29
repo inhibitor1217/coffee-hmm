@@ -21,7 +21,9 @@ const Header = ({ location }: HeaderProps) => {
           </button>
         </Link>
       )}
-      <Link to={{pathname: COFFEEHMM_MAIN_URL }}><div className="header-title">coffee hmm</div></Link>
+      <Link to={{ pathname: COFFEEHMM_MAIN_URL }}>
+        <div className="header-title">coffee hmm</div>
+      </Link>
       <Link to={{ pathname: COFFEEHMM_REPORT_URL }} target="_blank">
         <span className="airplane-icon">
           <img src="/icons/plane.png" alt="" />

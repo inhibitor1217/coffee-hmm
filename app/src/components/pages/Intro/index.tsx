@@ -12,10 +12,10 @@ const Intro = () => {
   const dispatch = useAppDispatch();
   const places = useAppSelector((state) => state.cafe.place?.list);
   const isInitialCafeImageReady = useAppSelector(
-    (state) => state.introNav.isInitialCafeImageReady
+    (state) => state.introNav.isInitialCafeImageReady,
   );
   const hasInitialClick = useAppSelector(
-    (state) => state.introNav.hasInitialClick
+    (state) => state.introNav.hasInitialClick,
   );
   const isInitialLoading = !hasInitialClick && !isInitialCafeImageReady;
 

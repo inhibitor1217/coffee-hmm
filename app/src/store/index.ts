@@ -1,6 +1,6 @@
-import { configureStore } from '@reduxjs/toolkit';
-import cafeSlice from './modules/cafe';
-import introNavSlice from './modules/intro-nav';
+import { configureStore } from "@reduxjs/toolkit";
+import cafeSlice from "./modules/cafe";
+import introNavSlice from "./modules/intro-nav";
 
 const store = configureStore({
   reducer: {

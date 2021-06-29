@@ -25,7 +25,7 @@ export const fetchPlaces = createAsyncThunk<
   TypePlace[],
   void,
   { state: RootState }
->('cafe/fetchPlaces', async (_, { getState }) => {
+>("cafe/fetchPlaces", async (_, { getState }) => {
   if (getState().cafe.place) {
     throw new DataAlreadyLoadedException();
   }
@@ -38,7 +38,7 @@ export const fetchCafesByPlace = createAsyncThunk<
   { placeId: string; list: TypeCafe[] },
   TypePlace,
   { state: RootState }
->('cafe/fetchCafesByPlace', async (place: TypePlace, { getState }) => {
+>("cafe/fetchCafesByPlace", async (place: TypePlace, { getState }) => {
   const cafeRecord = getState().cafe.cafeMap[place.id];
   if (cafeRecord) {
     throw new DataAlreadyLoadedException();

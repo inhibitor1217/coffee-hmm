@@ -11,7 +11,7 @@ export default function openSearch(searchedData: string, searchEngine: string) {
             window
               .open(
                 "https://m.search.naver.com/search.naver?query=" + encodedData,
-                "_blank"
+                "_blank",
               )
               ?.focus();
             break;
@@ -20,7 +20,7 @@ export default function openSearch(searchedData: string, searchEngine: string) {
             window
               .open(
                 "https://www.instagram.com/explore/tags/" + encodedData,
-                "_blank"
+                "_blank",
               )
               ?.focus();
             break;
@@ -40,7 +40,7 @@ export default function openSearch(searchedData: string, searchEngine: string) {
             window
               .open(
                 "https://www.instagram.com/explore/tags/" + encodedData,
-                "_blank"
+                "_blank",
               )
               ?.focus();
             break;

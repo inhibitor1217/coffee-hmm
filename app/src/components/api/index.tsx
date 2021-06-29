@@ -2,14 +2,14 @@ import { SERVER_URL } from "constants/url";
 
 // Cafe
 export const getCafeListByPlace = async (place: string) => {
-  let cafes = await fetch(
+  const cafes = await fetch(
     SERVER_URL + `/cafe/feed?limit=64&placeName=${place}`,
     {
       headers: {
         "Content-Type": "application/json",
       },
       method: "GET",
-    }
+    },
   )
     .then((response) => response.json())
     .then((data) => {
@@ -21,7 +21,7 @@ export const getCafeListByPlace = async (place: string) => {
 };
 
 export const getCafeList = async () => {
-  let cafes = await fetch(SERVER_URL + `/cafe/list?limit=20`, {
+  const cafes = await fetch(SERVER_URL + `/cafe/list?limit=20`, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -37,7 +37,7 @@ export const getCafeList = async () => {
 };
 
 export const getPlaceList = async () => {
-  let places = await fetch(SERVER_URL + `/place/list`, {
+  const places = await fetch(SERVER_URL + `/place/list`, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -53,7 +53,7 @@ export const getPlaceList = async () => {
 };
 
 export const getCafeById = async (cafeId: string) => {
-  let cafe = await fetch(SERVER_URL + `/cafe/${cafeId}`, {
+  const cafe = await fetch(SERVER_URL + `/cafe/${cafeId}`, {
     headers: {
       "Content-Type": "application/json",
     },
