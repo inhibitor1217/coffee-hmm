@@ -9,5 +9,6 @@
     },
     "typescript.tsdk": "node_modules/typescript/lib",
     "javascript.preferences.importModuleSpecifier": "relative",
-    "typescript.preferences.importModuleSpecifier": "relative"
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
