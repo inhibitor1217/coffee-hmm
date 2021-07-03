@@ -6,7 +6,8 @@ import { env } from '../util';
 import Logger from '../util/logger';
 import scheduledEventHandler from '../util/scheduledEventHandler';
 
-const SITEMAP_FILENAME = 'release/sitemap.xml';
+const SITEMAP_S3_PATH = 'release/sitemap.xml';
+const SITEMAP_CF_PATH = 'sitemap.xml';
 
 function getCafeDetailPageSubUrl(cafeId: string) {
   return `/cafe/${cafeId}`;
@@ -25,21 +26,21 @@ export const generateSitemap = async (
 
   await S3Service.uploadFile(sitemapStr, {
     bucketName: env('SPA_S3_BUCKET_NAME'),
-    fileName: SITEMAP_FILENAME,
+    fileName: SITEMAP_S3_PATH,
     contentType: 'application/xml',
   });
 
   logger?.info(
-    `Uploaded ${SITEMAP_FILENAME} to S3 bucket ${env('SPA_S3_BUCKET_NAME')}.`
+    `Uploaded ${SITEMAP_S3_PATH} to S3 bucket ${env('SPA_S3_BUCKET_NAME')}.`
   );
 
   await CloudfrontService.invalidateCache(
     env('SPA_CLOUDFRONT_DISTRIBUTION_ID'),
-    [`/${SITEMAP_FILENAME}`]
+    [`/${SITEMAP_CF_PATH}`]
   );
 
   logger?.info(
-    `Invalidated cache of /${SITEMAP_FILENAME} of cloudfront distribution ${env(
+    `Invalidated cache of /${SITEMAP_CF_PATH} of cloudfront distribution ${env(
       'SPA_CLOUDFRONT_DISTRIBUTION_ID'
     )}.`
   );
