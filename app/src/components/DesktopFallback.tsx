@@ -1,6 +1,6 @@
 import React from "react";
 
-const DesktopFallback = () => {
+const DesktopFallback: React.FC = () => {
   return (
     <main className="desktop-fallback">
       <div>데스크탑 화면은 지원하지 않습니다.</div>

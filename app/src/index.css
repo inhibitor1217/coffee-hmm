@@ -49,6 +49,7 @@ button,
 select,
 a {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0.05);
+  cursor: none;
 }
 
 input {
@@ -57,6 +58,10 @@ input {
 
 textarea:focus, input:focus, button:focus{
   outline: none;
+}
+a:focus, a:link, a:hover, a:active {
+  text-decoration: none;
+  color: black;
 }
 
 h1, h2, h3, h4, h5, h6 {

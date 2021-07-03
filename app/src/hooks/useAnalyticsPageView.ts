@@ -1,12 +1,14 @@
-import React from 'react';
-import { useHistory } from 'react-router';
-import firebase from 'firebase/app';
-import 'firebase/analytics';
-import { appStage, AppStage } from '../utils/function';
+import React from "react";
+import { useHistory } from "react-router";
+import firebase from "firebase/app";
+import "firebase/analytics";
+
+import { AppStage } from "constants/enums/appStage";
+import { appStage } from "utils";
 
 const appNames: { [key: string]: string } = {
-  [AppStage.development]: 'coffee-hmm-local',
-  [AppStage.production]: 'coffee-hmm',
+  [AppStage.development]: "coffee-hmm-local",
+  [AppStage.production]: "coffee-hmm",
 };
 
 export default function useAnalyticsPageView() {
@@ -16,13 +18,13 @@ export default function useAnalyticsPageView() {
     const analytics = firebase.apps[0]?.analytics();
     const appName = appNames[appStage()];
 
-    analytics?.logEvent('screen_view', {
+    analytics?.logEvent("screen_view", {
       app_name: appName,
       screen_name: history.location.pathname,
     });
 
     const cleanup = history.listen((location) => {
-      analytics?.logEvent('screen_view', {
+      analytics?.logEvent("screen_view", {
         app_name: appName,
         screen_name: location.pathname,
       });

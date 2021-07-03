@@ -6,7 +6,7 @@ import { env } from '../util';
 import Logger from '../util/logger';
 import scheduledEventHandler from '../util/scheduledEventHandler';
 
-const SITEMAP_FILENAME = 'sitemap.xml';
+const SITEMAP_FILENAME = 'release/sitemap.xml';
 
 function getCafeDetailPageSubUrl(cafeId: string) {
   return `/cafe/${cafeId}`;

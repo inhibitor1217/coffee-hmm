@@ -1,7 +1,9 @@
-import React from 'react';
-import firebase from 'firebase/app';
-import 'firebase/analytics';
-import { appStage, AppStage } from '../utils/function';
+import React from "react";
+import firebase from "firebase/app";
+import "firebase/analytics";
+
+import { AppStage } from "constants/enums/appStage";
+import { appStage } from "utils";
 
 const firebaseConfigs: { [key: string]: Record<string, string> } = {
   [AppStage.development]: {
@@ -35,11 +37,13 @@ export default function useFirebase() {
     const firebaseConfig = firebaseConfigs[appStage()];
 
     if (!firebaseConfig) {
-      console.warn('Invalid firebase configuration. Skipping firebase initialization ...');
+      console.warn(
+        "Invalid firebase configuration. Skipping firebase initialization ...",
+      );
       return;
     }
 
     firebase.initializeApp(firebaseConfig);
     firebase.analytics();
   }, []);
-};
+}

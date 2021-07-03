@@ -36,7 +36,7 @@ const defaultProps: Partial<SpinnerProps> = {
   size: 32,
 };
 
-const Spinner = (props: SpinnerProps) => {
+const Spinner: React.FC<SpinnerProps> = (props: SpinnerProps) => {
   return <StyledSpinner size={props.size} pathColor={props.pathColor} />;
 };
 

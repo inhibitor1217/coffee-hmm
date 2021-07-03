@@ -1,30 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { TypeCafe } from '../../../utils/type';
-import { getCafeById } from '../../api';
-import CafeDetail from '../../others/CafeDetail';
-import './index.css';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-const Detail = () => {
-    const { cafeId } = useParams<{cafeId: string}>();
-    const [cafe, setCafe] = useState<TypeCafe | null>(null);
+import { TypeCafe } from "types";
 
-    useEffect(() => {
-        async function fetchData(){
-            await getCafeById(cafeId).then(data => {
-                if(data){
-                    setCafe(data.cafe);
-                }
-            });
+import { getCafeById } from "components/api";
+import CafeDetail from "components/others/CafeDetail";
+
+import "./index.css";
+
+const Detail: React.FC = () => {
+  const { cafeId } = useParams<{ cafeId: string }>();
+  const [cafe, setCafe] = useState<TypeCafe | null>(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      await getCafeById(cafeId).then((data) => {
+        if (data) {
+          setCafe(data.cafe);
         }
-        fetchData();
-    }, [cafeId])
+      });
+    }
+    fetchData();
+  }, [cafeId]);
 
-    return(
-        <div className="cafe-detail">
-            {cafe && <CafeDetail cafe={cafe} setCafe={setCafe}/>}
-        </div>
-    )
-}
+  return (
+    <div className="cafe-detail">
+      {cafe && <CafeDetail cafe={cafe} setCafe={setCafe} />}
+    </div>
+  );
+};
 
 export default Detail;

@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type IntroNavState = {
   currentPlaceIndex: number;
@@ -15,7 +15,7 @@ const initialState: IntroNavState = {
 };
 
 const introNavSlice = createSlice({
-  name: 'introNav',
+  name: "introNav",
   initialState,
   reducers: {
     navigateToPlace(state, action: PayloadAction<number>) {
@@ -27,10 +27,10 @@ const introNavSlice = createSlice({
       state.currentCafeIndex = action.payload;
     },
     setImageReady(state, action: PayloadAction<number>) {
-      if(action.payload === initialState.currentCafeIndex) {
+      if (action.payload === initialState.currentCafeIndex) {
         state.isInitialCafeImageReady = true;
       }
-    }
+    },
   },
 });
 
