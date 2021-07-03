@@ -9,17 +9,38 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@master
-      - uses: actions/setup-node@v1
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v1
         with:
           node-version: '12'
-      - run: yarn install
+      - name: Install yarn
+        run: npm install -g yarn
+      - name: Cache yarn dependencies
+        id: yarn-cache
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Install dependencies
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install
         working-directory: app
-      - run: yarn build
+      - name: Production build
+        run: yarn build
         working-directory: app
         env:
           CI: false # NOTE: this disables eslint warnings
-      - run: aws s3 cp --recursive --region ap-northeast-2 build/ s3://coffee-hmm.inhibitor.com/
+      - name: Upload output files on S3
+        run: aws s3 cp --recursive --region ap-northeast-2 build/ s3://coffee-hmm.inhibitor.com/
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
         working-directory: app
+      - name: Invalidate cloudfront cache
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CF_APP_DISTRIBUTION_ID }} --paths "/index.html"
