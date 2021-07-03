@@ -1,8 +1,8 @@
 name: release-app
 on:
   push:
-    branches:
-      - master
+    tags:
+      - 'app@*'
 
 jobs:
   build:
@@ -13,8 +13,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12'
-      - name: Install yarn
-        run: npm install -g yarn
       - name: Cache yarn dependencies
         id: yarn-cache
         uses: actions/cache@v2
@@ -22,7 +20,7 @@ jobs:
           cache-name: cache-node-modules
         with:
           path: node_modules
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('app/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
@@ -36,11 +34,16 @@ jobs:
         working-directory: app
         env:
           CI: false # NOTE: this disables eslint warnings
+      - name: Backup files on S3
+        run: aws s3 sync s3://coffee-hmm.inhibitor.com/release s3://coffee-hmm.inhibitor.com/prev --delete
       - name: Upload output files on S3
-        run: aws s3 cp --recursive --region ap-northeast-2 build/ s3://coffee-hmm.inhibitor.com/
+        run: aws s3 sync ./build s3://coffee-hmm.inhibitor.com/release --acl public-read --delete
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
         working-directory: app
       - name: Invalidate cloudfront cache
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CF_APP_DISTRIBUTION_ID }} --paths "/index.html"

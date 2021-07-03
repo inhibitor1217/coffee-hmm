@@ -1,6 +1,6 @@
 {
   "name": "coffee-hmm-app",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "private": true,
   "dependencies": {
     "@inhibitor1217/react-swipeablepanel": "^0.1.7",
