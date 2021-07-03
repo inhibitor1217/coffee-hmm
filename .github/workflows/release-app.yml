@@ -35,6 +35,9 @@ jobs:
         env:
           CI: false # NOTE: this disables eslint warnings
       - name: Backup files on S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
         run: aws s3 sync s3://coffee-hmm.inhibitor.com/release s3://coffee-hmm.inhibitor.com/prev --delete
       - name: Upload output files on S3
         run: aws s3 sync ./build s3://coffee-hmm.inhibitor.com/release --delete
