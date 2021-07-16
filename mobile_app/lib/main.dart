@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobile_app/type.dart';
 
 Future<PlaceListResponse> fetchPlaceList() async {
   final response = await http
@@ -17,59 +18,16 @@ Future<PlaceListResponse> fetchPlaceList() async {
   }
 }
 
-class PlaceListResponse {
-  final PlaceListType place;
+Future<CafeListResponse> fetchCafeListByPlace(String placeName) async {
+  final response = await http.get(Uri.parse(
+      'https://release.api.coffee-hmm.inhibitor.io/cafe/feed?limit=64&placeName=${placeName}'));
 
-  PlaceListResponse({required this.place});
+  if (response.statusCode == 200) {
+    final jsonResponse = json.decode(response.body);
 
-  factory PlaceListResponse.fromJson(Map<String, dynamic> json) {
-    return PlaceListResponse(place: PlaceListType.fromJson(json['place']));
-  }
-}
-
-class PlaceListType {
-  final num count;
-  final List<PlaceType> list;
-
-  PlaceListType({required this.count, required this.list});
-
-  factory PlaceListType.fromJson(Map<String, dynamic> json) {
-    var listFromJson = json['list'] as List;
-    List<PlaceType> list =
-        listFromJson.map((place) => PlaceType.fromJson(place)).toList();
-
-    return PlaceListType(
-      count: json['count'],
-      list: list,
-    );
-  }
-}
-
-class PlaceType {
-  final String id;
-  final String createdAt;
-  final String updatedAt;
-  final String name;
-  final bool pinned;
-  final num cafeCount;
-
-  PlaceType(
-      {required this.id,
-      required this.createdAt,
-      required this.updatedAt,
-      required this.name,
-      required this.pinned,
-      required this.cafeCount});
-
-  factory PlaceType.fromJson(Map<String, dynamic> json) {
-    return PlaceType(
-      id: json['id'],
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
-      name: json['name'],
-      pinned: json['pinned'],
-      cafeCount: json['cafeCount'],
-    );
+    return CafeListResponse.fromJson(jsonResponse);
+  } else {
+    throw Exception('Failed to load cafe list');
   }
 }
 
@@ -95,18 +53,20 @@ class MyApp extends StatelessWidget {
                   )),
             ),
           ),
-          body: PlaceList(),
+          body: Center(child: Main()),
         ));
   }
 }
 
-class PlaceList extends StatefulWidget {
+class Main extends StatefulWidget {
   @override
-  _PlaceListState createState() => _PlaceListState();
+  _MainState createState() => _MainState();
 }
 
-class _PlaceListState extends State<PlaceList> {
+class _MainState extends State<Main> {
+  Future<CafeListResponse>? cafes;
   Future<PlaceListResponse>? place;
+  CafeType? _selectedCafe;
   PlaceType? _selectedPlace;
 
   @override
@@ -114,53 +74,169 @@ class _PlaceListState extends State<PlaceList> {
     super.initState();
     place = fetchPlaceList();
     place!.then((data) {
+      PlaceType initialPlace = data.place.list[0];
       setState(() {
-        _selectedPlace = data.place.list[0];
+        _selectedPlace = initialPlace;
+      });
+
+      cafes = fetchCafeListByPlace(initialPlace.name);
+      cafes!.then((data) {
+        setState(() {
+          _selectedCafe = data.cafe.list[0];
+        });
+      });
+    });
+  }
+
+  void handlePlaceClick(PlaceType place) {
+    setState(() {
+      _selectedPlace = place;
+      cafes = fetchCafeListByPlace(place.name);
+      cafes!.then((data) {
+        setState(() {
+          _selectedCafe = data.cafe.list[0];
+        });
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
+    return Column(
+      children: [
+        Container(
+            child: FutureBuilder<CafeListResponse>(
+                future: cafes,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && _selectedPlace != null) {
+                    return _buildCafe();
+                  } else if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
+                  return _buildSkeleton();
+                })),
+        Container(
             child: FutureBuilder<PlaceListResponse>(
                 future: place,
                 builder: (context, snapshot) {
-                  if (snapshot.hasData) {
+                  if (snapshot.hasData && _selectedCafe != null) {
                     return _buildPlaceList(snapshot.data?.place.list);
                   } else if (snapshot.hasError) {
                     return Text("${snapshot.error}");
                   }
-                  return CircularProgressIndicator();
-                })));
+                  return _buildSkeleton();
+                }))
+      ],
+    );
+  }
+
+  Widget _buildSkeleton() {
+    return Expanded(
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12.0), color: Colors.white60),
+      ),
+    );
   }
 
   Widget _buildPlaceList(List<PlaceType>? list) {
     if (list == null) return ListTile(title: Text('검색결과가 없습니다.'));
 
-    return ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemCount: list.length,
-        itemBuilder: (context, i) {
-          return _buildPlace(list[i]);
-        });
+    List<Container> _buildGridTileList(int count) => List.generate(
+        count, (index) => Container(child: _buildPlace(list[index])));
+
+    return Flexible(
+      child: GridView.count(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          crossAxisCount: 5,
+          childAspectRatio: 2.5,
+          mainAxisSpacing: 4,
+          crossAxisSpacing: 4,
+          padding: EdgeInsets.only(top: 20),
+          children: _buildGridTileList(list.length)),
+    );
   }
 
   Widget _buildPlace(PlaceType place) {
     final isSelected = _selectedPlace == place;
 
-    return ListTile(
-      title: Text(place.name),
-      trailing: Icon(
-        isSelected ? Icons.favorite : Icons.favorite_border,
-        color: isSelected ? Colors.red : null,
+    return GestureDetector(
+      child: Text(
+        place.name,
+        style: TextStyle(
+          fontSize: 14,
+          color: Colors.black,
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+        ),
+        textAlign: TextAlign.center,
       ),
       onTap: () {
-        setState(() {
-          _selectedPlace = place;
-        });
+        handlePlaceClick(place);
       },
     );
+  }
+
+  Widget _buildCafe() {
+    return Column(
+      children: <Widget>[
+        Container(child: _buildCafeInfo()),
+        Container(
+          child: _buildCafeImage(),
+        )
+      ],
+    );
+  }
+
+  Widget _buildCafeInfo() {
+    return Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              _selectedCafe!.name,
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            Row(
+              children: [
+                Text(_selectedCafe!.place.name),
+                Text(' OPEN '),
+                Text(_selectedCafe!.metadata.hour,
+                    style: TextStyle(fontSize: 14)),
+              ],
+            ),
+            Container(
+              alignment: Alignment.centerRight,
+              child: Text(
+                "${_selectedCafe!.metadata.creator ??= 'jyuunnii'} 님이 올려주신 ${_selectedCafe!.name}",
+                style: TextStyle(
+                  fontSize: 12,
+                ),
+              ),
+            )
+          ],
+        ));
+  }
+
+  Widget _buildCafeImage() {
+    double viewportWidth = MediaQuery.of(context).size.width;
+    ImageType? mainImage =
+        _selectedCafe!.image.list.firstWhere((image) => image.isMain);
+    return Container(
+        width: viewportWidth,
+        height: viewportWidth,
+        child: Image.network(
+          mainImage.relativeUri,
+          fit: BoxFit.cover,
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return Center(child: CircularProgressIndicator());
+          },
+          errorBuilder: (context, error, stackTrace) {
+            return Center(child: Text('no image'));
+          },
+        ));
   }
 }
