@@ -1,37 +1,41 @@
+import 'package:meta/meta.dart';
+import 'enum.dart';
+
+@immutable
 class CafeListResponse {
-  final CafeListType cafe;
+  final CafeListModel cafe;
 
   CafeListResponse({required this.cafe});
 
   factory CafeListResponse.fromJson(Map<String, dynamic> json) {
-    return CafeListResponse(cafe: CafeListType.fromJson(json['cafe']));
+    return CafeListResponse(cafe: CafeListModel.fromJson(json['cafe']));
   }
 }
 
-class CafeListType {
-  final List<CafeType> list;
+class CafeListModel {
+  final List<CafeModel> list;
 
-  CafeListType({required this.list});
+  CafeListModel({required this.list});
 
-  factory CafeListType.fromJson(Map<String, dynamic> json) {
-    var listFromJson = json['list'] as List;
-    List<CafeType> list =
-        listFromJson.map((cafe) => CafeType.fromJson(cafe)).toList();
-    return CafeListType(list: list);
+  factory CafeListModel.fromJson(Map<String, dynamic> json) {
+    final listFromJson = json['list'] as List;
+    final List<CafeModel> list =
+        listFromJson.map((cafe) => CafeModel.fromJson(cafe)).toList();
+    return CafeListModel(list: list);
   }
 }
 
-class CafeType {
+class CafeModel {
   final String id;
-  final String createdAt;
-  final String updatedAt;
+  final DateTime createdAt;
+  final DateTime updatedAt;
   final String name;
-  final PlaceType place;
-  final MetadataType metadata;
-  final ImageListType image;
-  final String state;
+  final PlaceModel place;
+  final CafeMetadata metadata;
+  final CafeImageList image;
+  final CafeState state;
 
-  CafeType(
+  CafeModel(
       {required this.id,
       required this.createdAt,
       required this.updatedAt,
@@ -41,45 +45,46 @@ class CafeType {
       required this.image,
       required this.state});
 
-  factory CafeType.fromJson(Map<String, dynamic> json) {
-    return CafeType(
+  factory CafeModel.fromJson(Map<String, dynamic> json) {
+    return CafeModel(
         id: json['id'],
-        createdAt: json['createdAt'],
-        updatedAt: json['updatedAt'],
+        createdAt: DateTime.parse(json['createdAt']),
+        updatedAt: DateTime.parse(json['updatedAt']),
         name: json['name'],
-        place: PlaceType.fromJson(json['place']),
-        metadata: MetadataType.fromJson(json['metadata']),
-        image: ImageListType.fromJson(json['image']),
-        state: json['state']);
+        place: PlaceModel.fromJson(json['place']),
+        metadata: CafeMetadata.fromJson(json['metadata']),
+        image: CafeImageList.fromJson(json['image']),
+        state: CafeState.values
+            .firstWhere((e) => e.toString().split('.').last == json['state']));
   }
 }
 
-class ImageListType {
-  final num count;
-  final List<ImageType> list;
+class CafeImageList {
+  final int count;
+  final List<CafeImage> list;
 
-  ImageListType({required this.count, required this.list});
+  CafeImageList({required this.count, required this.list});
 
-  factory ImageListType.fromJson(Map<String, dynamic> json) {
-    var listFromJson = json['list'] as List;
-    List<ImageType> list =
-        listFromJson.map((image) => ImageType.fromJson(image)).toList();
-    return ImageListType(count: json['count'], list: list);
+  factory CafeImageList.fromJson(Map<String, dynamic> json) {
+    final listFromJson = json['list'] as List;
+    final List<CafeImage> list =
+        listFromJson.map((image) => CafeImage.fromJson(image)).toList();
+    return CafeImageList(count: json['count'], list: list);
   }
 }
 
-class ImageType {
+class CafeImage {
   final String id;
   final String createdAt;
   final String updatedAt;
   final String cafeId;
-  final num index;
+  final int index;
   final bool isMain;
-  final ImageMetadataType metadata;
+  final CafeImageMetadata metadata;
   final String relativeUri;
-  final String state;
+  final CafeImageState state;
 
-  ImageType(
+  CafeImage(
       {required this.id,
       required this.createdAt,
       required this.updatedAt,
@@ -90,84 +95,86 @@ class ImageType {
       required this.relativeUri,
       required this.state});
 
-  factory ImageType.fromJson(Map<String, dynamic> json) {
-    return ImageType(
+  factory CafeImage.fromJson(Map<String, dynamic> json) {
+    return CafeImage(
         id: json['id'],
         createdAt: json['createdAt'],
         updatedAt: json['updatedAt'],
         cafeId: json['cafeId'],
         index: json['index'],
         isMain: json['isMain'],
-        metadata: ImageMetadataType.fromJson(json['metadata']),
+        metadata: CafeImageMetadata.fromJson(json['metadata']),
         relativeUri: json['relativeUri'],
-        state: json['state']);
+        state: CafeImageState.values
+            .firstWhere((e) => e.toString().split('.').last == json['state']));
   }
 }
 
-class ImageMetadataType {
+class CafeImageMetadata {
   final String tag;
 
-  ImageMetadataType({required this.tag});
+  CafeImageMetadata({required this.tag});
 
-  factory ImageMetadataType.fromJson(Map<String, dynamic> json) {
-    return ImageMetadataType(
+  factory CafeImageMetadata.fromJson(Map<String, dynamic> json) {
+    return CafeImageMetadata(
       tag: json['tag'],
     );
   }
 }
 
-class MetadataType {
+class CafeMetadata {
   String? creator;
   final String hour;
   final List<String> tag;
 
-  MetadataType({required this.creator, required this.hour, required this.tag});
+  CafeMetadata({required this.creator, required this.hour, required this.tag});
 
-  factory MetadataType.fromJson(Map<String, dynamic> json) {
-    var listFromJson = json['tag'];
-    List<String> list = new List<String>.from(listFromJson);
-    return MetadataType(
+  factory CafeMetadata.fromJson(Map<String, dynamic> json) {
+    final listFromJson = json['tag'];
+    final List<String> list = new List<String>.from(listFromJson);
+    return CafeMetadata(
         creator: json['creator'], hour: json['hour'], tag: list);
   }
 }
 
+@immutable
 class PlaceListResponse {
-  final PlaceListType place;
+  final PlaceListModel place;
 
   PlaceListResponse({required this.place});
 
   factory PlaceListResponse.fromJson(Map<String, dynamic> json) {
-    return PlaceListResponse(place: PlaceListType.fromJson(json['place']));
+    return PlaceListResponse(place: PlaceListModel.fromJson(json['place']));
   }
 }
 
-class PlaceListType {
-  final num count;
-  final List<PlaceType> list;
+class PlaceListModel {
+  final int count;
+  final List<PlaceModel> list;
 
-  PlaceListType({required this.count, required this.list});
+  PlaceListModel({required this.count, required this.list});
 
-  factory PlaceListType.fromJson(Map<String, dynamic> json) {
-    var listFromJson = json['list'] as List;
-    List<PlaceType> list =
-        listFromJson.map((place) => PlaceType.fromJson(place)).toList();
+  factory PlaceListModel.fromJson(Map<String, dynamic> json) {
+    final listFromJson = json['list'] as List;
+    final List<PlaceModel> list =
+        listFromJson.map((place) => PlaceModel.fromJson(place)).toList();
 
-    return PlaceListType(
+    return PlaceListModel(
       count: json['count'],
       list: list,
     );
   }
 }
 
-class PlaceType {
+class PlaceModel {
   final String id;
   final String createdAt;
   final String updatedAt;
   final String name;
   final bool pinned;
-  final num? cafeCount;
+  final int? cafeCount;
 
-  PlaceType(
+  PlaceModel(
       {required this.id,
       required this.createdAt,
       required this.updatedAt,
@@ -175,8 +182,8 @@ class PlaceType {
       required this.pinned,
       this.cafeCount});
 
-  factory PlaceType.fromJson(Map<String, dynamic> json) {
-    return PlaceType(
+  factory PlaceModel.fromJson(Map<String, dynamic> json) {
+    return PlaceModel(
       id: json['id'],
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
