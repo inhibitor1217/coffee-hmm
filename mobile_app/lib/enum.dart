@@ -1,7 +1,7 @@
 enum CafeState { active, hidden }
 enum CafeImageState { active, hidden }
 
-extension getCafeState on CafeState {
+extension GetCafeState on CafeState {
   static CafeState parse(String value) {
     return CafeState.values.firstWhere(
         (e) => e.toString().split('.').last == value,
@@ -9,7 +9,7 @@ extension getCafeState on CafeState {
   }
 }
 
-extension getCafeImageState on CafeImageState {
+extension GetCafeImageState on CafeImageState {
   static CafeImageState parse(String value) {
     return CafeImageState.values.firstWhere(
         (e) => e.toString().split('.').last == value,

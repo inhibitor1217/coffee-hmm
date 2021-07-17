@@ -45,7 +45,10 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-.idea
+.idea/*.xml
+.idea/*.iml
+.idea/*.ipr
+.idea/*.iws
 .gradle
 local.properties
 ios/build

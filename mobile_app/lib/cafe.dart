@@ -30,9 +30,12 @@ class Cafe extends StatelessWidget {
               cafe.name,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            Text(
-              '${cafe.place.name} OPEN ${cafe.metadata.hour}',
-              style: TextStyle(fontSize: 14),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 4),
+              child: Text(
+                '${cafe.place.name} OPEN ${cafe.metadata.hour}',
+                style: TextStyle(fontSize: 14),
+              ),
             ),
             Container(
               alignment: Alignment.centerRight,

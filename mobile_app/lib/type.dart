@@ -57,7 +57,7 @@ class CafeModel {
         place: PlaceModel.fromJson(json['place']),
         metadata: CafeMetadata.fromJson(json['metadata']),
         image: CafeImageList.fromJson(json['image']),
-        state: getCafeState.parse(json['state']));
+        state: GetCafeState.parse(json['state']));
   }
 }
 
@@ -109,7 +109,7 @@ class CafeImage {
         isMain: json['isMain'],
         metadata: CafeImageMetadata.fromJson(json['metadata']),
         relativeUri: json['relativeUri'],
-        state: getCafeImageState.parse(json['state']));
+        state: GetCafeImageState.parse(json['state']));
   }
 }
 
