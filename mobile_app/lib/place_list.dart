@@ -4,7 +4,7 @@ import 'package:mobile_app/type.dart';
 class PlaceList extends StatelessWidget {
   final List<PlaceModel>? placeList;
   final PlaceModel? selectedPlace;
-  final Function handlePlaceClick;
+  final void Function(PlaceModel) handlePlaceClick;
 
   PlaceList(
       {required this.placeList,

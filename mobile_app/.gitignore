@@ -48,3 +48,4 @@ app.*.map.json
 .idea
 .gradle
 local.properties
+ios/build

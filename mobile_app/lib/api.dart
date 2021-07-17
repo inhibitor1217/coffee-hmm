@@ -16,7 +16,8 @@ Future<PlaceListResponse> fetchPlaceList() async {
   }
 }
 
-Future<CafeListResponse> fetchCafeListByPlace(String placeName) async {
+Future<CafeListResponse> fetchCafeListByPlace(PlaceModel place) async {
+  final placeName = place.name;
   final response = await http.get(Uri.parse(
       'https://release.api.coffee-hmm.inhibitor.io/cafe/feed?limit=64&placeName=$placeName'));
 

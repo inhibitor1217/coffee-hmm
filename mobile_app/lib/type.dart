@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+
 import 'enum.dart';
 
 @immutable
@@ -12,6 +13,7 @@ class CafeListResponse {
   }
 }
 
+@immutable
 class CafeListModel {
   final List<CafeModel> list;
 
@@ -19,12 +21,13 @@ class CafeListModel {
 
   factory CafeListModel.fromJson(Map<String, dynamic> json) {
     final listFromJson = json['list'] as List;
-    final List<CafeModel> list =
-        listFromJson.map((cafe) => CafeModel.fromJson(cafe)).toList();
+    final List<CafeModel> list = List.unmodifiable(
+        listFromJson.map((cafe) => CafeModel.fromJson(cafe)).toList());
     return CafeListModel(list: list);
   }
 }
 
+@immutable
 class CafeModel {
   final String id;
   final DateTime createdAt;
@@ -54,11 +57,11 @@ class CafeModel {
         place: PlaceModel.fromJson(json['place']),
         metadata: CafeMetadata.fromJson(json['metadata']),
         image: CafeImageList.fromJson(json['image']),
-        state: CafeState.values
-            .firstWhere((e) => e.toString().split('.').last == json['state']));
+        state: getCafeState.parse(json['state']));
   }
 }
 
+@immutable
 class CafeImageList {
   final int count;
   final List<CafeImage> list;
@@ -67,12 +70,13 @@ class CafeImageList {
 
   factory CafeImageList.fromJson(Map<String, dynamic> json) {
     final listFromJson = json['list'] as List;
-    final List<CafeImage> list =
-        listFromJson.map((image) => CafeImage.fromJson(image)).toList();
+    final List<CafeImage> list = List.unmodifiable(
+        listFromJson.map((image) => CafeImage.fromJson(image)).toList());
     return CafeImageList(count: json['count'], list: list);
   }
 }
 
+@immutable
 class CafeImage {
   final String id;
   final String createdAt;
@@ -105,11 +109,11 @@ class CafeImage {
         isMain: json['isMain'],
         metadata: CafeImageMetadata.fromJson(json['metadata']),
         relativeUri: json['relativeUri'],
-        state: CafeImageState.values
-            .firstWhere((e) => e.toString().split('.').last == json['state']));
+        state: getCafeImageState.parse(json['state']));
   }
 }
 
+@immutable
 class CafeImageMetadata {
   final String tag;
 
@@ -122,8 +126,9 @@ class CafeImageMetadata {
   }
 }
 
+@immutable
 class CafeMetadata {
-  String? creator;
+  final String? creator;
   final String hour;
   final List<String> tag;
 
@@ -131,7 +136,8 @@ class CafeMetadata {
 
   factory CafeMetadata.fromJson(Map<String, dynamic> json) {
     final listFromJson = json['tag'];
-    final List<String> list = new List<String>.from(listFromJson);
+    final List<String> list =
+        List.unmodifiable(new List<String>.from(listFromJson));
     return CafeMetadata(
         creator: json['creator'], hour: json['hour'], tag: list);
   }
@@ -148,6 +154,7 @@ class PlaceListResponse {
   }
 }
 
+@immutable
 class PlaceListModel {
   final int count;
   final List<PlaceModel> list;
@@ -156,8 +163,8 @@ class PlaceListModel {
 
   factory PlaceListModel.fromJson(Map<String, dynamic> json) {
     final listFromJson = json['list'] as List;
-    final List<PlaceModel> list =
-        listFromJson.map((place) => PlaceModel.fromJson(place)).toList();
+    final List<PlaceModel> list = List.unmodifiable(
+        listFromJson.map((place) => PlaceModel.fromJson(place)).toList());
 
     return PlaceListModel(
       count: json['count'],
@@ -166,10 +173,11 @@ class PlaceListModel {
   }
 }
 
+@immutable
 class PlaceModel {
   final String id;
-  final String createdAt;
-  final String updatedAt;
+  final DateTime createdAt;
+  final DateTime updatedAt;
   final String name;
   final bool pinned;
   final int? cafeCount;
@@ -185,8 +193,8 @@ class PlaceModel {
   factory PlaceModel.fromJson(Map<String, dynamic> json) {
     return PlaceModel(
       id: json['id'],
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
       name: json['name'],
       pinned: json['pinned'],
       cafeCount: json['cafeCount'],

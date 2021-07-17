@@ -57,7 +57,7 @@ class _MainState extends State<Main> {
         _selectedPlace = initialPlace;
       });
 
-      _cafes = fetchCafeListByPlace(initialPlace.name);
+      _cafes = fetchCafeListByPlace(initialPlace);
       _cafes!.then((data) {
         setState(() {
           _selectedCafe = data.cafe.list[0];
@@ -69,7 +69,7 @@ class _MainState extends State<Main> {
   void handlePlaceClick(PlaceModel place) {
     setState(() {
       _selectedPlace = place;
-      _cafes = fetchCafeListByPlace(place.name);
+      _cafes = fetchCafeListByPlace(place);
       _cafes!.then((data) {
         setState(() {
           _selectedCafe = data.cafe.list[0];
