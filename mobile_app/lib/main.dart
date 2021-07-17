@@ -38,6 +38,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final PageController controller = PageController(initialPage: 0);
     return MaterialApp(
         theme: ThemeData(
           primaryColor: Colors.white,
@@ -102,40 +103,48 @@ class _MainState extends State<Main> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-            child: FutureBuilder<CafeListResponse>(
-                future: cafes,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData && _selectedPlace != null) {
-                    return _buildCafe();
-                  } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
-                  }
-                  return _buildSkeleton();
-                })),
-        Container(
-            child: FutureBuilder<PlaceListResponse>(
-                future: place,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData && _selectedCafe != null) {
-                    return _buildPlaceList(snapshot.data?.place.list);
-                  } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
-                  }
-                  return _buildSkeleton();
-                }))
-      ],
+    return ListView.builder(
+      itemCount: 1,
+      itemBuilder: (context, index) {
+        return Row(
+          children: [
+            Expanded(
+                child: Column(
+              children: [
+                Container(
+                    child: FutureBuilder<CafeListResponse>(
+                        future: cafes,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData && _selectedPlace != null) {
+                            return _buildCafe();
+                          } else if (snapshot.hasError) {
+                            return Text("${snapshot.error}");
+                          }
+                          return _buildSkeleton();
+                        })),
+                Container(
+                    child: FutureBuilder<PlaceListResponse>(
+                        future: place,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData && _selectedCafe != null) {
+                            return _buildPlaceList(snapshot.data?.place.list);
+                          } else if (snapshot.hasError) {
+                            return Text("${snapshot.error}");
+                          }
+                          return _buildSkeleton();
+                        }))
+              ],
+            ))
+          ],
+        );
+      },
     );
   }
 
   Widget _buildSkeleton() {
-    return Expanded(
-      child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12.0), color: Colors.white60),
-      ),
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12.0), color: Colors.white60),
     );
   }
 
@@ -145,17 +154,13 @@ class _MainState extends State<Main> {
     List<Container> _buildGridTileList(int count) => List.generate(
         count, (index) => Container(child: _buildPlace(list[index])));
 
-    return Flexible(
-      child: GridView.count(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          crossAxisCount: 5,
-          childAspectRatio: 2.5,
-          mainAxisSpacing: 4,
-          crossAxisSpacing: 4,
-          padding: EdgeInsets.only(top: 20),
-          children: _buildGridTileList(list.length)),
-    );
+    return GridView.count(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        crossAxisCount: 5,
+        childAspectRatio: 2.5,
+        padding: EdgeInsets.only(top: 20),
+        children: _buildGridTileList(list.length));
   }
 
   Widget _buildPlace(PlaceType place) {
