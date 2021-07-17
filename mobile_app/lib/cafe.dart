@@ -22,7 +22,7 @@ class Cafe extends StatelessWidget {
   Widget _buildCafeInfo() {
     return Container(
         width: double.infinity,
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

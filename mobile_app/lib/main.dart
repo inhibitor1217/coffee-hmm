@@ -14,13 +14,13 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final PageController controller = PageController(initialPage: 0);
     return MaterialApp(
         theme: ThemeData(
           primaryColor: Colors.white,
         ),
         home: Scaffold(
           appBar: AppBar(
+            toolbarHeight: 48,
             title: Center(
               child: Text('coffeehmm',
                   textAlign: TextAlign.center,
