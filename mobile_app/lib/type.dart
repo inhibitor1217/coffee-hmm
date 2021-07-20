@@ -34,8 +34,8 @@ class CafeModel {
   final DateTime updatedAt;
   final String name;
   final PlaceModel place;
-  final CafeMetadata metadata;
-  final CafeImageList image;
+  final CafeMetadataModel metadata;
+  final CafeImageListModel image;
   final CafeState state;
 
   CafeModel(
@@ -55,40 +55,44 @@ class CafeModel {
         updatedAt: DateTime.parse(json['updatedAt']),
         name: json['name'],
         place: PlaceModel.fromJson(json['place']),
-        metadata: CafeMetadata.fromJson(json['metadata']),
-        image: CafeImageList.fromJson(json['image']),
+        metadata: CafeMetadataModel.fromJson(json['metadata']),
+        image: CafeImageListModel.fromJson(json['image']),
         state: GetCafeState.parse(json['state']));
   }
 }
 
 @immutable
-class CafeImageList {
+class CafeImageListModel {
   final int count;
-  final List<CafeImage> list;
+  final List<CafeImageModel> list;
+  final CafeImageModel mainImage;
 
-  CafeImageList({required this.count, required this.list});
+  CafeImageListModel(
+      {required this.count, required this.list, required this.mainImage});
 
-  factory CafeImageList.fromJson(Map<String, dynamic> json) {
+  factory CafeImageListModel.fromJson(Map<String, dynamic> json) {
     final listFromJson = json['list'] as List;
-    final List<CafeImage> list = List.unmodifiable(
-        listFromJson.map((image) => CafeImage.fromJson(image)).toList());
-    return CafeImageList(count: json['count'], list: list);
+    final List<CafeImageModel> list = List.unmodifiable(
+        listFromJson.map((image) => CafeImageModel.fromJson(image)).toList());
+    final mainImage = list.firstWhere((image) => image.isMain);
+    return CafeImageListModel(
+        count: json['count'], list: list, mainImage: mainImage);
   }
 }
 
 @immutable
-class CafeImage {
+class CafeImageModel {
   final String id;
   final String createdAt;
   final String updatedAt;
   final String cafeId;
   final int index;
   final bool isMain;
-  final CafeImageMetadata metadata;
+  final CafeImageMetadataModel metadata;
   final String relativeUri;
   final CafeImageState state;
 
-  CafeImage(
+  CafeImageModel(
       {required this.id,
       required this.createdAt,
       required this.updatedAt,
@@ -99,46 +103,47 @@ class CafeImage {
       required this.relativeUri,
       required this.state});
 
-  factory CafeImage.fromJson(Map<String, dynamic> json) {
-    return CafeImage(
+  factory CafeImageModel.fromJson(Map<String, dynamic> json) {
+    return CafeImageModel(
         id: json['id'],
         createdAt: json['createdAt'],
         updatedAt: json['updatedAt'],
         cafeId: json['cafeId'],
         index: json['index'],
         isMain: json['isMain'],
-        metadata: CafeImageMetadata.fromJson(json['metadata']),
+        metadata: CafeImageMetadataModel.fromJson(json['metadata']),
         relativeUri: json['relativeUri'],
         state: GetCafeImageState.parse(json['state']));
   }
 }
 
 @immutable
-class CafeImageMetadata {
+class CafeImageMetadataModel {
   final String tag;
 
-  CafeImageMetadata({required this.tag});
+  CafeImageMetadataModel({required this.tag});
 
-  factory CafeImageMetadata.fromJson(Map<String, dynamic> json) {
-    return CafeImageMetadata(
+  factory CafeImageMetadataModel.fromJson(Map<String, dynamic> json) {
+    return CafeImageMetadataModel(
       tag: json['tag'],
     );
   }
 }
 
 @immutable
-class CafeMetadata {
+class CafeMetadataModel {
   final String? creator;
   final String hour;
   final List<String> tag;
 
-  CafeMetadata({required this.creator, required this.hour, required this.tag});
+  CafeMetadataModel(
+      {required this.creator, required this.hour, required this.tag});
 
-  factory CafeMetadata.fromJson(Map<String, dynamic> json) {
+  factory CafeMetadataModel.fromJson(Map<String, dynamic> json) {
     final listFromJson = json['tag'];
     final List<String> list =
         List.unmodifiable(new List<String>.from(listFromJson));
-    return CafeMetadata(
+    return CafeMetadataModel(
         creator: json['creator'], hour: json['hour'], tag: list);
   }
 }

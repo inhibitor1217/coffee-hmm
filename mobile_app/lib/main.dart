@@ -105,8 +105,8 @@ class _MainState extends State<Main> {
                           if (snapshot.hasData && _selectedPlace != null) {
                             return Column(
                               children: [
-                                CafeInfoView(cafe: _selectedCafe!),
-                                CafeImageSliderView(
+                                CafeInfo(cafe: _selectedCafe!),
+                                CafeImageSlider(
                                   cafeList: snapshot.data!.cafe.list,
                                   handleCafeSlide: handleCafeSlide,
                                 )
@@ -122,7 +122,7 @@ class _MainState extends State<Main> {
                         future: _placeResponse,
                         builder: (context, snapshot) {
                           if (snapshot.hasData && _selectedCafe != null) {
-                            return PlaceListView(
+                            return PlaceList(
                               placeList: snapshot.data!.place.list,
                               selectedPlace: _selectedPlace,
                               handlePlaceClick: handlePlaceClick,

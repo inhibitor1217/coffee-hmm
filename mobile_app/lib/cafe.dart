@@ -2,26 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/cafe_image.dart';
 import 'package:mobile_app/type.dart';
 
-class CafeView extends StatelessWidget {
+class Cafe extends StatelessWidget {
   final CafeModel cafe;
 
-  CafeView({required this.cafe});
+  Cafe({required this.cafe});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        CafeInfoView(cafe: cafe),
-        CafeImageView(image: GetCafeMainImage.get(cafe)),
+        CafeInfo(cafe: cafe),
+        CafeImage(image: cafe.image.mainImage),
       ],
     );
   }
 }
 
-class CafeInfoView extends StatelessWidget {
+class CafeInfo extends StatelessWidget {
   final CafeModel cafe;
 
-  CafeInfoView({required this.cafe});
+  CafeInfo({required this.cafe});
 
   @override
   Widget build(BuildContext context) {
