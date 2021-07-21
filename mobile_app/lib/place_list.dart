@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/type.dart';
 
-class PlaceListView extends StatelessWidget {
+class PlaceList extends StatelessWidget {
   final List<PlaceModel>? placeList;
   final PlaceModel? currentPlace;
   final void Function(PlaceModel) handlePlaceClick;
 
-  PlaceListView(
+  PlaceList(
       {required this.placeList,
       required this.currentPlace,
       required this.handlePlaceClick});

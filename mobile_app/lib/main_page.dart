@@ -113,7 +113,7 @@ class _MainBodyState extends State<MainBody> {
                         future: _placeResponse,
                         builder: (context, snapshot) {
                           if (snapshot.hasData && _currentCafe != null) {
-                            return PlaceListView(
+                            return PlaceList(
                               placeList: snapshot.data!.place.list,
                               currentPlace: _currentPlace,
                               handlePlaceClick: handlePlaceClick,

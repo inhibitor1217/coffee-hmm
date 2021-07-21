@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/cafe_image.dart';
 import 'package:mobile_app/type.dart';
 
-class CafeView extends StatelessWidget {
+class Cafe extends StatelessWidget {
   final CafeModel cafe;
 
-  CafeView({required this.cafe});
+  Cafe({required this.cafe});
 
   @override
   Widget build(BuildContext context) {
