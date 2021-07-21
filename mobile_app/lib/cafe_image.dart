@@ -29,17 +29,22 @@ class CafeImage extends StatelessWidget {
 }
 
 class CafeImageSlider extends StatefulWidget {
-  final List<CafeModel> cafeList;
+  final List<CafeModel>? cafeList;
+  final CafeModel? cafe;
   final handleCafeSlide;
 
-  CafeImageSlider({required this.cafeList, required this.handleCafeSlide});
+  CafeImageSlider({this.cafeList, this.cafe, this.handleCafeSlide});
 
   @override
-  _CafeImageSliderState createState() => _CafeImageSliderState();
+  _CafeImageSliderState createState() =>
+      _CafeImageSliderState(isDetail: cafe != null);
 }
 
 class _CafeImageSliderState extends State<CafeImageSlider> {
   final _controller = PageController(initialPage: 0);
+  final bool isDetail;
+
+  _CafeImageSliderState({required this.isDetail});
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +54,25 @@ class _CafeImageSliderState extends State<CafeImageSlider> {
       height: size,
       child: Stack(
         children: [
-          _buildCafeImageSlider(),
+          isDetail ? _buildCafeImageSlider() : _buildCafeMainImageSlider(),
         ],
       ),
+    );
+  }
+
+  Widget _buildCafeMainImageSlider() {
+    return PageView.builder(
+      physics: AlwaysScrollableScrollPhysics(),
+      controller: _controller,
+      itemCount: widget.cafeList!.length,
+      itemBuilder: (BuildContext context, int index) {
+        return CafeImage(
+            image: widget
+                .cafeList![index % widget.cafeList!.length].image.mainImage);
+      },
+      onPageChanged: (index) {
+        widget.handleCafeSlide(index);
+      },
     );
   }
 
@@ -59,15 +80,12 @@ class _CafeImageSliderState extends State<CafeImageSlider> {
     return PageView.builder(
       physics: AlwaysScrollableScrollPhysics(),
       controller: _controller,
-      itemCount: widget.cafeList.length,
+      itemCount: widget.cafe!.image.count,
       itemBuilder: (BuildContext context, int index) {
         return CafeImage(
-            image: widget
-                .cafeList[index % widget.cafeList.length].image.mainImage);
+            image: widget.cafe!.image.list[index % widget.cafe!.image.count]);
       },
-      onPageChanged: (index) {
-        widget.handleCafeSlide(index);
-      },
+      onPageChanged: (index) {},
     );
   }
 }

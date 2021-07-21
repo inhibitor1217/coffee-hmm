@@ -7,7 +7,9 @@ class Header extends StatelessWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      iconTheme: IconThemeData(color: Colors.black45, size: 20),
+      backgroundColor: Colors.white,
+      elevation: 0,
+      iconTheme: IconThemeData(color: Colors.black45),
       title: Text('coffeehmm',
           textAlign: TextAlign.center,
           style: TextStyle(

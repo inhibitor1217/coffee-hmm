@@ -15,6 +15,7 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: Header(),
       body: MainBody(onTapped: onTapped),
     );
@@ -33,7 +34,7 @@ class MainBody extends StatefulWidget {
 class _MainBodyState extends State<MainBody> {
   Map<String, Future<CafeListResponse>> _cafeListResponse = {};
   Future<PlaceListResponse>? _placeResponse;
-  List<CafeModel>? _cafes;
+  List<CafeModel>? _cafeList;
   CafeModel? _currentCafe;
   PlaceModel? _currentPlace;
   final ValueChanged<CafeModel> onTapped;
@@ -51,7 +52,7 @@ class _MainBodyState extends State<MainBody> {
 
       _fetchCafeListOfPlace(initialPlace).then((data) {
         setState(() {
-          _cafes = data.cafe.list;
+          _cafeList = data.cafe.list;
           _currentCafe = data.cafe.list[0];
         });
       });
@@ -62,7 +63,7 @@ class _MainBodyState extends State<MainBody> {
     setState(() {
       _fetchCafeListOfPlace(place).then((data) {
         setState(() {
-          _cafes = data.cafe.list;
+          _cafeList = data.cafe.list;
           _currentCafe = data.cafe.list[0];
         });
       });
@@ -71,7 +72,7 @@ class _MainBodyState extends State<MainBody> {
 
   void handleCafeSlide(int index) {
     setState(() {
-      _currentCafe = _cafes![index];
+      _currentCafe = _cafeList![index];
     });
   }
 
