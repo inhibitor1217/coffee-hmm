@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/api.dart';
 import 'package:mobile_app/cafe.dart';
+import 'package:mobile_app/cafe_image.dart';
 import 'package:mobile_app/place_list.dart';
 import 'package:mobile_app/skeleton.dart';
 import 'package:mobile_app/type.dart';
@@ -42,24 +43,26 @@ class Main extends StatefulWidget {
 }
 
 class _MainState extends State<Main> {
-  Future<CafeListResponse>? _cafes;
-  Future<PlaceListResponse>? _place;
+  Future<CafeListResponse>? _cafeListResponse;
+  Future<PlaceListResponse>? _placeResponse;
+  List<CafeModel>? _cafes;
   CafeModel? _selectedCafe;
   PlaceModel? _selectedPlace;
 
   @override
   void initState() {
     super.initState();
-    _place = fetchPlaceList();
-    _place!.then((data) {
+    _placeResponse = fetchPlaceList();
+    _placeResponse!.then((data) {
       PlaceModel initialPlace = data.place.list[0];
       setState(() {
         _selectedPlace = initialPlace;
       });
 
-      _cafes = fetchCafeListByPlace(initialPlace);
-      _cafes!.then((data) {
+      _cafeListResponse = fetchCafeListByPlace(initialPlace);
+      _cafeListResponse!.then((data) {
         setState(() {
+          _cafes = data.cafe.list;
           _selectedCafe = data.cafe.list[0];
         });
       });
@@ -69,12 +72,19 @@ class _MainState extends State<Main> {
   void handlePlaceClick(PlaceModel place) {
     setState(() {
       _selectedPlace = place;
-      _cafes = fetchCafeListByPlace(place);
-      _cafes!.then((data) {
+      _cafeListResponse = fetchCafeListByPlace(place);
+      _cafeListResponse!.then((data) {
         setState(() {
+          _cafes = data.cafe.list;
           _selectedCafe = data.cafe.list[0];
         });
       });
+    });
+  }
+
+  void handleCafeSlide(int index) {
+    setState(() {
+      _selectedCafe = _cafes![index];
     });
   }
 
@@ -90,10 +100,18 @@ class _MainState extends State<Main> {
               children: [
                 Container(
                     child: FutureBuilder<CafeListResponse>(
-                        future: _cafes,
+                        future: _cafeListResponse,
                         builder: (context, snapshot) {
                           if (snapshot.hasData && _selectedPlace != null) {
-                            return Cafe(cafe: snapshot.data!.cafe.list.first);
+                            return Column(
+                              children: [
+                                CafeInfo(cafe: _selectedCafe!),
+                                CafeImageSlider(
+                                  cafeList: snapshot.data!.cafe.list,
+                                  handleCafeSlide: handleCafeSlide,
+                                )
+                              ],
+                            );
                           } else if (snapshot.hasError) {
                             return Text("${snapshot.error}");
                           }
@@ -101,7 +119,7 @@ class _MainState extends State<Main> {
                         })),
                 Container(
                     child: FutureBuilder<PlaceListResponse>(
-                        future: _place,
+                        future: _placeResponse,
                         builder: (context, snapshot) {
                           if (snapshot.hasData && _selectedCafe != null) {
                             return PlaceList(
