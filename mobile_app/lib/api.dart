@@ -29,16 +29,3 @@ Future<CafeListResponse> fetchCafeListByPlace(PlaceModel place) async {
     throw Exception('Failed to load cafe list');
   }
 }
-
-Future<CafeResponse> fetchCafeById(String id) async {
-  final response = await http
-      .get(Uri.parse('https://release.api.coffee-hmm.inhibitor.io/cafe/$id'));
-
-  if (response.statusCode == 200) {
-    final jsonResponse = json.decode(response.body);
-
-    return CafeResponse.fromJson(jsonResponse);
-  } else {
-    throw Exception('Failed to load cafe');
-  }
-}

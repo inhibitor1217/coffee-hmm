@@ -3,17 +3,6 @@ import 'package:meta/meta.dart';
 import 'enum.dart';
 
 @immutable
-class CafeResponse {
-  final CafeModel cafe;
-
-  CafeResponse({required this.cafe});
-
-  factory CafeResponse.fromJson(Map<String, dynamic> json) {
-    return CafeResponse(cafe: CafeModel.fromJson(json['cafe']));
-  }
-}
-
-@immutable
 class CafeListResponse {
   final CafeListModel cafe;
 
