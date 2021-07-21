@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/cafe.dart';
 import 'package:mobile_app/header.dart';
 import 'package:mobile_app/slider.dart';
 import 'package:mobile_app/type.dart';
@@ -43,13 +44,13 @@ class DetailBody extends StatefulWidget {
 
 class _DetailBodyState extends State<DetailBody> {
   CafeModel cafe;
-  CafeImageModel? _image;
+  int? currentIndex;
 
   _DetailBodyState({required this.cafe});
 
   void handleImageSlide(int index) {
     setState(() {
-      _image = cafe.image.list[index];
+      currentIndex = index % cafe.image.count;
     });
   }
 
@@ -61,6 +62,11 @@ class _DetailBodyState extends State<DetailBody> {
           cafe: cafe,
           handleSlide: handleImageSlide,
         ),
+        ImageIndexBullet(
+          totalCount: cafe.image.count,
+          currentIndex: currentIndex ?? 0,
+        ),
+        CafeMinimumInfo(cafe: cafe),
       ],
     );
   }

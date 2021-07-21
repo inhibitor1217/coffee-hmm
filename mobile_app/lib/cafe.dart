@@ -54,3 +54,32 @@ class CafeInfo extends StatelessWidget {
         ));
   }
 }
+
+class CafeMinimumInfo extends StatelessWidget {
+  final CafeModel cafe;
+
+  CafeMinimumInfo({required this.cafe});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        alignment: Alignment.centerLeft,
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              cafe.name,
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 4),
+              child: Text(
+                '${cafe.place.name} OPEN ${cafe.metadata.hour}',
+                style: TextStyle(fontSize: 14),
+              ),
+            ),
+          ],
+        ));
+  }
+}
