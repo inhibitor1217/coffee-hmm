@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/cafe_image.dart';
 import 'package:mobile_app/header.dart';
+import 'package:mobile_app/slider.dart';
 import 'package:mobile_app/type.dart';
 
 class CafeDetailPage extends Page {
@@ -47,7 +47,7 @@ class _DetailBodyState extends State<DetailBody> {
 
   _DetailBodyState({required this.cafe});
 
-  void handleCafeSlide(int index) {
+  void handleImageSlide(int index) {
     setState(() {
       _image = cafe.image.list[index];
     });
@@ -59,7 +59,7 @@ class _DetailBodyState extends State<DetailBody> {
       children: [
         CafeImageSlider(
           cafe: cafe,
-          handleCafeSlide: handleCafeSlide,
+          handleSlide: handleImageSlide,
         ),
       ],
     );

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/api.dart';
 import 'package:mobile_app/cafe.dart';
-import 'package:mobile_app/cafe_image.dart';
 import 'package:mobile_app/header.dart';
 import 'package:mobile_app/place_list.dart';
 import 'package:mobile_app/skeleton.dart';
+import 'package:mobile_app/slider.dart';
 import 'package:mobile_app/type.dart';
 
 class MainScreen extends StatelessWidget {
@@ -97,7 +97,7 @@ class _MainBodyState extends State<MainBody> {
                                   CafeInfo(cafe: _currentCafe!),
                                   CafeImageSlider(
                                     cafeList: snapshot.data!.cafe.list,
-                                    handleCafeSlide: handleCafeSlide,
+                                    handleSlide: handleCafeSlide,
                                   )
                                 ],
                               ),
