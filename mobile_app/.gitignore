@@ -50,5 +50,6 @@ app.*.map.json
 .idea/*.ipr
 .idea/*.iws
 .gradle
+.vscode
 local.properties
 ios/build

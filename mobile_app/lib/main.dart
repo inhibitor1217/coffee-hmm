@@ -43,8 +43,9 @@ class Main extends StatefulWidget {
 }
 
 class _MainState extends State<Main> {
-  Future<CafeListResponse>? _cafeListResponse;
   Future<PlaceListResponse>? _placeResponse;
+  Map<String, Future<CafeListResponse>> _cafeListResponses = {};
+
   List<CafeModel>? _cafes;
   CafeModel? _selectedCafe;
   PlaceModel? _selectedPlace;
@@ -59,8 +60,7 @@ class _MainState extends State<Main> {
         _selectedPlace = initialPlace;
       });
 
-      _cafeListResponse = fetchCafeListByPlace(initialPlace);
-      _cafeListResponse!.then((data) {
+      _fetchCafeListOfPlace(initialPlace).then((data) {
         setState(() {
           _cafes = data.cafe.list;
           _selectedCafe = data.cafe.list[0];
@@ -72,8 +72,8 @@ class _MainState extends State<Main> {
   void handlePlaceClick(PlaceModel place) {
     setState(() {
       _selectedPlace = place;
-      _cafeListResponse = fetchCafeListByPlace(place);
-      _cafeListResponse!.then((data) {
+
+      _fetchCafeListOfPlace(place).then((data) {
         setState(() {
           _cafes = data.cafe.list;
           _selectedCafe = data.cafe.list[0];
@@ -100,7 +100,7 @@ class _MainState extends State<Main> {
               children: [
                 Container(
                     child: FutureBuilder<CafeListResponse>(
-                        future: _cafeListResponse,
+                        future: _cafeListResponses[_selectedPlace?.id],
                         builder: (context, snapshot) {
                           if (snapshot.hasData && _selectedPlace != null) {
                             return Column(
@@ -138,5 +138,13 @@ class _MainState extends State<Main> {
         );
       },
     );
+  }
+
+  Future<CafeListResponse> _fetchCafeListOfPlace(PlaceModel place) {
+    if (!_cafeListResponses.containsKey(place.id)) {
+      _cafeListResponses[place.id] = fetchCafeListByPlace(place);
+    }
+
+    return _cafeListResponses[place.id]!;
   }
 }
