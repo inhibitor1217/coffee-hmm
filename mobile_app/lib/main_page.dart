@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/api.dart';
 import 'package:mobile_app/cafe.dart';
+import 'package:mobile_app/cafe_image_slider.dart';
 import 'package:mobile_app/header.dart';
 import 'package:mobile_app/place_list.dart';
 import 'package:mobile_app/skeleton.dart';
-import 'package:mobile_app/slider.dart';
 import 'package:mobile_app/type.dart';
 
 class MainScreen extends StatelessWidget {
@@ -44,7 +44,8 @@ class _MainBodyState extends State<MainBody> {
   @override
   void initState() {
     super.initState();
-    fetchPlaceList().then((data) {
+    _placeResponse = fetchPlaceList();
+    _placeResponse!.then((data) {
       PlaceModel initialPlace = data.place.list[0];
       setState(() {
         _currentPlace = initialPlace;
@@ -96,7 +97,9 @@ class _MainBodyState extends State<MainBody> {
                                 children: [
                                   CafeInfo(cafe: _currentCafe!),
                                   CafeImageSlider(
-                                    cafeList: snapshot.data!.cafe.list,
+                                    imageList: _cafeList!
+                                        .map((cafe) => cafe.image.mainImage)
+                                        .toList(),
                                     handleSlide: handleCafeSlide,
                                   )
                                 ],
@@ -130,7 +133,8 @@ class _MainBodyState extends State<MainBody> {
       },
     );
   }
-   Future<CafeListResponse> _fetchCafeListOfPlace(PlaceModel place) {
+
+  Future<CafeListResponse> _fetchCafeListOfPlace(PlaceModel place) {
     if (!_cafeListResponse.containsKey(place.id)) {
       _cafeListResponse[place.id] = fetchCafeListByPlace(place);
     }

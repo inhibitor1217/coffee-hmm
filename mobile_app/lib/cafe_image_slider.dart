@@ -3,23 +3,21 @@ import 'package:mobile_app/cafe_image.dart';
 import 'package:mobile_app/type.dart';
 
 class CafeImageSlider extends StatefulWidget {
-  final List<CafeModel>? cafeList;
-  final CafeModel? cafe;
+  final List<CafeImageModel> imageList;
   final handleSlide;
 
-  CafeImageSlider({this.cafeList, this.cafe, required this.handleSlide});
+  CafeImageSlider({required this.imageList, required this.handleSlide});
 
   @override
-  _CafeImageSliderState createState() => _CafeImageSliderState(
-        isDetail: cafe != null,
-      );
+  _CafeImageSliderState createState() =>
+      _CafeImageSliderState(imageList: imageList);
 }
 
 class _CafeImageSliderState extends State<CafeImageSlider> {
-  final bool isDetail;
+  final List<CafeImageModel> imageList;
   final _controller = PageController();
 
-  _CafeImageSliderState({required this.isDetail});
+  _CafeImageSliderState({required this.imageList});
 
   @override
   Widget build(BuildContext context) {
@@ -28,35 +26,18 @@ class _CafeImageSliderState extends State<CafeImageSlider> {
     return Container(
       height: size,
       child: Stack(
-        children: [
-          isDetail ? _buildCafeImageSlider() : _buildCafeMainImageSlider(),
-        ],
+        children: [_buildImageSlider()],
       ),
     );
   }
 
-  Widget _buildCafeMainImageSlider() {
+  Widget _buildImageSlider() {
     return PageView.builder(
       physics: AlwaysScrollableScrollPhysics(),
       controller: _controller,
       itemBuilder: (BuildContext context, int index) {
         return CafeImage(
-            image: widget
-                .cafeList![index % widget.cafeList!.length].image.mainImage);
-      },
-      onPageChanged: (index) {
-        widget.handleSlide(index);
-      },
-    );
-  }
-
-  Widget _buildCafeImageSlider() {
-    return PageView.builder(
-      physics: AlwaysScrollableScrollPhysics(),
-      controller: _controller,
-      itemBuilder: (BuildContext context, int index) {
-        return CafeImage(
-            image: widget.cafe!.image.list[index % widget.cafe!.image.count]);
+            image: widget.imageList[index % widget.imageList.length]);
       },
       onPageChanged: (index) {
         widget.handleSlide(index);

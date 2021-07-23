@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/cafe.dart';
+import 'package:mobile_app/cafe_image_slider.dart';
 import 'package:mobile_app/header.dart';
-import 'package:mobile_app/slider.dart';
 import 'package:mobile_app/type.dart';
 
 class CafeDetailPage extends Page {
@@ -59,7 +59,7 @@ class _DetailBodyState extends State<DetailBody> {
     return Column(
       children: [
         CafeImageSlider(
-          cafe: cafe,
+          imageList: cafe.image.list,
           handleSlide: handleImageSlide,
         ),
         ImageIndexBullet(
