@@ -74,8 +74,6 @@ class DetailButton extends StatelessWidget {
                     ))
               ],
             )),
-        onTap: () {
-          button.onTapped();
-        });
+        onTap: button.onTapped);
   }
 }

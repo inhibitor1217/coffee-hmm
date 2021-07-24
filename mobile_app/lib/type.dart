@@ -213,7 +213,7 @@ class CafeButtonModel {
   final String text;
   final Color color;
   final String firstEngLetter;
-  final Function onTapped;
+  final void Function() onTapped;
 
   CafeButtonModel(
       {required this.text,
