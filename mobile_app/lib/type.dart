@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 import 'enum.dart';
@@ -205,4 +206,18 @@ class PlaceModel {
       cafeCount: json['cafeCount'],
     );
   }
+}
+
+@immutable
+class CafeButtonModel {
+  final String text;
+  final Color color;
+  final String firstEngLetter;
+  final Function onTapped;
+
+  CafeButtonModel(
+      {required this.text,
+      required this.color,
+      required this.firstEngLetter,
+      required this.onTapped});
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/cafe.dart';
-import 'package:mobile_app/cafe_detail_button.dart';
 import 'package:mobile_app/cafe_image_slider.dart';
+import 'package:mobile_app/detail_button.dart';
 import 'package:mobile_app/header.dart';
 import 'package:mobile_app/type.dart';
 
@@ -68,7 +68,7 @@ class _DetailBodyState extends State<DetailBody> {
           currentIndex: currentIndex ?? 0,
         ),
         CafeMinimumInfo(cafe: cafe),
-        CafeDetailButtonGroup(),
+        DetailButtonSet(),
       ],
     );
   }
