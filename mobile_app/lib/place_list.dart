@@ -21,7 +21,7 @@ class PlaceList extends StatelessWidget {
         shrinkWrap: true,
         crossAxisCount: 5,
         childAspectRatio: 2.5,
-        padding: EdgeInsets.symmetric(vertical: 20),
+        padding: EdgeInsets.symmetric(vertical: 14),
         children: _buildGridTileList(placeList!.length));
   }
 

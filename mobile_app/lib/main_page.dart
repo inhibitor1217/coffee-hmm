@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/api.dart';
-import 'package:mobile_app/cafe.dart';
-import 'package:mobile_app/cafe_image_slider.dart';
 import 'package:mobile_app/header.dart';
+import 'package:mobile_app/main_cafe_section.dart';
 import 'package:mobile_app/place_list.dart';
 import 'package:mobile_app/skeleton.dart';
 import 'package:mobile_app/type.dart';
@@ -79,59 +78,47 @@ class _MainBodyState extends State<MainBody> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: 1,
-      itemBuilder: (context, index) {
-        return Row(
-          children: [
-            Expanded(
-                child: Column(
-              children: [
-                Container(
-                    child: FutureBuilder<CafeListResponse>(
-                        future: _cafeListResponse[_currentPlace?.id],
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData && _currentPlace != null) {
-                            return GestureDetector(
-                              child: Column(
-                                children: [
-                                  CafeInfo(cafe: _currentCafe!),
-                                  CafeImageSlider(
-                                    imageList: _cafeList!
-                                        .map((cafe) => cafe.image.mainImage)
-                                        .toList(),
-                                    handleSlide: handleCafeSlide,
-                                  )
-                                ],
-                              ),
-                              onTap: () => onTapped(_currentCafe!),
-                            );
-                          } else if (snapshot.hasError) {
-                            return Text("${snapshot.error}");
-                          }
-                          return Skeleton();
-                        })),
-                Container(
-                    child: FutureBuilder<PlaceListResponse>(
-                        future: _placeResponse,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData && _currentCafe != null) {
-                            return PlaceList(
-                              placeList: snapshot.data!.place.list,
-                              currentPlace: _currentPlace,
-                              handlePlaceClick: handlePlaceClick,
-                            );
-                          } else if (snapshot.hasError) {
-                            return Text("${snapshot.error}");
-                          }
-                          return Skeleton();
-                        }))
-              ],
-            ))
-          ],
-        );
-      },
-    );
+    if (_currentPlace != null && _cafeList != null && _currentCafe != null) {
+      return ListView.builder(
+        itemCount: 1,
+        itemBuilder: (context, index) {
+          return Row(
+            children: [
+              Expanded(
+                  child: Column(
+                children: [
+                  MainCafeSection(
+                    cafeListResponses: _cafeListResponse,
+                    cafeList: _cafeList!,
+                    currentCafe: _currentCafe!,
+                    currentPlace: _currentPlace!,
+                    onSlide: handleCafeSlide,
+                    onTapped: onTapped,
+                  ),
+                  Container(
+                      child: FutureBuilder<PlaceListResponse>(
+                          future: _placeResponse,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return PlaceList(
+                                placeList: snapshot.data!.place.list,
+                                currentPlace: _currentPlace,
+                                handlePlaceClick: handlePlaceClick,
+                              );
+                            } else if (snapshot.hasError) {
+                              return Text("${snapshot.error}");
+                            }
+                            return Skeleton();
+                          }))
+                ],
+              ))
+            ],
+          );
+        },
+      );
+    } else {
+      return Center(child: Text('loading...'));
+    }
   }
 
   Future<CafeListResponse> _fetchCafeListOfPlace(PlaceModel place) {
