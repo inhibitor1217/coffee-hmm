@@ -61,6 +61,7 @@ class _MainBodyState extends State<MainBody> {
 
   void handlePlaceClick(PlaceModel place) {
     setState(() {
+      _currentPlace = place;
       _fetchCafeListOfPlace(place).then((data) {
         setState(() {
           _cafeList = data.cafe.list;
