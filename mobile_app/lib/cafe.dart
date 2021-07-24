@@ -9,10 +9,11 @@ class Cafe extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double size = MediaQuery.of(context).size.width;
     return Column(
       children: <Widget>[
         CafeInfo(cafe: cafe),
-        CafeImage(image: cafe.image.mainImage),
+        CafeImage(image: cafe.image.mainImage, size: size),
       ],
     );
   }

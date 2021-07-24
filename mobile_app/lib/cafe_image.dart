@@ -4,12 +4,12 @@ import 'package:mobile_app/type.dart';
 
 class CafeImage extends StatelessWidget {
   final CafeImageModel image;
+  final double size;
 
-  CafeImage({required this.image});
+  CafeImage({required this.image, required this.size});
 
   @override
   Widget build(BuildContext context) {
-    double size = MediaQuery.of(context).size.width;
     return Container(
       height: size,
       child: CachedNetworkImage(
