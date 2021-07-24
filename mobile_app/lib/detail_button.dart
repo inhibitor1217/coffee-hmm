@@ -17,7 +17,7 @@ class DetailButtonSet extends StatelessWidget {
       text: "인스타그램\n바로가기",
       color: Color.fromRGBO(214, 42, 123, 1),
       firstEngLetter: 'I',
-      onTapped: () => handleInstagramClick);
+      onTapped: handleInstagramClick);
 
   @override
   Widget build(BuildContext context) {
@@ -41,42 +41,41 @@ class DetailButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: Container(
-          width: 48,
-          padding: EdgeInsets.symmetric(horizontal: 4),
-          child: Column(
-            children: [
-              Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    color: button.color,
-                    borderRadius: BorderRadius.circular(50),
-                    border: Border.all(
-                        color: button.color,
-                        width: 1,
-                        style: BorderStyle.solid),
-                  ),
-                  child: Center(
-                      child: Text(
-                    button.firstEngLetter,
-                    style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
-                  ))),
-              Container(
-                  padding: EdgeInsets.only(top: 4),
-                  child: Text(
-                    button.text,
-                    style: TextStyle(fontSize: 11),
-                    textAlign: TextAlign.center,
-                  ))
-            ],
-          )),
-      onTap: () {
-        button.onTapped();
-      },
-    );
+        child: Container(
+            width: 48,
+            padding: EdgeInsets.symmetric(horizontal: 4),
+            child: Column(
+              children: [
+                Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: button.color,
+                      borderRadius: BorderRadius.circular(50),
+                      border: Border.all(
+                          color: button.color,
+                          width: 1,
+                          style: BorderStyle.solid),
+                    ),
+                    child: Center(
+                        child: Text(
+                      button.firstEngLetter,
+                      style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                    ))),
+                Container(
+                    padding: EdgeInsets.only(top: 4),
+                    child: Text(
+                      button.text,
+                      style: TextStyle(fontSize: 11),
+                      textAlign: TextAlign.center,
+                    ))
+              ],
+            )),
+        onTap: () {
+          button.onTapped();
+        });
   }
 }

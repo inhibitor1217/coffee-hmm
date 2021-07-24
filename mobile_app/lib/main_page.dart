@@ -88,7 +88,7 @@ class _MainBodyState extends State<MainBody> {
                   child: Column(
                 children: [
                   MainCafeSection(
-                    cafeListResponse: _cafeListResponse,
+                    cafeListResponses: _cafeListResponse,
                     cafeList: _cafeList!,
                     currentCafe: _currentCafe!,
                     currentPlace: _currentPlace!,

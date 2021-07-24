@@ -12,7 +12,7 @@ class MainButtonSet extends StatelessWidget {
       text: "인스타그램 바로가기",
       firstEngLetter: 'I',
       color: Color.fromRGBO(214, 42, 123, 1),
-      onTapped: () => handleInstagramClick);
+      onTapped: handleInstagramClick);
 
   @override
   Widget build(BuildContext context) {
@@ -35,31 +35,30 @@ class MainButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: Container(
-          width: 16,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                  padding: EdgeInsets.only(right: 4),
-                  child: Text(
-                    button.firstEngLetter,
-                    style: TextStyle(
-                        fontSize: 12,
-                        color: button.color,
-                        fontWeight: FontWeight.bold),
-                  )),
-              Text(
-                button.text,
-                style: TextStyle(fontSize: 12),
-                textAlign: TextAlign.center,
-              )
-            ],
-          )),
-      onTap: () {
-        button.onTapped();
-      },
-    );
+        child: Container(
+            width: 16,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                    padding: EdgeInsets.only(right: 4),
+                    child: Text(
+                      button.firstEngLetter,
+                      style: TextStyle(
+                          fontSize: 12,
+                          color: button.color,
+                          fontWeight: FontWeight.bold),
+                    )),
+                Text(
+                  button.text,
+                  style: TextStyle(fontSize: 12),
+                  textAlign: TextAlign.center,
+                )
+              ],
+            )),
+        onTap: () {
+          button.onTapped();
+        });
   }
 }
