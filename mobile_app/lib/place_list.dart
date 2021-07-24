@@ -3,12 +3,12 @@ import 'package:mobile_app/type.dart';
 
 class PlaceList extends StatelessWidget {
   final List<PlaceModel>? placeList;
-  final PlaceModel? selectedPlace;
+  final PlaceModel? currentPlace;
   final void Function(PlaceModel) handlePlaceClick;
 
   PlaceList(
       {required this.placeList,
-      required this.selectedPlace,
+      required this.currentPlace,
       required this.handlePlaceClick});
 
   List<Container> _buildGridTileList(int count) => List.generate(
@@ -26,7 +26,7 @@ class PlaceList extends StatelessWidget {
   }
 
   Widget _buildPlace(PlaceModel place) {
-    final isSelected = place == selectedPlace;
+    final isSelected = place == currentPlace;
 
     return GestureDetector(
       child: Text(
