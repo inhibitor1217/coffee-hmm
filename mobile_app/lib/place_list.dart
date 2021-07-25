@@ -12,7 +12,12 @@ class PlaceList extends StatelessWidget {
       required this.handlePlaceClick});
 
   List<Container> _buildGridTileList(int count) => List.generate(
-      count, (index) => Container(child: _buildPlace(placeList![index])));
+      count,
+      (index) => Container(
+          child: CafePlace(
+              place: placeList![index],
+              isSelected: placeList![index] == currentPlace,
+              onTapped: handlePlaceClick)));
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +26,20 @@ class PlaceList extends StatelessWidget {
         shrinkWrap: true,
         crossAxisCount: 5,
         childAspectRatio: 2.5,
-        padding: EdgeInsets.symmetric(vertical: 14),
         children: _buildGridTileList(placeList!.length));
   }
+}
 
-  Widget _buildPlace(PlaceModel place) {
-    final isSelected = place == currentPlace;
+class CafePlace extends StatelessWidget {
+  final PlaceModel place;
+  final bool isSelected;
+  final void Function(PlaceModel) onTapped;
 
+  CafePlace(
+      {required this.place, required this.isSelected, required this.onTapped});
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       child: Text(
         place.name,
@@ -39,7 +51,7 @@ class PlaceList extends StatelessWidget {
         textAlign: TextAlign.center,
       ),
       onTap: () {
-        handlePlaceClick(place);
+        onTapped(place);
       },
     );
   }

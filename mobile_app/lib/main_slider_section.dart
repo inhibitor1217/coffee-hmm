@@ -5,7 +5,7 @@ import 'package:mobile_app/main_button.dart';
 import 'package:mobile_app/skeleton.dart';
 import 'package:mobile_app/type.dart';
 
-class MainCafeSection extends StatelessWidget {
+class MainSlider extends StatelessWidget {
   final Map<String, Future<CafeListResponse>> cafeListResponses;
   final List<CafeModel> cafeList;
   final CafeModel currentCafe;
@@ -13,7 +13,7 @@ class MainCafeSection extends StatelessWidget {
   final void Function(int) onSlide;
   final void Function(CafeModel) onTapped;
 
-  MainCafeSection(
+  MainSlider(
       {required this.cafeListResponses,
       required this.cafeList,
       required this.currentCafe,

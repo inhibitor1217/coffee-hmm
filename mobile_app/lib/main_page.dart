@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/api.dart';
 import 'package:mobile_app/header.dart';
-import 'package:mobile_app/main_cafe_section.dart';
-import 'package:mobile_app/place_list.dart';
-import 'package:mobile_app/skeleton.dart';
+import 'package:mobile_app/main_button.dart';
+import 'package:mobile_app/main_slider_view.dart';
+import 'package:mobile_app/main_table_view.dart';
 import 'package:mobile_app/type.dart';
 
 class MainScreen extends StatelessWidget {
@@ -37,6 +37,7 @@ class _MainBodyState extends State<MainBody> {
   CafeModel? _currentCafe;
   PlaceModel? _currentPlace;
   final ValueChanged<CafeModel> onTapped;
+  bool isTableView = false;
 
   _MainBodyState({required this.onTapped});
 
@@ -80,42 +81,46 @@ class _MainBodyState extends State<MainBody> {
   @override
   Widget build(BuildContext context) {
     if (_currentPlace != null && _cafeList != null && _currentCafe != null) {
-      return ListView.builder(
-        itemCount: 1,
-        itemBuilder: (context, index) {
-          return Row(
-            children: [
-              Expanded(
-                  child: Column(
+      return Stack(
+        children: [
+          ListView.builder(
+            itemCount: 1,
+            itemBuilder: (context, index) {
+              return Column(
                 children: [
-                  MainCafeSection(
-                    cafeListResponses: _cafeListResponse,
-                    cafeList: _cafeList!,
-                    currentCafe: _currentCafe!,
-                    currentPlace: _currentPlace!,
-                    onSlide: handleCafeSlide,
-                    onTapped: onTapped,
-                  ),
-                  Container(
-                      child: FutureBuilder<PlaceListResponse>(
-                          future: _placeResponse,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return PlaceList(
-                                placeList: snapshot.data!.place.list,
-                                currentPlace: _currentPlace,
-                                handlePlaceClick: handlePlaceClick,
-                              );
-                            } else if (snapshot.hasError) {
-                              return Text("${snapshot.error}");
-                            }
-                            return Skeleton();
-                          }))
+                  isTableView
+                      ? MainTableView(
+                          cafeListResponses: _cafeListResponse,
+                          placeResponse: _placeResponse,
+                          cafeList: _cafeList!,
+                          currentCafe: _currentCafe!,
+                          currentPlace: _currentPlace!,
+                          onTapped: onTapped,
+                          onChangePlace: handlePlaceClick)
+                      : MainSliderView(
+                          cafeListResponses: _cafeListResponse,
+                          placeResponse: _placeResponse,
+                          cafeList: _cafeList!,
+                          currentCafe: _currentCafe!,
+                          currentPlace: _currentPlace!,
+                          onSlide: handleCafeSlide,
+                          onTapped: onTapped,
+                          onChangePlace: handlePlaceClick),
                 ],
+              );
+            },
+          ),
+          Positioned(
+              bottom: 0,
+              child: GestureDetector(
+                child: MainFloatingButton(isTableView: isTableView),
+                onTap: () {
+                  setState(() {
+                    isTableView = !isTableView;
+                  });
+                },
               ))
-            ],
-          );
-        },
+        ],
       );
     } else {
       return Center(child: Text('loading...'));

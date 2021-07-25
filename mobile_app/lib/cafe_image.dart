@@ -17,8 +17,13 @@ class CafeImage extends StatelessWidget {
         fit: BoxFit.cover,
         progressIndicatorBuilder: (context, url, downloadProgress) {
           return Center(
-              child: CircularProgressIndicator(
-                  color: Colors.black12, value: downloadProgress.progress));
+              child: SizedBox(
+                  width: size * 0.1,
+                  height: size * 0.1,
+                  child: CircularProgressIndicator(
+                      color: Colors.black12,
+                      strokeWidth: size > 319 ? 5 : 2,
+                      value: downloadProgress.progress)));
         },
         errorWidget: (context, error, stackTrace) {
           return Center(child: Text('no image'));

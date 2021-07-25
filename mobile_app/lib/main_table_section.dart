@@ -66,7 +66,7 @@ class MainTableCafeElement extends StatelessWidget {
         decoration: BoxDecoration(
             border: Border(
                 bottom: BorderSide(
-                    color: Colors.black12,
+                    color: Color.fromRGBO(243, 243, 243, 1),
                     width: 1,
                     style: BorderStyle.solid))),
         child: GestureDetector(
