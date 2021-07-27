@@ -60,24 +60,3 @@ class MainButton extends StatelessWidget {
         onTap: button.onTapped);
   }
 }
-
-class MainFloatingButton extends StatelessWidget {
-  final bool isTableView;
-
-  MainFloatingButton({required this.isTableView});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width - 40,
-      height: 36,
-      alignment: Alignment.center,
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 28),
-      decoration: BoxDecoration(
-          color: Color.fromRGBO(243, 243, 243, 1),
-          borderRadius: BorderRadius.circular(4)),
-      child: Text(isTableView ? '포스트형 보기' : '리스트형 보기',
-          style: TextStyle(color: Colors.black)),
-    );
-  }
-}

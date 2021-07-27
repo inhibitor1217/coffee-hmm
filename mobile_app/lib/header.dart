@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget with PreferredSizeWidget {
+  final void Function()? onChangeView;
+  final bool isDetailPage;
+
+  Header({this.onChangeView, required this.isDetailPage});
+
   @override
   Size get preferredSize => const Size.fromHeight(48);
 
@@ -17,6 +22,11 @@ class Header extends StatelessWidget with PreferredSizeWidget {
             color: Colors.black,
           )),
       centerTitle: true,
+      actions: isDetailPage
+          ? null
+          : <Widget>[
+              IconButton(onPressed: onChangeView, icon: Icon(Icons.list))
+            ],
     );
   }
 }
