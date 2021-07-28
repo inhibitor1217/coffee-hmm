@@ -63,12 +63,6 @@ class MainTableCafeElement extends StatelessWidget {
         height: 200,
         padding: EdgeInsets.symmetric(horizontal: 20),
         alignment: Alignment.centerLeft,
-        decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(
-                    color: Color.fromRGBO(243, 243, 243, 1),
-                    width: 1,
-                    style: BorderStyle.solid))),
         child: GestureDetector(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

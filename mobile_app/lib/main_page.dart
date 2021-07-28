@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/api.dart';
 import 'package:mobile_app/header.dart';
-import 'package:mobile_app/main_floating_place.dart';
+import 'package:mobile_app/main_button.dart';
+import 'package:mobile_app/main_place_bottom_sheet.dart';
 import 'package:mobile_app/main_slider_section.dart';
 import 'package:mobile_app/main_table_section.dart';
 import 'package:mobile_app/type.dart';
@@ -44,13 +45,13 @@ class MainBody extends StatefulWidget {
   _MainBodyState createState() => _MainBodyState(onTapped: onTapped);
 }
 
-class _MainBodyState extends State<MainBody> {
+class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
+  final ValueChanged<CafeModel> onTapped;
   Map<String, Future<CafeListResponse>> _cafeListResponses = {};
   Future<PlaceListResponse>? _placeResponses;
   List<CafeModel>? _cafeList;
   CafeModel? _currentCafe;
   PlaceModel? _currentPlace;
-  final ValueChanged<CafeModel> onTapped;
 
   _MainBodyState({required this.onTapped});
 
@@ -71,6 +72,25 @@ class _MainBodyState extends State<MainBody> {
         });
       });
     });
+  }
+
+  late final AnimationController _controller = AnimationController(
+    duration: const Duration(milliseconds: 500),
+    vsync: this,
+  );
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void handleBottomSheet(bool openMode) {
+    if (openMode) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
+    }
   }
 
   void handlePlaceClick(PlaceModel place) {
@@ -94,51 +114,44 @@ class _MainBodyState extends State<MainBody> {
   @override
   Widget build(BuildContext context) {
     if (_currentPlace != null && _cafeList != null && _currentCafe != null) {
-      return widget.isTableView
-          ? Stack(
-              children: [
-                ListView.builder(
-                  itemCount: 1,
-                  itemBuilder: (context, index) {
-                    return Container(
-                        margin: EdgeInsets.only(bottom: 180),
-                        child: MainTable(
-                          cafeListResponses: _cafeListResponses,
-                          cafeList: _cafeList!,
-                          currentCafe: _currentCafe!,
-                          currentPlace: _currentPlace!,
-                          onTapped: onTapped,
-                        ));
-                  },
-                ),
-                Positioned(
-                    left: 20,
-                    bottom: 0,
-                    child: MainFloatingPlace(
-                        placeResponses: _placeResponses,
-                        currentPlace: _currentPlace!,
-                        onChangePlace: handlePlaceClick))
-              ],
-            )
-          : ListView.builder(
-              itemCount: 1,
-              itemBuilder: (context, index) {
-                return Column(children: [
-                  MainSlider(
-                    cafeListResponses: _cafeListResponses,
-                    cafeList: _cafeList!,
-                    currentCafe: _currentCafe!,
-                    currentPlace: _currentPlace!,
-                    onSlide: handleCafeSlide,
-                    onTapped: onTapped,
-                  ),
-                  MainFloatingPlace(
-                      placeResponses: _placeResponses,
+      return Stack(
+        children: [
+          ListView.builder(
+            itemCount: 1,
+            itemBuilder: (context, index) {
+              return widget.isTableView
+                  ? MainTable(
+                      cafeListResponses: _cafeListResponses,
+                      cafeList: _cafeList!,
+                      currentCafe: _currentCafe!,
                       currentPlace: _currentPlace!,
-                      onChangePlace: handlePlaceClick)
-                ]);
-              },
-            );
+                      onTapped: onTapped,
+                    )
+                  : Column(children: [
+                      MainSlider(
+                        cafeListResponses: _cafeListResponses,
+                        cafeList: _cafeList!,
+                        currentCafe: _currentCafe!,
+                        currentPlace: _currentPlace!,
+                        onSlide: handleCafeSlide,
+                        onTapped: onTapped,
+                      ),
+                      MainButtonSetOfSlider(
+                          handleBottomSheet: handleBottomSheet)
+                    ]);
+            },
+          ),
+          PositionedTransition(
+              rect: RelativeRectTween(
+                      /* BottomSheet height is 268px */
+                      begin: RelativeRect.fromLTRB(
+                          0, MediaQuery.of(context).size.height, 0, 0),
+                      end: RelativeRect.fromLTRB(
+                          0, MediaQuery.of(context).size.height - 268, 0, 0))
+                  .animate(_controller),
+              child: MainPlaceBottomSheet(handleBottomSheet: handleBottomSheet))
+        ],
+      );
     } else {
       return Center(child: Text('loading...'));
     }

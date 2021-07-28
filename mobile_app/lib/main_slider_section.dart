@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/cafe.dart';
 import 'package:mobile_app/cafe_image_slider.dart';
-import 'package:mobile_app/main_button.dart';
 import 'package:mobile_app/skeleton.dart';
 import 'package:mobile_app/type.dart';
 
@@ -28,23 +27,20 @@ class MainSlider extends StatelessWidget {
             future: cafeListResponses[currentPlace.id],
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return Column(children: [
-                  GestureDetector(
-                    child: Column(
-                      children: [
-                        CafeInfo(cafe: currentCafe),
-                        CafeImageSlider(
-                          imageList: cafeList
-                              .map((cafe) => cafe.image.mainImage)
-                              .toList(),
-                          handleSlide: onSlide,
-                        ),
-                      ],
-                    ),
-                    onTap: () => onTapped(currentCafe),
+                return GestureDetector(
+                  child: Column(
+                    children: [
+                      CafeInfo(cafe: currentCafe),
+                      CafeImageSlider(
+                        imageList: cafeList
+                            .map((cafe) => cafe.image.mainImage)
+                            .toList(),
+                        handleSlide: onSlide,
+                      ),
+                    ],
                   ),
-                  MainButtonSet()
-                ]);
+                  onTap: () => onTapped(currentCafe),
+                );
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }

@@ -4,7 +4,7 @@ import 'package:mobile_app/util.dart';
 
 class DetailButtonSet extends StatelessWidget {
   final _hmmLinkShare = CafeButtonModel(
-      text: "흠 링크\n바로가기",
+      text: "흠 링크\n복사하기",
       color: Color.fromRGBO(255, 235, 77, 1),
       firstEngLetter: 'H',
       onTapped: handleLinkShareClick);

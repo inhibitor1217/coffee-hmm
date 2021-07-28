@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/type.dart';
 import 'package:mobile_app/util.dart';
 
-class MainButtonSet extends StatelessWidget {
+class MainButtonSetOfSlider extends StatelessWidget {
+  final void Function(bool) handleBottomSheet;
+
+  MainButtonSetOfSlider({required this.handleBottomSheet});
+
   final _naverShort = CafeButtonModel(
       text: "네이버 바로가기",
       firstEngLetter: 'N',
@@ -20,17 +24,33 @@ class MainButtonSet extends StatelessWidget {
         padding: EdgeInsets.only(top: 14),
         child: Row(
           children: [
-            Expanded(child: MainButton(button: _naverShort)),
-            Expanded(child: MainButton(button: _instagramShort))
+            Expanded(child: MainButtonOfSlider(button: _naverShort)),
+            Expanded(child: MainButtonOfSlider(button: _instagramShort)),
+            GestureDetector(
+                child: Container(
+                    width: 56,
+                    height: 24,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(
+                            color: Colors.black12,
+                            width: 1,
+                            style: BorderStyle.solid)),
+                    child: Text(
+                      '유사 동네',
+                      style: TextStyle(fontSize: 12),
+                    )),
+                onTap: () => handleBottomSheet(true))
           ],
         ));
   }
 }
 
-class MainButton extends StatelessWidget {
+class MainButtonOfSlider extends StatelessWidget {
   final CafeButtonModel button;
 
-  MainButton({required this.button});
+  MainButtonOfSlider({required this.button});
 
   @override
   Widget build(BuildContext context) {
