@@ -20,6 +20,7 @@ class MainTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+        margin: EdgeInsets.only(bottom: 48),
         child: FutureBuilder<CafeListResponse>(
             future: cafeListResponses[currentPlace.id],
             builder: (context, snapshot) {

@@ -28,8 +28,9 @@ class MainButtonSetOfSlider extends StatelessWidget {
             Expanded(child: MainButtonOfSlider(button: _instagramShort)),
             GestureDetector(
                 child: Container(
-                    width: 56,
+                    width: 80,
                     height: 24,
+                    margin: EdgeInsets.symmetric(horizontal: 20),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(4),
@@ -38,7 +39,7 @@ class MainButtonSetOfSlider extends StatelessWidget {
                             width: 1,
                             style: BorderStyle.solid)),
                     child: Text(
-                      '유사 동네',
+                      '핫플레이스',
                       style: TextStyle(fontSize: 12),
                     )),
                 onTap: () => handleBottomSheet(true))

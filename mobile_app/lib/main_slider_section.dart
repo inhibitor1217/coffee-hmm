@@ -41,6 +41,10 @@ class MainSlider extends StatelessWidget {
                   ),
                   onTap: () => onTapped(currentCafe),
                 );
+              } else if (!snapshot.hasData) {
+                return Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.width);
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }

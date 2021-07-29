@@ -17,43 +17,64 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  bool isTableView = false;
+  /* Main Page has 2 view mode : Slider, Table */
+  bool isTableViewMode = false;
+  double opacityLevel = 0.0;
 
-  void handleChangeView() {
+  void handleChangeViewMode() {
     setState(() {
-      isTableView = !isTableView;
+      isTableViewMode = !isTableViewMode;
+    });
+  }
+
+  void handleOpacity(double opacity) {
+    setState(() {
+      opacityLevel = opacity;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: Header(isDetailPage: false, onChangeView: handleChangeView),
-      body: MainBody(onTapped: widget.onTapped, isTableView: isTableView),
-    );
+        backgroundColor: Colors.white,
+        extendBodyBehindAppBar: true,
+        appBar: Header(
+            isDetailPage: false,
+            onChangeViewMode: handleChangeViewMode,
+            opacityLevel: opacityLevel),
+        body: MainBody(
+            onTapped: widget.onTapped,
+            isTableViewMode: isTableViewMode,
+            onChangeOpacity: handleOpacity));
   }
 }
 
 class MainBody extends StatefulWidget {
   final ValueChanged<CafeModel> onTapped;
-  final bool isTableView;
+  final ValueChanged<double> onChangeOpacity;
+  final bool isTableViewMode;
 
-  MainBody({required this.onTapped, required this.isTableView});
+  MainBody(
+      {required this.onTapped,
+      required this.isTableViewMode,
+      required this.onChangeOpacity});
 
   @override
-  _MainBodyState createState() => _MainBodyState(onTapped: onTapped);
+  _MainBodyState createState() =>
+      _MainBodyState(onTapped: onTapped, onChangeOpacity: onChangeOpacity);
 }
 
 class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
   final ValueChanged<CafeModel> onTapped;
+  final ValueChanged<double> onChangeOpacity;
   Map<String, Future<CafeListResponse>> _cafeListResponses = {};
   Future<PlaceListResponse>? _placeResponses;
   List<CafeModel>? _cafeList;
   CafeModel? _currentCafe;
   PlaceModel? _currentPlace;
+  double opacityLevel = 0.0;
 
-  _MainBodyState({required this.onTapped});
+  _MainBodyState({required this.onTapped, required this.onChangeOpacity});
 
   @override
   void initState() {
@@ -75,21 +96,23 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
   }
 
   late final AnimationController _controller = AnimationController(
-    duration: const Duration(milliseconds: 500),
+    duration: Duration(milliseconds: 300),
     vsync: this,
   );
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   void handleBottomSheet(bool openMode) {
     if (openMode) {
       _controller.forward();
+      setState(() {
+        opacityLevel = 1.0;
+      });
+      onChangeOpacity(1.0);
     } else {
       _controller.reverse();
+      setState(() {
+        opacityLevel = 0.0;
+      });
+      onChangeOpacity(0.0);
     }
   }
 
@@ -119,7 +142,7 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
           ListView.builder(
             itemCount: 1,
             itemBuilder: (context, index) {
-              return widget.isTableView
+              return widget.isTableViewMode
                   ? MainTable(
                       cafeListResponses: _cafeListResponses,
                       cafeList: _cafeList!,
@@ -141,15 +164,30 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
                     ]);
             },
           ),
+          AnimatedOpacity(
+              opacity: opacityLevel,
+              duration: Duration(milliseconds: 200),
+              child: Visibility(
+                  visible: opacityLevel == 0.0 ? false : true,
+                  child: GestureDetector(
+                      child: Container(
+                          height: double.infinity,
+                          decoration: BoxDecoration(color: Colors.black45)),
+                      onTap: () => handleBottomSheet(false)))),
           PositionedTransition(
               rect: RelativeRectTween(
-                      /* BottomSheet height is 268px */
+                      /* BottomSheet height is 348px */
                       begin: RelativeRect.fromLTRB(
                           0, MediaQuery.of(context).size.height, 0, 0),
                       end: RelativeRect.fromLTRB(
-                          0, MediaQuery.of(context).size.height - 268, 0, 0))
+                          0, MediaQuery.of(context).size.height - 320, 0, 0))
                   .animate(_controller),
-              child: MainPlaceBottomSheet(handleBottomSheet: handleBottomSheet))
+              child: AnimatedOpacity(
+                  opacity: opacityLevel,
+                  duration: Duration(milliseconds: 200),
+                  child: MainPlaceBottomSheet(
+                      cafeList: _cafeList!,
+                      handleBottomSheet: handleBottomSheet)))
         ],
       );
     } else {
