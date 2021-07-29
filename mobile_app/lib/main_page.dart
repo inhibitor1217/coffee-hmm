@@ -40,6 +40,7 @@ class _MainScreenState extends State<MainScreen> {
         extendBodyBehindAppBar: true,
         appBar: Header(
             isDetailPage: false,
+            isTableViewMode: isTableViewMode,
             onChangeViewMode: handleChangeViewMode,
             opacityLevel: opacityLevel),
         body: MainBody(
@@ -176,7 +177,7 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
                       onTap: () => handleBottomSheet(false)))),
           PositionedTransition(
               rect: RelativeRectTween(
-                      /* BottomSheet height is 348px */
+                      /* BottomSheet height is 320px */
                       begin: RelativeRect.fromLTRB(
                           0, MediaQuery.of(context).size.height, 0, 0),
                       end: RelativeRect.fromLTRB(

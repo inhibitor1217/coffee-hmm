@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget with PreferredSizeWidget {
   final void Function()? onChangeViewMode;
+  final bool isTableViewMode;
   final bool isDetailPage;
   final double opacityLevel;
 
   Header(
       {this.onChangeViewMode,
+      required this.isTableViewMode,
       required this.isDetailPage,
       required this.opacityLevel});
 
@@ -16,7 +18,7 @@ class Header extends StatelessWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.transparent,
+      backgroundColor: isTableViewMode ? Colors.white : Colors.transparent,
       elevation: 0,
       iconTheme: IconThemeData(color: Colors.black45),
       title: Text('coffeehmm',
