@@ -1,25 +1,8 @@
 import { Exception } from '@coffee-hmm/common';
-import { logLevel, buildString } from '.';
-import { EventContext, EventHandler, EventOptions } from '../types/event';
-import { Logger } from './logger';
-
-const formatBody = (body: AnyJson) =>
-  typeof body === 'string' ? body : JSON.stringify(body);
-
-const formatJobCompleteMessage = (
-  options: EventOptions,
-  statusCode: number,
-  body: AnyJson
-): string => {
-  const { name, buildString: version = buildString() } = options;
-
-  return [
-    `job.name: ${name}`,
-    `job.version: ${version}`,
-    `statusCode: ${statusCode}`,
-    formatBody(body),
-  ].join('\n');
-};
+import { logLevel } from '..';
+import { EventContext, EventHandler, EventOptions } from '../../types/event';
+import { Logger } from '../logger';
+import { formatBody, formatJobCompleteMessage } from './util';
 
 const scheduledEventHandler = (
   handler: EventHandler,
