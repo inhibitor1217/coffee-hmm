@@ -149,11 +149,13 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
       return Column(
         children: [
           /* 뷰 모드 공통 장소 탭 */
-          PlaceTab(
-            placeList: _placeList!,
-            currentPlace: _currentPlace!,
-            onTapped: handlePlaceClick,
-          ),
+          Visibility(
+              visible: backgroundOpacity == 0.0 ? true : false,
+              child: PlaceTab(
+                placeList: _placeList!,
+                currentPlace: _currentPlace!,
+                onTapped: handlePlaceClick,
+              )),
           /* 뷰 모드에 따른 메인 컨텐츠 */
           Flexible(
               child: Stack(children: [
@@ -169,6 +171,21 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
                         onTapped: onTapped,
                       )
                     : Column(children: [
+                        /* BottomSheet 이 열렸을 때 background로 고정된 영역(헤더 + 장소탭)을 대체하기 위함 */
+                        Visibility(
+                            visible: backgroundOpacity == 0.0 ? false : true,
+                            child: Column(children: [
+                              Header(
+                                  isDetailPage: false,
+                                  isTableViewMode: false,
+                                  onChangeViewMode: () {},
+                                  isBottomSheetOpen: backgroundOpacity == 1.0),
+                              PlaceTab(
+                                placeList: _placeList!,
+                                currentPlace: _currentPlace!,
+                                onTapped: handlePlaceClick,
+                              )
+                            ])),
                         MainSlider(
                           cafeListResponses: _cafeListResponses,
                           cafeList: _cafeList!,

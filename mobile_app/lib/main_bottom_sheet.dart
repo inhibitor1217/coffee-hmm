@@ -25,11 +25,11 @@ class MainBottomSheetController extends StatelessWidget {
                 onTapped: onTapped)),
         PositionedTransition(
             rect: RelativeRectTween(
-                    /* BottomSheet height is 360px */
+                    /* BottomSheet height is 280px */
                     begin: RelativeRect.fromLTRB(
                         0, MediaQuery.of(context).size.height, 0, 0),
                     end: RelativeRect.fromLTRB(
-                        0, MediaQuery.of(context).size.height - 360, 0, 0))
+                        0, MediaQuery.of(context).size.height - 280, 0, 0))
                 .animate(controller),
             child: AnimatedOpacity(
                 opacity: backgroundOpacity,
@@ -143,7 +143,7 @@ class BottomSheetBackground extends StatelessWidget {
         child: GestureDetector(
             child: Container(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height - 48,
+                height: MediaQuery.of(context).size.height,
                 decoration: BoxDecoration(color: Colors.black54)),
             onTap: () => onTapped(false)));
   }

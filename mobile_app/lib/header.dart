@@ -13,7 +13,7 @@ class Header extends StatelessWidget with PreferredSizeWidget {
       required this.isBottomSheetOpen});
 
   @override
-  Size get preferredSize => Size.fromHeight(48);
+  Size get preferredSize => Size.fromHeight(isBottomSheetOpen ? 0 : 48);
 
   @override
   Widget build(BuildContext context) {
