@@ -29,6 +29,9 @@ custom:
         - '@coffee-hmm/common'    # NOTE: cannot allow heavy pg, typeorm modules to be executed at Lambda@Edge
         - aws-sdk
     packager: yarn
+    packagerOptions:
+      scripts:
+        - if [ -f src/job/resizeImage/originResponse.js ]; then rm -rf node_modules/sharp; SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm install --arch=x64 --platform=linux sharp; fi;
     excludeFiles: src/**/*.test.ts
 
 # NOTE: environment variables are not allowed for Lambda@Edge handlers
