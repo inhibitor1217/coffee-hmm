@@ -30,7 +30,9 @@ class CafeDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: Header(
-            isDetailPage: true, isTableViewMode: false, opacityLevel: 0.0),
+            isDetailPage: true,
+            isTableViewMode: false,
+            isBottomSheetOpen: false),
         body: DetailBody(cafe: cafe));
   }
 }

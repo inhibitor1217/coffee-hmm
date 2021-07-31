@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/type.dart';
 
-class MainPlaceBottomSheet extends StatefulWidget {
+class MainBottomSheet extends StatefulWidget {
   final List<CafeModel> cafeList; /* 현재 장소를 제외한 10개 장소별 대표 카페 */
-  final void Function(bool) handleBottomSheet;
+  final void Function(bool) onTapped;
 
-  MainPlaceBottomSheet(
-      {required this.cafeList, required this.handleBottomSheet});
+  MainBottomSheet({required this.cafeList, required this.onTapped});
 
   @override
-  _MainPlaceBottomSheetState createState() => _MainPlaceBottomSheetState();
+  _MainBottomSheetState createState() => _MainBottomSheetState();
 }
 
-class _MainPlaceBottomSheetState extends State<MainPlaceBottomSheet> {
+class _MainBottomSheetState extends State<MainBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -59,7 +58,7 @@ class _MainPlaceBottomSheetState extends State<MainPlaceBottomSheet> {
                   width: MediaQuery.of(context).size.width,
                   margin: EdgeInsets.symmetric(vertical: 12),
                   child: Text('닫기', textAlign: TextAlign.center)),
-              onTap: () => widget.handleBottomSheet(false))
+              onTap: () => widget.onTapped(false))
         ]));
   }
 }
@@ -103,5 +102,24 @@ class RepresentativeCafe extends StatelessWidget {
         Text('카페이름', style: TextStyle(fontSize: 12, color: Colors.black45))
       ],
     );
+  }
+}
+
+class BottomSheetBackground extends StatelessWidget {
+  final bool isBottomSheetOpen;
+  final void Function(bool) onTapped;
+
+  BottomSheetBackground(
+      {required this.isBottomSheetOpen, required this.onTapped});
+
+  @override
+  Widget build(BuildContext context) {
+    return Visibility(
+        visible: isBottomSheetOpen ? true : false,
+        child: GestureDetector(
+            child: Container(
+                height: double.infinity,
+                decoration: BoxDecoration(color: Colors.black54)),
+            onTap: () => onTapped(false)));
   }
 }

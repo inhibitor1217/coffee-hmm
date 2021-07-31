@@ -43,7 +43,7 @@ class MainSlider extends StatelessWidget {
                 );
               } else if (!snapshot.hasData) {
                 return Container(
-                    width: MediaQuery.of(context).size.width,
+                    width: MediaQuery.of(context).size.width + 48,
                     height: MediaQuery.of(context).size.width);
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");

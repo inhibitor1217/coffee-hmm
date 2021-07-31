@@ -4,13 +4,13 @@ class Header extends StatelessWidget with PreferredSizeWidget {
   final void Function()? onChangeViewMode;
   final bool isTableViewMode;
   final bool isDetailPage;
-  final double opacityLevel;
+  final bool isBottomSheetOpen;
 
   Header(
       {this.onChangeViewMode,
       required this.isTableViewMode,
       required this.isDetailPage,
-      required this.opacityLevel});
+      required this.isBottomSheetOpen});
 
   @override
   Size get preferredSize => Size.fromHeight(48);
@@ -31,9 +31,13 @@ class Header extends StatelessWidget with PreferredSizeWidget {
       actions: isDetailPage
           ? null
           : <Widget>[
-              IconButton(
-                  onPressed: opacityLevel == 1.0 ? () {} : onChangeViewMode,
-                  icon: Icon(Icons.list))
+              isTableViewMode
+                  ? IconButton(
+                      onPressed: isBottomSheetOpen ? () {} : onChangeViewMode,
+                      icon: Icon(Icons.image))
+                  : IconButton(
+                      onPressed: isBottomSheetOpen ? () {} : onChangeViewMode,
+                      icon: Icon(Icons.list))
             ],
     );
   }
