@@ -38,7 +38,6 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        extendBodyBehindAppBar: true, // BottomSheet background cover appbar
         appBar: Header(
             isDetailPage: false,
             isTableViewMode: isTableViewMode,
@@ -147,18 +146,21 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     if (_currentPlace != null && _cafeList != null && _currentCafe != null) {
-      return Stack(children: [
-        ListView.builder(
-          itemCount: 1,
-          itemBuilder: (context, index) {
-            return Column(
-              children: [
-                PlaceTab(
-                  placeList: _placeList!,
-                  currentPlace: _currentPlace!,
-                  onTapped: handlePlaceClick,
-                ),
-                widget.isTableViewMode
+      return Column(
+        children: [
+          /* 뷰 모드 공통 장소 탭 */
+          PlaceTab(
+            placeList: _placeList!,
+            currentPlace: _currentPlace!,
+            onTapped: handlePlaceClick,
+          ),
+          /* 뷰 모드에 따른 메인 컨텐츠 */
+          Flexible(
+              child: Stack(children: [
+            ListView.builder(
+              itemCount: 1,
+              itemBuilder: (context, index) {
+                return widget.isTableViewMode
                     ? MainTable(
                         cafeListResponses: _cafeListResponses,
                         cafeList: _cafeList!,
@@ -177,18 +179,18 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
                         ),
                         MainButtonSetOfSlider(
                             handleBottomSheet: handleBottomSheetOpen)
-                      ])
-              ],
-            );
-          },
-        ),
-        MainBottomSheetController(
-          backgroundOpacity: backgroundOpacity,
-          controller: _controller,
-          cafeList: _cafeList!,
-          onTapped: handleBottomSheetOpen,
-        )
-      ]);
+                      ]);
+              },
+            ),
+            MainBottomSheetController(
+              backgroundOpacity: backgroundOpacity,
+              controller: _controller,
+              cafeList: _cafeList!,
+              onTapped: handleBottomSheetOpen,
+            )
+          ])),
+        ],
+      );
     } else {
       return Center(child: Text('loading...'));
     }

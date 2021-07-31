@@ -25,11 +25,11 @@ class MainBottomSheetController extends StatelessWidget {
                 onTapped: onTapped)),
         PositionedTransition(
             rect: RelativeRectTween(
-                    /* BottomSheet height is 320px */
+                    /* BottomSheet height is 360px */
                     begin: RelativeRect.fromLTRB(
                         0, MediaQuery.of(context).size.height, 0, 0),
                     end: RelativeRect.fromLTRB(
-                        0, MediaQuery.of(context).size.height - 320, 0, 0))
+                        0, MediaQuery.of(context).size.height - 360, 0, 0))
                 .animate(controller),
             child: AnimatedOpacity(
                 opacity: backgroundOpacity,
@@ -66,8 +66,6 @@ class _MainBottomSheetState extends State<MainBottomSheet> {
         ),
         child: ListView(children: [
           Container(
-              transform: Matrix4.translationValues(
-                  0.0, -48.0, 0.0), // extendBodyBehindAppBar: true 무력화
               margin: EdgeInsets.only(left: 20, bottom: 12, right: 20),
               child: Row(children: [
                 Expanded(child: Text('핫플레이스 추천')),
@@ -81,10 +79,8 @@ class _MainBottomSheetState extends State<MainBottomSheet> {
                     ])))
               ])),
           Container(
-              transform: Matrix4.translationValues(
-                  0.0, -48.0, 0.0), // extendBodyBehindAppBar: true 무력화
               margin: EdgeInsets.only(left: 20),
-              height: 140,
+              height: 160,
               child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: List.generate(
@@ -146,7 +142,8 @@ class BottomSheetBackground extends StatelessWidget {
         visible: isBottomSheetOpen ? true : false,
         child: GestureDetector(
             child: Container(
-                height: double.infinity,
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height - 48,
                 decoration: BoxDecoration(color: Colors.black54)),
             onTap: () => onTapped(false)));
   }
