@@ -1,0 +1,42 @@
+service: coffee-hmm-jobs
+
+provider:
+  name: aws
+  region: 'us-east-1'   # NOTE: Lambda@Edge functions are required to be deployed at us-east-1
+  runtime: nodejs12.x
+  stage: ${self:custom.stage}
+  memorySize: 128       # NOTE: Lambda@Edge functions memory limit is 128 MB
+  timeout: 3            # NOTE: Lambda@Edge functions timeout limit is 5 s
+
+resources:
+  Resources:
+    BaseLambdaEdgeRole: ${file(./res/BaseLambdaEdgeRole.yml)}
+
+plugins:
+  - serverless-webpack
+  - serverless-lambda-edge-pre-existing-cloudfront
+
+custom:
+  stage: ${env:APP_STAGE, 'beta'}
+  version: 0.1.0
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules:
+      forceExclude:
+        - '@coffee-hmm/common'    # NOTE: cannot allow heavy pg, typeorm modules to be executed at Lambda@Edge
+        - aws-sdk
+    packager: yarn
+    excludeFiles: src/**/*.test.ts
+
+# NOTE: environment variables are not allowed for Lambda@Edge handlers
+functions:
+  resizeImage__viewerRequest:
+    handler: src/job/resizeImage/viewerRequest.handler
+    role: BaseLambdaEdgeRole
+    events:
+      - preExistingCloudFront:
+          distributionId: E1JZY2UVRRS5EE
+          eventType: viewer-request
+          pathPattern: '*'
+          includeBody: false
+    

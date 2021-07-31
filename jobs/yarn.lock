@@ -7746,6 +7746,11 @@ serialize-javascript@^5.0.1:
   dependencies:
     randombytes "^2.1.0"
 
+serverless-lambda-edge-pre-existing-cloudfront@^1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/serverless-lambda-edge-pre-existing-cloudfront/-/serverless-lambda-edge-pre-existing-cloudfront-1.1.5.tgz#2b6675e104238c05f338756f8841f6f24c8d8ff9"
+  integrity sha512-4HNi6enU2VUXKaynd23jsKgCWwH9it16i+zcJGK0r6kR1o6AjfePkF5hNlJtIx8Z7KBfQ4wmiJ5Aq4urExE+mw==
+
 serverless-webpack@^5.4.0:
   version "5.4.0"
   resolved "https://registry.yarnpkg.com/serverless-webpack/-/serverless-webpack-5.4.0.tgz#75a9201629c4285da43d795b59f27733f84763bf"
