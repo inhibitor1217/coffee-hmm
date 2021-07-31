@@ -39,4 +39,13 @@ functions:
           eventType: viewer-request
           pathPattern: '*'
           includeBody: false
-    
+
+  resizeImage__originResponse:
+    handler: src/job/resizeImage/originResponse.handler
+    role: BaseLambdaEdgeRole
+    events:
+      - preExistingCloudFront:
+          distributionId: E1JZY2UVRRS5EE
+          eventType: origin-response
+          pathPattern: '*'
+          includeBody: false

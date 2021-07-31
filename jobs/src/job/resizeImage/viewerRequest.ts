@@ -3,7 +3,7 @@ import { parse, stringify } from 'qs';
 import { cloudfrontRequestEventHandler } from '../../util/handler/cloudfrontEventHandler';
 import { RESIZE_ALLOWED_DIMENSIONS } from './const';
 import { Dimension } from './type';
-import { formatDimension, stringifyDimension } from './util';
+import { formatDimension, parseDimension, stringifyDimension } from './util';
 
 function formatBody(
   request: CloudFrontRequest,
@@ -15,23 +15,6 @@ function formatBody(
       ? formatDimension(dimension)
       : 'no dimension specified or dimension param is invalid',
   };
-}
-
-function parseDimension(dimension: string): Dimension {
-  const matches = dimension.split('x');
-
-  if (matches.length !== 2) {
-    throw new TypeError('invalid format');
-  }
-
-  const width = parseInt(matches[0], 10);
-  const height = parseInt(matches[1], 10);
-
-  if (Number.isNaN(width) || Number.isNaN(height)) {
-    throw new TypeError('invalid width or height');
-  }
-
-  return { width, height };
 }
 
 export const viewerRequest = (
