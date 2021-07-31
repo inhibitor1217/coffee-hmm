@@ -1,14 +1,95 @@
-import { ILogger } from '../../util/logger';
-import cloudfrontEventHandler from '../../util/handler/cloudfrontEventHandler';
+import type { CloudFrontRequest, CloudFrontRequestEvent } from 'aws-lambda';
+import { parse, stringify } from 'qs';
+import { cloudfrontRequestEventHandler } from '../../util/handler/cloudfrontEventHandler';
+import { RESIZE_ALLOWED_DIMENSIONS } from './const';
+import { Dimension } from './type';
+import { formatDimension, stringifyDimension } from './util';
 
-export const viewerRequest = (logger?: ILogger): Promise<[number, AnyJson]> => {
-  logger?.info('hi');
+function formatBody(
+  request: CloudFrontRequest,
+  dimension?: Dimension
+): AnyJson {
+  return {
+    uri: request.uri,
+    dimension: dimension
+      ? formatDimension(dimension)
+      : 'no dimension specified or dimension param is invalid',
+  };
+}
 
-  return Promise.resolve([200, null]);
+function parseDimension(dimension: string): Dimension {
+  const matches = dimension.split('x');
+
+  if (matches.length !== 2) {
+    throw new TypeError('invalid format');
+  }
+
+  const width = parseInt(matches[0], 10);
+  const height = parseInt(matches[1], 10);
+
+  if (Number.isNaN(width) || Number.isNaN(height)) {
+    throw new TypeError('invalid width or height');
+  }
+
+  return { width, height };
+}
+
+export const viewerRequest = (
+  event: CloudFrontRequestEvent,
+  allowedDimensions: Dimension[]
+) => {
+  const {
+    Records: [
+      {
+        cf: { request },
+      },
+    ],
+  } = event;
+  const { querystring } = request;
+  const params = parse(querystring);
+  const { d } = params;
+
+  try {
+    if (!d) {
+      throw new TypeError('no dimension');
+    }
+
+    if (typeof d !== 'string') {
+      throw new TypeError('param.d should be string');
+    }
+
+    const dimension = parseDimension(d);
+
+    if (
+      !allowedDimensions.some(
+        (allowed) =>
+          allowed.width === dimension.width &&
+          allowed.height === dimension.height
+      )
+    ) {
+      throw new TypeError('requested dimension is not allowed');
+    }
+
+    return Promise.resolve({
+      result: {
+        ...request,
+        querystring: stringify({ d: stringifyDimension(dimension) }),
+      },
+      body: formatBody(request, dimension),
+    });
+  } catch (e) {
+    // NOTE: no dimension is specified, or dimension parameter is in invalid format
+    // forward request as is in this case
+
+    return Promise.resolve({
+      result: { ...request, querystring: '' },
+      body: formatBody(request),
+    });
+  }
 };
 
-export const handler = cloudfrontEventHandler(
-  ({ logger }) => viewerRequest(logger),
+export const handler = cloudfrontRequestEventHandler(
+  ({ event }) => viewerRequest(event, RESIZE_ALLOWED_DIMENSIONS),
   {
     name: 'resizeImage/viewerRequest',
   }

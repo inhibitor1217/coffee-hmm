@@ -1,28 +1,30 @@
-import { LogLevel } from '../../types/env';
 import type {
-  EventContext,
-  EventHandler,
-  EventOptions,
-} from '../../types/event';
+  CloudFrontRequestEvent,
+  CloudFrontRequestHandler,
+} from 'aws-lambda';
+import {
+  CloudFrontRequestEventContext,
+  CloudFrontRequestEventHandler,
+} from '../../types/cloudFrontEvent';
+import { LogLevel } from '../../types/env';
+import type { EventOptions } from '../../types/event';
 import { SimpleLogger } from '../logger';
-import { formatBody, formatJobCompleteMessage } from './util';
+import { formatJobCompleteMessage } from './util';
 
-const cloudfrontEventHandler = (
-  handler: EventHandler,
+export const cloudfrontRequestEventHandler = (
+  handler: CloudFrontRequestEventHandler,
   options: EventOptions
-) => () => {
-  const context: EventContext = {
+): CloudFrontRequestHandler => (event: CloudFrontRequestEvent) => {
+  const context: CloudFrontRequestEventContext = {
+    event,
     logger: new SimpleLogger(LogLevel.info),
   };
 
   return new Promise((resolve, reject) => {
     handler(context)
-      .then(([status, body]) => {
-        context.logger.info(formatJobCompleteMessage(options, status, body));
-        resolve({
-          statusCode: status ?? 501,
-          body: formatBody(body),
-        });
+      .then(({ result, body }) => {
+        context.logger.info(formatJobCompleteMessage(options, 200, body));
+        resolve(result);
       })
       .catch((e) => {
         context.logger.error(e);
@@ -30,5 +32,3 @@ const cloudfrontEventHandler = (
       });
   });
 };
-
-export default cloudfrontEventHandler;
