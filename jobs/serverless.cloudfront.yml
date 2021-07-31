@@ -1,5 +1,8 @@
 service: coffee-hmm-jobs
 
+package:
+  individually: true
+
 provider:
   name: aws
   region: 'us-east-1'   # NOTE: Lambda@Edge functions are required to be deployed at us-east-1

@@ -32,6 +32,7 @@
     "@types/jest": "^26.0.21",
     "@types/node": "^14.14.35",
     "@types/qs": "^6.9.7",
+    "@types/sharp": "^0.28.5",
     "@types/supertest": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
@@ -59,6 +60,7 @@
     "@coffee-hmm/common": "npm:@inhibitor1217/coffee-hmm-common",
     "aws-sdk": "^2.868.0",
     "axios": "^0.21.1",
-    "qs": "^6.10.1"
+    "qs": "^6.10.1",
+    "sharp": "^0.28.3"
   }
 }

@@ -1,4 +1,4 @@
-import { Dimension } from './type';
+import Dimension from '../../types/dimension';
 
 export function formatDimension(dimension: Dimension): string {
   const { width, height } = dimension;

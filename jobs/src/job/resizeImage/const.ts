@@ -1,4 +1,24 @@
-import { Dimension } from './type';
+import Dimension from '../../types/dimension';
+
+export const ORIGIN_S3_BUCKET_NAME = 'test.resource.coffee-hmm.inhibitor.io';
+
+export const RESIZE_ALLOWED_CONTENT_TYPE = [
+  'image/png',
+  'image/jpg',
+  'image/jpeg',
+];
+
+export type ResizeAllowedContentType = 'image/png' | 'image/jpg' | 'image/jpeg';
+
+export function isResizeAllowedContentType(
+  contentType?: string
+): contentType is ResizeAllowedContentType {
+  if (!contentType) {
+    return false;
+  }
+
+  return RESIZE_ALLOWED_CONTENT_TYPE.includes(contentType);
+}
 
 export const RESIZE_ALLOWED_DIMENSIONS: Dimension[] = [
   { width: 128, height: 128 },

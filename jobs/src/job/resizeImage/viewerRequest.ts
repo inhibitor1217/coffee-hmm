@@ -1,8 +1,8 @@
 import type { CloudFrontRequest, CloudFrontRequestEvent } from 'aws-lambda';
 import { parse, stringify } from 'qs';
 import { cloudfrontRequestEventHandler } from '../../util/handler/cloudfrontEventHandler';
+import Dimension from '../../types/dimension';
 import { RESIZE_ALLOWED_DIMENSIONS } from './const';
-import { Dimension } from './type';
 import { formatDimension, parseDimension, stringifyDimension } from './util';
 
 function formatBody(
