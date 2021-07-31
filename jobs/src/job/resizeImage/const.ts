@@ -21,8 +21,9 @@ export function isResizeAllowedContentType(
 }
 
 export const RESIZE_ALLOWED_DIMENSIONS: Dimension[] = [
-  { width: 128, height: 128 },
-  { width: 256, height: 256 },
-  { width: 512, height: 512 },
-  { width: 1024, height: 1024 },
+  { width: 120, height: 120 },
+  { width: 240, height: 240 },
+  { width: 360, height: 360 },
+  { width: 480, height: 480 },
+  { width: 720, height: 720 },
 ];
