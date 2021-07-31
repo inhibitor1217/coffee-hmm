@@ -3,7 +3,7 @@ import CloudfrontService from '../services/cloudfront';
 import S3Service from '../services/s3';
 import SitemapService from '../services/sitemap';
 import { env } from '../util';
-import Logger from '../util/logger';
+import { Logger } from '../util/logger';
 import scheduledEventHandler from '../util/scheduledEventHandler';
 
 const SITEMAP_S3_PATH = 'release/sitemap.xml';

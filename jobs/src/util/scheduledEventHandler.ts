@@ -1,17 +1,13 @@
 import { Exception } from '@coffee-hmm/common';
 import { logLevel, buildString } from '.';
-import {
-  ScheduledEventContext,
-  ScheduledEventHandler,
-  ScheduledEventOptions,
-} from '../types/scheduledEvent';
-import Logger from './logger';
+import { EventContext, EventHandler, EventOptions } from '../types/event';
+import { Logger } from './logger';
 
 const formatBody = (body: AnyJson) =>
   typeof body === 'string' ? body : JSON.stringify(body);
 
 const formatJobCompleteMessage = (
-  options: ScheduledEventOptions,
+  options: EventOptions,
   statusCode: number,
   body: AnyJson
 ): string => {
@@ -26,10 +22,10 @@ const formatJobCompleteMessage = (
 };
 
 const scheduledEventHandler = (
-  handler: ScheduledEventHandler,
-  options: ScheduledEventOptions
+  handler: EventHandler,
+  options: EventOptions
 ) => () => {
-  const context: ScheduledEventContext = {
+  const context: EventContext = {
     logger: new Logger(logLevel()),
   };
 
