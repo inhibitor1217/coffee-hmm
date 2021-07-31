@@ -9,11 +9,12 @@ provider:
   runtime: nodejs12.x
   stage: ${self:custom.stage}
   memorySize: 128       # NOTE: Lambda@Edge functions memory limit is 128 MB
-  timeout: 3            # NOTE: Lambda@Edge functions timeout limit is 5 s
+  timeout: 5            # NOTE: Lambda@Edge functions timeout limit is 5 s
 
 resources:
   Resources:
     BaseLambdaEdgeRole: ${file(./res/BaseLambdaEdgeRole.yml)}
+    OriginResponseLambdaEdgeRole: ${file(./res/OriginResponseLambdaEdgeRole.yml)}
 
 plugins:
   - serverless-webpack
@@ -33,6 +34,10 @@ custom:
       scripts:
         - if [ -f src/job/resizeImage/originResponse.js ]; then rm -rf node_modules/sharp; SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm install --arch=x64 --platform=linux sharp; fi;
     excludeFiles: src/**/*.test.ts
+  origin:
+    s3:
+      arn: arn:aws:s3:::test.resource.coffee-hmm.inhibitor.io
+      name: test.resource.coffee-hmm.inhibitor.io
 
 # NOTE: environment variables are not allowed for Lambda@Edge handlers
 functions:
@@ -48,7 +53,7 @@ functions:
 
   resizeImage__originResponse:
     handler: src/job/resizeImage/originResponse.handler
-    role: BaseLambdaEdgeRole
+    role: OriginResponseLambdaEdgeRole
     events:
       - preExistingCloudFront:
           distributionId: E1JZY2UVRRS5EE
