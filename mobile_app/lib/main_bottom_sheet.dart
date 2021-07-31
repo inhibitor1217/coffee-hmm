@@ -1,6 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/type.dart';
 
+class MainBottomSheetController extends StatelessWidget {
+  final double backgroundOpacity;
+  final AnimationController controller;
+  final List<CafeModel> cafeList;
+  final void Function(bool) onTapped;
+
+  MainBottomSheetController(
+      {required this.backgroundOpacity,
+      required this.controller,
+      required this.cafeList,
+      required this.onTapped});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        AnimatedOpacity(
+            opacity: backgroundOpacity,
+            duration: Duration(milliseconds: 200),
+            child: BottomSheetBackground(
+                isBottomSheetOpen: backgroundOpacity == 1.0,
+                onTapped: onTapped)),
+        PositionedTransition(
+            rect: RelativeRectTween(
+                    /* BottomSheet height is 320px */
+                    begin: RelativeRect.fromLTRB(
+                        0, MediaQuery.of(context).size.height, 0, 0),
+                    end: RelativeRect.fromLTRB(
+                        0, MediaQuery.of(context).size.height - 320, 0, 0))
+                .animate(controller),
+            child: AnimatedOpacity(
+                opacity: backgroundOpacity,
+                duration: Duration(milliseconds: 200),
+                child: MainBottomSheet(cafeList: cafeList, onTapped: onTapped)))
+      ],
+    );
+  }
+}
+
 class MainBottomSheet extends StatefulWidget {
   final List<CafeModel> cafeList; /* 현재 장소를 제외한 10개 장소별 대표 카페 */
   final void Function(bool) onTapped;
@@ -46,7 +85,13 @@ class _MainBottomSheetState extends State<MainBottomSheet> {
                   0.0, -48.0, 0.0), // extendBodyBehindAppBar: true 무력화
               margin: EdgeInsets.only(left: 20),
               height: 140,
-              child: MainPlaceBottomSheetBody(cafeList: widget.cafeList)),
+              child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: List.generate(
+                      10,
+                      (index) => Container(
+                          margin: EdgeInsets.only(right: index == 9 ? 20 : 8),
+                          child: RepresentativeCafe())))),
           Container(
               width: MediaQuery.of(context).size.width,
               margin: EdgeInsets.symmetric(horizontal: 20),
@@ -60,23 +105,6 @@ class _MainBottomSheetState extends State<MainBottomSheet> {
                   child: Text('닫기', textAlign: TextAlign.center)),
               onTap: () => widget.onTapped(false))
         ]));
-  }
-}
-
-class MainPlaceBottomSheetBody extends StatelessWidget {
-  final List<CafeModel> cafeList;
-
-  MainPlaceBottomSheetBody({required this.cafeList});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-        scrollDirection: Axis.horizontal,
-        children: List.generate(
-            10,
-            (index) => Container(
-                margin: EdgeInsets.only(right: index == 9 ? 20 : 8),
-                child: RepresentativeCafe())));
   }
 }
 

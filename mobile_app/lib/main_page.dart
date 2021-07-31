@@ -4,6 +4,7 @@ import 'package:mobile_app/header.dart';
 import 'package:mobile_app/main_bottom_sheet.dart';
 import 'package:mobile_app/main_button.dart';
 import 'package:mobile_app/main_slider_section.dart';
+import 'package:mobile_app/main_tab.dart';
 import 'package:mobile_app/main_table_section.dart';
 import 'package:mobile_app/type.dart';
 
@@ -21,7 +22,7 @@ class _MainScreenState extends State<MainScreen> {
   bool isTableViewMode = false;
   double backgroundOpacity = 0.0;
 
-  void handleChangeViewMode() {
+  void handleViewMode() {
     setState(() {
       isTableViewMode = !isTableViewMode;
     });
@@ -37,11 +38,11 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        extendBodyBehindAppBar: true,
+        extendBodyBehindAppBar: true, // BottomSheet background cover appbar
         appBar: Header(
             isDetailPage: false,
             isTableViewMode: isTableViewMode,
-            onChangeViewMode: handleChangeViewMode,
+            onChangeViewMode: handleViewMode,
             isBottomSheetOpen: backgroundOpacity == 1.0),
         body: MainBody(
             onTapped: widget.onTapped,
@@ -70,6 +71,7 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
   final ValueChanged<double> onChangeBackground;
   Map<String, Future<CafeListResponse>> _cafeListResponses = {};
   Future<PlaceListResponse>? _placeResponses;
+  List<PlaceModel>? _placeList;
   List<CafeModel>? _cafeList;
   CafeModel? _currentCafe;
   PlaceModel? _currentPlace;
@@ -84,6 +86,7 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
     _placeResponses!.then((data) {
       PlaceModel initialPlace = data.place.list[0];
       setState(() {
+        _placeList = data.place.list;
         _currentPlace = initialPlace;
       });
 
@@ -100,6 +103,12 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
     duration: Duration(milliseconds: 300),
     vsync: this,
   );
+
+  @override
+  dispose() {
+    _controller.dispose(); // you need this
+    super.dispose();
+  }
 
   void handleBottomSheetOpen(bool isOpen) {
     if (isOpen) {
@@ -142,47 +151,43 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
         ListView.builder(
           itemCount: 1,
           itemBuilder: (context, index) {
-            return widget.isTableViewMode
-                ? MainTable(
-                    cafeListResponses: _cafeListResponses,
-                    cafeList: _cafeList!,
-                    currentCafe: _currentCafe!,
-                    currentPlace: _currentPlace!,
-                    onTapped: onTapped,
-                  )
-                : Column(children: [
-                    MainSlider(
-                      cafeListResponses: _cafeListResponses,
-                      cafeList: _cafeList!,
-                      currentCafe: _currentCafe!,
-                      currentPlace: _currentPlace!,
-                      onSlide: handleCafeSlide,
-                      onTapped: onTapped,
-                    ),
-                    MainButtonSetOfSlider(
-                        handleBottomSheet: handleBottomSheetOpen)
-                  ]);
+            return Column(
+              children: [
+                PlaceTab(
+                  placeList: _placeList!,
+                  currentPlace: _currentPlace!,
+                  onTapped: handlePlaceClick,
+                ),
+                widget.isTableViewMode
+                    ? MainTable(
+                        cafeListResponses: _cafeListResponses,
+                        cafeList: _cafeList!,
+                        currentCafe: _currentCafe!,
+                        currentPlace: _currentPlace!,
+                        onTapped: onTapped,
+                      )
+                    : Column(children: [
+                        MainSlider(
+                          cafeListResponses: _cafeListResponses,
+                          cafeList: _cafeList!,
+                          currentCafe: _currentCafe!,
+                          currentPlace: _currentPlace!,
+                          onSlide: handleCafeSlide,
+                          onTapped: onTapped,
+                        ),
+                        MainButtonSetOfSlider(
+                            handleBottomSheet: handleBottomSheetOpen)
+                      ])
+              ],
+            );
           },
         ),
-        AnimatedOpacity(
-            opacity: backgroundOpacity,
-            duration: Duration(milliseconds: 200),
-            child: BottomSheetBackground(
-                isBottomSheetOpen: backgroundOpacity == 1.0,
-                onTapped: handleBottomSheetOpen)),
-        PositionedTransition(
-            rect: RelativeRectTween(
-                    /* BottomSheet height is 320px */
-                    begin: RelativeRect.fromLTRB(
-                        0, MediaQuery.of(context).size.height, 0, 0),
-                    end: RelativeRect.fromLTRB(
-                        0, MediaQuery.of(context).size.height - 320, 0, 0))
-                .animate(_controller),
-            child: AnimatedOpacity(
-                opacity: backgroundOpacity,
-                duration: Duration(milliseconds: 200),
-                child: MainBottomSheet(
-                    cafeList: _cafeList!, onTapped: handleBottomSheetOpen)))
+        MainBottomSheetController(
+          backgroundOpacity: backgroundOpacity,
+          controller: _controller,
+          cafeList: _cafeList!,
+          onTapped: handleBottomSheetOpen,
+        )
       ]);
     } else {
       return Center(child: Text('loading...'));
