@@ -36,8 +36,8 @@ custom:
     excludeFiles: src/**/*.test.ts
   origin:
     s3:
-      arn: arn:aws:s3:::test.resource.coffee-hmm.inhibitor.io
-      name: test.resource.coffee-hmm.inhibitor.io
+      arn: arn:aws:s3:::coffee-hmm-image
+      name: coffee-hmm-image
 
 # NOTE: environment variables are not allowed for Lambda@Edge handlers
 functions:
@@ -46,7 +46,7 @@ functions:
     role: BaseLambdaEdgeRole
     events:
       - preExistingCloudFront:
-          distributionId: E1JZY2UVRRS5EE
+          distributionId: E2RC8J015K5SBE
           eventType: viewer-request
           pathPattern: '*'
           includeBody: false
@@ -56,7 +56,7 @@ functions:
     role: OriginResponseLambdaEdgeRole
     events:
       - preExistingCloudFront:
-          distributionId: E1JZY2UVRRS5EE
+          distributionId: E2RC8J015K5SBE
           eventType: origin-response
           pathPattern: '*'
           includeBody: false

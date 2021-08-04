@@ -1,6 +1,6 @@
 import Dimension from '../../types/dimension';
 
-export const ORIGIN_S3_BUCKET_NAME = 'test.resource.coffee-hmm.inhibitor.io';
+export const ORIGIN_S3_BUCKET_NAME = 'coffee-hmm-image';
 
 export const RESIZE_ALLOWED_CONTENT_TYPE = [
   'image/png',
