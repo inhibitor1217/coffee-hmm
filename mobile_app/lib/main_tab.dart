@@ -11,6 +11,20 @@ class PlaceTab extends StatelessWidget {
       required this.currentPlace,
       required this.onTapped});
 
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        height: 36,
+        margin: EdgeInsets.only(left: 20, bottom: 10),
+        child: ListView(scrollDirection: Axis.horizontal, children: [
+          Container(
+              margin: EdgeInsets.only(right: 4),
+              child: PlaceTabElement(
+                  place: currentPlace, isSelected: true, onPressed: onTapped)),
+          ...buildExtraPlaces()
+        ]));
+  }
+
   List<Widget> buildExtraPlaces() {
     List<PlaceModel> places = List.from(placeList)
       ..removeWhere((place) => place.id == currentPlace.id);
@@ -21,20 +35,6 @@ class PlaceTab extends StatelessWidget {
             margin: EdgeInsets.only(right: index == places.length - 1 ? 20 : 4),
             child: PlaceTabElement(
                 place: places[index], isSelected: false, onPressed: onTapped)));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        height: 26,
-        margin: EdgeInsets.only(left: 20, bottom: 10),
-        child: ListView(scrollDirection: Axis.horizontal, children: [
-          Container(
-              margin: EdgeInsets.only(right: 4),
-              child: PlaceTabElement(
-                  place: currentPlace, isSelected: true, onPressed: onTapped)),
-          ...buildExtraPlaces()
-        ]));
   }
 }
 
@@ -56,7 +56,7 @@ class PlaceTabElement extends StatelessWidget {
           onPrimary: isSelected ? Colors.white : Colors.black,
           shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
           ),
           side: BorderSide(
               width: 1,
@@ -64,7 +64,11 @@ class PlaceTabElement extends StatelessWidget {
                   ? Color.fromRGBO(220, 238, 238, 1)
                   : Color.fromRGBO(204, 236, 236, 1),
               style: BorderStyle.solid),
-          textStyle: TextStyle(fontSize: 12, letterSpacing: 1.5)),
+          textStyle: TextStyle(
+            fontSize: 14,
+            letterSpacing: 1.5,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+          )),
       child: Text(place.name),
       onPressed: () => onPressed(place),
     );

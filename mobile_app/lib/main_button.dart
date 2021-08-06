@@ -24,14 +24,14 @@ class MainButtonSetOfSlider extends StatelessWidget {
           Expanded(child: MainButtonOfSlider(button: _instagramShort)),
           Container(
               width: 80,
-              height: 24,
+              height: 28,
               margin: EdgeInsets.symmetric(horizontal: 20),
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: Colors.white,
                       onPrimary: Colors.black,
                       shadowColor: Colors.transparent,
-                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 10),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
                       ),

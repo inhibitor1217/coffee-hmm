@@ -52,27 +52,18 @@ class _MainBottomSheetState extends State<MainBottomSheet> {
             Positioned(
                 left: 0,
                 bottom: 0,
-                child: Column(
-                  children: [
-                    Container(
-                        width: MediaQuery.of(context).size.width - 40,
-                        height: 1,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(color: Colors.black12)),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                          primary: Colors.black,
-                          padding: EdgeInsets.symmetric(vertical: 20)),
-                      child: SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: Text(
-                            '닫기',
-                            style: TextStyle(fontSize: 14),
-                            textAlign: TextAlign.center,
-                          )),
-                      onPressed: widget.onTapped,
-                    )
-                  ],
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      primary: Colors.black87,
+                      padding: EdgeInsets.symmetric(vertical: 20)),
+                  child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: Text(
+                        '닫기',
+                        style: TextStyle(fontSize: 14),
+                        textAlign: TextAlign.center,
+                      )),
+                  onPressed: widget.onTapped,
                 ))
           ],
         ));
