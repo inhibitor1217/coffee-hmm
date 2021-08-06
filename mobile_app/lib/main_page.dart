@@ -94,7 +94,7 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
 
   void handleCafeSlide(int index) {
     setState(() {
-      _currentCafe = _cafeList![index];
+      _currentCafe = _cafeList![index % _cafeList!.length];
     });
   }
 
