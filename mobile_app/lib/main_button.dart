@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/main_bottom_sheet.dart';
 import 'package:mobile_app/type.dart';
 import 'package:mobile_app/util.dart';
 
 class MainButtonSetOfSlider extends StatelessWidget {
-  final void Function(bool) handleBottomSheet;
-
-  MainButtonSetOfSlider({required this.handleBottomSheet});
-
   final _naverShort = CafeButtonModel(
       text: "네이버 바로가기",
       firstEngLetter: 'N',
@@ -22,29 +19,41 @@ class MainButtonSetOfSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         padding: EdgeInsets.only(top: 14),
-        child: Row(
-          children: [
-            Expanded(child: MainButtonOfSlider(button: _naverShort)),
-            Expanded(child: MainButtonOfSlider(button: _instagramShort)),
-            GestureDetector(
-                child: Container(
-                    width: 80,
-                    height: 24,
-                    margin: EdgeInsets.symmetric(horizontal: 20),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
+        child: Row(children: [
+          Expanded(child: MainButtonOfSlider(button: _naverShort)),
+          Expanded(child: MainButtonOfSlider(button: _instagramShort)),
+          Container(
+              width: 80,
+              height: 24,
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                      onPrimary: Colors.black,
+                      shadowColor: Colors.transparent,
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
-                        border: Border.all(
-                            color: Colors.black12,
-                            width: 1,
-                            style: BorderStyle.solid)),
-                    child: Text(
-                      '핫플레이스',
-                      style: TextStyle(fontSize: 12),
-                    )),
-                onTap: () => handleBottomSheet(true))
-          ],
-        ));
+                      ),
+                      side: BorderSide(
+                          width: 1,
+                          color: Colors.black12,
+                          style: BorderStyle.solid),
+                      textStyle: TextStyle(fontSize: 12)),
+                  child: Text('핫플레이스'),
+                  onPressed: () {
+                    showModalBottomSheet<void>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Container(
+                              height: 300,
+                              color: Colors.transparent,
+                              child: MainBottomSheet(
+                                onTapped: () => Navigator.pop(context),
+                              ));
+                        });
+                  }))
+        ]));
   }
 }
 

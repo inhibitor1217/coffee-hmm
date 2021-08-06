@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/api.dart';
 import 'package:mobile_app/header.dart';
-import 'package:mobile_app/main_bottom_sheet.dart';
 import 'package:mobile_app/main_button.dart';
 import 'package:mobile_app/main_slider_section.dart';
 import 'package:mobile_app/main_tab.dart';
@@ -20,17 +19,10 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   /* Main Page has 2 view mode : Slider, Table */
   bool isTableViewMode = false;
-  double backgroundOpacity = 0.0;
 
   void handleViewMode() {
     setState(() {
       isTableViewMode = !isTableViewMode;
-    });
-  }
-
-  void handleBackgroundOpacity(double opacity) {
-    setState(() {
-      backgroundOpacity = opacity;
     });
   }
 
@@ -39,44 +31,35 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: Header(
-            isDetailPage: false,
-            isTableViewMode: isTableViewMode,
-            onChangeViewMode: handleViewMode,
-            isBottomSheetOpen: backgroundOpacity == 1.0),
+          isDetailPage: false,
+          isTableViewMode: isTableViewMode,
+          onChangeViewMode: handleViewMode,
+        ),
         body: MainBody(
-            onTapped: widget.onTapped,
-            isTableViewMode: isTableViewMode,
-            onChangeBackground: handleBackgroundOpacity));
+            onTapped: widget.onTapped, isTableViewMode: isTableViewMode));
   }
 }
 
 class MainBody extends StatefulWidget {
   final ValueChanged<CafeModel> onTapped;
-  final ValueChanged<double> onChangeBackground;
   final bool isTableViewMode;
 
-  MainBody(
-      {required this.onTapped,
-      required this.isTableViewMode,
-      required this.onChangeBackground});
+  MainBody({required this.onTapped, required this.isTableViewMode});
 
   @override
-  _MainBodyState createState() => _MainBodyState(
-      onTapped: onTapped, onChangeBackground: onChangeBackground);
+  _MainBodyState createState() => _MainBodyState(onTapped: onTapped);
 }
 
 class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
   final ValueChanged<CafeModel> onTapped;
-  final ValueChanged<double> onChangeBackground;
   Map<String, Future<CafeListResponse>> _cafeListResponses = {};
   Future<PlaceListResponse>? _placeResponses;
   List<PlaceModel>? _placeList;
   List<CafeModel>? _cafeList;
   CafeModel? _currentCafe;
   PlaceModel? _currentPlace;
-  double backgroundOpacity = 0.0;
 
-  _MainBodyState({required this.onTapped, required this.onChangeBackground});
+  _MainBodyState({required this.onTapped});
 
   @override
   void initState() {
@@ -96,33 +79,6 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
         });
       });
     });
-  }
-
-  late final AnimationController _controller = AnimationController(
-    duration: Duration(milliseconds: 300),
-    vsync: this,
-  );
-
-  @override
-  dispose() {
-    _controller.dispose(); // you need this
-    super.dispose();
-  }
-
-  void handleBottomSheetOpen(bool isOpen) {
-    if (isOpen) {
-      _controller.forward();
-      setState(() {
-        backgroundOpacity = 1.0;
-      });
-      onChangeBackground(1.0);
-    } else {
-      _controller.reverse();
-      setState(() {
-        backgroundOpacity = 0.0;
-      });
-      onChangeBackground(0.0);
-    }
   }
 
   void handlePlaceClick(PlaceModel place) {
@@ -146,68 +102,39 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     if (_currentPlace != null && _cafeList != null && _currentCafe != null) {
-      return Column(
-        children: [
-          /* 뷰 모드 공통 장소 탭 */
-          Visibility(
-              visible: backgroundOpacity == 0.0 ? true : false,
-              child: PlaceTab(
-                placeList: _placeList!,
-                currentPlace: _currentPlace!,
-                onTapped: handlePlaceClick,
-              )),
-          /* 뷰 모드에 따른 메인 컨텐츠 */
-          Flexible(
-              child: Stack(children: [
-            ListView.builder(
-              itemCount: 1,
-              itemBuilder: (context, index) {
-                return widget.isTableViewMode
-                    ? MainTable(
-                        cafeListResponses: _cafeListResponses,
-                        cafeList: _cafeList!,
-                        currentCafe: _currentCafe!,
-                        currentPlace: _currentPlace!,
-                        onTapped: onTapped,
-                      )
-                    : Column(children: [
-                        /* BottomSheet 이 열렸을 때 background로 고정된 영역(헤더 + 장소탭)을 대체하기 위함 */
-                        Visibility(
-                            visible: backgroundOpacity == 0.0 ? false : true,
-                            child: Column(children: [
-                              Header(
-                                  isDetailPage: false,
-                                  isTableViewMode: false,
-                                  onChangeViewMode: () {},
-                                  isBottomSheetOpen: backgroundOpacity == 1.0),
-                              PlaceTab(
-                                placeList: _placeList!,
-                                currentPlace: _currentPlace!,
-                                onTapped: handlePlaceClick,
-                              )
-                            ])),
-                        MainSlider(
+      return Column(children: [
+        /* 뷰 모드 공통 장소 탭 */
+        PlaceTab(
+          placeList: _placeList!,
+          currentPlace: _currentPlace!,
+          onTapped: handlePlaceClick,
+        ),
+        /* 뷰 모드에 따른 메인 컨텐츠 */
+        Flexible(
+            child: ListView.builder(
+                itemCount: 1,
+                itemBuilder: (context, index) {
+                  return widget.isTableViewMode
+                      ? MainTable(
                           cafeListResponses: _cafeListResponses,
                           cafeList: _cafeList!,
                           currentCafe: _currentCafe!,
                           currentPlace: _currentPlace!,
-                          onSlide: handleCafeSlide,
                           onTapped: onTapped,
-                        ),
-                        MainButtonSetOfSlider(
-                            handleBottomSheet: handleBottomSheetOpen)
-                      ]);
-              },
-            ),
-            MainBottomSheetController(
-              backgroundOpacity: backgroundOpacity,
-              controller: _controller,
-              cafeList: _cafeList!,
-              onTapped: handleBottomSheetOpen,
-            )
-          ])),
-        ],
-      );
+                        )
+                      : Column(children: [
+                          MainSlider(
+                            cafeListResponses: _cafeListResponses,
+                            cafeList: _cafeList!,
+                            currentCafe: _currentCafe!,
+                            currentPlace: _currentPlace!,
+                            onSlide: handleCafeSlide,
+                            onTapped: onTapped,
+                          ),
+                          MainButtonSetOfSlider()
+                        ]);
+                }))
+      ]);
     } else {
       return Center(child: Text('loading...'));
     }

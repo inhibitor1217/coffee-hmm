@@ -26,6 +26,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
         title: '카페 추천은, 커피흠',
         theme: new ThemeData(
+          canvasColor: Colors.transparent,
           scaffoldBackgroundColor: Colors.white,
         ),
         home: Navigator(
