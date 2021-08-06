@@ -82,11 +82,6 @@ class MainTableCafeElement extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 12,
                         ))),
-                Container(
-                    child: Text('# ' + cafe.metadata.tag.first,
-                        style: TextStyle(
-                          fontSize: 11,
-                        ))),
                 Card(
                     clipBehavior: Clip.antiAlias,
                     child: Container(
@@ -96,17 +91,13 @@ class MainTableCafeElement extends StatelessWidget {
                         child: Row(
                           children: [
                             Expanded(
-                                child: Container(
-                                    padding: EdgeInsets.only(right: 2),
-                                    child: CafeImage(
-                                        image: cafe.image.mainImage,
-                                        size: 112))),
+                                child: CafeImage(
+                                    image: cafe.image.mainImage, size: 112)),
+                            SizedBox(width: 2),
                             Expanded(
-                                child: Container(
-                                    padding: EdgeInsets.only(right: 2),
-                                    child: CafeImage(
-                                        image: cafe.image.mainImage,
-                                        size: 112))),
+                                child: CafeImage(
+                                    image: cafe.image.mainImage, size: 112)),
+                            SizedBox(width: 2),
                             Expanded(
                                 child: Container(
                                     child: CafeImage(

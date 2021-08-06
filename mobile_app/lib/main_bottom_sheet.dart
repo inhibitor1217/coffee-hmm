@@ -27,15 +27,14 @@ class _MainBottomSheetState extends State<MainBottomSheet> {
               Container(
                   margin: EdgeInsets.only(left: 20, bottom: 20, right: 20),
                   child: Row(children: [
-                    Expanded(child: Text('\u{1F496} 핫플레이스 추천')),
+                    Expanded(child: Text('핫플레이스 추천')),
                     Expanded(
                         child: Container(
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                           Text('# 감성 ', style: TextStyle(fontSize: 11)),
-                          Text('# 데이트 ', style: TextStyle(fontSize: 11)),
-                          Text('# \u{2615}', style: TextStyle(fontSize: 11))
+                          Text('# 데이트', style: TextStyle(fontSize: 11))
                         ])))
                   ])),
               Container(

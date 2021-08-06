@@ -30,8 +30,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: Header(
-          isDetailPage: false,
+        appBar: MainHeader(
           isTableViewMode: isTableViewMode,
           onChangeViewMode: handleViewMode,
         ),

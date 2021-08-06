@@ -13,16 +13,14 @@ class PlaceTab extends StatelessWidget {
 
   List<Widget> buildExtraPlaces() {
     List<PlaceModel> places = List.from(placeList)
-      ..removeWhere((place) => place == currentPlace);
+      ..removeWhere((place) => place.id == currentPlace.id);
 
     return List.generate(
         places.length,
         (index) => Container(
             margin: EdgeInsets.only(right: index == places.length - 1 ? 20 : 4),
-            child: GestureDetector(
-              child: PlaceTabElement(place: places[index], isSelected: false),
-              onTap: () => onTapped(places[index]),
-            )));
+            child: PlaceTabElement(
+                place: places[index], isSelected: false, onPressed: onTapped)));
   }
 
   @override
@@ -33,7 +31,8 @@ class PlaceTab extends StatelessWidget {
         child: ListView(scrollDirection: Axis.horizontal, children: [
           Container(
               margin: EdgeInsets.only(right: 4),
-              child: PlaceTabElement(place: currentPlace, isSelected: true)),
+              child: PlaceTabElement(
+                  place: currentPlace, isSelected: true, onPressed: onTapped)),
           ...buildExtraPlaces()
         ]));
   }
@@ -42,28 +41,32 @@ class PlaceTab extends StatelessWidget {
 class PlaceTabElement extends StatelessWidget {
   final PlaceModel place;
   final bool isSelected;
+  final void Function(PlaceModel) onPressed;
 
-  PlaceTabElement({required this.place, required this.isSelected});
+  PlaceTabElement(
+      {required this.place, required this.isSelected, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-        decoration: BoxDecoration(
-            color: isSelected
-                ? Color.fromRGBO(155, 218, 218, 1)
-                : Colors.transparent,
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+          primary: isSelected
+              ? Color.fromRGBO(155, 218, 218, 1)
+              : Colors.transparent,
+          onPrimary: isSelected ? Colors.white : Colors.black,
+          shadowColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-                color: isSelected
-                    ? Color.fromRGBO(220, 238, 238, 1)
-                    : Color.fromRGBO(204, 236, 236, 1),
-                width: 1,
-                style: BorderStyle.solid)),
-        child: Text(place.name,
-            style: TextStyle(
-                fontSize: 12,
-                letterSpacing: 2,
-                color: isSelected ? Colors.white : Colors.black)));
+          ),
+          side: BorderSide(
+              width: 1,
+              color: isSelected
+                  ? Color.fromRGBO(220, 238, 238, 1)
+                  : Color.fromRGBO(204, 236, 236, 1),
+              style: BorderStyle.solid),
+          textStyle: TextStyle(fontSize: 12, letterSpacing: 1.5)),
+      child: Text(place.name),
+      onPressed: () => onPressed(place),
+    );
   }
 }
