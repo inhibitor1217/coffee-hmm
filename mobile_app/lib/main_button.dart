@@ -19,13 +19,14 @@ class MainButtonSetOfSlider extends StatelessWidget {
               onTapped: handleInstagramClick),
           Spacer(),
           Container(
-              width: 96,
+              width: 100,
               height: 29,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: Colors.white,
                       onPrimary: Colors.black,
                       shadowColor: Colors.transparent,
+                      padding: EdgeInsets.all(0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
                       ),
