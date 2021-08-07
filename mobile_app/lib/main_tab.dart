@@ -16,25 +16,18 @@ class PlaceTab extends StatelessWidget {
     return Container(
         height: 36,
         margin: EdgeInsets.only(bottom: 10),
-        child: ListView(scrollDirection: Axis.horizontal, children: [
-          Container(
-              margin: EdgeInsets.only(right: 4, left: 20),
-              child: PlaceTabElement(
-                  place: currentPlace, isSelected: true, onPressed: onTapped)),
-          ...buildExtraPlaces()
-        ]));
-  }
-
-  List<Widget> buildExtraPlaces() {
-    List<PlaceModel> places = List.from(placeList)
-      ..removeWhere((place) => place.id == currentPlace.id);
-
-    return List.generate(
-        places.length,
-        (index) => Container(
-            margin: EdgeInsets.only(right: index == places.length - 1 ? 20 : 4),
-            child: PlaceTabElement(
-                place: places[index], isSelected: false, onPressed: onTapped)));
+        child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: List.generate(
+                placeList.length,
+                (index) => Container(
+                    padding: EdgeInsets.only(
+                        right: index == placeList.length - 1 ? 20 : 4,
+                        left: index == 0 ? 20 : 4),
+                    child: PlaceTabElement(
+                        place: placeList[index],
+                        isSelected: currentPlace.id == placeList[index].id,
+                        onPressed: onTapped)))));
   }
 }
 

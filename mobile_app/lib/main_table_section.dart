@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/cafe_image.dart';
-import 'package:mobile_app/main_button.dart';
 import 'package:mobile_app/skeleton.dart';
 import 'package:mobile_app/type.dart';
 import 'package:mobile_app/util.dart';
@@ -21,14 +20,16 @@ class MainTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<CafeModel> cafes = List.from(cafeList)
+      ..removeWhere((cafe) => cafe.image.count < 4);
+
     return Container(
         margin: EdgeInsets.only(bottom: 48),
         child: FutureBuilder<CafeListResponse>(
             future: cafeListResponses[currentPlace.id],
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return MainTableCafeList(
-                    cafeList: cafeList, onTapped: onTapped);
+                return MainTableCafeList(cafeList: cafes, onTapped: onTapped);
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }
@@ -43,22 +44,22 @@ class MainTableCafeList extends StatelessWidget {
 
   MainTableCafeList({required this.cafeList, required this.onTapped});
 
-  List<Widget> _buildCafeListTable(int count) => List.generate(
-      count,
-      (index) => Column(children: [
-            MainTableCafeElement(cafe: cafeList[index], onTapped: onTapped),
-            Visibility(
-                visible: index < cafeList.length - 1 ? true : false,
-                child: Container(
-                  height: 8,
-                  decoration:
-                      BoxDecoration(color: Color.fromRGBO(242, 242, 242, 1)),
-                ))
-          ]));
-
   @override
   build(BuildContext context) {
-    return Column(children: _buildCafeListTable(cafeList.length));
+    return Column(
+        children: List.generate(
+            cafeList.length,
+            (index) => Column(children: [
+                  MainTableCafeElement(
+                      cafe: cafeList[index], onTapped: onTapped),
+                  Visibility(
+                      visible: index < cafeList.length - 1 ? true : false,
+                      child: Container(
+                        height: 8,
+                        decoration: BoxDecoration(
+                            color: Color.fromRGBO(242, 242, 242, 1)),
+                      ))
+                ])));
   }
 }
 
@@ -75,41 +76,23 @@ class MainTableCafeElement extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 20),
         alignment: Alignment.centerLeft,
         child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                            padding: EdgeInsets.only(bottom: 4),
-                            child: Text(cafe.name,
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold))),
-                        Container(
-                            padding: EdgeInsets.only(bottom: 2),
-                            child: Text('OPEN ' + cafe.metadata.hour,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                )))
-                      ],
-                    ),
-                    Spacer(),
-                    MainButtonOfSlider(
-                      imgSrc: 'assets/images/Naver_icon.png',
-                      onTapped: handleNaverClick,
-                    ),
-                    SizedBox(width: 15),
-                    MainButtonOfSlider(
-                        imgSrc:
-                            'assets/images/Instagram_Glyph_Gradient_RGB.png',
-                        onTapped: handleInstagramClick),
-                  ],
-                ),
+                Container(
+                    padding: EdgeInsets.only(bottom: 4),
+                    child: Text(cafe.name,
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold))),
+                Container(
+                    padding: EdgeInsets.only(bottom: 2),
+                    child: Text('OPEN ' + cafe.metadata.hour,
+                        style: TextStyle(
+                          fontSize: 13,
+                        ))),
+                /* 테이블 뷰 모드에서는 등록된 이미지가 3개 이상인 카페만 표시 */
                 Card(
                     clipBehavior: Clip.antiAlias,
                     child: Container(
@@ -124,12 +107,11 @@ class MainTableCafeElement extends StatelessWidget {
                                     image: cafe.image.mainImage, size: 112)),
                             Expanded(
                                 child: CafeImage(
-                                    image: cafe.image.mainImage, size: 112)),
+                                    image: cafe.image.list[1], size: 112)),
                             Expanded(
                                 child: Container(
                                     child: CafeImage(
-                                        image: cafe.image.mainImage,
-                                        size: 112))),
+                                        image: cafe.image.list[2], size: 112))),
                           ],
                           separator: SizedBox(width: 2),
                         ).toList())))
