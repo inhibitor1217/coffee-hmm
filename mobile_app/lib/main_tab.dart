@@ -15,10 +15,10 @@ class PlaceTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         height: 36,
-        margin: EdgeInsets.only(left: 20, bottom: 10),
+        margin: EdgeInsets.only(bottom: 10),
         child: ListView(scrollDirection: Axis.horizontal, children: [
           Container(
-              margin: EdgeInsets.only(right: 4),
+              margin: EdgeInsets.only(right: 4, left: 20),
               child: PlaceTabElement(
                   place: currentPlace, isSelected: true, onPressed: onTapped)),
           ...buildExtraPlaces()
@@ -61,7 +61,7 @@ class PlaceTabElement extends StatelessWidget {
               width: 1,
               color: isSelected
                   ? Color.fromRGBO(220, 238, 238, 1)
-                  : Color.fromRGBO(204, 236, 236, 1),
+                  : Colors.black12,
               style: BorderStyle.solid),
           textStyle: TextStyle(
             fontSize: 14,
