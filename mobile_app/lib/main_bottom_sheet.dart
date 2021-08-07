@@ -94,23 +94,3 @@ class RepresentativeCafe extends StatelessWidget {
     );
   }
 }
-
-class BottomSheetBackground extends StatelessWidget {
-  final bool isBottomSheetOpen;
-  final void Function(bool) onTapped;
-
-  BottomSheetBackground(
-      {required this.isBottomSheetOpen, required this.onTapped});
-
-  @override
-  Widget build(BuildContext context) {
-    return Visibility(
-        visible: isBottomSheetOpen ? true : false,
-        child: GestureDetector(
-            child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                decoration: BoxDecoration(color: Colors.black54)),
-            onTap: () => onTapped(false)));
-  }
-}

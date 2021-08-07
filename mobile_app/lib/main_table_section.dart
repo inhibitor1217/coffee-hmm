@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/cafe_image.dart';
 import 'package:mobile_app/skeleton.dart';
 import 'package:mobile_app/type.dart';
+import 'package:mobile_app/util.dart';
 
 class MainTable extends StatelessWidget {
   final Map<String, Future<CafeListResponse>> cafeListResponses;
@@ -89,22 +90,22 @@ class MainTableCafeElement extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
-                          children: [
+                            children: ListUtils.join(
+                          [
                             Expanded(
                                 child: CafeImage(
                                     image: cafe.image.mainImage, size: 112)),
-                            SizedBox(width: 2),
                             Expanded(
                                 child: CafeImage(
                                     image: cafe.image.mainImage, size: 112)),
-                            SizedBox(width: 2),
                             Expanded(
                                 child: Container(
                                     child: CafeImage(
                                         image: cafe.image.mainImage,
                                         size: 112))),
                           ],
-                        )))
+                          separator: SizedBox(width: 2),
+                        ).toList())))
               ],
             ),
             onTap: () => onTapped(cafe)));
