@@ -12,6 +12,7 @@ class MainButtonSetOfSlider extends StatelessWidget {
             imgSrc: 'assets/images/Naver_icon.png',
             onTapped: handleNaverClick,
           ),
+          SizedBox(width: 15),
           MainButtonOfSlider(
               imgSrc: 'assets/images/Instagram_Glyph_Gradient_RGB.png',
               onTapped: handleInstagramClick),
@@ -61,12 +62,10 @@ class MainButtonOfSlider extends StatelessWidget {
       네이버 아이콘 가이드 : 최소 크기 제한 없음, 최소 여백 = width / 3.5
       인스타그램 아이콘 가이드 : 최소 크기 29x29 pixels, 최소 여백 = width / 2
       */
-    return Container(
-        padding: EdgeInsets.only(right: 15),
-        child: IconButton(
+    return IconButton(
             onPressed: onTapped,
             padding: EdgeInsets.zero,
             constraints: BoxConstraints(),
-            icon: Image.asset(imgSrc, width: 29, height: 29)));
+            icon: Image.asset(imgSrc, width: 29, height: 29));
   }
 }

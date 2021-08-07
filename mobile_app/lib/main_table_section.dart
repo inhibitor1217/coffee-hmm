@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/cafe_image.dart';
+import 'package:mobile_app/main_button.dart';
 import 'package:mobile_app/skeleton.dart';
 import 'package:mobile_app/type.dart';
 import 'package:mobile_app/util.dart';
@@ -44,8 +45,16 @@ class MainTableCafeList extends StatelessWidget {
 
   List<Widget> _buildCafeListTable(int count) => List.generate(
       count,
-      (index) =>
-          MainTableCafeElement(cafe: cafeList[index], onTapped: onTapped));
+      (index) => Column(children: [
+            MainTableCafeElement(cafe: cafeList[index], onTapped: onTapped),
+            Visibility(
+                visible: index < cafeList.length - 1 ? true : false,
+                child: Container(
+                  height: 8,
+                  decoration:
+                      BoxDecoration(color: Color.fromRGBO(242, 242, 242, 1)),
+                ))
+          ]));
 
   @override
   build(BuildContext context) {
@@ -70,19 +79,37 @@ class MainTableCafeElement extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                    padding: EdgeInsets.only(bottom: 4),
-                    child: Text(cafe.name,
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Color.fromRGBO(0, 75, 141, 1),
-                            fontWeight: FontWeight.bold))),
-                Container(
-                    padding: EdgeInsets.only(bottom: 2),
-                    child: Text('OPEN ' + cafe.metadata.hour,
-                        style: TextStyle(
-                          fontSize: 12,
-                        ))),
+                Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                            padding: EdgeInsets.only(bottom: 4),
+                            child: Text(cafe.name,
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold))),
+                        Container(
+                            padding: EdgeInsets.only(bottom: 2),
+                            child: Text('OPEN ' + cafe.metadata.hour,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                )))
+                      ],
+                    ),
+                    Spacer(),
+                    MainButtonOfSlider(
+                      imgSrc: 'assets/images/Naver_icon.png',
+                      onTapped: handleNaverClick,
+                    ),
+                    SizedBox(width: 15),
+                    MainButtonOfSlider(
+                        imgSrc:
+                            'assets/images/Instagram_Glyph_Gradient_RGB.png',
+                        onTapped: handleInstagramClick),
+                  ],
+                ),
                 Card(
                     clipBehavior: Clip.antiAlias,
                     child: Container(

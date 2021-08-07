@@ -23,9 +23,12 @@ class MainHeader extends StatelessWidget with PreferredSizeWidget {
           )),
       centerTitle: true,
       actions: <Widget>[
-        isTableViewMode
-            ? IconButton(onPressed: onChangeViewMode, icon: Icon(Icons.image))
-            : IconButton(onPressed: onChangeViewMode, icon: Icon(Icons.list))
+        IconButton(
+            onPressed: onChangeViewMode,
+            icon: Icon(Icons.list,
+                color: isTableViewMode
+                    ? Color.fromRGBO(155, 218, 218, 1)
+                    : Colors.black38))
       ],
     );
   }
