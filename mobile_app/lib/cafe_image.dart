@@ -4,12 +4,12 @@ import 'package:mobile_app/type.dart';
 
 class CafeImage extends StatelessWidget {
   final CafeImageModel image;
+  final double size;
 
-  CafeImage({required this.image});
+  CafeImage({required this.image, required this.size});
 
   @override
   Widget build(BuildContext context) {
-    double size = MediaQuery.of(context).size.width;
     return Container(
       height: size,
       child: CachedNetworkImage(
@@ -17,8 +17,13 @@ class CafeImage extends StatelessWidget {
         fit: BoxFit.cover,
         progressIndicatorBuilder: (context, url, downloadProgress) {
           return Center(
-              child: CircularProgressIndicator(
-                  color: Colors.black12, value: downloadProgress.progress));
+              child: SizedBox(
+                  width: size * 0.1,
+                  height: size * 0.1,
+                  child: CircularProgressIndicator(
+                      color: Colors.black12,
+                      strokeWidth: size > 319 ? 5 : 2,
+                      value: downloadProgress.progress)));
         },
         errorWidget: (context, error, stackTrace) {
           return Center(child: Text('no image'));

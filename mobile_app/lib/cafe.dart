@@ -9,10 +9,11 @@ class Cafe extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double size = MediaQuery.of(context).size.width;
     return Column(
       children: <Widget>[
         CafeInfo(cafe: cafe),
-        CafeImage(image: cafe.image.mainImage),
+        CafeImage(image: cafe.image.mainImage, size: size),
       ],
     );
   }
@@ -26,7 +27,7 @@ class CafeInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        padding: EdgeInsets.only(left: 20, right: 20, bottom: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

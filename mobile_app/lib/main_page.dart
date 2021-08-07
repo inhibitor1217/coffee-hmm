@@ -1,52 +1,73 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/api.dart';
 import 'package:mobile_app/header.dart';
-import 'package:mobile_app/main_cafe_section.dart';
-import 'package:mobile_app/place_list.dart';
-import 'package:mobile_app/skeleton.dart';
+import 'package:mobile_app/main_button.dart';
+import 'package:mobile_app/main_slider_section.dart';
+import 'package:mobile_app/main_tab.dart';
+import 'package:mobile_app/main_table_section.dart';
 import 'package:mobile_app/type.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   final ValueChanged<CafeModel> onTapped;
 
   MainScreen({required this.onTapped});
 
   @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  /* Main Page has 2 view mode : Slider, Table */
+  bool isTableViewMode = false;
+
+  void handleViewMode() {
+    setState(() {
+      isTableViewMode = !isTableViewMode;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: Header(),
-      body: MainBody(onTapped: onTapped),
-    );
+        backgroundColor: Colors.white,
+        appBar: MainHeader(
+          isTableViewMode: isTableViewMode,
+          onChangeViewMode: handleViewMode,
+        ),
+        body: MainBody(
+            onTapped: widget.onTapped, isTableViewMode: isTableViewMode));
   }
 }
 
 class MainBody extends StatefulWidget {
   final ValueChanged<CafeModel> onTapped;
+  final bool isTableViewMode;
 
-  MainBody({required this.onTapped});
+  MainBody({required this.onTapped, required this.isTableViewMode});
 
   @override
   _MainBodyState createState() => _MainBodyState(onTapped: onTapped);
 }
 
-class _MainBodyState extends State<MainBody> {
-  Map<String, Future<CafeListResponse>> _cafeListResponse = {};
-  Future<PlaceListResponse>? _placeResponse;
+class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
+  final ValueChanged<CafeModel> onTapped;
+  Map<String, Future<CafeListResponse>> _cafeListResponses = {};
+  Future<PlaceListResponse>? _placeResponses;
+  List<PlaceModel>? _placeList;
   List<CafeModel>? _cafeList;
   CafeModel? _currentCafe;
   PlaceModel? _currentPlace;
-  final ValueChanged<CafeModel> onTapped;
 
   _MainBodyState({required this.onTapped});
 
   @override
   void initState() {
     super.initState();
-    _placeResponse = fetchPlaceList();
-    _placeResponse!.then((data) {
+    _placeResponses = fetchPlaceList();
+    _placeResponses!.then((data) {
       PlaceModel initialPlace = data.place.list[0];
       setState(() {
+        _placeList = data.place.list;
         _currentPlace = initialPlace;
       });
 
@@ -73,60 +94,56 @@ class _MainBodyState extends State<MainBody> {
 
   void handleCafeSlide(int index) {
     setState(() {
-      _currentCafe = _cafeList![index];
+      _currentCafe = _cafeList![index % _cafeList!.length];
     });
   }
 
   @override
   Widget build(BuildContext context) {
     if (_currentPlace != null && _cafeList != null && _currentCafe != null) {
-      return ListView.builder(
-        itemCount: 1,
-        itemBuilder: (context, index) {
-          return Row(
-            children: [
-              Expanded(
-                  child: Column(
-                children: [
-                  MainCafeSection(
-                    cafeListResponses: _cafeListResponse,
-                    cafeList: _cafeList!,
-                    currentCafe: _currentCafe!,
-                    currentPlace: _currentPlace!,
-                    onSlide: handleCafeSlide,
-                    onTapped: onTapped,
-                  ),
-                  Container(
-                      child: FutureBuilder<PlaceListResponse>(
-                          future: _placeResponse,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return PlaceList(
-                                placeList: snapshot.data!.place.list,
-                                currentPlace: _currentPlace,
-                                handlePlaceClick: handlePlaceClick,
-                              );
-                            } else if (snapshot.hasError) {
-                              return Text("${snapshot.error}");
-                            }
-                            return Skeleton();
-                          }))
-                ],
-              ))
-            ],
-          );
-        },
-      );
+      return Column(children: [
+        /* 뷰 모드 공통 장소 탭 */
+        PlaceTab(
+          placeList: _placeList!,
+          currentPlace: _currentPlace!,
+          onTapped: handlePlaceClick,
+        ),
+        /* 뷰 모드에 따른 메인 컨텐츠 */
+        Flexible(
+            child: ListView.builder(
+                itemCount: 1,
+                itemBuilder: (context, index) {
+                  return widget.isTableViewMode
+                      ? MainTable(
+                          cafeListResponses: _cafeListResponses,
+                          cafeList: _cafeList!,
+                          currentCafe: _currentCafe!,
+                          currentPlace: _currentPlace!,
+                          onTapped: onTapped,
+                        )
+                      : Column(children: [
+                          MainSlider(
+                            cafeListResponses: _cafeListResponses,
+                            cafeList: _cafeList!,
+                            currentCafe: _currentCafe!,
+                            currentPlace: _currentPlace!,
+                            onSlide: handleCafeSlide,
+                            onTapped: onTapped,
+                          ),
+                          MainButtonSetOfSlider()
+                        ]);
+                }))
+      ]);
     } else {
       return Center(child: Text('loading...'));
     }
   }
 
   Future<CafeListResponse> _fetchCafeListOfPlace(PlaceModel place) {
-    if (!_cafeListResponse.containsKey(place.id)) {
-      _cafeListResponse[place.id] = fetchCafeListByPlace(place);
+    if (!_cafeListResponses.containsKey(place.id)) {
+      _cafeListResponses[place.id] = fetchCafeListByPlace(place);
     }
 
-    return _cafeListResponse[place.id]!;
+    return _cafeListResponses[place.id]!;
   }
 }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/main_bottom_sheet.dart';
 import 'package:mobile_app/type.dart';
 import 'package:mobile_app/util.dart';
 
-class MainButtonSet extends StatelessWidget {
+class MainButtonSetOfSlider extends StatelessWidget {
   final _naverShort = CafeButtonModel(
       text: "네이버 바로가기",
       firstEngLetter: 'N',
@@ -18,19 +19,48 @@ class MainButtonSet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         padding: EdgeInsets.only(top: 14),
-        child: Row(
-          children: [
-            Expanded(child: MainButton(button: _naverShort)),
-            Expanded(child: MainButton(button: _instagramShort))
-          ],
-        ));
+        child: Row(children: [
+          Expanded(child: MainButtonOfSlider(button: _naverShort)),
+          Expanded(child: MainButtonOfSlider(button: _instagramShort)),
+          Container(
+              width: 80,
+              height: 28,
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                      onPrimary: Colors.black,
+                      shadowColor: Colors.transparent,
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      side: BorderSide(
+                          width: 1,
+                          color: Colors.black12,
+                          style: BorderStyle.solid),
+                      textStyle: TextStyle(fontSize: 12)),
+                  child: Text('핫플레이스'),
+                  onPressed: () {
+                    showModalBottomSheet<void>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Container(
+                              height: 300,
+                              color: Colors.transparent,
+                              child: MainBottomSheet(
+                                onTapped: () => Navigator.pop(context),
+                              ));
+                        });
+                  }))
+        ]));
   }
 }
 
-class MainButton extends StatelessWidget {
+class MainButtonOfSlider extends StatelessWidget {
   final CafeButtonModel button;
 
-  MainButton({required this.button});
+  MainButtonOfSlider({required this.button});
 
   @override
   Widget build(BuildContext context) {

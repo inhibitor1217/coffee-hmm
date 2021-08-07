@@ -32,12 +32,14 @@ class _CafeImageSliderState extends State<CafeImageSlider> {
   }
 
   Widget _buildImageSlider() {
+    double size = MediaQuery.of(context).size.width;
     return PageView.builder(
       physics: AlwaysScrollableScrollPhysics(),
       controller: _controller,
       itemBuilder: (BuildContext context, int index) {
         return CafeImage(
-            image: widget.imageList[index % widget.imageList.length]);
+            image: widget.imageList[index % widget.imageList.length],
+            size: size);
       },
       onPageChanged: (index) {
         widget.handleSlide(index);
