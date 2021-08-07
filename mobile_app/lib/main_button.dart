@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/main_bottom_sheet.dart';
 import 'package:mobile_app/util.dart';
 
@@ -18,7 +19,7 @@ class MainButtonSetOfSlider extends StatelessWidget {
               onTapped: handleInstagramClick),
           Spacer(),
           Container(
-              width: 90,
+              width: 96,
               height: 29,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -33,7 +34,15 @@ class MainButtonSetOfSlider extends StatelessWidget {
                           color: Colors.black12,
                           style: BorderStyle.solid),
                       textStyle: TextStyle(fontSize: 12)),
-                  child: Text('핫플레이스'),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text('핫플레이스 '),
+                      SvgPicture.asset('assets/images/hot.svg',
+                          width: 18, height: 18)
+                    ],
+                  ),
                   onPressed: () {
                     showModalBottomSheet<void>(
                         context: context,
@@ -63,9 +72,9 @@ class MainButtonOfSlider extends StatelessWidget {
       인스타그램 아이콘 가이드 : 최소 크기 29x29 pixels, 최소 여백 = width / 2
       */
     return IconButton(
-            onPressed: onTapped,
-            padding: EdgeInsets.zero,
-            constraints: BoxConstraints(),
-            icon: Image.asset(imgSrc, width: 29, height: 29));
+        onPressed: onTapped,
+        padding: EdgeInsets.zero,
+        constraints: BoxConstraints(),
+        icon: Image.asset(imgSrc, width: 29, height: 29));
   }
 }

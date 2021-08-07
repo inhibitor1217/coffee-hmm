@@ -43,7 +43,7 @@ class DetailHeader extends StatelessWidget with PreferredSizeWidget {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
-      iconTheme: IconThemeData(color: Colors.black45),
+      iconTheme: IconThemeData(color: Colors.black38),
       title: Text('coffeehmm',
           textAlign: TextAlign.center,
           style: TextStyle(

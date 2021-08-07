@@ -10,6 +10,8 @@ flutter:
     - assets/images/Naver_icon.png
     - assets/images/Instagram_Glyph_Gradient_RGB.png
     - assets/images/Hmm_icon.png
+    - assets/images/like.svg
+    - assets/images/hot.svg
 dependencies:
   flutter:
     sdk: flutter
@@ -17,6 +19,7 @@ dependencies:
   http: ^0.13.3
   cached_network_image: ^3.1.0
   meta: ^1.3.0
+  flutter_svg: ^0.22.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

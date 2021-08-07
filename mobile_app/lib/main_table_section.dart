@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/cafe_image.dart';
 import 'package:mobile_app/skeleton.dart';
 import 'package:mobile_app/type.dart';
@@ -81,17 +82,32 @@ class MainTableCafeElement extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                    padding: EdgeInsets.only(bottom: 4),
-                    child: Text(cafe.name,
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold))),
-                Container(
-                    padding: EdgeInsets.only(bottom: 2),
-                    child: Text('OPEN ' + cafe.metadata.hour,
-                        style: TextStyle(
-                          fontSize: 13,
-                        ))),
+                Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                            padding: EdgeInsets.only(bottom: 4),
+                            child: Text(cafe.name,
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold))),
+                        Container(
+                            padding: EdgeInsets.only(bottom: 2),
+                            child: Text('OPEN ' + cafe.metadata.hour,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                )))
+                      ],
+                    ),
+                    Spacer(),
+                    Visibility(
+                        visible: cafe.image.count > 8,
+                        child: SvgPicture.asset('assets/images/like.svg',
+                            width: 24, height: 24))
+                  ],
+                ),
                 /* 테이블 뷰 모드에서는 등록된 이미지가 3개 이상인 카페만 표시 */
                 Card(
                     clipBehavior: Clip.antiAlias,
