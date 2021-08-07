@@ -207,17 +207,3 @@ class PlaceModel {
     );
   }
 }
-
-@immutable
-class CafeButtonModel {
-  final String text;
-  final Color color;
-  final String firstEngLetter;
-  final void Function() onTapped;
-
-  CafeButtonModel(
-      {required this.text,
-      required this.color,
-      required this.firstEngLetter,
-      required this.onTapped});
-}

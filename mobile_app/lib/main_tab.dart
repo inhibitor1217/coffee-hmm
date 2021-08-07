@@ -53,7 +53,6 @@ class PlaceTabElement extends StatelessWidget {
           primary: isSelected
               ? Color.fromRGBO(155, 218, 218, 1)
               : Colors.transparent,
-          onPrimary: isSelected ? Colors.white : Colors.black,
           shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -69,7 +68,8 @@ class PlaceTabElement extends StatelessWidget {
             letterSpacing: 1.5,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           )),
-      child: Text(place.name),
+      child: Text(place.name,
+          style: TextStyle(color: isSelected ? Colors.white : Colors.black)),
       onPressed: () => onPressed(place),
     );
   }
