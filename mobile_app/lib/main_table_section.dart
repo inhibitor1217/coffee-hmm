@@ -9,14 +9,14 @@ class MainTable extends StatelessWidget {
   final List<CafeModel> cafeList;
   final CafeModel currentCafe;
   final PlaceModel currentPlace;
-  final void Function(CafeModel) onTapped;
+  final ValueChanged<CafeModel> onTappedCafe;
 
   MainTable(
       {required this.cafeListResponses,
       required this.cafeList,
       required this.currentCafe,
       required this.currentPlace,
-      required this.onTapped});
+      required this.onTappedCafe});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,8 @@ class MainTable extends StatelessWidget {
             future: cafeListResponses[currentPlace.id],
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return MainTableCafeList(cafeList: cafes, onTapped: onTapped);
+                return MainTableCafeList(
+                    cafeList: cafes, onTappedCafe: onTappedCafe);
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }
@@ -41,9 +42,9 @@ class MainTable extends StatelessWidget {
 
 class MainTableCafeList extends StatelessWidget {
   final List<CafeModel> cafeList;
-  final void Function(CafeModel) onTapped;
+  final ValueChanged<CafeModel> onTappedCafe;
 
-  MainTableCafeList({required this.cafeList, required this.onTapped});
+  MainTableCafeList({required this.cafeList, required this.onTappedCafe});
 
   @override
   build(BuildContext context) {
@@ -52,7 +53,7 @@ class MainTableCafeList extends StatelessWidget {
             cafeList.length,
             (index) => Column(children: [
                   MainTableCafeElement(
-                      cafe: cafeList[index], onTapped: onTapped),
+                      cafe: cafeList[index], onTappedCafe: onTappedCafe),
                   if (index < cafeList.length - 1)
                     Container(
                       height: 8,
@@ -65,9 +66,9 @@ class MainTableCafeList extends StatelessWidget {
 
 class MainTableCafeElement extends StatelessWidget {
   final CafeModel cafe;
-  final void Function(CafeModel) onTapped;
+  final ValueChanged<CafeModel> onTappedCafe;
 
-  MainTableCafeElement({required this.cafe, required this.onTapped});
+  MainTableCafeElement({required this.cafe, required this.onTappedCafe});
 
   @override
   Widget build(BuildContext context) {
@@ -135,6 +136,6 @@ class MainTableCafeElement extends StatelessWidget {
                         ).toList())))
               ],
             ),
-            onTap: () => onTapped(cafe)));
+            onTap: () => onTappedCafe(cafe)));
   }
 }

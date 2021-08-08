@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/main_bottom_sheet.dart';
+import 'package:mobile_app/type.dart';
 import 'package:mobile_app/util.dart';
 
 class MainButtonSetOfSlider extends StatelessWidget {
+  final ValueChanged<CafeModel> onTappedCafe;
+
+  MainButtonSetOfSlider({required this.onTappedCafe});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -52,7 +57,8 @@ class MainButtonSetOfSlider extends StatelessWidget {
                               height: 300,
                               color: Colors.transparent,
                               child: MainBottomSheet(
-                                onTapped: () => Navigator.pop(context),
+                                onTappedCafe: onTappedCafe,
+                                onPressed: () => Navigator.pop(context),
                               ));
                         });
                   }))

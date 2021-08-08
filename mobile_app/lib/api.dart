@@ -29,3 +29,17 @@ Future<CafeListResponse> fetchCafeListByPlace(PlaceModel place) async {
     throw Exception('Failed to load cafe list');
   }
 }
+
+Future<CafeListResponse> fetchCafeListRecommended(int limit) async {
+  // FIXME: release api 로 교체
+  final response = await http.get(Uri.parse(
+      'https://beta.api.coffee-hmm.inhibitor.io/cafe/feed?&&limit=$limit'));
+
+  if (response.statusCode == 200) {
+    final jsonResponse = json.decode(response.body);
+
+    return CafeListResponse.fromJson(jsonResponse);
+  } else {
+    throw Exception('Failed to load cafe list');
+  }
+}
