@@ -354,8 +354,16 @@ describe('Cafe - GET /cafe/feed', () => {
     Date.now = jest.fn(() => new Date(Date.UTC(2021, 1, 2)).valueOf());
 
     const tomorrowCafeIds = (
-      (await request.get('/cafe/feed').query({ limit: 10 }).expect(HTTP_OK))
-        .body as {
+      (
+        await request
+          .get('/cafe/feed')
+          .query({ limit: 10 })
+          .set({
+            'x-debug-user-id': uid,
+            'x-debug-iam-policy': adminerPolicyString,
+          })
+          .expect(HTTP_OK)
+      ).body as {
         cafe: { list: SimpleCafe[] };
         cursor: string;
         identifier: string;
@@ -390,8 +398,16 @@ describe('Cafe - GET /cafe/feed', () => {
     Date.now = jest.fn(() => new Date(Date.UTC(2021, 1, 2)).valueOf());
 
     const tomorrowCafeIds = (
-      (await request.get('/cafe/feed').query({ limit: 10 }).expect(HTTP_OK))
-        .body as {
+      (
+        await request
+          .get('/cafe/feed')
+          .query({ limit: 10, place: 'mixed' })
+          .set({
+            'x-debug-user-id': uid,
+            'x-debug-iam-policy': adminerPolicyString,
+          })
+          .expect(HTTP_OK)
+      ).body as {
         cafe: { list: SimpleCafe[] };
         cursor: string;
         identifier: string;
