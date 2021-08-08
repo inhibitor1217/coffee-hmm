@@ -121,12 +121,15 @@ export const getFeed = handler<
     })();
 
     const cursorExpression = (() => {
+      const currentDate = new Date(Date.now());
+      const formattedCurrentDate = currentDate.toISOString().split('T')[0];
+
       switch (cursorKey) {
         case 'cafe':
         default:
-          return `md5(concat("cafe"."id", :identifier::text))`;
+          return `md5(concat_ws(':', "cafe"."id", ${formattedCurrentDate}, :identifier::text))`;
         case 'place':
-          return `md5(concat("place"."id", :identifier::text))`;
+          return `md5(concat_ws(':', "place"."id", ${formattedCurrentDate}, :identifier::text))`;
       }
     })();
 
