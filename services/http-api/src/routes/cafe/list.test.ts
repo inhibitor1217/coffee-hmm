@@ -66,13 +66,14 @@ const setupCafes = async (
   const throttle = pLimit(16);
   const ids = await Promise.all(
     range
-      .map((i) => () =>
-        setupCafe(connection, {
-          name: `카페_${i.toString().padStart(3, '0')}`,
-          placeId: i % 3 === 0 ? placeOne.id : placeTwo.id,
-          state: i % 2 === 0 ? CafeState.active : CafeState.hidden,
-          images: generateImages && generateImages(i),
-        }).then(({ cafe }) => cafe.id)
+      .map(
+        (i) => () =>
+          setupCafe(connection, {
+            name: `카페_${i.toString().padStart(3, '0')}`,
+            placeId: i % 3 === 0 ? placeOne.id : placeTwo.id,
+            state: i % 2 === 0 ? CafeState.active : CafeState.hidden,
+            images: generateImages && generateImages(i),
+          }).then(({ cafe }) => cafe.id)
       )
       .map((task) => throttle(task))
   );
@@ -286,30 +287,33 @@ describe('Cafe - GET /cafe/feed', () => {
 
     Date.now = jest.fn(() => new Date(Date.UTC(2021, 1, 1)).valueOf());
 
-    const todayCafeIds = ((
-      await request
-        .get('/cafe/feed')
-        .query({ limit: 10 })
-        .set({
-          'x-debug-user-id': uid,
-          'x-debug-iam-policy': adminerPolicyString,
-        })
-        .expect(HTTP_OK)
-    ).body as {
-      cafe: { list: SimpleCafe[] };
-      cursor: string;
-      identifier: string;
-    }).cafe.list.map((cafe) => cafe.id);
+    const todayCafeIds = (
+      (
+        await request
+          .get('/cafe/feed')
+          .query({ limit: 10 })
+          .set({
+            'x-debug-user-id': uid,
+            'x-debug-iam-policy': adminerPolicyString,
+          })
+          .expect(HTTP_OK)
+      ).body as {
+        cafe: { list: SimpleCafe[] };
+        cursor: string;
+        identifier: string;
+      }
+    ).cafe.list.map((cafe) => cafe.id);
 
     Date.now = jest.fn(() => new Date(Date.UTC(2021, 1, 2)).valueOf());
 
-    const tomorrowCafeIds = ((
-      await request.get('/cafe/feed').query({ limit: 10 }).expect(HTTP_OK)
-    ).body as {
-      cafe: { list: SimpleCafe[] };
-      cursor: string;
-      identifier: string;
-    }).cafe.list.map((cafe) => cafe.id);
+    const tomorrowCafeIds = (
+      (await request.get('/cafe/feed').query({ limit: 10 }).expect(HTTP_OK))
+        .body as {
+        cafe: { list: SimpleCafe[] };
+        cursor: string;
+        identifier: string;
+      }
+    ).cafe.list.map((cafe) => cafe.id);
 
     expect(todayCafeIds).not.toEqual(tomorrowCafeIds);
   });
