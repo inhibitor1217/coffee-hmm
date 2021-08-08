@@ -112,7 +112,10 @@ type SimpleCafe = {
   id: string;
   updatedAt: string;
   name: string;
-  place: { name: string };
+  place: {
+    id: string;
+    name: string;
+  };
   state: CafeStateStrings;
   image: {
     count: number;
@@ -291,7 +294,39 @@ describe('Cafe - GET /cafe/feed', () => {
   });
 
   test('A list should be different per user id, or an unsigned user (place=mixed case)', async () => {
-    // pass
+    const uid0 = uuid.v4();
+    const responses = await Promise.all(
+      [uid0, uid0, uuid.v4(), null, null].map((uid) =>
+        request
+          .get('/cafe/feed')
+          .query({ limit: 10, place: 'mixed' })
+          .set(
+            uid
+              ? {
+                  'x-debug-user-id': uid,
+                  'x-debug-iam-policy': adminerPolicyString,
+                }
+              : {}
+          )
+          .expect(HTTP_OK)
+      )
+    );
+
+    const cafeIdLists = responses
+      .map(
+        (response) =>
+          response.body as {
+            cafe: { list: SimpleCafe[] };
+            cursor: string;
+            identifier: string;
+          }
+      )
+      .map((body) => body.cafe.list.map((cafe) => cafe.id));
+
+    expect(cafeIdLists[0]).toEqual(cafeIdLists[1]);
+    expect(cafeIdLists[1]).not.toEqual(cafeIdLists[2]);
+    expect(cafeIdLists[2]).not.toEqual(cafeIdLists[3]);
+    expect(cafeIdLists[3]).not.toEqual(cafeIdLists[4]);
   });
 
   test('A list should be different in next day', async () => {
@@ -331,7 +366,39 @@ describe('Cafe - GET /cafe/feed', () => {
   });
 
   test('A list should be different in next day (place=mixed case)', async () => {
-    // pass
+    const uid = uuid.v4();
+
+    Date.now = jest.fn(() => new Date(Date.UTC(2021, 1, 1)).valueOf());
+
+    const todayCafeIds = (
+      (
+        await request
+          .get('/cafe/feed')
+          .query({ limit: 10, place: 'mixed' })
+          .set({
+            'x-debug-user-id': uid,
+            'x-debug-iam-policy': adminerPolicyString,
+          })
+          .expect(HTTP_OK)
+      ).body as {
+        cafe: { list: SimpleCafe[] };
+        cursor: string;
+        identifier: string;
+      }
+    ).cafe.list.map((cafe) => cafe.id);
+
+    Date.now = jest.fn(() => new Date(Date.UTC(2021, 1, 2)).valueOf());
+
+    const tomorrowCafeIds = (
+      (await request.get('/cafe/feed').query({ limit: 10 }).expect(HTTP_OK))
+        .body as {
+        cafe: { list: SimpleCafe[] };
+        cursor: string;
+        identifier: string;
+      }
+    ).cafe.list.map((cafe) => cafe.id);
+
+    expect(todayCafeIds).not.toEqual(tomorrowCafeIds);
   });
 
   test('Cafe item contains its images', async () => {
@@ -413,11 +480,20 @@ describe('Cafe - GET /cafe/feed', () => {
   });
 
   test('If place=mixed, the response contains cafes with unique place', async () => {
-    // pass
+    const cafes = await sweepCafes('/cafe/feed', { place: 'mixed' });
+
+    const placeIdList = cafes.map((cafe) => cafe.place.id);
+    const placeIdSet = new Set(placeIds);
+
+    expect(placeIdList.length).toBe(placeIdSet.size);
   });
 
   test('If place=mixed, the response should sweep all places', async () => {
-    // pass
+    const cafes = await sweepCafes('/cafe/feed', { place: 'mixed' });
+
+    const placeNames = cafes.map((cafe) => cafe.place.name);
+
+    expect(placeNames.sort()).toEqual([...PLACE_NAMES].sort());
   });
 
   test('Cannot use both placeId and placeName parameters', async () => {
@@ -428,11 +504,17 @@ describe('Cafe - GET /cafe/feed', () => {
   });
 
   test('Cannot use both place and placeId parameters', async () => {
-    // pass
+    await request
+      .get('/cafe/feed')
+      .query({ limit: 10, place: 'mixed', placeId: uuid.v4() })
+      .expect(HTTP_BAD_REQUEST);
   });
 
   test('Cannot use both place and placeName parameters', async () => {
-    // pass
+    await request
+      .get('/cafe/feed')
+      .query({ limit: 10, place: 'mixed', placeName: 'foo' })
+      .expect(HTTP_BAD_REQUEST);
   });
 });
 
