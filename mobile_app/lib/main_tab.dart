@@ -15,26 +15,19 @@ class PlaceTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         height: 36,
-        margin: EdgeInsets.only(left: 20, bottom: 10),
-        child: ListView(scrollDirection: Axis.horizontal, children: [
-          Container(
-              margin: EdgeInsets.only(right: 4),
-              child: PlaceTabElement(
-                  place: currentPlace, isSelected: true, onPressed: onTapped)),
-          ...buildExtraPlaces()
-        ]));
-  }
-
-  List<Widget> buildExtraPlaces() {
-    List<PlaceModel> places = List.from(placeList)
-      ..removeWhere((place) => place.id == currentPlace.id);
-
-    return List.generate(
-        places.length,
-        (index) => Container(
-            margin: EdgeInsets.only(right: index == places.length - 1 ? 20 : 4),
-            child: PlaceTabElement(
-                place: places[index], isSelected: false, onPressed: onTapped)));
+        margin: EdgeInsets.only(bottom: 10),
+        child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: List.generate(
+                placeList.length,
+                (index) => Container(
+                    padding: EdgeInsets.only(
+                        right: index == placeList.length - 1 ? 20 : 4,
+                        left: index == 0 ? 20 : 4),
+                    child: PlaceTabElement(
+                        place: placeList[index],
+                        isSelected: currentPlace.id == placeList[index].id,
+                        onPressed: onTapped)))));
   }
 }
 
@@ -53,7 +46,6 @@ class PlaceTabElement extends StatelessWidget {
           primary: isSelected
               ? Color.fromRGBO(155, 218, 218, 1)
               : Colors.transparent,
-          onPrimary: isSelected ? Colors.white : Colors.black,
           shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -62,14 +54,15 @@ class PlaceTabElement extends StatelessWidget {
               width: 1,
               color: isSelected
                   ? Color.fromRGBO(220, 238, 238, 1)
-                  : Color.fromRGBO(204, 236, 236, 1),
+                  : Colors.black12,
               style: BorderStyle.solid),
           textStyle: TextStyle(
             fontSize: 14,
             letterSpacing: 1.5,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           )),
-      child: Text(place.name),
+      child: Text(place.name,
+          style: TextStyle(color: isSelected ? Colors.white : Colors.black)),
       onPressed: () => onPressed(place),
     );
   }

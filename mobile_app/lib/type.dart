@@ -66,18 +66,27 @@ class CafeModel {
 class CafeImageListModel {
   final int count;
   final List<CafeImageModel> list;
-  final CafeImageModel mainImage;
+  final CafeImageModel mainImage; // 대표 이미지
+  final List<CafeImageModel> basicImages; // 대표 이미지 제외 기본 이미지
 
   CafeImageListModel(
-      {required this.count, required this.list, required this.mainImage});
+      {required this.count,
+      required this.list,
+      required this.mainImage,
+      required this.basicImages});
 
   factory CafeImageListModel.fromJson(Map<String, dynamic> json) {
     final listFromJson = json['list'] as List;
     final List<CafeImageModel> list = List.unmodifiable(
         listFromJson.map((image) => CafeImageModel.fromJson(image)).toList());
     final mainImage = list.firstWhere((image) => image.isMain);
+    final List<CafeImageModel> basicImages = List.from(list)
+      ..removeWhere((image) => image.id == mainImage.id);
     return CafeImageListModel(
-        count: json['count'], list: list, mainImage: mainImage);
+        count: json['count'],
+        list: list,
+        mainImage: mainImage,
+        basicImages: basicImages);
   }
 }
 
@@ -206,18 +215,4 @@ class PlaceModel {
       cafeCount: json['cafeCount'],
     );
   }
-}
-
-@immutable
-class CafeButtonModel {
-  final String text;
-  final Color color;
-  final String firstEngLetter;
-  final void Function() onTapped;
-
-  CafeButtonModel(
-      {required this.text,
-      required this.color,
-      required this.firstEngLetter,
-      required this.onTapped});
 }
