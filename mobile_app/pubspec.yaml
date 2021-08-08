@@ -7,11 +7,7 @@ environment:
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/Naver_icon.png
-    - assets/images/Instagram_Glyph_Gradient_RGB.png
-    - assets/images/Hmm_icon.png
-    - assets/images/like.svg
-    - assets/images/hot.svg
+    - assets/images/
 dependencies:
   flutter:
     sdk: flutter
