@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/util.dart';
 
 class DetailButtonSet extends StatelessWidget {
+  final String cafeId;
+
+  DetailButtonSet({required this.cafeId});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -12,7 +15,8 @@ class DetailButtonSet extends StatelessWidget {
                 child: DetailButton(
                     text: '흠 링크\n복사하기',
                     imgSrc: 'assets/images/Hmm_icon.png',
-                    onPressed: handleLinkShareClick)),
+                    onPressed: () => handleLinkShareClick(
+                        'https://www.coffeehmm.com/cafe/$cafeId', context))),
             Expanded(
                 child: DetailButton(
                     text: '네이버\n바로가기',
