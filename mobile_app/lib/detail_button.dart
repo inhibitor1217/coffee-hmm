@@ -16,7 +16,7 @@ class DetailButtonSet extends StatelessWidget {
                     text: '흠 링크\n복사하기',
                     imgSrc: 'assets/images/Hmm_icon.png',
                     onPressed: () => handleLinkShareClick(
-                        'https://www.coffeehmm.com/cafe/$cafeId', context))),
+                        'https://www.coffeehmm.com/cafe/$cafeId'))),
             Expanded(
                 child: DetailButton(
                     text: '네이버\n바로가기',
