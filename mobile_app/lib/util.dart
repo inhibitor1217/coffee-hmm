@@ -1,5 +1,14 @@
-void handleLinkShareClick() {
-  print('share click!');
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+void handleLinkShareClick(String link) {
+  Clipboard.setData(ClipboardData(text: link));
+  Fluttertoast.showToast(
+    msg: '커피흠 링크가 복사되었습니다.',
+    backgroundColor: Colors.white,
+    textColor: Colors.black,
+  );
 }
 
 void handleNaverClick() {
