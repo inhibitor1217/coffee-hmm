@@ -58,6 +58,8 @@ class _MainBodyState extends State<MainBody> {
   List<CafeModel>? _cafeList;
   CafeModel? _currentCafe;
   PlaceModel? _currentPlace;
+  Future<CafeListResponse>? _hotCafeListResponses;
+  List<CafeModel>? _hotCafeList;
 
   _MainBodyState({required this.onTappedCafe});
 
@@ -79,6 +81,13 @@ class _MainBodyState extends State<MainBody> {
         });
       });
     });
+
+    _hotCafeListResponses = fetchHotCafeList(10);
+    _hotCafeListResponses!.then((data) {
+      setState(() {
+        _hotCafeList = data.cafe.list;
+      });
+    });
   }
 
   void handlePlaceClick(PlaceModel place) {
@@ -96,6 +105,15 @@ class _MainBodyState extends State<MainBody> {
   void handleCafeSlide(int index) {
     setState(() {
       _currentCafe = _cafeList![index % _cafeList!.length];
+    });
+  }
+
+  void handleHotCafesClick() {
+    _hotCafeListResponses = fetchHotCafeList(10);
+    _hotCafeListResponses!.then((data) {
+      setState(() {
+        _hotCafeList = data.cafe.list;
+      });
     });
   }
 
@@ -131,7 +149,10 @@ class _MainBodyState extends State<MainBody> {
                             onSlide: handleCafeSlide,
                             onTappedCafe: onTappedCafe,
                           ),
-                          MainButtonSetOfSlider(onTappedCafe: onTappedCafe)
+                          MainButtonSetOfSlider(
+                              onTappedCafe: onTappedCafe,
+                              hotCafeList: _hotCafeList!,
+                              onTappedHotCafes: handleHotCafesClick)
                         ]);
                 }))
       ]);

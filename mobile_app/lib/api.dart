@@ -30,10 +30,10 @@ Future<CafeListResponse> fetchCafeListByPlace(PlaceModel place) async {
   }
 }
 
-Future<CafeListResponse> fetchCafeListRecommended(int limit) async {
+Future<CafeListResponse> fetchHotCafeList(int limit) async {
   // FIXME: release api 로 교체
   final response = await http.get(Uri.parse(
-      'https://beta.api.coffee-hmm.inhibitor.io/cafe/feed?&&limit=$limit'));
+      'https://beta.api.coffee-hmm.inhibitor.io/cafe/feed?place=mixed&&limit=$limit'));
 
   if (response.statusCode == 200) {
     final jsonResponse = json.decode(response.body);
