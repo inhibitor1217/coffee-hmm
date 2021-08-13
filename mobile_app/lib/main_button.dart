@@ -58,7 +58,7 @@ class MainButtonSetOfSlider extends StatelessWidget {
                               color: Colors.transparent,
                               child: MainBottomSheet(
                                 onTappedCafe: onTappedCafe,
-                                onPressed: () => Navigator.pop(context),
+                                onClose: () => Navigator.pop(context),
                               ));
                         });
                   }))

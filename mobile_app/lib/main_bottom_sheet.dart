@@ -5,10 +5,10 @@ import 'package:mobile_app/skeleton.dart';
 import 'package:mobile_app/type.dart';
 
 class MainBottomSheet extends StatefulWidget {
-  final void Function() onPressed;
+  final void Function() onClose;
   final ValueChanged<CafeModel> onTappedCafe;
 
-  MainBottomSheet({required this.onPressed, required this.onTappedCafe});
+  MainBottomSheet({required this.onClose, required this.onTappedCafe});
 
   @override
   _MainBottomSheetState createState() => _MainBottomSheetState();
@@ -106,7 +106,7 @@ class _MainBottomSheetState extends State<MainBottomSheet> {
                                 style: TextStyle(fontSize: 14),
                                 textAlign: TextAlign.center,
                               )),
-                          onPressed: widget.onPressed,
+                          onPressed: widget.onClose,
                         ))
                   ],
                 ));
