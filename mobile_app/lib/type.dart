@@ -29,6 +29,17 @@ class CafeListModel {
 }
 
 @immutable
+class SingleCafeResponse {
+  final CafeModel cafe;
+
+  SingleCafeResponse({required this.cafe});
+
+  factory SingleCafeResponse.fromJson(Map<String, dynamic> json) {
+    return SingleCafeResponse(cafe: CafeModel.fromJson(json['cafe']));
+  }
+}
+
+@immutable
 class CafeModel {
   final String id;
   final DateTime createdAt;

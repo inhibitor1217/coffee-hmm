@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/detail_page.dart';
-import 'package:mobile_app/main_page.dart';
-import 'package:mobile_app/type.dart';
+import 'package:mobile_app/router/app_route_information_parser.dart';
+import 'package:mobile_app/router/app_router_delegate.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,17 +12,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  CafeModel? _selectedCafe;
-
-  void handleCafeTapped(CafeModel cafe) {
-    setState(() {
-      _selectedCafe = cafe;
-    });
-  }
+  final _routerDelegate = AppRouterDelegate();
+  final _routeInformationParser = AppRouteInformationParser();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
         title: '카페 추천은, 커피흠',
         theme: new ThemeData(
           canvasColor: Colors.transparent,
@@ -32,24 +26,8 @@ class _MyAppState extends State<MyApp> {
           hoverColor: Colors.transparent,
           scaffoldBackgroundColor: Colors.white,
         ),
-        home: Navigator(
-          pages: [
-            MaterialPage(
-                key: ValueKey('MainPage'),
-                child: MainScreen(onTappedCafe: handleCafeTapped)),
-            if (_selectedCafe != null) CafeDetailPage(cafe: _selectedCafe!)
-          ],
-          onPopPage: (route, result) {
-            if (!route.didPop(result)) {
-              return false;
-            }
-            setState(() {
-              _selectedCafe = null;
-            });
-
-            return true;
-          },
-        ),
+        routerDelegate: _routerDelegate,
+        routeInformationParser: _routeInformationParser,
         debugShowCheckedModeBanner: false);
   }
 }

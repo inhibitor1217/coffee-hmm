@@ -8,10 +8,6 @@ import 'package:mobile_app/main_table_section.dart';
 import 'package:mobile_app/type.dart';
 
 class MainScreen extends StatefulWidget {
-  final ValueChanged<CafeModel> onTappedCafe;
-
-  MainScreen({required this.onTappedCafe});
-
   @override
   _MainScreenState createState() => _MainScreenState();
 }
@@ -34,24 +30,20 @@ class _MainScreenState extends State<MainScreen> {
           isTableViewMode: isTableViewMode,
           onChangeViewMode: handleViewMode,
         ),
-        body: MainBody(
-            onTappedCafe: widget.onTappedCafe,
-            isTableViewMode: isTableViewMode));
+        body: MainBody(isTableViewMode: isTableViewMode));
   }
 }
 
 class MainBody extends StatefulWidget {
-  final ValueChanged<CafeModel> onTappedCafe;
   final bool isTableViewMode;
 
-  MainBody({required this.onTappedCafe, required this.isTableViewMode});
+  MainBody({required this.isTableViewMode});
 
   @override
-  _MainBodyState createState() => _MainBodyState(onTappedCafe: onTappedCafe);
+  _MainBodyState createState() => _MainBodyState();
 }
 
-class _MainBodyState extends State<MainBody> {
-  final ValueChanged<CafeModel> onTappedCafe;
+class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
   Map<String, Future<CafeListResponse>> _cafeListResponses = {};
   Future<PlaceListResponse>? _placeResponses;
   List<PlaceModel>? _placeList;
@@ -60,8 +52,6 @@ class _MainBodyState extends State<MainBody> {
   PlaceModel? _currentPlace;
   Future<CafeListResponse>? _hotCafeListResponses;
   List<CafeModel>? _hotCafeList;
-
-  _MainBodyState({required this.onTappedCafe});
 
   @override
   void initState() {
@@ -138,7 +128,6 @@ class _MainBodyState extends State<MainBody> {
                           cafeList: _cafeList!,
                           currentCafe: _currentCafe!,
                           currentPlace: _currentPlace!,
-                          onTappedCafe: onTappedCafe,
                         )
                       : Column(children: [
                           MainSlider(
@@ -147,10 +136,8 @@ class _MainBodyState extends State<MainBody> {
                             currentCafe: _currentCafe!,
                             currentPlace: _currentPlace!,
                             onSlide: handleCafeSlide,
-                            onTappedCafe: onTappedCafe,
                           ),
                           MainButtonSetOfSlider(
-                              onTappedCafe: onTappedCafe,
                               hotCafeList: _hotCafeList!,
                               onTappedHotCafes: handleHotCafesClick)
                         ]);

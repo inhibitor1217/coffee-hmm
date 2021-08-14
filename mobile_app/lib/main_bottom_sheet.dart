@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/cafe_image.dart';
+import 'package:mobile_app/router/mixins/enter_cafe_detail_mixin.dart';
 import 'package:mobile_app/type.dart';
 
 class MainBottomSheet extends StatefulWidget {
   final List<CafeModel> hotCafeList;
   final void Function() onClose;
-  final ValueChanged<CafeModel> onTappedCafe;
 
-  MainBottomSheet(
-      {required this.hotCafeList,
-      required this.onClose,
-      required this.onTappedCafe});
+  MainBottomSheet({required this.hotCafeList, required this.onClose});
 
   @override
   _MainBottomSheetState createState() => _MainBottomSheetState();
 }
 
-class _MainBottomSheetState extends State<MainBottomSheet> {
+class _MainBottomSheetState extends State<MainBottomSheet>
+    with EnterCafeDetailMixin {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -69,8 +67,7 @@ class _MainBottomSheetState extends State<MainBottomSheet> {
                               child: GestureDetector(
                                 child: RepresentativeCafe(
                                     cafe: widget.hotCafeList[index]),
-                                onTap: () => widget
-                                    .onTappedCafe(widget.hotCafeList[index]),
+                                onTap: enterDetail(widget.hotCafeList[index]),
                               ))))),
             ]),
             Positioned(
