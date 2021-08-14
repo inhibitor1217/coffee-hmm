@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/header.dart';
+import 'package:mobile_app/util/app_stage.dart';
+import 'package:mobile_app/util/environment.dart';
 import 'package:package_info/package_info.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -31,7 +33,7 @@ class SettingsBody extends StatelessWidget {
               ),
               ListTile(
                 title: Text('앱 스테이지'),
-                subtitle: Text('dev'),
+                subtitle: Text(Environment.appStage.key),
               ),
             ],
           );
