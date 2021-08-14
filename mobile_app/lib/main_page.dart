@@ -50,6 +50,8 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
   List<CafeModel>? _cafeList;
   CafeModel? _currentCafe;
   PlaceModel? _currentPlace;
+  Future<CafeListResponse>? _hotCafeListResponses;
+  List<CafeModel>? _hotCafeList;
 
   @override
   void initState() {
@@ -69,6 +71,13 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
         });
       });
     });
+
+    _hotCafeListResponses = fetchHotCafeList(10);
+    _hotCafeListResponses!.then((data) {
+      setState(() {
+        _hotCafeList = data.cafe.list;
+      });
+    });
   }
 
   void handlePlaceClick(PlaceModel place) {
@@ -86,6 +95,15 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
   void handleCafeSlide(int index) {
     setState(() {
       _currentCafe = _cafeList![index % _cafeList!.length];
+    });
+  }
+
+  void handleHotCafesClick() {
+    _hotCafeListResponses = fetchHotCafeList(10);
+    _hotCafeListResponses!.then((data) {
+      setState(() {
+        _hotCafeList = data.cafe.list;
+      });
     });
   }
 
@@ -119,7 +137,9 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
                             currentPlace: _currentPlace!,
                             onSlide: handleCafeSlide,
                           ),
-                          MainButtonSetOfSlider()
+                          MainButtonSetOfSlider(
+                              hotCafeList: _hotCafeList!,
+                              onTappedHotCafes: handleHotCafesClick)
                         ]);
                 }))
       ]);

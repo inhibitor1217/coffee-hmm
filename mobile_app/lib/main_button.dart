@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/main_bottom_sheet.dart';
+import 'package:mobile_app/type.dart';
 import 'package:mobile_app/util.dart';
 
 class MainButtonSetOfSlider extends StatelessWidget {
+  final List<CafeModel> hotCafeList;
+  final void Function() onTappedHotCafes;
+
+  MainButtonSetOfSlider(
+      {required this.hotCafeList, required this.onTappedHotCafes});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,11 +55,13 @@ class MainButtonSetOfSlider extends StatelessWidget {
                     showModalBottomSheet<void>(
                         context: context,
                         builder: (BuildContext context) {
+                          onTappedHotCafes();
                           return Container(
                               height: 300,
                               color: Colors.transparent,
                               child: MainBottomSheet(
-                                onTapped: () => Navigator.pop(context),
+                                hotCafeList: hotCafeList,
+                                onClose: () => Navigator.pop(context),
                               ));
                         });
                   }))
