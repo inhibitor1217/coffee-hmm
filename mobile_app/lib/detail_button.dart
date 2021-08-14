@@ -3,8 +3,13 @@ import 'package:mobile_app/util.dart';
 
 class DetailButtonSet extends StatelessWidget {
   final String cafeId;
+  final String cafeName;
+  final String cafePlaceName;
 
-  DetailButtonSet({required this.cafeId});
+  DetailButtonSet(
+      {required this.cafeId,
+      required this.cafeName,
+      required this.cafePlaceName});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,12 +26,13 @@ class DetailButtonSet extends StatelessWidget {
                 child: DetailButton(
                     text: '네이버\n바로가기',
                     imgSrc: 'assets/images/Naver_icon.png',
-                    onPressed: handleNaverClick)),
+                    onPressed: () => handleNaverClick(
+                        cafeName + ' ' + cafePlaceName, context))),
             Expanded(
                 child: DetailButton(
                     text: '인스타그램\n바로가기',
                     imgSrc: 'assets/images/Instagram_Glyph_Gradient_RGB.png',
-                    onPressed: handleInstagramClick))
+                    onPressed: () => handleInstagramClick(cafeName, context)))
           ],
         ));
   }
