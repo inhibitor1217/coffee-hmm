@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/cafe_image.dart';
+import 'package:mobile_app/router/mixins/enter_cafe_detail_mixin.dart';
 import 'package:mobile_app/skeleton.dart';
 import 'package:mobile_app/type.dart';
 import 'package:mobile_app/util.dart';
@@ -9,14 +10,12 @@ class MainTable extends StatelessWidget {
   final List<CafeModel> cafeList;
   final CafeModel currentCafe;
   final PlaceModel currentPlace;
-  final void Function(CafeModel) onTapped;
 
   MainTable(
       {required this.cafeListResponses,
       required this.cafeList,
       required this.currentCafe,
-      required this.currentPlace,
-      required this.onTapped});
+      required this.currentPlace});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,7 @@ class MainTable extends StatelessWidget {
             future: cafeListResponses[currentPlace.id],
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return MainTableCafeList(cafeList: cafes, onTapped: onTapped);
+                return MainTableCafeList(cafeList: cafes);
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }
@@ -41,9 +40,8 @@ class MainTable extends StatelessWidget {
 
 class MainTableCafeList extends StatelessWidget {
   final List<CafeModel> cafeList;
-  final void Function(CafeModel) onTapped;
 
-  MainTableCafeList({required this.cafeList, required this.onTapped});
+  MainTableCafeList({required this.cafeList});
 
   @override
   build(BuildContext context) {
@@ -51,8 +49,7 @@ class MainTableCafeList extends StatelessWidget {
         children: List.generate(
             cafeList.length,
             (index) => Column(children: [
-                  MainTableCafeElement(
-                      cafe: cafeList[index], onTapped: onTapped),
+                  MainTableCafeElement(cafe: cafeList[index]),
                   if (index < cafeList.length - 1)
                     Container(
                       height: 8,
@@ -63,12 +60,17 @@ class MainTableCafeList extends StatelessWidget {
   }
 }
 
-class MainTableCafeElement extends StatelessWidget {
+class MainTableCafeElement extends StatefulWidget {
   final CafeModel cafe;
-  final void Function(CafeModel) onTapped;
 
-  MainTableCafeElement({required this.cafe, required this.onTapped});
+  MainTableCafeElement({required this.cafe});
 
+  @override
+  _MainTableCafeElementState createState() => _MainTableCafeElementState();
+}
+
+class _MainTableCafeElementState extends State<MainTableCafeElement>
+    with EnterCafeDetailMixin {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -86,11 +88,11 @@ class MainTableCafeElement extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text(cafe.name,
+                        Text(widget.cafe.name,
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold)),
                         Spacer(),
-                        if (cafe.image.count > 8)
+                        if (widget.cafe.image.count > 8)
                           Text(
                             '커피흠 추천',
                             style: TextStyle(
@@ -102,7 +104,7 @@ class MainTableCafeElement extends StatelessWidget {
                     ),
                     Container(
                         margin: EdgeInsets.only(top: 4, bottom: 2),
-                        child: Text('OPEN ' + cafe.metadata.hour,
+                        child: Text('OPEN ' + widget.cafe.metadata.hour,
                             style: TextStyle(
                               fontSize: 13,
                             )))
@@ -120,21 +122,22 @@ class MainTableCafeElement extends StatelessWidget {
                           [
                             Expanded(
                                 child: CafeImage(
-                                    image: cafe.image.mainImage, size: 112)),
+                                    image: widget.cafe.image.mainImage,
+                                    size: 112)),
                             Expanded(
                                 child: CafeImage(
-                                    image: cafe.image.basicImages[0],
+                                    image: widget.cafe.image.basicImages[0],
                                     size: 112)),
                             Expanded(
                                 child: Container(
                                     child: CafeImage(
-                                        image: cafe.image.basicImages[1],
+                                        image: widget.cafe.image.basicImages[1],
                                         size: 112))),
                           ],
                           separator: SizedBox(width: 2),
                         ).toList())))
               ],
             ),
-            onTap: () => onTapped(cafe)));
+            onTap: enterDetail(widget.cafe)));
   }
 }

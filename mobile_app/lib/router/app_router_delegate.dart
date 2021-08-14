@@ -18,14 +18,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
   List<MaterialPage> get pages {
     return List.unmodifiable([
-      MaterialPage(
-          child: MainScreen(
-            onTapped: (cafe) {
-              _state.enterCafeDetails(cafe.id);
-              notifyListeners();
-            },
-          ),
-          arguments: PageConfiguration.home),
+      MaterialPage(child: MainScreen(), arguments: PageConfiguration.home),
       if (_state.isOnDetailPage)
         MaterialPage(
           child: CafeDetailScreen(cafeId: _state.selectedCafeId!),

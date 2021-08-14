@@ -8,10 +8,6 @@ import 'package:mobile_app/main_table_section.dart';
 import 'package:mobile_app/type.dart';
 
 class MainScreen extends StatefulWidget {
-  final ValueChanged<CafeModel> onTapped;
-
-  MainScreen({required this.onTapped});
-
   @override
   _MainScreenState createState() => _MainScreenState();
 }
@@ -34,31 +30,26 @@ class _MainScreenState extends State<MainScreen> {
           isTableViewMode: isTableViewMode,
           onChangeViewMode: handleViewMode,
         ),
-        body: MainBody(
-            onTapped: widget.onTapped, isTableViewMode: isTableViewMode));
+        body: MainBody(isTableViewMode: isTableViewMode));
   }
 }
 
 class MainBody extends StatefulWidget {
-  final ValueChanged<CafeModel> onTapped;
   final bool isTableViewMode;
 
-  MainBody({required this.onTapped, required this.isTableViewMode});
+  MainBody({required this.isTableViewMode});
 
   @override
-  _MainBodyState createState() => _MainBodyState(onTapped: onTapped);
+  _MainBodyState createState() => _MainBodyState();
 }
 
 class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
-  final ValueChanged<CafeModel> onTapped;
   Map<String, Future<CafeListResponse>> _cafeListResponses = {};
   Future<PlaceListResponse>? _placeResponses;
   List<PlaceModel>? _placeList;
   List<CafeModel>? _cafeList;
   CafeModel? _currentCafe;
   PlaceModel? _currentPlace;
-
-  _MainBodyState({required this.onTapped});
 
   @override
   void initState() {
@@ -119,7 +110,6 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
                           cafeList: _cafeList!,
                           currentCafe: _currentCafe!,
                           currentPlace: _currentPlace!,
-                          onTapped: onTapped,
                         )
                       : Column(children: [
                           MainSlider(
@@ -128,7 +118,6 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
                             currentCafe: _currentCafe!,
                             currentPlace: _currentPlace!,
                             onSlide: handleCafeSlide,
-                            onTapped: onTapped,
                           ),
                           MainButtonSetOfSlider()
                         ]);
