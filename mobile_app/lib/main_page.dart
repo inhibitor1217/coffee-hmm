@@ -141,7 +141,6 @@ class _MainBodyState extends State<MainBody> {
                             currentPlace: _currentPlace!,
                             onSlide: handleCafeSlide,
                           ),
-                     
                           ImageIndexBullet(
                               totalCount: _cafeList!.length,
                               currentIndex: _cafeList!.indexOf(_currentCafe!)),

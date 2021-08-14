@@ -38,18 +38,16 @@ class _MainSliderState extends State<MainSlider> with EnterCafeDetailMixin {
                 children: [
                   CafeInfo(cafe: widget.currentCafe),
                   CafeImageSlider(
-                    controller: controller,
+                    controller: widget.controller,
                     imageList: widget.cafeList
                         .map((cafe) => cafe.image.mainImage)
                         .toList(),
-                    handleSlide: widget.onSlide,
+                    onSlide: widget.onSlide,
                   ),
                 ],
               ),
               onTap: enterDetail(widget.currentCafe),
             );
-              
-             
           } else if (!snapshot.hasData) {
             return Container(
                 width: MediaQuery.of(context).size.width + 48,
