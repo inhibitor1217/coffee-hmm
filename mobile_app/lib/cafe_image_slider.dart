@@ -3,10 +3,15 @@ import 'package:mobile_app/cafe_image.dart';
 import 'package:mobile_app/type.dart';
 
 class CafeImageSlider extends StatefulWidget {
+  final PageController controller;
   final List<CafeImageModel> imageList;
-  final handleSlide;
+  final ValueChanged<int> onSlide;
 
-  CafeImageSlider({required this.imageList, required this.handleSlide});
+  CafeImageSlider({
+    required this.controller,
+    required this.imageList,
+    required this.onSlide,
+  });
 
   @override
   _CafeImageSliderState createState() =>
@@ -15,7 +20,6 @@ class CafeImageSlider extends StatefulWidget {
 
 class _CafeImageSliderState extends State<CafeImageSlider> {
   final List<CafeImageModel> imageList;
-  final _controller = PageController();
 
   _CafeImageSliderState({required this.imageList});
 
@@ -26,24 +30,21 @@ class _CafeImageSliderState extends State<CafeImageSlider> {
     return Container(
       height: size,
       child: Stack(
-        children: [_buildImageSlider()],
+        children: [
+          PageView.builder(
+            physics: AlwaysScrollableScrollPhysics(),
+            controller: widget.controller,
+            itemBuilder: (BuildContext context, int index) {
+              return CafeImage(
+                  image: widget.imageList[index % widget.imageList.length],
+                  size: size);
+            },
+            onPageChanged: (index) {
+              widget.onSlide(index);
+            },
+          )
+        ],
       ),
-    );
-  }
-
-  Widget _buildImageSlider() {
-    double size = MediaQuery.of(context).size.width;
-    return PageView.builder(
-      physics: AlwaysScrollableScrollPhysics(),
-      controller: _controller,
-      itemBuilder: (BuildContext context, int index) {
-        return CafeImage(
-            image: widget.imageList[index % widget.imageList.length],
-            size: size);
-      },
-      onPageChanged: (index) {
-        widget.handleSlide(index);
-      },
     );
   }
 }

@@ -6,18 +6,21 @@ import 'package:mobile_app/skeleton.dart';
 import 'package:mobile_app/type.dart';
 
 class MainSlider extends StatefulWidget {
+  final PageController controller;
   final Map<String, Future<CafeListResponse>> cafeListResponses;
   final List<CafeModel> cafeList;
   final CafeModel currentCafe;
   final PlaceModel currentPlace;
   final void Function(int) onSlide;
 
-  MainSlider(
-      {required this.cafeListResponses,
-      required this.cafeList,
-      required this.currentCafe,
-      required this.currentPlace,
-      required this.onSlide});
+  MainSlider({
+    required this.controller,
+    required this.cafeListResponses,
+    required this.cafeList,
+    required this.currentCafe,
+    required this.currentPlace,
+    required this.onSlide,
+  });
 
   @override
   _MainSliderState createState() => _MainSliderState();
@@ -35,6 +38,7 @@ class _MainSliderState extends State<MainSlider> with EnterCafeDetailMixin {
                 children: [
                   CafeInfo(cafe: widget.currentCafe),
                   CafeImageSlider(
+                    controller: controller,
                     imageList: widget.cafeList
                         .map((cafe) => cafe.image.mainImage)
                         .toList(),
@@ -44,6 +48,8 @@ class _MainSliderState extends State<MainSlider> with EnterCafeDetailMixin {
               ),
               onTap: enterDetail(widget.currentCafe),
             );
+              
+             
           } else if (!snapshot.hasData) {
             return Container(
                 width: MediaQuery.of(context).size.width + 48,

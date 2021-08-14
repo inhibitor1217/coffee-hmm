@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/api.dart';
+import 'package:mobile_app/cafe_image_slider.dart';
 import 'package:mobile_app/header.dart';
 import 'package:mobile_app/main_button.dart';
 import 'package:mobile_app/main_slider_section.dart';
@@ -43,7 +44,8 @@ class MainBody extends StatefulWidget {
   _MainBodyState createState() => _MainBodyState();
 }
 
-class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
+class _MainBodyState extends State<MainBody> {
+  final PageController _controller = PageController();
   Map<String, Future<CafeListResponse>> _cafeListResponses = {};
   Future<PlaceListResponse>? _placeResponses;
   List<PlaceModel>? _placeList;
@@ -81,6 +83,7 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
   }
 
   void handlePlaceClick(PlaceModel place) {
+    _controller.jumpToPage(0);
     setState(() {
       _currentPlace = place;
       _fetchCafeListOfPlace(place).then((data) {
@@ -131,12 +134,17 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
                         )
                       : Column(children: [
                           MainSlider(
+                            controller: _controller,
                             cafeListResponses: _cafeListResponses,
                             cafeList: _cafeList!,
                             currentCafe: _currentCafe!,
                             currentPlace: _currentPlace!,
                             onSlide: handleCafeSlide,
                           ),
+                     
+                          ImageIndexBullet(
+                              totalCount: _cafeList!.length,
+                              currentIndex: _cafeList!.indexOf(_currentCafe!)),
                           MainButtonSetOfSlider(
                               hotCafeList: _hotCafeList!,
                               onTappedHotCafes: handleHotCafesClick)

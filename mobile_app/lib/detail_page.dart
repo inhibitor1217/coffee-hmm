@@ -33,6 +33,7 @@ class DetailBody extends StatefulWidget {
 class _DetailBodyState extends State<DetailBody> {
   late Future<SingleCafeResponse> _cafeResponse;
   late CafeModel _cafe;
+  final PageController _controller = PageController();
   int? currentIndex;
 
   @override
@@ -75,8 +76,9 @@ class _DetailBodyState extends State<DetailBody> {
     return Column(
       children: [
         CafeImageSlider(
+          controller: _controller,
           imageList: cafe.image.list,
-          handleSlide: handleImageSlide,
+          onSlide: handleImageSlide,
         ),
         ImageIndexBullet(
           totalCount: cafe.image.count,

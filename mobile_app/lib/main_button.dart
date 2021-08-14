@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/main_bottom_sheet.dart';
 import 'package:mobile_app/type.dart';
 import 'package:mobile_app/util.dart';
@@ -14,7 +13,7 @@ class MainButtonSetOfSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(top: 14, right: 20, left: 20),
+        padding: EdgeInsets.symmetric(horizontal: 20),
         child: Row(children: [
           MainButtonOfSlider(
             imgSrc: 'assets/images/Naver_icon.png',
@@ -26,31 +25,23 @@ class MainButtonSetOfSlider extends StatelessWidget {
               onTapped: handleInstagramClick),
           Spacer(),
           Container(
-              width: 100,
+              width: 80,
               height: 29,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: Colors.white,
                       onPrimary: Colors.black,
                       shadowColor: Colors.transparent,
-                      padding: EdgeInsets.all(0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
                       ),
+                      padding: EdgeInsets.all(0),
                       side: BorderSide(
                           width: 1,
                           color: Colors.black12,
                           style: BorderStyle.solid),
                       textStyle: TextStyle(fontSize: 12)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text('핫플레이스 '),
-                      SvgPicture.asset('assets/images/hot.svg',
-                          width: 18, height: 18)
-                    ],
-                  ),
+                  child: Text('핫플레이스 '),
                   onPressed: () {
                     showModalBottomSheet<void>(
                         context: context,
