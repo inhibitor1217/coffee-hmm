@@ -4,6 +4,7 @@ import 'package:mobile_app/main_page.dart';
 import 'package:mobile_app/router/app_state.dart';
 import 'package:mobile_app/router/page_configuration.dart';
 import 'package:mobile_app/router/pages.dart';
+import 'package:mobile_app/settings_page.dart';
 
 class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<PageConfiguration> {
@@ -27,7 +28,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
         ),
       if (_state.isOnSettings)
         MaterialPage(
-          child: Container(child: Center(child: Text('Settings'))),
+          child: SettingsScreen(),
           arguments: PageConfiguration.settings,
         )
     ]);

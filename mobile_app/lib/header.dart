@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/router/page_configuration.dart';
 
 const _titleStyle = TextStyle(
   fontSize: 12,
@@ -15,9 +16,15 @@ class _MoreActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.more_vert),
-      onPressed: () {},
+      icon: Icon(Icons.info_rounded),
+      onPressed: _enterSettings(context),
     );
+  }
+
+  void Function() _enterSettings(BuildContext context) {
+    return () => Router.of(context)
+        .routerDelegate
+        .setNewRoutePath(PageConfiguration.settings);
   }
 }
 
@@ -49,7 +56,7 @@ class MainHeader extends StatelessWidget with PreferredSizeWidget {
   }
 }
 
-class DetailHeader extends StatelessWidget with PreferredSizeWidget {
+class BaseHeader extends StatelessWidget with PreferredSizeWidget {
   @override
   Size get preferredSize => Size.fromHeight(48);
 

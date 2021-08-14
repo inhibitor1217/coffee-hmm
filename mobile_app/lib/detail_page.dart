@@ -6,20 +6,6 @@ import 'package:mobile_app/detail_button.dart';
 import 'package:mobile_app/header.dart';
 import 'package:mobile_app/type.dart';
 
-class CafeDetailPage extends Page {
-  final String cafeId;
-
-  CafeDetailPage({required this.cafeId}) : super(key: ValueKey(cafeId));
-
-  Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
-        settings: this,
-        builder: (BuildContext context) {
-          return CafeDetailScreen(cafeId: cafeId);
-        });
-  }
-}
-
 class CafeDetailScreen extends StatelessWidget {
   final String cafeId;
 
@@ -29,7 +15,7 @@ class CafeDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: DetailHeader(), body: DetailBody(cafeId: cafeId));
+    return Scaffold(appBar: BaseHeader(), body: DetailBody(cafeId: cafeId));
   }
 }
 
