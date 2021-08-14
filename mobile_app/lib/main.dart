@@ -13,11 +13,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  CafeModel? _selectedCafe;
+  String? _selectedCafeId;
 
   void handleCafeTapped(CafeModel cafe) {
     setState(() {
-      _selectedCafe = cafe;
+      _selectedCafeId = cafe.id;
     });
   }
 
@@ -37,14 +37,15 @@ class _MyAppState extends State<MyApp> {
             MaterialPage(
                 key: ValueKey('MainPage'),
                 child: MainScreen(onTapped: handleCafeTapped)),
-            if (_selectedCafe != null) CafeDetailPage(cafe: _selectedCafe!)
+            if (_selectedCafeId != null)
+              CafeDetailPage(cafeId: _selectedCafeId!),
           ],
           onPopPage: (route, result) {
             if (!route.didPop(result)) {
               return false;
             }
             setState(() {
-              _selectedCafe = null;
+              _selectedCafeId = null;
             });
 
             return true;

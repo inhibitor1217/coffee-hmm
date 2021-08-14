@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/api.dart';
 import 'package:mobile_app/cafe.dart';
 import 'package:mobile_app/cafe_image_slider.dart';
 import 'package:mobile_app/detail_button.dart';
@@ -6,57 +7,85 @@ import 'package:mobile_app/header.dart';
 import 'package:mobile_app/type.dart';
 
 class CafeDetailPage extends Page {
-  final CafeModel cafe;
+  final String cafeId;
 
-  CafeDetailPage({required this.cafe});
+  CafeDetailPage({required this.cafeId}) : super(key: ValueKey(cafeId));
 
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(
         settings: this,
         builder: (BuildContext context) {
-          return CafeDetailScreen(cafe: cafe);
+          return CafeDetailScreen(cafeId: cafeId);
         });
   }
 }
 
 class CafeDetailScreen extends StatelessWidget {
-  final CafeModel cafe;
+  final String cafeId;
 
   CafeDetailScreen({
-    required this.cafe,
+    required this.cafeId,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: DetailHeader(), body: DetailBody(cafe: cafe));
+    return Scaffold(appBar: DetailHeader(), body: DetailBody(cafeId: cafeId));
   }
 }
 
 class DetailBody extends StatefulWidget {
-  final CafeModel cafe;
+  final String cafeId;
 
   DetailBody({
-    required this.cafe,
+    required this.cafeId,
   });
 
   @override
-  _DetailBodyState createState() => _DetailBodyState(cafe: cafe);
+  _DetailBodyState createState() => _DetailBodyState();
 }
 
 class _DetailBodyState extends State<DetailBody> {
-  CafeModel cafe;
+  late Future<SingleCafeResponse> _cafeResponse;
+  late CafeModel _cafe;
   int? currentIndex;
 
-  _DetailBodyState({required this.cafe});
+  @override
+  void initState() {
+    super.initState();
+
+    _cafeResponse = fetchCafe(widget.cafeId);
+    _cafeResponse.then((data) {
+      setState(() {
+        _cafe = data.cafe;
+      });
+    });
+  }
 
   void handleImageSlide(int index) {
     setState(() {
-      currentIndex = index % cafe.image.count;
+      currentIndex = index % _cafe.image.count;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: _cafeResponse,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return _buildContent(context, cafe: _cafe);
+          }
+
+          if (snapshot.hasError) {
+            return _buildError(context);
+          }
+
+          return Center(
+              child: CircularProgressIndicator(color: Colors.black12));
+        });
+  }
+
+  Widget _buildContent(BuildContext context, {required CafeModel cafe}) {
     return Column(
       children: [
         CafeImageSlider(
@@ -71,5 +100,22 @@ class _DetailBodyState extends State<DetailBody> {
         DetailButtonSet(cafeId: cafe.id),
       ],
     );
+  }
+
+  Widget _buildError(BuildContext context) {
+    return Center(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Icon(Icons.error_rounded, color: Colors.black26, size: 48),
+      SizedBox(height: 8),
+      Text('카페를 찾을 수 없습니다.',
+          style: const TextStyle(color: Colors.black38, fontSize: 14)),
+      SizedBox(height: 16),
+      ElevatedButton(
+        child: Text('돌아가기'),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+    ]));
   }
 }
