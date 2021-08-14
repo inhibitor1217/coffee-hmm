@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
           pages: [
             MaterialPage(
                 key: ValueKey('MainPage'),
-                child: MainScreen(onTapped: handleCafeTapped)),
+                child: MainScreen(onTappedCafe: handleCafeTapped)),
             if (_selectedCafe != null) CafeDetailPage(cafe: _selectedCafe!)
           ],
           onPopPage: (route, result) {

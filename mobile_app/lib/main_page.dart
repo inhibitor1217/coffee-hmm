@@ -8,9 +8,9 @@ import 'package:mobile_app/main_table_section.dart';
 import 'package:mobile_app/type.dart';
 
 class MainScreen extends StatefulWidget {
-  final ValueChanged<CafeModel> onTapped;
+  final ValueChanged<CafeModel> onTappedCafe;
 
-  MainScreen({required this.onTapped});
+  MainScreen({required this.onTappedCafe});
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -35,30 +35,33 @@ class _MainScreenState extends State<MainScreen> {
           onChangeViewMode: handleViewMode,
         ),
         body: MainBody(
-            onTapped: widget.onTapped, isTableViewMode: isTableViewMode));
+            onTappedCafe: widget.onTappedCafe,
+            isTableViewMode: isTableViewMode));
   }
 }
 
 class MainBody extends StatefulWidget {
-  final ValueChanged<CafeModel> onTapped;
+  final ValueChanged<CafeModel> onTappedCafe;
   final bool isTableViewMode;
 
-  MainBody({required this.onTapped, required this.isTableViewMode});
+  MainBody({required this.onTappedCafe, required this.isTableViewMode});
 
   @override
-  _MainBodyState createState() => _MainBodyState(onTapped: onTapped);
+  _MainBodyState createState() => _MainBodyState(onTappedCafe: onTappedCafe);
 }
 
-class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
-  final ValueChanged<CafeModel> onTapped;
+class _MainBodyState extends State<MainBody> {
+  final ValueChanged<CafeModel> onTappedCafe;
   Map<String, Future<CafeListResponse>> _cafeListResponses = {};
   Future<PlaceListResponse>? _placeResponses;
   List<PlaceModel>? _placeList;
   List<CafeModel>? _cafeList;
   CafeModel? _currentCafe;
   PlaceModel? _currentPlace;
+  Future<CafeListResponse>? _hotCafeListResponses;
+  List<CafeModel>? _hotCafeList;
 
-  _MainBodyState({required this.onTapped});
+  _MainBodyState({required this.onTappedCafe});
 
   @override
   void initState() {
@@ -78,6 +81,13 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
         });
       });
     });
+
+    _hotCafeListResponses = fetchHotCafeList(10);
+    _hotCafeListResponses!.then((data) {
+      setState(() {
+        _hotCafeList = data.cafe.list;
+      });
+    });
   }
 
   void handlePlaceClick(PlaceModel place) {
@@ -95,6 +105,15 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
   void handleCafeSlide(int index) {
     setState(() {
       _currentCafe = _cafeList![index % _cafeList!.length];
+    });
+  }
+
+  void handleHotCafesClick() {
+    _hotCafeListResponses = fetchHotCafeList(10);
+    _hotCafeListResponses!.then((data) {
+      setState(() {
+        _hotCafeList = data.cafe.list;
+      });
     });
   }
 
@@ -119,7 +138,7 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
                           cafeList: _cafeList!,
                           currentCafe: _currentCafe!,
                           currentPlace: _currentPlace!,
-                          onTapped: onTapped,
+                          onTappedCafe: onTappedCafe,
                         )
                       : Column(children: [
                           MainSlider(
@@ -128,9 +147,12 @@ class _MainBodyState extends State<MainBody> with TickerProviderStateMixin {
                             currentCafe: _currentCafe!,
                             currentPlace: _currentPlace!,
                             onSlide: handleCafeSlide,
-                            onTapped: onTapped,
+                            onTappedCafe: onTappedCafe,
                           ),
-                          MainButtonSetOfSlider()
+                          MainButtonSetOfSlider(
+                              onTappedCafe: onTappedCafe,
+                              hotCafeList: _hotCafeList!,
+                              onTappedHotCafes: handleHotCafesClick)
                         ]);
                 }))
       ]);

@@ -10,7 +10,7 @@ class MainSlider extends StatelessWidget {
   final CafeModel currentCafe;
   final PlaceModel currentPlace;
   final void Function(int) onSlide;
-  final void Function(CafeModel) onTapped;
+  final ValueChanged<CafeModel> onTappedCafe;
 
   MainSlider(
       {required this.cafeListResponses,
@@ -18,37 +18,35 @@ class MainSlider extends StatelessWidget {
       required this.currentCafe,
       required this.currentPlace,
       required this.onSlide,
-      required this.onTapped});
+      required this.onTappedCafe});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: FutureBuilder<CafeListResponse>(
-            future: cafeListResponses[currentPlace.id],
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return GestureDetector(
-                  child: Column(
-                    children: [
-                      CafeInfo(cafe: currentCafe),
-                      CafeImageSlider(
-                        imageList: cafeList
-                            .map((cafe) => cafe.image.mainImage)
-                            .toList(),
-                        handleSlide: onSlide,
-                      ),
-                    ],
+    return FutureBuilder<CafeListResponse>(
+        future: cafeListResponses[currentPlace.id],
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return GestureDetector(
+              child: Column(
+                children: [
+                  CafeInfo(cafe: currentCafe),
+                  CafeImageSlider(
+                    imageList:
+                        cafeList.map((cafe) => cafe.image.mainImage).toList(),
+                    handleSlide: onSlide,
                   ),
-                  onTap: () => onTapped(currentCafe),
-                );
-              } else if (!snapshot.hasData) {
-                return Container(
-                    width: MediaQuery.of(context).size.width + 48,
-                    height: MediaQuery.of(context).size.width);
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
-              return Skeleton();
-            }));
+                ],
+              ),
+              onTap: () => onTappedCafe(currentCafe),
+            );
+          } else if (!snapshot.hasData) {
+            return Container(
+                width: MediaQuery.of(context).size.width + 48,
+                height: MediaQuery.of(context).size.width);
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          }
+          return Skeleton();
+        });
   }
 }
