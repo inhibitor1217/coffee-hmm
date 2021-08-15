@@ -147,8 +147,7 @@ class _MainBodyState extends State<MainBody> {
                           MainButtonSetOfSlider(
                               hotCafeList: _hotCafeList!,
                               onTappedHotCafes: handleHotCafesClick,
-                              cafeName: _currentCafe!.name,
-                              cafePlaceName: _currentCafe!.place.name)
+                              cafe: _currentCafe!)
                         ]);
                 }))
       ]);
