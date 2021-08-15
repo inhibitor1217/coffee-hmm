@@ -85,11 +85,7 @@ class _DetailBodyState extends State<DetailBody> {
           currentIndex: currentIndex ?? 0,
         ),
         CafeMinimumInfo(cafe: cafe),
-        DetailButtonSet(
-          cafeId: cafe.id,
-          cafeName: cafe.name,
-          cafePlaceName: cafe.place.name,
-        ),
+        DetailButtonSet(cafe: cafe),
       ],
     );
   }

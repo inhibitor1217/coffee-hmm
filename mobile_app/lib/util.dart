@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mobile_app/webView.dart';
+import 'package:mobile_app/web_view.dart';
 
 void handleLinkShareClick(String link) {
   Clipboard.setData(ClipboardData(text: link));
@@ -13,7 +13,7 @@ void handleLinkShareClick(String link) {
 }
 
 void handleNaverClick(String searchTerm, BuildContext context) {
-  var uri = Uri.encodeFull(searchTerm);
+  final uri = Uri.encodeFull(searchTerm);
 
   Navigator.push(
       context,
@@ -23,7 +23,7 @@ void handleNaverClick(String searchTerm, BuildContext context) {
 }
 
 void handleInstagramClick(String tag, BuildContext context) {
-  var uri = Uri.encodeFull(tag);
+  final uri = Uri.encodeFull(tag);
 
   Navigator.push(
       context,

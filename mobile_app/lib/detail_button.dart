@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/type.dart';
 import 'package:mobile_app/util.dart';
 
 class DetailButtonSet extends StatelessWidget {
-  final String cafeId;
-  final String cafeName;
-  final String cafePlaceName;
+  final CafeModel cafe;
 
-  DetailButtonSet(
-      {required this.cafeId,
-      required this.cafeName,
-      required this.cafePlaceName});
+  DetailButtonSet({required this.cafe});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,18 +17,18 @@ class DetailButtonSet extends StatelessWidget {
                     text: '흠 링크\n복사하기',
                     imgSrc: 'assets/images/Hmm_icon.png',
                     onPressed: () => handleLinkShareClick(
-                        'https://www.coffeehmm.com/cafe/$cafeId'))),
+                        'https://www.coffeehmm.com/cafe/${cafe.id}'))),
             Expanded(
                 child: DetailButton(
                     text: '네이버\n바로가기',
                     imgSrc: 'assets/images/Naver_icon.png',
                     onPressed: () => handleNaverClick(
-                        cafeName + ' ' + cafePlaceName, context))),
+                        cafe.name + ' ' + cafe.place.name, context))),
             Expanded(
                 child: DetailButton(
                     text: '인스타그램\n바로가기',
                     imgSrc: 'assets/images/Instagram_Glyph_Gradient_RGB.png',
-                    onPressed: () => handleInstagramClick(cafeName, context)))
+                    onPressed: () => handleInstagramClick(cafe.name, context)))
           ],
         ));
   }

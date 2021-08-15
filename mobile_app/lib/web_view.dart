@@ -34,7 +34,7 @@ class WebViewPageState extends State<WebViewPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
         child: Scaffold(
-          appBar: DetailHeader(),
+          appBar: BaseHeader(),
           body: SafeArea(
             child: WebView(
               initialUrl: uri,
