@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mobile_app/web_view.dart';
 
 void handleLinkShareClick(String link) {
   Clipboard.setData(ClipboardData(text: link));
@@ -11,12 +12,24 @@ void handleLinkShareClick(String link) {
   );
 }
 
-void handleNaverClick() {
-  print('naver click!');
+void handleNaverClick(String searchTerm, BuildContext context) {
+  final uri = Uri.encodeFull(searchTerm);
+
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => WebViewPage(
+              uri: 'https://m.search.naver.com/search.naver?query=' + uri)));
 }
 
-void handleInstagramClick() {
-  print('instagram click!');
+void handleInstagramClick(String tag, BuildContext context) {
+  final uri = Uri.encodeFull(tag);
+
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => WebViewPage(
+              uri: 'https://www.instagram.com/explore/tags/' + uri)));
 }
 
 class ListUtils {

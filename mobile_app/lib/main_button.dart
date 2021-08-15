@@ -6,9 +6,12 @@ import 'package:mobile_app/util.dart';
 class MainButtonSetOfSlider extends StatelessWidget {
   final List<CafeModel> hotCafeList;
   final void Function() onTappedHotCafes;
+  final CafeModel cafe;
 
   MainButtonSetOfSlider(
-      {required this.hotCafeList, required this.onTappedHotCafes});
+      {required this.hotCafeList,
+      required this.onTappedHotCafes,
+      required this.cafe});
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +20,13 @@ class MainButtonSetOfSlider extends StatelessWidget {
         child: Row(children: [
           MainButtonOfSlider(
             imgSrc: 'assets/images/Naver_icon.png',
-            onTapped: handleNaverClick,
+            onTapped: () =>
+                handleNaverClick(cafe.name + ' ' + cafe.place.name, context),
           ),
           SizedBox(width: 15),
           MainButtonOfSlider(
               imgSrc: 'assets/images/Instagram_Glyph_Gradient_RGB.png',
-              onTapped: handleInstagramClick),
+              onTapped: () => handleInstagramClick(cafe.name, context)),
           Spacer(),
           Container(
               width: 80,
