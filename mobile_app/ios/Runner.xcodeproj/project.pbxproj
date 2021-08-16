@@ -13,7 +13,6 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
-		9D17429726CA73C1000CFFAC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9D17429926CA73C1000CFFAC /* InfoPlist.strings */; };
 		CD6A939504BBDDCFE6992E71 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC0FCD185C851C6FF28FF68 /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +46,7 @@
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9D17429826CA73C1000CFFAC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		9D17429A26CA74D3000CFFAC /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		9D17429B26CA78A8000CFFAC /* AppStage-defaults.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "AppStage-defaults.xcconfig"; sourceTree = "<group>"; };
 		C8378E4952DE8B0194A8A611 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		DDC0FCD185C851C6FF28FF68 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F33A35A1E30409C09348FBF1 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
@@ -89,6 +89,7 @@
 				9740EEB21CF90195004384FC /* Debug.xcconfig */,
 				7AFA3C8E1D35360C0083082E /* Release.xcconfig */,
 				9740EEB31CF90195004384FC /* Generated.xcconfig */,
+				9D17429B26CA78A8000CFFAC /* AppStage-defaults.xcconfig */,
 			);
 			name = Flutter;
 			sourceTree = "<group>";
@@ -139,6 +140,8 @@
 				9740EEB61CF901F6004384FC /* Run Script */,
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
+				9D1742A526CA8EB9000CFFAC /* ShellScript */,
+				9D1742A626CA9301000CFFAC /* ShellScript */,
 				97C146EC1CF9000F007C117D /* Resources */,
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
@@ -196,7 +199,6 @@
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
-				9D17429726CA73C1000CFFAC /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,7 +248,41 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
+		};
+		9D1742A526CA8EB9000CFFAC /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "## Configure [CFBundleDisplayName] according to app stage ##\n\nBUILD_APP_DIR=\"${BUILT_PRODUCTS_DIR}/${FULL_PRODUCT_NAME}\"\n\nSTRINGS_OUT_DIR=\"${BUILD_APP_DIR}/ko.lproj\"\nSTRINGS_OUT_FILE=\"${STRINGS_OUT_DIR}/InfoPlist.strings\"\nif [ ! -d \"${STRINGS_OUT_DIR}\" ]; then\n    mkdir \"${STRINGS_OUT_DIR}\"\nfi\nprintf \"%s\\n\" \"\\\"CFBundleDisplayName\\\" = \\\"커피흠${BUNDLE_NAME_SUFFIX}\\\";\" > ${STRINGS_OUT_FILE}\n\nSTRINGS_OUT_DIR=\"${BUILD_APP_DIR}/en.lproj\"\nSTRINGS_OUT_FILE=\"${STRINGS_OUT_DIR}/InfoPlist.strings\"\nif [ ! -d \"${STRINGS_OUT_DIR}\" ]; then\n    mkdir \"${STRINGS_OUT_DIR}\"\nfi\nprintf \"%s\\n\" \"\\\"CFBundleDisplayName\\\" = \\\"Coffee Hmm${BUNDLE_NAME_SUFFIX}\\\";\" > ${STRINGS_OUT_FILE}\n";
+		};
+		9D1742A626CA9301000CFFAC /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "## Firebase Settings ##\n\nBUILD_APP_DIR=\"${BUILT_PRODUCTS_DIR}/${FULL_PRODUCT_NAME}\"\n\nFIREBASE_IN_FILE=\"${SRCROOT}/Firebase/GoogleService-Info-${APP_STAGE}.plist\"\nFIREBASE_OUT_FILE=\"${BUILD_APP_DIR}/GoogleService-Info.plist\"\n\n# Make sure GoogleService-Info-${APP_STAGE}.plist exists\nif [ ! -f ${FIREBASE_IN_FILE} ]; then\n    echo \"No GoogleService-Info-${APP_STAGE}.plist found. Please ensure it's at ${FIREBASE_IN_FILE}.\"\n    exit 1\nfi\n\ncp ${FIREBASE_IN_FILE} ${FIREBASE_OUT_FILE}\n";
 		};
 		BD1AEDCB7082B0A7426BD816 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -379,7 +415,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.coffeehmm.mobileApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.coffeehmm.mobileApp$(BUNDLE_IDENTIFIER_SUFFIX)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -512,7 +548,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.coffeehmm.mobileApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.coffeehmm.mobileApp$(BUNDLE_IDENTIFIER_SUFFIX)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -535,7 +571,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.coffeehmm.mobileApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.coffeehmm.mobileApp$(BUNDLE_IDENTIFIER_SUFFIX)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
