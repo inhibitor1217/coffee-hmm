@@ -5,7 +5,7 @@ import 'package:mobile_app/skeleton.dart';
 import 'package:mobile_app/type.dart';
 import 'package:mobile_app/util.dart';
 
-class MainTable extends StatelessWidget {
+class MainTable extends StatefulWidget {
   final Map<String, Future<CafeListResponse>> cafeListResponses;
   final List<CafeModel> cafeList;
   final CafeModel currentCafe;
@@ -18,15 +18,20 @@ class MainTable extends StatelessWidget {
       required this.currentPlace});
 
   @override
+  _MainTableState createState() => _MainTableState();
+}
+
+class _MainTableState extends State<MainTable> {
+  @override
   Widget build(BuildContext context) {
     /* FIXME: 백엔드에서 처리하도록 수정 */
-    List<CafeModel> cafes = List.from(cafeList)
+    List<CafeModel> cafes = List.from(widget.cafeList)
       ..removeWhere((cafe) => cafe.image.count < 4);
 
     return Container(
-        margin: EdgeInsets.only(bottom: 48),
+        margin: EdgeInsets.only(bottom: 52),
         child: FutureBuilder<CafeListResponse>(
-            future: cafeListResponses[currentPlace.id],
+            future: widget.cafeListResponses[widget.currentPlace.id],
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return MainTableCafeList(cafeList: cafes);
@@ -90,7 +95,7 @@ class _MainTableCafeElementState extends State<MainTableCafeElement>
                       children: [
                         Text(widget.cafe.name,
                             style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold)),
+                                fontSize: 13, fontWeight: FontWeight.bold)),
                         Spacer(),
                         if (widget.cafe.image.count > 8)
                           Text(
@@ -98,7 +103,7 @@ class _MainTableCafeElementState extends State<MainTableCafeElement>
                             style: TextStyle(
                                 color: Color.fromRGBO(155, 218, 218, 1),
                                 fontWeight: FontWeight.bold,
-                                fontSize: 14),
+                                fontSize: 12),
                           )
                       ],
                     ),
@@ -106,7 +111,7 @@ class _MainTableCafeElementState extends State<MainTableCafeElement>
                         margin: EdgeInsets.only(top: 4, bottom: 2),
                         child: Text('OPEN ' + widget.cafe.metadata.hour,
                             style: TextStyle(
-                              fontSize: 13,
+                              fontSize: 12,
                             )))
                   ],
                 ),

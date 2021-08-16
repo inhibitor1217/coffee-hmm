@@ -83,7 +83,9 @@ class _MainBodyState extends State<MainBody> {
   }
 
   void handlePlaceClick(PlaceModel place) {
-    _controller.jumpToPage(0);
+    if (_controller.hasClients) {
+      _controller.jumpToPage(0);
+    }
     setState(() {
       _currentPlace = place;
       _fetchCafeListOfPlace(place).then((data) {
@@ -112,7 +114,10 @@ class _MainBodyState extends State<MainBody> {
 
   @override
   Widget build(BuildContext context) {
-    if (_currentPlace != null && _cafeList != null && _currentCafe != null) {
+    if (_currentPlace != null &&
+        _cafeList != null &&
+        _currentCafe != null &&
+        _hotCafeList != null) {
       return Column(children: [
         /* 뷰 모드 공통 장소 탭 */
         PlaceTab(

@@ -14,16 +14,16 @@ class PlaceTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 36,
-        margin: EdgeInsets.only(bottom: 10),
+        height: 32,
+        margin: EdgeInsets.only(bottom: 16),
         child: ListView(
             scrollDirection: Axis.horizontal,
             children: List.generate(
                 placeList.length,
                 (index) => Container(
-                    padding: EdgeInsets.only(
-                        right: index == placeList.length - 1 ? 20 : 4,
-                        left: index == 0 ? 20 : 4),
+                    margin: EdgeInsets.only(
+                        right: index == placeList.length - 1 ? 20 : 2,
+                        left: index == 0 ? 20 : 2),
                     child: PlaceTabElement(
                         place: placeList[index],
                         isSelected: currentPlace.id == placeList[index].id,
@@ -52,13 +52,11 @@ class PlaceTabElement extends StatelessWidget {
           ),
           side: BorderSide(
               width: 1,
-              color: isSelected
-                  ? Color.fromRGBO(220, 238, 238, 1)
-                  : Colors.black12,
+              color: isSelected ? Colors.transparent : Colors.black12,
               style: BorderStyle.solid),
           textStyle: TextStyle(
-            fontSize: 14,
-            letterSpacing: 1.5,
+            fontSize: 12,
+            letterSpacing: 1,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           )),
       child: Text(place.name,

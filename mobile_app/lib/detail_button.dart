@@ -9,19 +9,21 @@ class DetailButtonSet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.symmetric(vertical: 20),
+        padding: EdgeInsets.symmetric(vertical: 16),
         child: Row(
           children: [
             Expanded(
-                child: DetailButton(
-                    text: '흠 링크\n복사하기',
-                    imgSrc: 'assets/images/Hmm_icon.png',
-                    onPressed: () => handleLinkShareClick(
-                        'https://www.coffeehmm.com/cafe/${cafe.id}'))),
+              child: DetailButton(
+                text: '흠 링크\n공유하기',
+                imgSrc: 'assets/icon/icon_small.png',
+                onPressed: () => handleLinkShareClick(
+                    'https://www.coffeehmm.com/cafe/${cafe.id}'),
+              ),
+            ),
             Expanded(
                 child: DetailButton(
                     text: '네이버\n바로가기',
-                    imgSrc: 'assets/images/Naver_icon.png',
+                    imgSrc: 'assets/images/Naver_btnW.png',
                     onPressed: () => handleNaverClick(
                         cafe.name + ' ' + cafe.place.name, context))),
             Expanded(
@@ -55,12 +57,20 @@ class DetailButton extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Image.asset(imgSrc, width: 29, height: 29),
+            Card(
+                clipBehavior: Clip.antiAlias,
+                elevation: 0,
+                child: Container(
+                    width: 29,
+                    height: 29,
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(4)),
+                    child: Image.asset(imgSrc))),
             Container(
-                padding: EdgeInsets.only(top: 15),
+                margin: EdgeInsets.only(top: 4),
                 child: Text(
                   text,
-                  style: TextStyle(fontSize: 12, color: Colors.black),
+                  style: TextStyle(fontSize: 11, color: Colors.black),
                   textAlign: TextAlign.center,
                 ))
           ],

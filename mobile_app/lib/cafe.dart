@@ -19,6 +19,7 @@ class Cafe extends StatelessWidget {
   }
 }
 
+/* 메인 페이지 */
 class CafeInfo extends StatelessWidget {
   final CafeModel cafe;
 
@@ -33,13 +34,13 @@ class CafeInfo extends StatelessWidget {
           children: [
             Text(
               cafe.name,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
             Container(
-              padding: EdgeInsets.symmetric(vertical: 4),
+              padding: EdgeInsets.only(top: 4, bottom: 6),
               child: Text(
                 '${cafe.place.name} OPEN ${cafe.metadata.hour}',
-                style: TextStyle(fontSize: 14),
+                style: TextStyle(fontSize: 13),
               ),
             ),
             Container(
@@ -47,7 +48,7 @@ class CafeInfo extends StatelessWidget {
               child: Text(
                 "${cafe.metadata.creator ?? 'jyuunnii'} 님이 올려주신 ${cafe.name}",
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 11,
                 ),
               ),
             )
@@ -56,6 +57,7 @@ class CafeInfo extends StatelessWidget {
   }
 }
 
+/* 디테일 페이지 */
 class CafeMinimumInfo extends StatelessWidget {
   final CafeModel cafe;
 
@@ -75,10 +77,10 @@ class CafeMinimumInfo extends StatelessWidget {
             ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 4),
-              child: Text(
-                '${cafe.place.name} OPEN ${cafe.metadata.hour}',
-                style: TextStyle(fontSize: 14),
-              ),
+              child: Text('${cafe.place.name} OPEN ${cafe.metadata.hour}',
+                  style: TextStyle(
+                    fontSize: 13,
+                  )),
             ),
           ],
         ));

@@ -8,6 +8,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/icon/
 flutter_icons:
   android: true
   ios: true

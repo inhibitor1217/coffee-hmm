@@ -28,8 +28,8 @@ class _MainBottomSheetState extends State<MainBottomSheet>
           children: [
             ListView(children: [
               Container(
-                  padding: EdgeInsets.only(top: 20),
-                  margin: EdgeInsets.only(left: 20, bottom: 20, right: 20),
+                  padding: EdgeInsets.only(top: 30),
+                  margin: EdgeInsets.only(left: 20, bottom: 30, right: 20),
                   child: Row(children: [
                     Expanded(
                         child: Row(
@@ -81,7 +81,7 @@ class _MainBottomSheetState extends State<MainBottomSheet>
                       width: MediaQuery.of(context).size.width,
                       child: Text(
                         '닫기',
-                        style: TextStyle(fontSize: 14),
+                        style: TextStyle(fontSize: 13, color: Colors.black87),
                         textAlign: TextAlign.center,
                       )),
                   onPressed: widget.onClose,
@@ -114,12 +114,13 @@ class RepresentativeCafe extends StatelessWidget {
             )),
         Container(
             width: 100,
-            margin: EdgeInsets.only(top: 4),
+            margin: EdgeInsets.only(top: 8),
             child: Text(cafe.name,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 13))),
+                style: TextStyle(fontSize: 12))),
+        SizedBox(height: 2),
         Text(cafe.place.name,
-            style: TextStyle(fontSize: 13, color: Colors.black54))
+            style: TextStyle(fontSize: 11, color: Colors.black54))
       ],
     );
   }
