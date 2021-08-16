@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.coffeehmm.mobile_app">
    <application
-        android:label="@string/app_name"
+        android:label="@string/app_name_${appStage}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
         <activity

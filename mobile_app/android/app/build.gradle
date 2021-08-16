@@ -51,6 +51,7 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         versionNameSuffix "-" + (dartEnvironmentVariables.APP_STAGE ?: 'dev')
+        manifestPlaceholders = [appStage: dartEnvironmentVariables.APP_STAGE ?: 'dev']
     }
 
     buildTypes {
