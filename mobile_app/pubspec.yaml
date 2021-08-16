@@ -22,7 +22,7 @@ dependencies:
   firebase_analytics: ^8.0.2
   firebase_core: ^1.4.0
   fluttertoast: ^8.0.8
-  package_info: ^2.0.2
+  package_info_plus: ^1.0.4
   webview_flutter: ^2.0.12
   flutter_launcher_icons: ^0.9.1
 dev_dependencies:
