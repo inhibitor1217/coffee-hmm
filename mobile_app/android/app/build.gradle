@@ -31,27 +31,32 @@ if (project.hasProperty('dart-defines')) {
             }
 }
 
+def appStage = dartEnvironmentVariables.APP_STAGE ?: 'dev'
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 30
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+
+        // This includes firebase configuration per build stage.
+        // The values are located at google-services/{appStage}, which are not included at VCS.
+        main.res.srcDirs += 'google-services/' + appStage
     }
 
     defaultConfig {
         applicationId "com.coffeehmm.mobile_app"
-        applicationIdSuffix "." + (dartEnvironmentVariables.APP_STAGE ?: 'dev')
+        applicationIdSuffix (appStage != 'release' ? '.' + appStage : '')
         minSdkVersion 19
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        versionNameSuffix "-" + (dartEnvironmentVariables.APP_STAGE ?: 'dev')
-        manifestPlaceholders = [appStage: dartEnvironmentVariables.APP_STAGE ?: 'dev']
+        versionNameSuffix "-" + appStage
+        manifestPlaceholders = [appStage: appStage]
     }
 
     buildTypes {
