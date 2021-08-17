@@ -2,10 +2,11 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/type.dart';
+import 'package:mobile_app/util/environment.dart';
 
 Future<PlaceListResponse> fetchPlaceList() async {
-  final response = await http
-      .get(Uri.parse('https://release.api.coffee-hmm.inhibitor.io/place/list'));
+  final response =
+      await http.get(Uri.parse('${Environment.apiBaseUrl}/place/list'));
 
   if (response.statusCode == 200) {
     final jsonResponse = json.decode(response.body);
@@ -19,7 +20,7 @@ Future<PlaceListResponse> fetchPlaceList() async {
 Future<CafeListResponse> fetchCafeListByPlace(PlaceModel place) async {
   final placeName = place.name;
   final response = await http.get(Uri.parse(
-      'https://release.api.coffee-hmm.inhibitor.io/cafe/feed?limit=64&placeName=$placeName'));
+      '${Environment.apiBaseUrl}/cafe/feed?limit=64&placeName=$placeName'));
 
   if (response.statusCode == 200) {
     final jsonResponse = json.decode(response.body);
@@ -31,8 +32,8 @@ Future<CafeListResponse> fetchCafeListByPlace(PlaceModel place) async {
 }
 
 Future<SingleCafeResponse> fetchCafe(String cafeId) async {
-  final response = await http.get(
-      Uri.parse('https://release.api.coffee-hmm.inhibitor.io/cafe/$cafeId'));
+  final response =
+      await http.get(Uri.parse('${Environment.apiBaseUrl}/cafe/$cafeId'));
 
   if (response.statusCode == 200) {
     final jsonResponse = json.decode(response.body);
@@ -46,7 +47,7 @@ Future<SingleCafeResponse> fetchCafe(String cafeId) async {
 Future<CafeListResponse> fetchHotCafeList(int limit) async {
   // FIXME: release api 로 교체
   final response = await http.get(Uri.parse(
-      'https://beta.api.coffee-hmm.inhibitor.io/cafe/feed?place=mixed&limit=$limit'));
+      '${Environment.apiBaseUrl}/cafe/feed?place=mixed&limit=$limit'));
 
   if (response.statusCode == 200) {
     final jsonResponse = json.decode(response.body);
