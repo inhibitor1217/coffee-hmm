@@ -58,7 +58,7 @@ class ImageIndexBullet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.symmetric(vertical: 12),
+        margin: EdgeInsets.symmetric(vertical: 20),
         child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -75,7 +75,7 @@ class Bullet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(right: 8),
+      margin: EdgeInsets.only(right: 6),
       width: 6,
       height: 6,
       decoration: BoxDecoration(
