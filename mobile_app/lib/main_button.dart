@@ -29,8 +29,8 @@ class MainButtonSetOfSlider extends StatelessWidget {
               onTapped: () => handleInstagramClick(cafe.name, context)),
           Spacer(),
           Container(
-              width: 100,
-              height: 30,
+              width: 90,
+              height: 29,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Colors.white,
@@ -79,8 +79,8 @@ class MainButtonOfSlider extends StatelessWidget {
       인스타그램 아이콘 가이드 : 최소 크기 29x29 pixels, 최소 여백 = width / 2
       */
     return SizedBox(
-      width: 30,
-      height: 30,
+      width: 29,
+      height: 29,
       child: IconButton(
           onPressed: onTapped,
           padding: EdgeInsets.zero,

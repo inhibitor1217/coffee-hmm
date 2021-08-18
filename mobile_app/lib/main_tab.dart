@@ -14,8 +14,8 @@ class PlaceTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 32,
-        margin: EdgeInsets.only(bottom: 16),
+        height: 30,
+        margin: EdgeInsets.only(bottom: 12),
         child: ListView(
             scrollDirection: Axis.horizontal,
             children: List.generate(
@@ -41,26 +41,30 @@ class PlaceTabElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const _activeTabColor = Color.fromRGBO(242, 196, 109, 1);
+    const _idleTabColor = Colors.black12;
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-          primary: isSelected
-              ? Color.fromRGBO(155, 218, 218, 1)
-              : Colors.transparent,
+          padding: EdgeInsets.all(0),
+          primary: isSelected ? _activeTabColor : Colors.transparent,
           shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
           side: BorderSide(
               width: 1,
-              color: isSelected ? Colors.transparent : Colors.black12,
+              color: isSelected ? Colors.transparent : _idleTabColor,
               style: BorderStyle.solid),
           textStyle: TextStyle(
             fontSize: 12,
             letterSpacing: 1,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           )),
-      child: Text(place.name,
-          style: TextStyle(color: isSelected ? Colors.white : Colors.black)),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 4),
+        child: Text(place.name,
+            style: TextStyle(color: isSelected ? Colors.white : Colors.black)),
+      ),
       onPressed: () => onPressed(place),
     );
   }

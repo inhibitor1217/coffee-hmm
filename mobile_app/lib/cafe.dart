@@ -28,20 +28,21 @@ class CafeInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(left: 20, right: 20, bottom: 16),
+        padding: EdgeInsets.only(left: 20, right: 20, bottom: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               cafe.name,
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
-            Container(
-              padding: EdgeInsets.only(top: 4, bottom: 6),
-              child: Text(
-                '${cafe.place.name} OPEN ${cafe.metadata.hour}',
-                style: TextStyle(fontSize: 13),
-              ),
+            SizedBox(height: 2),
+            Text(
+              '${cafe.place.name} OPEN ${cafe.metadata.hour}',
+              style: TextStyle(fontSize: 14),
+            ),
+            SizedBox(
+              height: 2,
             ),
             Container(
               alignment: Alignment.centerRight,
@@ -73,14 +74,14 @@ class CafeMinimumInfo extends StatelessWidget {
           children: [
             Text(
               cafe.name,
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 4),
-              child: Text('${cafe.place.name} OPEN ${cafe.metadata.hour}',
-                  style: TextStyle(
-                    fontSize: 13,
-                  )),
+            SizedBox(height: 2),
+            Text(
+              '${cafe.place.name} OPEN ${cafe.metadata.hour}',
+              style: TextStyle(
+                fontSize: 14,
+              ),
             ),
           ],
         ));

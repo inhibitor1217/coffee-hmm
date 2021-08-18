@@ -17,6 +17,7 @@ class _MainBottomSheetState extends State<MainBottomSheet>
     with EnterCafeDetailMixin {
   @override
   Widget build(BuildContext context) {
+    const _highlightedColor = Color.fromRGBO(242, 196, 109, 1);
     return Container(
         decoration: BoxDecoration(
             color: Colors.white,
@@ -38,7 +39,7 @@ class _MainBottomSheetState extends State<MainBottomSheet>
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: Color.fromRGBO(155, 218, 218, 1))),
+                                color: _highlightedColor)),
                         Text(
                           '핫플레이스 추천',
                           style: TextStyle(fontSize: 14),
