@@ -15,7 +15,7 @@ class PlaceTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         height: 30,
-        margin: EdgeInsets.only(bottom: 12),
+        margin: EdgeInsets.only(bottom: 16),
         child: ListView(
             scrollDirection: Axis.horizontal,
             children: List.generate(

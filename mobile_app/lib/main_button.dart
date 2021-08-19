@@ -25,7 +25,7 @@ class MainButtonSetOfSlider extends StatelessWidget {
               onTapped: () => handleInstagramClick(cafe.name, context)),
           Spacer(),
           Container(
-              width: 90,
+              width: 100,
               height: 29,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(

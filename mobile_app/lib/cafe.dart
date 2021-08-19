@@ -36,13 +36,13 @@ class CafeInfo extends StatelessWidget {
               cafe.name,
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 2),
+            SizedBox(height: 4),
             Text(
               '${cafe.place.name} OPEN ${cafe.metadata.hour}',
               style: TextStyle(fontSize: 14),
             ),
             SizedBox(
-              height: 2,
+              height: 4,
             ),
             Container(
               alignment: Alignment.centerRight,
@@ -76,7 +76,7 @@ class CafeMinimumInfo extends StatelessWidget {
               cafe.name,
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 2),
+            SizedBox(height: 4),
             Text(
               '${cafe.place.name} OPEN ${cafe.metadata.hour}',
               style: TextStyle(
