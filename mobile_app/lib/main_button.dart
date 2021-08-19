@@ -5,13 +5,9 @@ import 'package:mobile_app/util.dart';
 
 class MainButtonSetOfSlider extends StatelessWidget {
   final List<CafeModel> hotCafeList;
-  final void Function() onTappedHotCafes;
   final CafeModel cafe;
 
-  MainButtonSetOfSlider(
-      {required this.hotCafeList,
-      required this.onTappedHotCafes,
-      required this.cafe});
+  MainButtonSetOfSlider({required this.hotCafeList, required this.cafe});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +48,6 @@ class MainButtonSetOfSlider extends StatelessWidget {
                     showModalBottomSheet<void>(
                         context: context,
                         builder: (BuildContext context) {
-                          onTappedHotCafes();
                           return Container(
                               height: 320,
                               color: Colors.transparent,

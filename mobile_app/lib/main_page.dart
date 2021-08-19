@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/api.dart';
 import 'package:mobile_app/cafe_image_slider.dart';
 import 'package:mobile_app/header.dart';
@@ -103,17 +104,9 @@ class _MainBodyState extends State<MainBody> {
     });
   }
 
-  void handleHotCafesClick() {
-    _hotCafeListResponses = fetchHotCafeList(10);
-    _hotCafeListResponses!.then((data) {
-      setState(() {
-        _hotCafeList = data.cafe.list;
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    const _highlightedColor = Color.fromRGBO(242, 196, 109, 1);
     if (_currentPlace != null &&
         _cafeList != null &&
         _currentCafe != null &&
@@ -150,14 +143,34 @@ class _MainBodyState extends State<MainBody> {
                               totalCount: _cafeList!.length,
                               currentIndex: _cafeList!.indexOf(_currentCafe!)),
                           MainButtonSetOfSlider(
-                              hotCafeList: _hotCafeList!,
-                              onTappedHotCafes: handleHotCafesClick,
-                              cafe: _currentCafe!)
+                              hotCafeList: _hotCafeList!, cafe: _currentCafe!)
                         ]);
                 }))
       ]);
     } else {
-      return Center(child: Text('loading...'));
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(height: 160),
+            SvgPicture.asset(
+              'assets/images/loading_text.svg',
+              width: 130,
+              height: 68,
+            ),
+            SizedBox(height: 20),
+            SizedBox(
+              width: 14,
+              height: 14,
+              child: CircularProgressIndicator(
+                semanticsLabel: 'Linear progress indicator',
+                strokeWidth: 4,
+                color: _highlightedColor,
+              ),
+            ),
+          ],
+        ),
+      );
     }
   }
 
