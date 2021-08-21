@@ -10,11 +10,30 @@ on:
 jobs:
   build:
     runs-on: ubuntu-18.04
+    defaults:
+      run:
+        working-directory: mobile_app
     steps:
       - name: Checkout source from branch.
         uses: actions/checkout@master
         with:
           ref: ${{ github.event.inputs.branch }}
+      - name: Decode signing key.
+        env:
+          SIGNING_KEY: ${{ secrets.ANDROID_SIGNING_KEY_BETA }}
+        run: echo $SIGNING_KEY | base64 -d > android/app/keystore.jks
+      - uses: subosito/flutter-action@master
+        with:
+          flutter-version: "2.2.3"
+      - name: Install flutter package dependencies.
+        run: flutter pub get
+      - name: Build APK.
+        run: flutter build apk --release --split-per-abi --dart-define APP_STAGE=beta
+        env:
+          ALIAS: upload
+          KEY_PATH: keystore.jks
+          SIGNING_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD_BETA }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD_BETA }}
       - name: Notify build message.
         uses: 8398a7/action-slack@v3.9.2
         with:
