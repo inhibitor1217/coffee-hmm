@@ -1,0 +1,25 @@
+name: release-mobile@beta
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch"
+        required: true
+        default: "master"
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout source from branch.
+        uses: actions/checkout@master
+        with:
+          ref: ${{ github.event.inputs.branch }}
+      - name: Notify build message.
+        uses: 8398a7/action-slack@v3.9.2
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_TEST }}
+        if: always()
