@@ -1,0 +1,17 @@
+name: release-mobile@beta
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch"
+        required: true
+        default: "master"
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout source from branch.
+        uses: actions/checkout@master
+        with:
+          ref: ${{ github.event.inputs.branch }}
