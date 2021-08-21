@@ -91,7 +91,7 @@ class _MainBodyState extends State<MainBody> {
 
     if (_scrollController.hasClients) {
       await Future.delayed(const Duration(milliseconds: 300));
-      _scrollController.jumpTo(_scrollController.position.minScrollExtent);t a
+      _scrollController.jumpTo(_scrollController.position.minScrollExtent);
     }
 
     setState(() {
