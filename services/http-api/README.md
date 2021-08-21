@@ -894,7 +894,7 @@ Delete an image attached to cafe.
 
 ### `GET /place/list`
 
-Retrieve an entire list of places. The list is sorted by number of cafes listed at each place, with descending order.
+Retrieve an entire list of places. The list is sorted by number of active cafes listed at each place, with descending order.
 
 **Request Example**
 
