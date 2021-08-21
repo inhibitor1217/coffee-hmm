@@ -6,7 +6,7 @@ import 'package:mobile_app/skeleton.dart';
 import 'package:mobile_app/type.dart';
 
 class MainSlider extends StatefulWidget {
-  final PageController controller;
+  final PageController pageController;
   final Map<String, Future<CafeListResponse>> cafeListResponses;
   final List<CafeModel> cafeList;
   final CafeModel currentCafe;
@@ -14,7 +14,7 @@ class MainSlider extends StatefulWidget {
   final void Function(int) onSlide;
 
   MainSlider({
-    required this.controller,
+    required this.pageController,
     required this.cafeListResponses,
     required this.cafeList,
     required this.currentCafe,
@@ -38,7 +38,7 @@ class _MainSliderState extends State<MainSlider> with EnterCafeDetailMixin {
                 children: [
                   CafeInfo(cafe: widget.currentCafe),
                   CafeImageSlider(
-                    controller: widget.controller,
+                    pageController: widget.pageController,
                     imageList: widget.cafeList
                         .map((cafe) => cafe.image.mainImage)
                         .toList(),

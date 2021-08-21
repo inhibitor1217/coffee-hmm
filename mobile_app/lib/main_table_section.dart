@@ -6,13 +6,15 @@ import 'package:mobile_app/type.dart';
 import 'package:mobile_app/util.dart';
 
 class MainTable extends StatefulWidget {
+  final ScrollController scrollController;
   final Map<String, Future<CafeListResponse>> cafeListResponses;
   final List<CafeModel> cafeList;
   final CafeModel currentCafe;
   final PlaceModel currentPlace;
 
   MainTable(
-      {required this.cafeListResponses,
+      {required this.scrollController,
+      required this.cafeListResponses,
       required this.cafeList,
       required this.currentCafe,
       required this.currentPlace});
@@ -33,7 +35,8 @@ class _MainTableState extends State<MainTable> {
             future: widget.cafeListResponses[widget.currentPlace.id],
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return MainTableCafeList(cafeList: cafes);
+                return MainTableCafeList(
+                    cafeList: cafes, scrollController: widget.scrollController);
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }
@@ -43,13 +46,16 @@ class _MainTableState extends State<MainTable> {
 }
 
 class MainTableCafeList extends StatelessWidget {
+  final ScrollController scrollController;
+
   final List<CafeModel> cafeList;
 
-  MainTableCafeList({required this.cafeList});
+  MainTableCafeList({required this.scrollController, required this.cafeList});
 
   @override
   build(BuildContext context) {
     return ListView.builder(
+        controller: scrollController,
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemCount: cafeList.length,
