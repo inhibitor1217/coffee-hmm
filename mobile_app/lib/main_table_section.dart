@@ -24,12 +24,11 @@ class MainTable extends StatefulWidget {
 class _MainTableState extends State<MainTable> {
   @override
   Widget build(BuildContext context) {
-    /* FIXME: 백엔드에서 처리하도록 수정 */
     List<CafeModel> cafes = List.from(widget.cafeList)
       ..removeWhere((cafe) => cafe.image.count < 4);
 
     return Container(
-        margin: EdgeInsets.only(bottom: 52),
+        margin: EdgeInsets.only(bottom: 48),
         child: FutureBuilder<CafeListResponse>(
             future: widget.cafeListResponses[widget.currentPlace.id],
             builder: (context, snapshot) {
@@ -50,18 +49,21 @@ class MainTableCafeList extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-    return Column(
-        children: List.generate(
-            cafeList.length,
-            (index) => Column(children: [
-                  MainTableCafeElement(cafe: cafeList[index]),
-                  if (index < cafeList.length - 1)
-                    Container(
-                      height: 8,
-                      decoration: BoxDecoration(
-                          color: Color.fromRGBO(242, 242, 242, 1)),
-                    )
-                ])));
+    return ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: cafeList.length,
+        itemBuilder: (context, index) {
+          return Column(children: [
+            MainTableCafeElement(cafe: cafeList[index]),
+            if (index < cafeList.length - 1)
+              Container(
+                height: 8,
+                decoration:
+                    BoxDecoration(color: Color.fromRGBO(242, 242, 242, 1)),
+              )
+          ]);
+        });
   }
 }
 
@@ -78,6 +80,7 @@ class _MainTableCafeElementState extends State<MainTableCafeElement>
     with EnterCafeDetailMixin {
   @override
   Widget build(BuildContext context) {
+    const _highlightedColor = Color.fromRGBO(242, 196, 109, 1);
     return Container(
         height: 200,
         padding: EdgeInsets.symmetric(horizontal: 20),
@@ -95,13 +98,13 @@ class _MainTableCafeElementState extends State<MainTableCafeElement>
                       children: [
                         Text(widget.cafe.name,
                             style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.bold)),
+                                fontSize: 14, fontWeight: FontWeight.bold)),
                         Spacer(),
                         if (widget.cafe.image.count > 8)
                           Text(
-                            '커피흠 추천',
+                            '추천',
                             style: TextStyle(
-                                color: Color.fromRGBO(155, 218, 218, 1),
+                                color: _highlightedColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 12),
                           )
@@ -111,7 +114,7 @@ class _MainTableCafeElementState extends State<MainTableCafeElement>
                         margin: EdgeInsets.only(top: 4, bottom: 2),
                         child: Text('OPEN ' + widget.cafe.metadata.hour,
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 13,
                             )))
                   ],
                 ),

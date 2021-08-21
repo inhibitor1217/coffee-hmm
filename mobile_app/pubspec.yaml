@@ -26,6 +26,7 @@ dependencies:
   package_info_plus: ^1.0.4
   webview_flutter: ^2.0.12
   flutter_launcher_icons: ^0.9.1
+  flutter_svg: ^0.22.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

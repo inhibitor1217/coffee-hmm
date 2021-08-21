@@ -5,13 +5,9 @@ import 'package:mobile_app/util.dart';
 
 class MainButtonSetOfSlider extends StatelessWidget {
   final List<CafeModel> hotCafeList;
-  final void Function() onTappedHotCafes;
   final CafeModel cafe;
 
-  MainButtonSetOfSlider(
-      {required this.hotCafeList,
-      required this.onTappedHotCafes,
-      required this.cafe});
+  MainButtonSetOfSlider({required this.hotCafeList, required this.cafe});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +26,7 @@ class MainButtonSetOfSlider extends StatelessWidget {
           Spacer(),
           Container(
               width: 100,
-              height: 30,
+              height: 29,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Colors.white,
@@ -52,7 +48,6 @@ class MainButtonSetOfSlider extends StatelessWidget {
                     showModalBottomSheet<void>(
                         context: context,
                         builder: (BuildContext context) {
-                          onTappedHotCafes();
                           return Container(
                               height: 320,
                               color: Colors.transparent,
@@ -79,8 +74,8 @@ class MainButtonOfSlider extends StatelessWidget {
       인스타그램 아이콘 가이드 : 최소 크기 29x29 pixels, 최소 여백 = width / 2
       */
     return SizedBox(
-      width: 30,
-      height: 30,
+      width: 29,
+      height: 29,
       child: IconButton(
           onPressed: onTapped,
           padding: EdgeInsets.zero,

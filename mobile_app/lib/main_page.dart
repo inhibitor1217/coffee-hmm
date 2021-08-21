@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/api.dart';
 import 'package:mobile_app/cafe_image_slider.dart';
 import 'package:mobile_app/header.dart';
@@ -46,6 +47,7 @@ class MainBody extends StatefulWidget {
 
 class _MainBodyState extends State<MainBody> {
   final PageController _controller = PageController();
+  final ScrollController _scrollController = ScrollController();
   Map<String, Future<CafeListResponse>> _cafeListResponses = {};
   Future<PlaceListResponse>? _placeResponses;
   List<PlaceModel>? _placeList;
@@ -82,10 +84,16 @@ class _MainBodyState extends State<MainBody> {
     });
   }
 
-  void handlePlaceClick(PlaceModel place) {
+  Future<void> handlePlaceClick(PlaceModel place) async {
     if (_controller.hasClients) {
       _controller.jumpToPage(0);
     }
+
+    if (_scrollController.hasClients) {
+      await Future.delayed(const Duration(milliseconds: 300));
+      _scrollController.jumpTo(_scrollController.position.minScrollExtent);
+    }
+
     setState(() {
       _currentPlace = place;
       _fetchCafeListOfPlace(place).then((data) {
@@ -103,17 +111,9 @@ class _MainBodyState extends State<MainBody> {
     });
   }
 
-  void handleHotCafesClick() {
-    _hotCafeListResponses = fetchHotCafeList(10);
-    _hotCafeListResponses!.then((data) {
-      setState(() {
-        _hotCafeList = data.cafe.list;
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    const _highlightedColor = Color.fromRGBO(242, 196, 109, 1);
     if (_currentPlace != null &&
         _cafeList != null &&
         _currentCafe != null &&
@@ -128,6 +128,7 @@ class _MainBodyState extends State<MainBody> {
         /* 뷰 모드에 따른 메인 컨텐츠 */
         Flexible(
             child: ListView.builder(
+                controller: _scrollController,
                 itemCount: 1,
                 itemBuilder: (context, index) {
                   return widget.isTableViewMode
@@ -150,14 +151,34 @@ class _MainBodyState extends State<MainBody> {
                               totalCount: _cafeList!.length,
                               currentIndex: _cafeList!.indexOf(_currentCafe!)),
                           MainButtonSetOfSlider(
-                              hotCafeList: _hotCafeList!,
-                              onTappedHotCafes: handleHotCafesClick,
-                              cafe: _currentCafe!)
+                              hotCafeList: _hotCafeList!, cafe: _currentCafe!)
                         ]);
                 }))
       ]);
     } else {
-      return Center(child: Text('loading...'));
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(height: 170),
+            SvgPicture.asset(
+              'assets/images/loading_text.svg',
+              width: 130,
+              height: 68,
+            ),
+            SizedBox(height: 20),
+            SizedBox(
+              width: 14,
+              height: 14,
+              child: CircularProgressIndicator(
+                semanticsLabel: 'Linear progress indicator',
+                strokeWidth: 4,
+                color: _highlightedColor,
+              ),
+            ),
+          ],
+        ),
+      );
     }
   }
 
