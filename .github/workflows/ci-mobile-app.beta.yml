@@ -10,6 +10,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-18.04
+    env:
+      WORKING_DIRECTORY: mobile_app
     defaults:
       run:
         working-directory: mobile_app
@@ -18,11 +20,28 @@ jobs:
         uses: actions/checkout@master
         with:
           ref: ${{ github.event.inputs.branch }}
+      - name: Notify build start message.
+        uses: 8398a7/action-slack@e74cd4e48f4452e8158dc4f8bcfc780ae6203364
+        with:
+          status: custom
+          fields: commit,author,ref,workflow
+          custom_payload: |
+            {
+              text: `Start workflow run ${process.env.AS_WORKFLOW}`,
+              attachments: [
+                {
+                  color: 'good',
+                  text: `Start workflow run ${process.env.AS_WORKFLOW}\n${process.env.AS_REF}(${process.env.AS_COMMIT}) by ${process.env.AS_AUTHOR}`,
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
       - name: Decode signing key.
         env:
           SIGNING_KEY: ${{ secrets.ANDROID_SIGNING_KEY_BETA }}
         run: echo $SIGNING_KEY | base64 -d > android/app/keystore.jks
-      - uses: subosito/flutter-action@master
+      - uses: subosito/flutter-action@4389e6cbc6cb8a4b18c628ff96ff90be0e926aa8
         with:
           flutter-version: "2.2.3"
       - name: Install flutter package dependencies.
@@ -34,11 +53,35 @@ jobs:
           KEY_PATH: keystore.jks
           SIGNING_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD_BETA }}
           SIGNING_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD_BETA }}
+      - name: Pass build artifact to Slack. (arm64-v8a)
+        uses: MeilCli/slack-upload-file@f8f4f6dbe44bb99b36c16a2774836022ffe56fed
+        with:
+          slack_token: ${{ secrets.SLACK_OAUTH_TOKEN }}
+          channels: ${{ secrets.SLACK_CHANNELS }}
+          file_path: ${{ env.WORKING_DIRECTORY }}/build/app/outputs/apk/release/app-arm64-v8a-release.apk
+          file_name: app-arm64-v8a-release.apk
+          file_type: apk
+      - name: Pass build artifact to Slack. (armeabi-v7a)
+        uses: MeilCli/slack-upload-file@f8f4f6dbe44bb99b36c16a2774836022ffe56fed
+        with:
+          slack_token: ${{ secrets.SLACK_OAUTH_TOKEN }}
+          channels: ${{ secrets.SLACK_CHANNELS }}
+          file_path: ${{ env.WORKING_DIRECTORY }}/build/app/outputs/apk/release/app-armeabi-v7a-release.apk
+          file_name: app-armeabi-v7a-release.apk
+          file_type: apk
+      - name: Pass build artifact to Slack. (x86_64)
+        uses: MeilCli/slack-upload-file@f8f4f6dbe44bb99b36c16a2774836022ffe56fed
+        with:
+          slack_token: ${{ secrets.SLACK_OAUTH_TOKEN }}
+          channels: ${{ secrets.SLACK_CHANNELS }}
+          file_path: ${{ env.WORKING_DIRECTORY }}/build/app/outputs/apk/release/app-x86_64-release.apk
+          file_name: app-x86_64-release.apk
+          file_type: apk
       - name: Notify build message.
-        uses: 8398a7/action-slack@v3.9.2
+        uses: 8398a7/action-slack@e74cd4e48f4452e8158dc4f8bcfc780ae6203364
         with:
           status: ${{ job.status }}
           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_TEST }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
         if: always()
