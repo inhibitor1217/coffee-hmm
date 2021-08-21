@@ -27,7 +27,7 @@ jobs:
           fields: commit,author,ref,workflow
           custom_payload: |
             {
-              text: `Start workflow run ${process.env.AS_WORKFLOW}`,
+              text: `Start workflow run ${process.env.AS_WORKFLOW} on ${process.env.INPUTS_BRANCH}`,
               attachments: [
                 {
                   color: 'good',
@@ -36,6 +36,7 @@ jobs:
               ]
             }
         env:
+          INPUTS_BRANCH: ${{ github.event.inputs.branch }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
       - name: Decode signing key.
         env:
@@ -81,7 +82,7 @@ jobs:
         uses: 8398a7/action-slack@e74cd4e48f4452e8158dc4f8bcfc780ae6203364
         with:
           status: ${{ job.status }}
-          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+          fields: repo,action,ref,took
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
         if: always()
