@@ -24,7 +24,6 @@ class MainTable extends StatefulWidget {
 class _MainTableState extends State<MainTable> {
   @override
   Widget build(BuildContext context) {
-    /* FIXME: 백엔드에서 처리하도록 수정 */
     List<CafeModel> cafes = List.from(widget.cafeList)
       ..removeWhere((cafe) => cafe.image.count < 4);
 
@@ -50,18 +49,21 @@ class MainTableCafeList extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-    return Column(
-        children: List.generate(
-            cafeList.length,
-            (index) => Column(children: [
-                  MainTableCafeElement(cafe: cafeList[index]),
-                  if (index < cafeList.length - 1)
-                    Container(
-                      height: 8,
-                      decoration: BoxDecoration(
-                          color: Color.fromRGBO(242, 242, 242, 1)),
-                    )
-                ])));
+    return ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: cafeList.length,
+        itemBuilder: (context, index) {
+          return Column(children: [
+            MainTableCafeElement(cafe: cafeList[index]),
+            if (index < cafeList.length - 1)
+              Container(
+                height: 8,
+                decoration:
+                    BoxDecoration(color: Color.fromRGBO(242, 242, 242, 1)),
+              )
+          ]);
+        });
   }
 }
 

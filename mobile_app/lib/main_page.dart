@@ -47,6 +47,7 @@ class MainBody extends StatefulWidget {
 
 class _MainBodyState extends State<MainBody> {
   final PageController _controller = PageController();
+  final ScrollController _scrollController = ScrollController();
   Map<String, Future<CafeListResponse>> _cafeListResponses = {};
   Future<PlaceListResponse>? _placeResponses;
   List<PlaceModel>? _placeList;
@@ -83,10 +84,16 @@ class _MainBodyState extends State<MainBody> {
     });
   }
 
-  void handlePlaceClick(PlaceModel place) {
+  Future<void> handlePlaceClick(PlaceModel place) async {
     if (_controller.hasClients) {
       _controller.jumpToPage(0);
     }
+
+    if (_scrollController.hasClients) {
+      await Future.delayed(const Duration(milliseconds: 300));
+      _scrollController.jumpTo(_scrollController.position.minScrollExtent);t a
+    }
+
     setState(() {
       _currentPlace = place;
       _fetchCafeListOfPlace(place).then((data) {
@@ -121,6 +128,7 @@ class _MainBodyState extends State<MainBody> {
         /* 뷰 모드에 따른 메인 컨텐츠 */
         Flexible(
             child: ListView.builder(
+                controller: _scrollController,
                 itemCount: 1,
                 itemBuilder: (context, index) {
                   return widget.isTableViewMode
@@ -152,7 +160,7 @@ class _MainBodyState extends State<MainBody> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(height: 160),
+            SizedBox(height: 170),
             SvgPicture.asset(
               'assets/images/loading_text.svg',
               width: 130,

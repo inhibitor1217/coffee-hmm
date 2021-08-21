@@ -11,14 +11,18 @@ class MainBottomSheet extends StatefulWidget {
   MainBottomSheet({required this.hotCafeList, required this.onClose});
 
   @override
-  _MainBottomSheetState createState() => _MainBottomSheetState();
+  _MainBottomSheetState createState() =>
+      _MainBottomSheetState(initialHotCafeList: hotCafeList);
 }
 
 class _MainBottomSheetState extends State<MainBottomSheet>
     with EnterCafeDetailMixin {
-  final _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
   Future<CafeListResponse>? _hotCafeListResponses;
   List<CafeModel>? _hotCafeList;
+
+  _MainBottomSheetState({required List<CafeModel> initialHotCafeList})
+      : _hotCafeList = initialHotCafeList;
 
   void handleHotCafesClick(int number) {
     _hotCafeListResponses = fetchHotCafeList(number);
@@ -72,24 +76,25 @@ class _MainBottomSheetState extends State<MainBottomSheet>
                         ])))
                   ])),
               Container(
-                  height: 180,
-                  child: ListView(
-                      controller: _scrollController,
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      children: List.generate(
-                          10,
-                          (index) => Container(
-                              margin: EdgeInsets.only(
-                                  right: index == 9 ? 20 : 4,
-                                  left: index == 0 ? 20 : 0),
-                              child: GestureDetector(
-                                child: RepresentativeCafe(
-                                    cafe: (_hotCafeList ??
-                                        widget.hotCafeList)[index]),
-                                onTap: enterDetail((_hotCafeList ??
-                                    widget.hotCafeList)[index]),
-                              ))))),
+                height: 180,
+                child: SingleChildScrollView(
+                    controller: _scrollController,
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                        children: List.generate(
+                            10,
+                            (index) => Container(
+                                margin: EdgeInsets.only(
+                                    right: index == 9 ? 20 : 4,
+                                    left: index == 0 ? 20 : 0),
+                                child: GestureDetector(
+                                  child: RepresentativeCafe(
+                                      cafe: (_hotCafeList ??
+                                          widget.hotCafeList)[index]),
+                                  onTap: enterDetail((_hotCafeList ??
+                                      widget.hotCafeList)[index]),
+                                ))))),
+              ),
             ]),
             Positioned(
               right: 4,
