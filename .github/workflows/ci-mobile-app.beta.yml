@@ -8,13 +8,8 @@ on:
         default: "master"
 
 jobs:
-  build:
+  init:
     runs-on: ubuntu-18.04
-    env:
-      WORKING_DIRECTORY: mobile_app
-    defaults:
-      run:
-        working-directory: mobile_app
     steps:
       - name: Checkout source from branch.
         uses: actions/checkout@master
@@ -38,19 +33,37 @@ jobs:
         env:
           INPUTS_BRANCH: ${{ github.event.inputs.branch }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
-      - name: Decode signing key.
+
+  build-android:
+    needs: [init]
+    runs-on: ubuntu-18.04
+    defaults:
+      run:
+        working-directory: mobile_app
+    steps:
+      - name: Checkout source from branch.
+        uses: actions/checkout@master
+        with:
+          ref: ${{ github.event.inputs.branch }}
+      - name: Decode android signing key.
         env:
           SIGNING_KEY: ${{ secrets.ANDROID_SIGNING_KEY_BETA }}
         run: echo $SIGNING_KEY | base64 -d > android/app/keystore.jks
-      - name: Decode firebase settings.
+      - name: Decode android firebase settings.
         env:
           FIREBASE_VALUES: ${{ secrets.FIREBASE_VALUES_ANDOIRD_BETA }}
-        run: echo $FIREBASE_VALUES | base64 -d > android/app/google-services/beta/values/values.xml
-      - uses: actions/setup-java@4b1b3d4a82f726de9ba1945f8c6967b67caf5dcd
+        run: |
+          mkdir android/app/google-services
+          mkdir android/app/google-services/beta
+          mkdir android/app/google-services/beta/values
+          echo $FIREBASE_VALUES | base64 -d > android/app/google-services/beta/values/values.xml
+      - name: Setup Java.
+        uses: actions/setup-java@v2.2.0
         with:
           distribution: adopt
           java-version: '8.0.302'
-      - uses: subosito/flutter-action@4389e6cbc6cb8a4b18c628ff96ff90be0e926aa8
+      - name: Setup Flutter.
+        uses: subosito/flutter-action@4389e6cbc6cb8a4b18c628ff96ff90be0e926aa8
         with:
           flutter-version: "2.2.3"
       - name: Install flutter package dependencies.
@@ -62,12 +75,38 @@ jobs:
           KEY_PATH: keystore.jks
           SIGNING_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD_BETA }}
           SIGNING_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD_BETA }}
+      - name: Upload build artifacts.
+        uses: actions/upload-artifact@v2.2.4
+        with:
+          name: build-android
+          path: build/app/outputs/apk/release/*.apk
+      - name: Notify build message.
+        uses: 8398a7/action-slack@e74cd4e48f4452e8158dc4f8bcfc780ae6203364
+        with:
+          status: ${{ job.status }}
+          fields: repo,job,ref,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+        if: always()
+  
+  upload-android-artifact:
+    needs: [build-android]
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout source from branch.
+        uses: actions/checkout@master
+        with:
+          ref: ${{ github.event.inputs.branch }}
+      - name: Download build artifacts.
+        uses: actions/download-artifact@v2.0.10
+        with:
+          name: build-android
       - name: Pass build artifact to Slack. (arm64-v8a)
         uses: MeilCli/slack-upload-file@f8f4f6dbe44bb99b36c16a2774836022ffe56fed
         with:
           slack_token: ${{ secrets.SLACK_OAUTH_TOKEN }}
           channels: ${{ secrets.SLACK_CHANNELS }}
-          file_path: ${{ env.WORKING_DIRECTORY }}/build/app/outputs/apk/release/app-arm64-v8a-release.apk
+          file_path: app-arm64-v8a-release.apk
           file_name: app-arm64-v8a-release.apk
           file_type: apk
       - name: Pass build artifact to Slack. (armeabi-v7a)
@@ -75,7 +114,7 @@ jobs:
         with:
           slack_token: ${{ secrets.SLACK_OAUTH_TOKEN }}
           channels: ${{ secrets.SLACK_CHANNELS }}
-          file_path: ${{ env.WORKING_DIRECTORY }}/build/app/outputs/apk/release/app-armeabi-v7a-release.apk
+          file_path: app-armeabi-v7a-release.apk
           file_name: app-armeabi-v7a-release.apk
           file_type: apk
       - name: Pass build artifact to Slack. (x86_64)
@@ -83,14 +122,6 @@ jobs:
         with:
           slack_token: ${{ secrets.SLACK_OAUTH_TOKEN }}
           channels: ${{ secrets.SLACK_CHANNELS }}
-          file_path: ${{ env.WORKING_DIRECTORY }}/build/app/outputs/apk/release/app-x86_64-release.apk
+          file_path: app-x86_64-release.apk
           file_name: app-x86_64-release.apk
           file_type: apk
-      - name: Notify build message.
-        uses: 8398a7/action-slack@e74cd4e48f4452e8158dc4f8bcfc780ae6203364
-        with:
-          status: ${{ job.status }}
-          fields: repo,action,ref,took
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
-        if: always()
