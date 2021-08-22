@@ -42,6 +42,10 @@ jobs:
         env:
           SIGNING_KEY: ${{ secrets.ANDROID_SIGNING_KEY_BETA }}
         run: echo $SIGNING_KEY | base64 -d > android/app/keystore.jks
+      - name: Decode firebase settings.
+        env:
+          FIREBASE_VALUES: ${{ secrets.FIREBASE_VALUES_ANDOIRD_BETA }}
+        run: echo $FIREBASE_VALUES | base64 -d > android/app/google-services/beta/values/values.xml
       - uses: actions/setup-java@4b1b3d4a82f726de9ba1945f8c6967b67caf5dcd
         with:
           distribution: adopt
