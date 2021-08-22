@@ -76,7 +76,7 @@ class _DetailBodyState extends State<DetailBody> {
     return Column(
       children: [
         CafeImageSlider(
-          controller: _controller,
+          pageController: _controller,
           imageList: cafe.image.list,
           onSlide: handleImageSlide,
         ),

@@ -3,12 +3,12 @@ import 'package:mobile_app/cafe_image.dart';
 import 'package:mobile_app/type.dart';
 
 class CafeImageSlider extends StatefulWidget {
-  final PageController controller;
+  final PageController pageController;
   final List<CafeImageModel> imageList;
   final ValueChanged<int> onSlide;
 
   CafeImageSlider({
-    required this.controller,
+    required this.pageController,
     required this.imageList,
     required this.onSlide,
   });
@@ -33,7 +33,7 @@ class _CafeImageSliderState extends State<CafeImageSlider> {
         children: [
           PageView.builder(
             physics: AlwaysScrollableScrollPhysics(),
-            controller: widget.controller,
+            controller: widget.pageController,
             itemBuilder: (BuildContext context, int index) {
               return CafeImage(
                   image: widget.imageList[index % widget.imageList.length],

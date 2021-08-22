@@ -46,7 +46,7 @@ class MainBody extends StatefulWidget {
 }
 
 class _MainBodyState extends State<MainBody> {
-  final PageController _controller = PageController();
+  final PageController _pageController = PageController();
   final ScrollController _scrollController = ScrollController();
   Map<String, Future<CafeListResponse>> _cafeListResponses = {};
   Future<PlaceListResponse>? _placeResponses;
@@ -85,8 +85,8 @@ class _MainBodyState extends State<MainBody> {
   }
 
   Future<void> handlePlaceClick(PlaceModel place) async {
-    if (_controller.hasClients) {
-      _controller.jumpToPage(0);
+    if (_pageController.hasClients) {
+      _pageController.jumpToPage(0);
     }
 
     if (_scrollController.hasClients) {
@@ -127,33 +127,29 @@ class _MainBodyState extends State<MainBody> {
         ),
         /* 뷰 모드에 따른 메인 컨텐츠 */
         Flexible(
-            child: ListView.builder(
-                controller: _scrollController,
-                itemCount: 1,
-                itemBuilder: (context, index) {
-                  return widget.isTableViewMode
-                      ? MainTable(
-                          cafeListResponses: _cafeListResponses,
-                          cafeList: _cafeList!,
-                          currentCafe: _currentCafe!,
-                          currentPlace: _currentPlace!,
-                        )
-                      : Column(children: [
-                          MainSlider(
-                            controller: _controller,
-                            cafeListResponses: _cafeListResponses,
-                            cafeList: _cafeList!,
-                            currentCafe: _currentCafe!,
-                            currentPlace: _currentPlace!,
-                            onSlide: handleCafeSlide,
-                          ),
-                          ImageIndexBullet(
-                              totalCount: _cafeList!.length,
-                              currentIndex: _cafeList!.indexOf(_currentCafe!)),
-                          MainButtonSetOfSlider(
-                              hotCafeList: _hotCafeList!, cafe: _currentCafe!)
-                        ]);
-                }))
+            child: widget.isTableViewMode
+                ? MainTable(
+                    scrollController: _scrollController,
+                    cafeListResponses: _cafeListResponses,
+                    cafeList: _cafeList!,
+                    currentCafe: _currentCafe!,
+                    currentPlace: _currentPlace!,
+                  )
+                : Column(children: [
+                    MainSlider(
+                      pageController: _pageController,
+                      cafeListResponses: _cafeListResponses,
+                      cafeList: _cafeList!,
+                      currentCafe: _currentCafe!,
+                      currentPlace: _currentPlace!,
+                      onSlide: handleCafeSlide,
+                    ),
+                    ImageIndexBullet(
+                        totalCount: _cafeList!.length,
+                        currentIndex: _cafeList!.indexOf(_currentCafe!)),
+                    MainButtonSetOfSlider(
+                        hotCafeList: _hotCafeList!, cafe: _currentCafe!)
+                  ]))
       ]);
     } else {
       return Center(
