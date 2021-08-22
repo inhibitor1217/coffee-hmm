@@ -1,0 +1,87 @@
+name: release-mobile
+on:
+  push:
+    tags:
+      - 'mobile-app@*'
+
+jobs:
+  init:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout source from branch.
+        uses: actions/checkout@master
+        with:
+          ref: ${{ github.event.inputs.branch }}
+      - name: Notify build start message.
+        uses: 8398a7/action-slack@e74cd4e48f4452e8158dc4f8bcfc780ae6203364
+        with:
+          status: custom
+          fields: commit,author,ref,workflow
+          custom_payload: |
+            {
+              text: `Start workflow run ${process.env.AS_WORKFLOW} on ${process.env.INPUTS_BRANCH}`,
+              attachments: [
+                {
+                  color: 'good',
+                  text: `Start workflow run ${process.env.AS_WORKFLOW}\n${process.env.AS_REF}(${process.env.AS_COMMIT}) by ${process.env.AS_AUTHOR}`,
+                }
+              ]
+            }
+        env:
+          INPUTS_BRANCH: ${{ github.event.inputs.branch }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+
+  build-android:
+    needs: [init]
+    runs-on: ubuntu-18.04
+    defaults:
+      run:
+        working-directory: mobile_app
+    steps:
+      - name: Checkout source from branch.
+        uses: actions/checkout@master
+        with:
+          ref: ${{ github.event.inputs.branch }}
+      - name: Decode android signing key.
+        run: echo $SIGNING_KEY | base64 -d > android/app/keystore.jks
+        env:
+          SIGNING_KEY: ${{ secrets.ANDROID_SIGNING_KEY_RELEASE }}
+      - name: Decode android firebase settings.
+        run: |
+          mkdir android/app/google-services
+          mkdir android/app/google-services/release
+          mkdir android/app/google-services/release/values
+          echo $FIREBASE_VALUES | base64 -d > android/app/google-services/release/values/values.xml
+        env:
+          FIREBASE_VALUES: ${{ secrets.FIREBASE_VALUES_ANDROID_RELEASE }}
+      - name: Setup Java.
+        uses: actions/setup-java@v2.2.0
+        with:
+          distribution: adopt
+          java-version: '8.0.302'
+      - name: Setup Flutter.
+        uses: subosito/flutter-action@4389e6cbc6cb8a4b18c628ff96ff90be0e926aa8
+        with:
+          flutter-version: "2.2.3"
+      - name: Install flutter package dependencies.
+        run: flutter pub get
+      - name: Build app bundle.
+        run: flutter build appbundle --release --dart-define APP_STAGE=release
+        env:
+          ALIAS: upload
+          KEY_PATH: keystore.jks
+          SIGNING_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD_RELEASE }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD_RELEASE }}
+      # - name: Upload build artifacts.
+      #   uses: actions/upload-artifact@v2.2.4
+      #   with:
+      #     name: build-android
+      #     path: mobile_app/build/app/outputs/apk/release/*.apk
+      - name: Notify build message.
+        uses: 8398a7/action-slack@e74cd4e48f4452e8158dc4f8bcfc780ae6203364
+        with:
+          status: ${{ job.status }}
+          fields: repo,job,ref,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+        if: always()
