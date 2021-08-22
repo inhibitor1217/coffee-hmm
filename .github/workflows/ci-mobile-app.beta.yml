@@ -46,17 +46,17 @@ jobs:
         with:
           ref: ${{ github.event.inputs.branch }}
       - name: Decode android signing key.
+        run: echo $SIGNING_KEY | base64 -d > android/app/keystore.jks
         env:
           SIGNING_KEY: ${{ secrets.ANDROID_SIGNING_KEY_BETA }}
-        run: echo $SIGNING_KEY | base64 -d > android/app/keystore.jks
       - name: Decode android firebase settings.
-        env:
-          FIREBASE_VALUES: ${{ secrets.FIREBASE_VALUES_ANDOIRD_BETA }}
         run: |
           mkdir android/app/google-services
           mkdir android/app/google-services/beta
           mkdir android/app/google-services/beta/values
           echo $FIREBASE_VALUES | base64 -d > android/app/google-services/beta/values/values.xml
+        env:
+          FIREBASE_VALUES: ${{ secrets.FIREBASE_VALUES_ANDROID_BETA }}
       - name: Setup Java.
         uses: actions/setup-java@v2.2.0
         with:
@@ -79,7 +79,7 @@ jobs:
         uses: actions/upload-artifact@v2.2.4
         with:
           name: build-android
-          path: build/app/outputs/apk/release/*.apk
+          path: mobile_app/build/app/outputs/apk/release/*.apk
       - name: Notify build message.
         uses: 8398a7/action-slack@e74cd4e48f4452e8158dc4f8bcfc780ae6203364
         with:
