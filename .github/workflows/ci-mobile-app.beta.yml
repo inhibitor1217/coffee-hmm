@@ -42,6 +42,10 @@ jobs:
         env:
           SIGNING_KEY: ${{ secrets.ANDROID_SIGNING_KEY_BETA }}
         run: echo $SIGNING_KEY | base64 -d > android/app/keystore.jks
+      - uses: actions/setup-java@4b1b3d4a82f726de9ba1945f8c6967b67caf5dcd
+        with:
+          distribution: adopt
+          java-version: '8.0.302'
       - uses: subosito/flutter-action@4389e6cbc6cb8a4b18c628ff96ff90be0e926aa8
         with:
           flutter-version: "2.2.3"
