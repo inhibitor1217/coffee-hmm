@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name_dev">Coffee\nHmm [dev]</string>
+    <string name="app_name_beta">Coffee\nHmm [beta]</string>
+    <string name="app_name_release">Coffee\nHmm</string>
+</resources>
