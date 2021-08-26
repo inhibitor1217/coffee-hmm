@@ -154,10 +154,51 @@ describe('Place - GET /place/list', () => {
     };
     const names = list.map((item) => item.name);
 
-    expect(count).toBe(2);
-    expect(names).toEqual(['양재', '판교']);
+    expect(count).toBe(1);
+    expect(names).toEqual(['양재']);
     expect(list[0].cafeCount).toBe(3);
-    expect(list[1].cafeCount).toBe(0);
+  });
+
+  test('Filters places with only hidden or deleted cafes', async () => {
+    const place0 = await setupPlace(connection, { name: '판교' });
+    const place1 = await setupPlace(connection, { name: '연남동' });
+
+    await setupCafe(connection, {
+      name: 'cafe_000',
+      state: CafeState.hidden,
+      placeId: place0.id,
+    });
+    await setupCafe(connection, {
+      name: 'cafe_001',
+      state: CafeState.active,
+      placeId: place1.id,
+    });
+    await setupCafe(connection, {
+      name: 'cafe_002',
+      state: CafeState.active,
+      placeId: place1.id,
+    });
+
+    const response = await request.get('/place/list').expect(HTTP_OK);
+
+    const {
+      place: { count, list },
+    } = response.body as {
+      place: {
+        count: number;
+        list: {
+          id: string;
+          name: string;
+          pinned: boolean;
+          cafeCount: number;
+        }[];
+      };
+    };
+
+    expect(count).toBe(1);
+
+    expect(list[0].name).toBe('연남동');
+    expect(list[0].cafeCount).toBe(2);
   });
 });
 
