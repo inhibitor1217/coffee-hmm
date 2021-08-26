@@ -94,6 +94,7 @@ export const getFeed = handler<
     limit: number;
     cursor?: string;
     identifier?: string;
+    place?: 'mixed';
     placeId?: string;
     placeName?: string;
   }
@@ -103,6 +104,7 @@ export const getFeed = handler<
       limit,
       cursor,
       identifier: _identifier,
+      place,
       placeId,
       placeName,
     } = ctx.query;
@@ -110,6 +112,26 @@ export const getFeed = handler<
     const connection = await ctx.state.connection();
 
     const identifier = _identifier ?? ctx.state.uid ?? uuid.v4();
+
+    const cursorKey = (() => {
+      if (place === 'mixed') {
+        return 'place';
+      }
+      return 'cafe';
+    })();
+
+    const cursorExpression = (() => {
+      const currentDate = new Date(Date.now());
+      const formattedCurrentDate = currentDate.toISOString().split('T')[0];
+
+      switch (cursorKey) {
+        case 'cafe':
+        default:
+          return `md5(concat_ws(':', "cafe"."id", ${formattedCurrentDate}, :identifier::text))`;
+        case 'place':
+          return `md5(concat_ws(':', "place"."id", ${formattedCurrentDate}, :identifier::text))`;
+      }
+    })();
 
     /**
      * TODO:  The following query sweeps through the entire table,
@@ -123,7 +145,7 @@ export const getFeed = handler<
     let query = getRepository(Cafe)
       .createQueryBuilder('cafe')
       .select()
-      .addSelect(`md5(concat("cafe"."id", :identifier::text)) AS "cursor"`)
+      .addSelect(`${cursorExpression} AS "cursor"`)
       .leftJoinAndSelect('cafe.place', 'place')
       .leftJoinAndSelect('cafe.statistic', 'cafe_statistic')
       .leftJoinAndSelect('cafe.imageCount', 'cafe_image_count')
@@ -136,12 +158,13 @@ export const getFeed = handler<
       });
 
     if (cursor) {
-      query = query.andWhere(
-        `md5(concat("cafe"."id", :identifier::text)) > :cursor`,
-        {
-          cursor,
-        }
-      );
+      query = query.andWhere(`${cursorExpression} > :cursor`, {
+        cursor,
+      });
+    }
+
+    if (place === 'mixed') {
+      query = query.distinctOn(['"cursor"']);
     }
 
     if (placeId) {
@@ -212,10 +235,11 @@ export const getFeed = handler<
           limit: joi.number().integer().min(1).max(64).required(),
           cursor: joi.string(),
           identifier: joi.string().uuid({ version: 'uuidv4' }),
+          place: joi.string().valid('mixed'),
           placeId: joi.string().uuid({ version: 'uuidv4' }),
           placeName: joi.string().min(1).max(255),
         })
-        .oxor('placeId', 'placeName')
+        .oxor('place', 'placeId', 'placeName')
         .required(),
     },
     transform: {

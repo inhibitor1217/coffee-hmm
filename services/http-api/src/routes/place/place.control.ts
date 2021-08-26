@@ -5,6 +5,7 @@ import {
   Place,
   OperationSchema,
   OperationType,
+  CafeState,
 } from '@coffee-hmm/common';
 import joi from 'joi';
 import { FOREIGN_KEY_VIOLATION, UNIQUE_VIOLATION } from 'pg-error-constants';
@@ -35,6 +36,12 @@ export const getList = handler<TransformedVariablesMap, { pinned?: boolean }>(
       .createQueryBuilder('cafe')
       .select('cafe.fk_place_id AS "placeId", COUNT(cafe.id) AS "cafeCount"')
       .where({ fkPlaceId: In(placeIds) })
+      .andWhere('"cafe"."state" IS DISTINCT FROM :hidden', {
+        hidden: CafeState.hidden,
+      })
+      .andWhere('"cafe"."state" IS DISTINCT FROM :deleted', {
+        deleted: CafeState.deleted,
+      })
       .groupBy('cafe.fk_place_id')
       .getRawMany()
       .then((records: { placeId: string; cafeCount: string }[]) =>
@@ -54,12 +61,13 @@ export const getList = handler<TransformedVariablesMap, { pinned?: boolean }>(
           cafeCount: cafeCounts[place.id]?.cafeCount ?? 0,
         })
       )
+      .filter((place) => place.cafeCount > 0)
       .sort((one, other) => other.cafeCount - one.cafeCount);
 
     ctx.status = HTTP_OK;
     ctx.body = {
       place: {
-        count: places.length,
+        count: placeObjectsWithCafeCount.length,
         list: placeObjectsWithCafeCount,
       },
     };

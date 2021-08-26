@@ -1,4 +1,11 @@
-import { IamPolicy, IamRule, Place, OperationType } from '@coffee-hmm/common';
+import {
+  IamPolicy,
+  IamRule,
+  Place,
+  OperationType,
+  CafeState,
+} from '@coffee-hmm/common';
+import _ from 'lodash';
 import { SuperTest, Test } from 'supertest';
 import { Connection, createConnection } from 'typeorm';
 import * as uuid from 'uuid';
@@ -55,17 +62,21 @@ beforeEach(async () => {
 describe('Place - GET /place/list', () => {
   test('Can retrieve an entire list of places', async () => {
     const places = await Promise.all(
-      ['판교', '연남동', '양재', '성수동'].map((name) =>
+      ['판교', '연남동', '양재', '성수동', '한남'].map((name) =>
         setupPlace(connection, { name })
       )
     );
 
-    await setupCafe(connection, { name: 'cafe_000', placeId: places[0].id });
-    await setupCafe(connection, { name: 'cafe_001', placeId: places[0].id });
-    await setupCafe(connection, { name: 'cafe_002', placeId: places[0].id });
-    await setupCafe(connection, { name: 'cafe_003', placeId: places[1].id });
-    await setupCafe(connection, { name: 'cafe_004', placeId: places[1].id });
-    await setupCafe(connection, { name: 'cafe_005', placeId: places[2].id });
+    const PLACE_INDICES = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4];
+    await Promise.all(
+      _.range(PLACE_INDICES.length).map((i) =>
+        setupCafe(connection, {
+          name: `cafe_${`${i}`.padStart(3, '0')}`,
+          placeId: places[PLACE_INDICES[i]].id,
+          state: i % 3 === 0 ? CafeState.hidden : CafeState.active,
+        })
+      )
+    );
 
     const response = await request.get('/place/list').expect(HTTP_OK);
     const {
@@ -83,12 +94,18 @@ describe('Place - GET /place/list', () => {
     };
     const names = list.map((item) => item.name);
 
-    expect(count).toBe(4);
-    expect(names).toEqual(['판교', '연남동', '양재', '성수동']);
-    expect(list[0].cafeCount).toBe(3);
-    expect(list[1].cafeCount).toBe(2);
+    expect(count).toBe(5);
+
+    expect(names[0]).toEqual('양재');
+    expect(names.sort()).toEqual(
+      ['판교', '연남동', '양재', '성수동', '한남'].sort()
+    );
+
+    expect(list[0].cafeCount).toBe(2);
+    expect(list[1].cafeCount).toBe(1);
     expect(list[2].cafeCount).toBe(1);
-    expect(list[3].cafeCount).toBe(0);
+    expect(list[3].cafeCount).toBe(1);
+    expect(list[4].cafeCount).toBe(1);
 
     list.forEach(({ pinned }) => expect(pinned).toBe(false));
   });
@@ -102,9 +119,21 @@ describe('Place - GET /place/list', () => {
     });
     await setupPlace(connection, { name: '성수동', pinned: false });
 
-    await setupCafe(connection, { name: 'cafe_000', placeId });
-    await setupCafe(connection, { name: 'cafe_001', placeId });
-    await setupCafe(connection, { name: 'cafe_002', placeId });
+    await setupCafe(connection, {
+      name: 'cafe_000',
+      state: CafeState.active,
+      placeId,
+    });
+    await setupCafe(connection, {
+      name: 'cafe_001',
+      state: CafeState.active,
+      placeId,
+    });
+    await setupCafe(connection, {
+      name: 'cafe_002',
+      state: CafeState.active,
+      placeId,
+    });
 
     const response = await request
       .get('/place/list')
@@ -125,10 +154,51 @@ describe('Place - GET /place/list', () => {
     };
     const names = list.map((item) => item.name);
 
-    expect(count).toBe(2);
-    expect(names).toEqual(['양재', '판교']);
+    expect(count).toBe(1);
+    expect(names).toEqual(['양재']);
     expect(list[0].cafeCount).toBe(3);
-    expect(list[1].cafeCount).toBe(0);
+  });
+
+  test('Filters places with only hidden or deleted cafes', async () => {
+    const place0 = await setupPlace(connection, { name: '판교' });
+    const place1 = await setupPlace(connection, { name: '연남동' });
+
+    await setupCafe(connection, {
+      name: 'cafe_000',
+      state: CafeState.hidden,
+      placeId: place0.id,
+    });
+    await setupCafe(connection, {
+      name: 'cafe_001',
+      state: CafeState.active,
+      placeId: place1.id,
+    });
+    await setupCafe(connection, {
+      name: 'cafe_002',
+      state: CafeState.active,
+      placeId: place1.id,
+    });
+
+    const response = await request.get('/place/list').expect(HTTP_OK);
+
+    const {
+      place: { count, list },
+    } = response.body as {
+      place: {
+        count: number;
+        list: {
+          id: string;
+          name: string;
+          pinned: boolean;
+          cafeCount: number;
+        }[];
+      };
+    };
+
+    expect(count).toBe(1);
+
+    expect(list[0].name).toBe('연남동');
+    expect(list[0].cafeCount).toBe(2);
   });
 });
 
