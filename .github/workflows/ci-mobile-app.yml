@@ -3,6 +3,12 @@ on:
   push:
     tags:
       - 'mobile-app@*'
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch"
+        required: true
+        default: "master"
 
 jobs:
   init:
@@ -103,6 +109,6 @@ jobs:
         with:
           slack_token: ${{ secrets.SLACK_OAUTH_TOKEN }}
           channels: ${{ secrets.SLACK_CHANNELS }}
-          file_path: app.aab
-          file_name: app.aab
+          file_path: app-release.aab
+          file_name: app-release.aab
           file_type: auto
