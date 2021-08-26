@@ -1,6 +1,6 @@
 {
   "name": "coffee-hmm-http-api",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A main http api server for coffee-hmm",
   "scripts": {
     "debug": "npx ts-node-dev --respawn --transpile-only --ignore-watch node_modules ./src/server.ts",
