@@ -72,11 +72,11 @@ jobs:
           KEY_PATH: keystore.jks
           SIGNING_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD_RELEASE }}
           SIGNING_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD_RELEASE }}
-      # - name: Upload build artifacts.
-      #   uses: actions/upload-artifact@v2.2.4
-      #   with:
-      #     name: build-android
-      #     path: mobile_app/build/app/outputs/apk/release/*.apk
+      - name: Upload build artifacts.
+        uses: actions/upload-artifact@v2.2.4
+        with:
+          name: build-android
+          path: mobile_app/build/app/outputs/bundle/release/*.aab
       - name: Notify build message.
         uses: 8398a7/action-slack@e74cd4e48f4452e8158dc4f8bcfc780ae6203364
         with:
@@ -85,3 +85,24 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
         if: always()
+
+  upload-android-artifact:
+    needs: [build-android]
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout source from branch.
+        uses: actions/checkout@master
+        with:
+          ref: ${{ github.event.inputs.branch }}
+      - name: Download build artifacts.
+        uses: actions/download-artifact@v2.0.10
+        with:
+          name: build-android
+      - name: Pass build artifact to Slack.
+        uses: MeilCli/slack-upload-file@f8f4f6dbe44bb99b36c16a2774836022ffe56fed
+        with:
+          slack_token: ${{ secrets.SLACK_OAUTH_TOKEN }}
+          channels: ${{ secrets.SLACK_CHANNELS }}
+          file_path: app.aab
+          file_name: app.aab
+          file_type: auto
