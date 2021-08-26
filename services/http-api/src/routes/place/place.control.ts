@@ -61,12 +61,13 @@ export const getList = handler<TransformedVariablesMap, { pinned?: boolean }>(
           cafeCount: cafeCounts[place.id]?.cafeCount ?? 0,
         })
       )
+      .filter((place) => place.cafeCount > 0)
       .sort((one, other) => other.cafeCount - one.cafeCount);
 
     ctx.status = HTTP_OK;
     ctx.body = {
       place: {
-        count: places.length,
+        count: placeObjectsWithCafeCount.length,
         list: placeObjectsWithCafeCount,
       },
     };
