@@ -27,7 +27,7 @@ class _MainTableState extends State<MainTable> {
   @override
   Widget build(BuildContext context) {
     List<CafeModel> cafes = List.from(widget.cafeList)
-      ..removeWhere((cafe) => cafe.image.count < 4);
+      ..removeWhere((cafe) => cafe.image.count < 3);
 
     return Container(
         margin: EdgeInsets.only(bottom: 48),
