@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/api.dart';
 import 'package:mobile_app/cafe_image.dart';
 import 'package:mobile_app/router/mixins/enter_cafe_detail_mixin.dart';
 import 'package:mobile_app/type.dart';
@@ -10,13 +11,33 @@ class MainBottomSheet extends StatefulWidget {
   MainBottomSheet({required this.hotCafeList, required this.onClose});
 
   @override
-  _MainBottomSheetState createState() => _MainBottomSheetState();
+  _MainBottomSheetState createState() =>
+      _MainBottomSheetState(initialHotCafeList: hotCafeList);
 }
 
 class _MainBottomSheetState extends State<MainBottomSheet>
     with EnterCafeDetailMixin {
+  final ScrollController _scrollController = ScrollController();
+  Future<CafeListResponse>? _hotCafeListResponses;
+  List<CafeModel>? _hotCafeList;
+
+  _MainBottomSheetState({required List<CafeModel> initialHotCafeList})
+      : _hotCafeList = initialHotCafeList;
+
+  void handleHotCafesClick(int number) {
+    _hotCafeListResponses = fetchHotCafeList(number);
+    _hotCafeListResponses!.then((data) {
+      setState(() {
+        _hotCafeList = data.cafe.list;
+      });
+    });
+    _scrollController.animateTo(0,
+        duration: Duration(microseconds: 500), curve: Curves.ease);
+  }
+
   @override
   Widget build(BuildContext context) {
+    const _highlightedColor = Color.fromRGBO(242, 196, 109, 1);
     return Container(
         decoration: BoxDecoration(
             color: Colors.white,
@@ -28,7 +49,7 @@ class _MainBottomSheetState extends State<MainBottomSheet>
           children: [
             ListView(children: [
               Container(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 38),
                   margin: EdgeInsets.only(left: 20, bottom: 30, right: 20),
                   child: Row(children: [
                     Expanded(
@@ -38,7 +59,7 @@ class _MainBottomSheetState extends State<MainBottomSheet>
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: Color.fromRGBO(155, 218, 218, 1))),
+                                color: _highlightedColor)),
                         Text(
                           '핫플레이스 추천',
                           style: TextStyle(fontSize: 14),
@@ -55,36 +76,66 @@ class _MainBottomSheetState extends State<MainBottomSheet>
                         ])))
                   ])),
               Container(
-                  height: 180,
-                  child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: List.generate(
-                          10,
-                          (index) => Container(
-                              margin: EdgeInsets.only(
-                                  right: index == 9 ? 20 : 4,
-                                  left: index == 0 ? 20 : 0),
-                              child: GestureDetector(
-                                child: RepresentativeCafe(
-                                    cafe: widget.hotCafeList[index]),
-                                onTap: enterDetail(widget.hotCafeList[index]),
-                              ))))),
+                height: 180,
+                child: SingleChildScrollView(
+                    controller: _scrollController,
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                        children: List.generate(
+                            10,
+                            (index) => Container(
+                                margin: EdgeInsets.only(
+                                    right: index == 9 ? 20 : 4,
+                                    left: index == 0 ? 20 : 0),
+                                child: GestureDetector(
+                                  child: RepresentativeCafe(
+                                      cafe: (_hotCafeList ??
+                                          widget.hotCafeList)[index]),
+                                  onTap: enterDetail((_hotCafeList ??
+                                      widget.hotCafeList)[index]),
+                                ))))),
+              ),
             ]),
             Positioned(
+              right: 4,
+              top: 0,
+              child: IconButton(
+                icon: Icon(Icons.close),
+                color: Colors.black12,
+                onPressed: widget.onClose,
+              ),
+            ),
+            Positioned(
                 left: 0,
-                bottom: 20,
+                bottom: 16,
                 child: TextButton(
                   style: TextButton.styleFrom(
                       primary: Colors.black87,
                       padding: EdgeInsets.symmetric(vertical: 20)),
                   child: SizedBox(
                       width: MediaQuery.of(context).size.width,
-                      child: Text(
-                        '닫기',
-                        style: TextStyle(fontSize: 13, color: Colors.black87),
-                        textAlign: TextAlign.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.refresh_rounded),
+                            color: _highlightedColor,
+                            iconSize: 18,
+                            onPressed: () {},
+                          ),
+                          Text(
+                            '새로고침',
+                            style:
+                                TextStyle(fontSize: 13, color: Colors.black87),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(width: 40, height: 40)
+                        ],
                       )),
-                  onPressed: widget.onClose,
+                  onPressed: () {
+                    handleHotCafesClick(10);
+                  },
                 ))
           ],
         ));

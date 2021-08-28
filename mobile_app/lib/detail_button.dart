@@ -9,12 +9,12 @@ class DetailButtonSet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.symmetric(vertical: 16),
+        padding: EdgeInsets.symmetric(vertical: 12),
         child: Row(
           children: [
             Expanded(
               child: DetailButton(
-                text: '흠 링크\n공유하기',
+                text: '공유하기',
                 imgSrc: 'assets/icon/icon_small.png',
                 onPressed: () => handleLinkShareClick(
                     'https://www.coffeehmm.com/cafe/${cafe.id}'),
@@ -22,13 +22,13 @@ class DetailButtonSet extends StatelessWidget {
             ),
             Expanded(
                 child: DetailButton(
-                    text: '네이버\n바로가기',
+                    text: '네이버',
                     imgSrc: 'assets/images/Naver_btnW.png',
                     onPressed: () => handleNaverClick(
                         cafe.name + ' ' + cafe.place.name, context))),
             Expanded(
                 child: DetailButton(
-                    text: '인스타그램\n바로가기',
+                    text: '인스타그램',
                     imgSrc: 'assets/images/Instagram_Glyph_Gradient_RGB.png',
                     onPressed: () => handleInstagramClick(cafe.name, context)))
           ],
@@ -66,13 +66,10 @@ class DetailButton extends StatelessWidget {
                     decoration:
                         BoxDecoration(borderRadius: BorderRadius.circular(4)),
                     child: Image.asset(imgSrc))),
-            Container(
-                margin: EdgeInsets.only(top: 4),
-                child: Text(
-                  text,
-                  style: TextStyle(fontSize: 11, color: Colors.black),
-                  textAlign: TextAlign.center,
-                ))
+            SizedBox(height: 2),
+            Text(text,
+                style: TextStyle(fontSize: 11, color: Colors.black),
+                textAlign: TextAlign.center)
           ],
         ),
         onPressed: onPressed);

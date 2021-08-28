@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/router/page_configuration.dart';
 
 const _titleStyle = TextStyle(
-  fontSize: 12,
-  color: Colors.black,
+  fontSize: 13,
+  color: Colors.black87,
 );
 
 final _headerTitle =
     Text('coffee hmm', textAlign: TextAlign.center, style: _titleStyle);
 
 const _idleIconColor = Colors.black38;
-const _activeIconColor = Color.fromRGBO(155, 218, 218, 1);
+const _activeIconColor = Color.fromRGBO(242, 196, 109, 1);
 
 class _MoreActionButton extends StatelessWidget {
   @override
@@ -35,7 +35,7 @@ class MainHeader extends StatelessWidget with PreferredSizeWidget {
   MainHeader({this.onChangeViewMode, required this.isTableViewMode});
 
   @override
-  Size get preferredSize => Size.fromHeight(52);
+  Size get preferredSize => Size.fromHeight(48);
 
   @override
   Widget build(BuildContext context) {
