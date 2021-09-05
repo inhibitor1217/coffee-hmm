@@ -11,6 +11,7 @@ class ResizeService {
   ): Promise<Buffer> {
     return Sharp(src)
       .resize(dstDimension.width, dstDimension.height)
+      .withMetadata()
       .toFormat(dstFormat)
       .toBuffer();
   }
