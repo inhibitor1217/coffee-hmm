@@ -8,12 +8,26 @@ class CafeImage extends StatelessWidget {
 
   CafeImage({required this.image, required this.size});
 
+  String _parseRelativeUri(String uri) {
+    if (uri.contains(
+        'https://coffee-hmm-image.s3.ap-northeast-2.amazonaws.com/cafes/')) {
+      return uri.replaceAll(
+          'https://coffee-hmm-image.s3.ap-northeast-2.amazonaws.com/cafes/',
+          '');
+    }
+    return uri;
+  }
+
   @override
   Widget build(BuildContext context) {
+    const path = 'http://resource.coffeehmm.com/cafes/';
+    final uri = _parseRelativeUri(image.relativeUri);
+    final query = '?d=' + (size > 319 ? '720x720' : '240x240');
+
     return Container(
       height: size,
       child: CachedNetworkImage(
-        imageUrl: image.relativeUri,
+        imageUrl: '$path$uri$query',
         fit: BoxFit.cover,
         progressIndicatorBuilder: (context, url, downloadProgress) {
           return Center(
