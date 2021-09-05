@@ -18,4 +18,14 @@ class Environment {
         return 'https://release.api.coffee-hmm.inhibitor.io';
     }
   }
+
+  static String get imageBaseUrl {
+    switch (appStage) {
+      case AppStage.development:
+      case AppStage.beta:
+        return 'https://beta-resource.coffeehmm.com';
+      case AppStage.release:
+        return 'https://resource.coffeehmm.com';
+    }
+  }
 }

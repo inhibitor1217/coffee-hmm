@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/type.dart';
+import 'package:mobile_app/util/environment.dart';
+
+import 'image.dart';
 
 class CafeImage extends StatelessWidget {
   final CafeImageModel image;
@@ -8,26 +11,17 @@ class CafeImage extends StatelessWidget {
 
   CafeImage({required this.image, required this.size});
 
-  String _parseRelativeUri(String uri) {
-    if (uri.contains(
-        'https://coffee-hmm-image.s3.ap-northeast-2.amazonaws.com/cafes/')) {
-      return uri.replaceAll(
-          'https://coffee-hmm-image.s3.ap-northeast-2.amazonaws.com/cafes/',
-          '');
-    }
-    return uri;
-  }
-
   @override
   Widget build(BuildContext context) {
-    const path = 'http://resource.coffeehmm.com/cafes/';
-    final uri = _parseRelativeUri(image.relativeUri);
+    final path = Environment.imageBaseUrl;
+    final group = '/cafes/';
+    final uri = parseRelativeUri(image.relativeUri, group);
     final query = '?d=' + (size > 319 ? '720x720' : '240x240');
 
     return Container(
       height: size,
       child: CachedNetworkImage(
-        imageUrl: '$path$uri$query',
+        imageUrl: '$path$group$uri$query',
         fit: BoxFit.cover,
         progressIndicatorBuilder: (context, url, downloadProgress) {
           return Center(
