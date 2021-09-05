@@ -14,6 +14,7 @@ LOG_LEVEL=verbose
 
 API_SERVICE=https://beta.api.coffee-hmm.inhibitor.io
 BASE_APP_URL=https://coffeehmm.com
+CF_DISTRIBUTION_ID=E2RC8J015K5SBE
 
 help: info
 	@echo
