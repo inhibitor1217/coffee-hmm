@@ -1,9 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_app/image.dart';
 import 'package:mobile_app/type.dart';
 import 'package:mobile_app/util/environment.dart';
-
-import 'image.dart';
 
 class CafeImage extends StatelessWidget {
   final CafeImageModel image;
