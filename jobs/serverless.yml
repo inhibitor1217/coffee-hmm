@@ -6,11 +6,10 @@ provider:
   runtime: nodejs12.x
   stage: ${self:custom.stage}
   memorySize: 256
-  role: LambdaRole
 
 resources:
   Resources:
-    LambdaRole: ${file(./res/LambdaRole.yml)}
+    GenerateSitemapRole: ${file(./res/GenerateSitemapRole.yml)}
 
 plugins:
   - serverless-webpack
@@ -37,6 +36,7 @@ custom:
 functions:
   generateSitemap:
     handler: src/job/generateSitemap.handler
+    role: GenerateSitemapRole
     events:
       - schedule: cron(00 13 * * ? *)
     environment:

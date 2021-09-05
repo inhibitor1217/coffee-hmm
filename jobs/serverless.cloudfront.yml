@@ -1,0 +1,64 @@
+service: coffee-hmm-jobs
+
+package:
+  individually: true
+
+provider:
+  name: aws
+  region: 'us-east-1'   # NOTE: Lambda@Edge functions are required to be deployed at us-east-1
+  runtime: nodejs12.x
+  stage: ${self:custom.stage}
+  memorySize: 128       # NOTE: Lambda@Edge functions memory limit is 128 MB
+  timeout: 5            # NOTE: Lambda@Edge functions timeout limit is 5 s
+
+resources:
+  Resources:
+    BaseLambdaEdgeRole: ${file(./res/BaseLambdaEdgeRole.yml)}
+    OriginResponseLambdaEdgeRole: ${file(./res/OriginResponseLambdaEdgeRole.yml)}
+
+plugins:
+  - serverless-webpack
+  - serverless-lambda-edge-pre-existing-cloudfront
+
+custom:
+  stage: ${env:APP_STAGE, 'beta'}
+  version: 0.1.0
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules:
+      forceExclude:
+        - '@coffee-hmm/common'    # NOTE: cannot allow heavy pg, typeorm modules to be executed at Lambda@Edge
+        - aws-sdk
+    packager: yarn
+    packagerOptions:
+      scripts:
+        - if [ -f src/job/resizeImage/originResponse.js ]; then rm -rf node_modules/sharp; SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm install --arch=x64 --platform=linux sharp; fi;
+    excludeFiles: src/**/*.test.ts
+  origin:
+    s3:
+      arn: arn:aws:s3:::coffee-hmm-image
+      name: coffee-hmm-image
+  distribution:
+    id: ${env:CF_DISTRIBUTION_ID}
+
+# NOTE: environment variables are not allowed for Lambda@Edge handlers
+functions:
+  resizeImage__viewerRequest:
+    handler: src/job/resizeImage/viewerRequest.handler
+    role: BaseLambdaEdgeRole
+    events:
+      - preExistingCloudFront:
+          distributionId: ${self:custom.distribution.id}
+          eventType: viewer-request
+          pathPattern: '*'
+          includeBody: false
+
+  resizeImage__originResponse:
+    handler: src/job/resizeImage/originResponse.handler
+    role: OriginResponseLambdaEdgeRole
+    events:
+      - preExistingCloudFront:
+          distributionId: ${self:custom.distribution.id}
+          eventType: origin-response
+          pathPattern: '*'
+          includeBody: false

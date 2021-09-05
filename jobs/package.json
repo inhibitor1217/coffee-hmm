@@ -28,11 +28,15 @@
     "@babel/preset-env": "^7.13.10",
     "@babel/preset-typescript": "^7.13.0",
     "@tsconfig/recommended": "^1.0.1",
+    "@types/aws-lambda": "^8.10.81",
     "@types/jest": "^26.0.21",
     "@types/node": "^14.14.35",
+    "@types/qs": "^6.9.7",
+    "@types/sharp": "^0.28.5",
     "@types/supertest": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
+    "aws-lambda": "^1.0.6",
     "babel-jest": "^26.6.3",
     "copy-webpack-plugin": "^8.0.0",
     "eslint": "^7.22.0",
@@ -44,6 +48,7 @@
     "jest": "^26.6.3",
     "prettier": "^2.2.1",
     "serverless": "^2.30.3",
+    "serverless-lambda-edge-pre-existing-cloudfront": "^1.1.5",
     "serverless-webpack": "^5.4.0",
     "ts-loader": "^8.0.18",
     "tsconfig-paths": "^3.9.0",
@@ -54,6 +59,8 @@
   "dependencies": {
     "@coffee-hmm/common": "npm:@inhibitor1217/coffee-hmm-common",
     "aws-sdk": "^2.868.0",
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "qs": "^6.10.1",
+    "sharp": "^0.28.3"
   }
 }

@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { CafeImageStateStrings, CafeStateStrings } from '@coffee-hmm/common';
 import { env, logLevel } from '../../util';
-import Logger from '../../util/logger';
+import { Logger } from '../../util/logger';
 
 type CafeRecord = {
   id: string;
