@@ -1,5 +1,6 @@
 import type { CloudFrontResponseEvent } from 'aws-lambda';
 import { parse } from 'qs';
+import { unescape } from 'querystring';
 import resize, { ResizableFormat } from '../../services/resize';
 import s3 from '../../services/s3';
 import { cloudfrontResponseEventHandler } from '../../util/handler/cloudfrontEventHandler';
@@ -41,7 +42,9 @@ export const originResponse = async (
 
     const dimension = parseDimension(d);
 
-    const objectKey = uri.substr(1); // NOTE: /file.png -> file.png
+    const encodedObjectKey = uri.substr(1); // NOTE: /file.png -> file.png
+    const objectKey = unescape(encodedObjectKey);
+
     const { body, contentType } = await s3.getFile({
       bucketName: ORIGIN_S3_BUCKET_NAME,
       fileName: objectKey,
