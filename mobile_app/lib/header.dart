@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/router/page_configuration.dart';
+import 'package:mobile_app/util/app_stage.dart';
+import 'package:mobile_app/util/environment.dart';
 
-const _titleStyle = TextStyle(
-  fontSize: 13,
-  color: Colors.black87,
-);
+mixin _HeaderSpec on StatelessWidget {
+  final _headerTitle = Text('coffee hmm',
+      textAlign: TextAlign.center,
+      style: TextStyle(fontSize: 13, color: Colors.black87));
 
-final _headerTitle =
-    Text('coffee hmm', textAlign: TextAlign.center, style: _titleStyle);
+  final _idleIconColor = Colors.black38;
+  final _activeIconColor = Color.fromRGBO(242, 196, 109, 1);
 
-const _idleIconColor = Colors.black38;
-const _activeIconColor = Color.fromRGBO(242, 196, 109, 1);
+  bool get _showMoreAction {
+    return Environment.appStage == AppStage.development;
+  }
+}
 
 class _MoreActionButton extends StatelessWidget {
   @override
@@ -28,7 +32,7 @@ class _MoreActionButton extends StatelessWidget {
   }
 }
 
-class MainHeader extends StatelessWidget with PreferredSizeWidget {
+class MainHeader extends StatelessWidget with PreferredSizeWidget, _HeaderSpec {
   final void Function()? onChangeViewMode;
   final bool isTableViewMode;
 
@@ -50,13 +54,13 @@ class MainHeader extends StatelessWidget with PreferredSizeWidget {
             onPressed: onChangeViewMode,
             icon: Icon(Icons.list,
                 color: isTableViewMode ? _activeIconColor : null)),
-        _MoreActionButton(),
+        if (_showMoreAction) _MoreActionButton(),
       ],
     );
   }
 }
 
-class BaseHeader extends StatelessWidget with PreferredSizeWidget {
+class BaseHeader extends StatelessWidget with PreferredSizeWidget, _HeaderSpec {
   @override
   Size get preferredSize => Size.fromHeight(52);
 
@@ -69,7 +73,7 @@ class BaseHeader extends StatelessWidget with PreferredSizeWidget {
       title: _headerTitle,
       centerTitle: true,
       actions: [
-        _MoreActionButton(),
+        if (_showMoreAction) _MoreActionButton(),
       ],
     );
   }
