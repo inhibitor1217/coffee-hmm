@@ -8,8 +8,7 @@ mixin _HeaderSpec on StatelessWidget {
       textAlign: TextAlign.center,
       style: TextStyle(fontSize: 13, color: Colors.black87));
 
-  final _idleIconColor = Colors.black38;
-  final _activeIconColor = Color.fromRGBO(242, 196, 109, 1);
+  final _iconColor = Colors.black38;
 
   bool get _showMoreAction {
     return Environment.appStage == AppStage.development;
@@ -46,14 +45,13 @@ class MainHeader extends StatelessWidget with PreferredSizeWidget, _HeaderSpec {
     return AppBar(
       backgroundColor: isTableViewMode ? Colors.white : Colors.transparent,
       elevation: 0,
-      iconTheme: IconThemeData(color: _idleIconColor),
+      iconTheme: IconThemeData(color: _iconColor),
       title: _headerTitle,
       centerTitle: true,
       actions: [
         IconButton(
             onPressed: onChangeViewMode,
-            icon: Icon(Icons.list,
-                color: isTableViewMode ? _activeIconColor : null)),
+            icon: Icon(isTableViewMode ? Icons.grid_view_sharp : Icons.list)),
         if (_showMoreAction) _MoreActionButton(),
       ],
     );
@@ -69,7 +67,7 @@ class BaseHeader extends StatelessWidget with PreferredSizeWidget, _HeaderSpec {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
-      iconTheme: IconThemeData(color: _idleIconColor),
+      iconTheme: IconThemeData(color: _iconColor),
       title: _headerTitle,
       centerTitle: true,
       actions: [
