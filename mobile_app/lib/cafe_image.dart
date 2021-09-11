@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/image.dart';
 import 'package:mobile_app/type.dart';
 import 'package:mobile_app/util/environment.dart';
+import 'package:mobile_app/widgets/delayed_widget.dart';
 
 class CafeImage extends StatelessWidget {
   final CafeImageModel image;
@@ -23,10 +24,11 @@ class CafeImage extends StatelessWidget {
         imageUrl: '$path$group$uri$query',
         fit: BoxFit.cover,
         progressIndicatorBuilder: (context, url, downloadProgress) => Center(
-            child: _CafeImageProgressIndicator(
+            child: DelayedWidget(
                 key: ValueKey(image.id),
-                contentSize: size,
-                progress: downloadProgress.progress ?? 0.0)),
+                child: _CafeImageProgressIndicator(
+                    contentSize: size,
+                    progress: downloadProgress.progress ?? 0.0))),
         errorWidget: (context, error, stackTrace) {
           return Center(child: Text('no image'));
         },
@@ -41,8 +43,7 @@ class _CafeImageProgressIndicator extends StatelessWidget {
   final double contentSize;
   final double progress;
   _CafeImageProgressIndicator(
-      {required Key key, required this.contentSize, required this.progress})
-      : super(key: key);
+      {required this.contentSize, required this.progress});
 
   double get _displayedProgress => progress.clamp(0.1, 1.0);
   double get _desiredSize => contentSize * 0.25;
