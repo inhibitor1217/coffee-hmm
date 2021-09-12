@@ -1,36 +1,50 @@
 import 'package:flutter/material.dart';
 
+@immutable
+class _ImageProgressIndicatorDimension {
+  final double contentSize;
+  _ImageProgressIndicatorDimension({required this.contentSize});
+
+  double get desiredSize => contentSize * 0.25;
+  double get iconSize => _roundToMultipleOfFour(desiredSize * 0.825);
+  double get gapSize => _roundToMultipleOfFour(desiredSize * 0.05);
+  double get progressBarWidth => _roundToMultipleOfFour(desiredSize);
+  double get progressBarHeight =>
+      _roundToMultipleOfFour(desiredSize * 0.125).clamp(4.0, double.infinity);
+
+  double _roundToMultipleOfFour(double value) {
+    return (value * 0.25).roundToDouble() * 4.0;
+  }
+}
+
 class ImageProgressIndicator extends StatelessWidget {
   static const _color = Colors.black12;
 
   final double contentSize;
   final double progress;
-  ImageProgressIndicator({required this.contentSize, required this.progress});
+
+  final _ImageProgressIndicatorDimension _dimension;
+
+  ImageProgressIndicator({required this.contentSize, required this.progress})
+      : _dimension = _ImageProgressIndicatorDimension(contentSize: contentSize);
 
   double get _displayedProgress => progress.clamp(0.1, 1.0);
-  double get _desiredSize => contentSize * 0.25;
 
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Icon(Icons.image,
-          color: _color, size: _roundToMultipleOfFour(_desiredSize * 0.75)),
-      SizedBox(height: _roundToMultipleOfFour(_desiredSize * 0.05)),
+      Icon(Icons.image, color: _color, size: _dimension.iconSize),
+      SizedBox(height: _dimension.gapSize),
       _progressBar(context)
     ]);
   }
 
   final _progressBarBorderRadius = BorderRadius.circular(4.0);
 
-  double get _progressBarWidth => _roundToMultipleOfFour(_desiredSize);
-  double get _progressBarHeight =>
-      _roundToMultipleOfFour(_progressBarWidth * 0.125)
-          .clamp(4.0, double.infinity);
-
   Widget _progressBar(BuildContext context) {
     return Container(
-        width: _progressBarWidth,
-        height: _progressBarHeight,
+        width: _dimension.progressBarWidth,
+        height: _dimension.progressBarHeight,
         padding: const EdgeInsets.all(2.0),
         decoration: BoxDecoration(
             color: _color, borderRadius: _progressBarBorderRadius),
@@ -51,9 +65,5 @@ class ImageProgressIndicator extends StatelessWidget {
         duration: const Duration(milliseconds: 150),
         curve: Curves.ease,
         constraints: BoxConstraints(maxWidth: maxSize * _displayedProgress));
-  }
-
-  double _roundToMultipleOfFour(double value) {
-    return (value * 0.25).roundToDouble() * 4.0;
   }
 }
