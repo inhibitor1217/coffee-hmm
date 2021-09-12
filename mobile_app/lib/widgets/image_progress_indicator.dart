@@ -5,7 +5,7 @@ class _ImageProgressIndicatorDimension {
   final double contentSize;
   _ImageProgressIndicatorDimension({required this.contentSize});
 
-  double get desiredSize => contentSize * 0.25;
+  double get desiredSize => (contentSize * 0.25).clamp(0, 64.0);
   double get iconSize => _roundToMultipleOfFour(desiredSize * 0.825);
   double get gapSize => _roundToMultipleOfFour(desiredSize * 0.05);
   double get progressBarWidth => _roundToMultipleOfFour(desiredSize);
