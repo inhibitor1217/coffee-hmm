@@ -154,6 +154,7 @@ class RepresentativeCafe extends StatelessWidget {
       children: [
         Card(
             clipBehavior: Clip.antiAlias,
+            elevation: 0,
             margin: EdgeInsets.only(right: 3),
             child: Container(
               width: 100,
