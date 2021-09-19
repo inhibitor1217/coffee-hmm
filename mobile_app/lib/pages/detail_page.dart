@@ -7,41 +7,18 @@ import 'package:mobile_app/constants/util.dart';
 import 'package:mobile_app/detail_button.dart';
 import 'package:mobile_app/header.dart';
 
-class CafeDetailScreen extends StatelessWidget {
+class CafeDetailScreen extends StatefulWidget {
   final String cafeId;
 
-  CafeDetailScreen({
-    required this.cafeId,
-  });
+  CafeDetailScreen({required this.cafeId});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: BaseHeader(),
-      body: SafeArea(
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [Expanded(child: DetailBody(cafeId: cafeId))])),
-    );
-  }
+  _CafeDetailScreenState createState() => _CafeDetailScreenState();
 }
 
-class DetailBody extends StatefulWidget {
-  final String cafeId;
-
-  DetailBody({
-    required this.cafeId,
-  });
-
-  @override
-  _DetailBodyState createState() => _DetailBodyState();
-}
-
-class _DetailBodyState extends State<DetailBody> {
+class _CafeDetailScreenState extends State<CafeDetailScreen> {
   late Future<SingleCafeResponse> _cafeResponse;
   late CafeModel _cafe;
-  final PageController _controller = PageController();
-  int? currentIndex;
 
   @override
   void initState() {
@@ -52,12 +29,6 @@ class _DetailBodyState extends State<DetailBody> {
       setState(() {
         _cafe = data.cafe;
       });
-    });
-  }
-
-  void handleImageSlide(int index) {
-    setState(() {
-      currentIndex = index % _cafe.image.count;
     });
   }
 
@@ -80,6 +51,59 @@ class _DetailBodyState extends State<DetailBody> {
   }
 
   Widget _buildContent(BuildContext context, {required CafeModel cafe}) {
+    return Scaffold(
+      appBar: BaseHeader(),
+      body: SafeArea(
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [Expanded(child: DetailBody(cafe: cafe))])),
+    );
+  }
+
+  Widget _buildError(BuildContext context) {
+    return Center(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Icon(Icons.error_rounded, color: Colors.black26, size: 48),
+      SizedBox(height: 8),
+      Text('카페를 찾을 수 없습니다.',
+          style: const TextStyle(color: Colors.black38, fontSize: 14)),
+      SizedBox(height: 16),
+      ElevatedButton(
+        child: Text('돌아가기'),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+    ]));
+  }
+}
+
+class DetailBody extends StatefulWidget {
+  final CafeModel cafe;
+
+  DetailBody({
+    required this.cafe,
+  });
+
+  @override
+  _DetailBodyState createState() => _DetailBodyState(cafe: cafe);
+}
+
+class _DetailBodyState extends State<DetailBody> {
+  final CafeModel cafe;
+  final PageController _controller = PageController();
+  int? currentIndex;
+
+  _DetailBodyState({required this.cafe});
+
+  void handleImageSlide(int index) {
+    setState(() {
+      currentIndex = index % cafe.image.count;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Stack(
       children: [
         ListView(
@@ -130,22 +154,5 @@ class _DetailBodyState extends State<DetailBody> {
           onPressed: () =>
               handleLinkShareClick('https://www.coffeehmm.com/cafe/$cafeId')),
     );
-  }
-
-  Widget _buildError(BuildContext context) {
-    return Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Icon(Icons.error_rounded, color: Colors.black26, size: 48),
-      SizedBox(height: 8),
-      Text('카페를 찾을 수 없습니다.',
-          style: const TextStyle(color: Colors.black38, fontSize: 14)),
-      SizedBox(height: 16),
-      ElevatedButton(
-        child: Text('돌아가기'),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
-    ]));
   }
 }
