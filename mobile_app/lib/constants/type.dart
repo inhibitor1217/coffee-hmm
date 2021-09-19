@@ -46,19 +46,20 @@ class CafeModel {
   final DateTime updatedAt;
   final String name;
   final PlaceModel place;
-  final CafeMetadataModel metadata;
   final CafeImageListModel image;
   final CafeState state;
+  final CafeMetadataModel? metadata;
 
-  CafeModel(
-      {required this.id,
-      required this.createdAt,
-      required this.updatedAt,
-      required this.name,
-      required this.place,
-      required this.metadata,
-      required this.image,
-      required this.state});
+  CafeModel({
+    required this.id,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.name,
+    required this.place,
+    required this.image,
+    required this.state,
+    this.metadata,
+  });
 
   factory CafeModel.fromJson(Map<String, dynamic> json) {
     return CafeModel(
@@ -109,9 +110,9 @@ class CafeImageModel {
   final String cafeId;
   final int index;
   final bool isMain;
-  final CafeImageMetadataModel metadata;
   final String relativeUri;
   final CafeImageState state;
+  final CafeImageMetadataModel? metadata;
 
   CafeImageModel(
       {required this.id,
@@ -120,9 +121,9 @@ class CafeImageModel {
       required this.cafeId,
       required this.index,
       required this.isMain,
-      required this.metadata,
       required this.relativeUri,
-      required this.state});
+      required this.state,
+      this.metadata});
 
   factory CafeImageModel.fromJson(Map<String, dynamic> json) {
     return CafeImageModel(
@@ -154,18 +155,90 @@ class CafeImageMetadataModel {
 @immutable
 class CafeMetadataModel {
   final String? creator;
-  final String hour;
-  final List<String> tag;
+  final String? hour;
+  final List<String>? tag;
+  final String? call;
+  final CafeMetaHoursModel? hours;
+  final CafeMetaLocationModel? location;
 
   CafeMetadataModel(
-      {required this.creator, required this.hour, required this.tag});
+      {this.creator = '',
+      this.hour = '',
+      this.tag = const [''],
+      this.call = '',
+      this.hours,
+      this.location});
 
-  factory CafeMetadataModel.fromJson(Map<String, dynamic> json) {
-    final listFromJson = json['tag'];
-    final List<String> list =
+  factory CafeMetadataModel.fromJson(Map<String, dynamic>? json) {
+    final listFromJson = json?['tag'];
+    final List<String> tag =
         List.unmodifiable(new List<String>.from(listFromJson));
     return CafeMetadataModel(
-        creator: json['creator'], hour: json['hour'], tag: list);
+        creator: json?['creator'],
+        hour: json?['hour'],
+        tag: tag,
+        call: json?['call'],
+        hours: CafeMetaHoursModel.fromJson(json?['hours']),
+        location: CafeMetaLocationModel.fromJson(json?['location']));
+  }
+}
+
+@immutable
+class CafeMetaLocationModel {
+  final String? address;
+  final CafeMetaSubwayModel? subway;
+  final String? lat;
+  final String? lng;
+
+  CafeMetaLocationModel({this.address, this.subway, this.lat, this.lng});
+
+  factory CafeMetaLocationModel.fromJson(Map<String, dynamic>? json) {
+    return CafeMetaLocationModel(
+        address: json?['address'],
+        lat: json?['lat'],
+        lng: json?['lng'],
+        subway: CafeMetaSubwayModel.fromJson(json?['subway']));
+  }
+}
+
+@immutable
+class CafeMetaSubwayModel {
+  final String? station;
+  final List<String>? line;
+  final String? exit;
+  final String? distance;
+
+  CafeMetaSubwayModel(
+      {this.station = '',
+      this.line = const [''],
+      this.exit = '',
+      this.distance = ''});
+
+  factory CafeMetaSubwayModel.fromJson(Map<String, dynamic>? json) {
+    final listFromJson = json?['line'];
+    List<String> list = [];
+    if (listFromJson != null) {
+      list = List.unmodifiable(new List<String>.from(listFromJson));
+    }
+
+    return CafeMetaSubwayModel(
+        station: json?['station'],
+        exit: json?['exit'],
+        distance: json?['distance'],
+        line: list);
+  }
+}
+
+@immutable
+class CafeMetaHoursModel {
+  final String? weekday;
+  final String? weekend;
+
+  CafeMetaHoursModel({this.weekday = '', this.weekend = ''});
+
+  factory CafeMetaHoursModel.fromJson(Map<String, dynamic>? json) {
+    return CafeMetaHoursModel(
+        weekday: json?['weekday'], weekend: json?['weekend']);
   }
 }
 

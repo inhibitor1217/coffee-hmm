@@ -38,7 +38,7 @@ class CafeInfo extends StatelessWidget {
             ),
             SizedBox(height: 4),
             Text(
-              '${cafe.place.name} OPEN ${cafe.metadata.hour}',
+              '${cafe.place.name} OPEN ${cafe.metadata!.hour}',
               style: TextStyle(fontSize: 14),
             ),
             SizedBox(
@@ -47,7 +47,7 @@ class CafeInfo extends StatelessWidget {
             Container(
               alignment: Alignment.centerRight,
               child: Text(
-                "${cafe.metadata.creator ?? 'jyuunnii'} 님이 올려주신 ${cafe.name}",
+                "${cafe.metadata!.creator ?? 'jyuunnii'} 님이 올려주신 ${cafe.name}",
                 style: TextStyle(
                   fontSize: 11,
                 ),
@@ -59,10 +59,10 @@ class CafeInfo extends StatelessWidget {
 }
 
 /* 디테일 페이지 */
-class CafeMinimumInfo extends StatelessWidget {
+class CafeDetailInfo extends StatelessWidget {
   final CafeModel cafe;
 
-  CafeMinimumInfo({required this.cafe});
+  CafeDetailInfo({required this.cafe});
 
   @override
   Widget build(BuildContext context) {
@@ -74,11 +74,11 @@ class CafeMinimumInfo extends StatelessWidget {
           children: [
             Text(
               cafe.name,
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 4),
             Text(
-              '${cafe.place.name} OPEN ${cafe.metadata.hour}',
+              '${cafe.place.name} OPEN ${cafe.metadata!.hour}',
               style: TextStyle(
                 fontSize: 14,
               ),

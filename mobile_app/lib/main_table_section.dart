@@ -118,7 +118,7 @@ class _MainTableCafeElementState extends State<MainTableCafeElement>
                     ),
                     Container(
                         margin: EdgeInsets.only(top: 4, bottom: 2),
-                        child: Text('OPEN ' + widget.cafe.metadata.hour,
+                        child: Text('OPEN ' + widget.cafe.metadata!.hour!,
                             style: TextStyle(
                               fontSize: 13,
                             )))
