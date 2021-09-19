@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/constants/type.dart';
+import 'package:mobile_app/constants/util.dart';
 import 'package:mobile_app/main_bottom_sheet.dart';
-import 'package:mobile_app/type.dart';
-import 'package:mobile_app/util.dart';
 
 class MainButtonSetOfSlider extends StatelessWidget {
   final List<CafeModel> hotCafeList;

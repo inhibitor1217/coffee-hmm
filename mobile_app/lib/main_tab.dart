@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/type.dart';
+import 'package:mobile_app/constants/type.dart';
 
 class PlaceTab extends StatelessWidget {
   final List<PlaceModel> placeList;

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/api.dart';
+import 'package:mobile_app/api/api.dart';
 import 'package:mobile_app/cafe.dart';
 import 'package:mobile_app/cafe_image_slider.dart';
+import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/detail_button.dart';
 import 'package:mobile_app/header.dart';
-import 'package:mobile_app/type.dart';
 
 class CafeDetailScreen extends StatelessWidget {
   final String cafeId;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/cafe_image.dart';
-import 'package:mobile_app/type.dart';
+import 'package:mobile_app/constants/type.dart';
 
 class CafeImageSlider extends StatefulWidget {
   final PageController pageController;
