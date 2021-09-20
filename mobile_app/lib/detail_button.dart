@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/type.dart';
-import 'package:mobile_app/util.dart';
+import 'package:mobile_app/constants/type.dart';
+import 'package:mobile_app/constants/util.dart';
 
 class DetailButtonSet extends StatelessWidget {
   final CafeModel cafe;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/api.dart';
+import 'package:mobile_app/api/api.dart';
 import 'package:mobile_app/cafe_image.dart';
+import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/router/mixins/enter_cafe_detail_mixin.dart';
-import 'package:mobile_app/type.dart';
 
 class MainBottomSheet extends StatefulWidget {
   final List<CafeModel> hotCafeList;

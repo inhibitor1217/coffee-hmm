@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mobile_app/api.dart';
+import 'package:mobile_app/api/api.dart';
 import 'package:mobile_app/cafe_image_slider.dart';
+import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/header.dart';
 import 'package:mobile_app/main_button.dart';
 import 'package:mobile_app/main_slider_section.dart';
 import 'package:mobile_app/main_tab.dart';
 import 'package:mobile_app/main_table_section.dart';
-import 'package:mobile_app/type.dart';
 
 class MainScreen extends StatefulWidget {
   @override

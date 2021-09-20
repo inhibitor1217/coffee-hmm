@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mobile_app/web_view.dart';
+import 'package:mobile_app/pages/web_view.dart';
 
 void handleLinkShareClick(String link) {
   Clipboard.setData(ClipboardData(text: link));
