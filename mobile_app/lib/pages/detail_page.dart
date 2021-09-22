@@ -105,6 +105,9 @@ class _DetailBodyState extends State<DetailBody> {
   @override
   Widget build(BuildContext context) {
     return Stack(
+    children:[ ListView(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
       children: [
         ListView(
           scrollDirection: Axis.vertical,
@@ -130,7 +133,7 @@ class _DetailBodyState extends State<DetailBody> {
           child: _buildFloatingShareButton(cafe.id),
         )
       ],
-    );
+    )]);
   }
 
   Widget _buildFloatingShareButton(String cafeId) {

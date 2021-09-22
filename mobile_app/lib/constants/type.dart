@@ -162,10 +162,10 @@ class CafeMetadataModel {
   final CafeMetaLocationModel? location;
 
   CafeMetadataModel(
-      {this.creator = '',
-      this.hour = '',
-      this.tag = const [''],
-      this.call = '',
+      {this.creator,
+      this.hour,
+      this.tag,
+      this.call,
       this.hours,
       this.location});
 
@@ -208,11 +208,7 @@ class CafeMetaSubwayModel {
   final String? exit;
   final String? distance;
 
-  CafeMetaSubwayModel(
-      {this.station = '',
-      this.line = const [''],
-      this.exit = '',
-      this.distance = ''});
+  CafeMetaSubwayModel({this.station, this.line, this.exit, this.distance});
 
   factory CafeMetaSubwayModel.fromJson(Map<String, dynamic>? json) {
     final listFromJson = json?['line'];
@@ -234,7 +230,7 @@ class CafeMetaHoursModel {
   final String? weekday;
   final String? weekend;
 
-  CafeMetaHoursModel({this.weekday = '', this.weekend = ''});
+  CafeMetaHoursModel({this.weekday, this.weekend});
 
   factory CafeMetaHoursModel.fromJson(Map<String, dynamic>? json) {
     return CafeMetaHoursModel(

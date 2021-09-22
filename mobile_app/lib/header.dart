@@ -6,9 +6,9 @@ import 'package:mobile_app/util/environment.dart';
 mixin _HeaderSpec on StatelessWidget {
   final _logoTitle = Text('coffee hmm',
       textAlign: TextAlign.center,
-      style: TextStyle(fontSize: 13, color: Colors.black87));
+      style: TextStyle(fontSize: 13, color: Colors.black));
 
-  final _iconColor = Colors.black38;
+  final _iconColor = Colors.black54;
 
   bool get _showMoreAction {
     return Environment.appStage == AppStage.development;
@@ -91,10 +91,20 @@ class DetailHeader extends StatelessWidget
     return AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: IconThemeData(color: _iconColor),
+        leading: IconButton(
+          color: _iconColor,
+          icon: Icon(
+            Icons.arrow_back_ios_rounded,
+            size: 18.0,
+          ),
+          onPressed: () => {Navigator.pop(context, true)},
+        ),
         title: Text(title,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 13, color: Colors.black87, fontWeight: FontWeight.bold)),
+            style: TextStyle(
+                fontSize: 13,
+                color: Colors.black87,
+                fontWeight: FontWeight.bold)),
         centerTitle: true);
   }
 }
