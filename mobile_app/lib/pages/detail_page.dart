@@ -4,7 +4,6 @@ import 'package:mobile_app/cafe.dart';
 import 'package:mobile_app/cafe_image_slider.dart';
 import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/constants/util.dart';
-import 'package:mobile_app/detail_button.dart';
 import 'package:mobile_app/header.dart';
 
 class CafeDetailScreen extends StatefulWidget {
@@ -120,7 +119,6 @@ class _DetailBodyState extends State<DetailBody> {
               currentIndex: currentIndex ?? 0,
             ),
             CafeDetailInfo(cafe: cafe),
-            DetailButtonSet(cafe: cafe),
             SizedBox(height: 50),
           ],
         ),
