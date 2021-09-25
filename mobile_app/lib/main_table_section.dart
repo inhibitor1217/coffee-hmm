@@ -119,10 +119,11 @@ class _MainTableCafeElementState extends State<MainTableCafeElement>
                     ),
                     Container(
                         margin: EdgeInsets.only(top: 4, bottom: 2),
-                        child: Text('OPEN ' + widget.cafe.metadata!.hour!,
-                            style: TextStyle(
-                              fontSize: 13,
-                            )))
+                        child:
+                            Text('OPEN ' + (widget.cafe.metadata?.hour ?? ''),
+                                style: TextStyle(
+                                  fontSize: 13,
+                                )))
                   ],
                 ),
                 /* 테이블 뷰 모드에서는 등록된 이미지가 3개 이상인 카페만 표시 */

@@ -15,10 +15,10 @@ class CafeMainInfo extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            buildCafeName(cafe.name),
+            CafeName(name: cafe.name),
             SizedBox(height: 4),
             Text(
-              '${cafe.place.name} OPEN ${cafe.metadata!.hour}',
+              '${cafe.place.name} OPEN ${cafe.metadata?.hour ?? ''}',
               style: TextStyle(fontSize: 14),
             ),
             SizedBox(
@@ -27,7 +27,7 @@ class CafeMainInfo extends StatelessWidget {
             Container(
               alignment: Alignment.centerRight,
               child: Text(
-                "${cafe.metadata!.creator ?? 'jyuunnii'} 님이 올려주신 ${cafe.name}",
+                "${cafe.metadata?.creator ?? 'jyuunnii'} 님이 올려주신 ${cafe.name}",
                 style: TextStyle(
                   fontSize: 11,
                 ),
@@ -51,7 +51,7 @@ class CafeDetailInfo extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            buildCafeName(cafe.name),
+            CafeName(name: cafe.name),
             SizedBox(height: 8),
             _buildCafeDetailInfo(context),
           ],
@@ -59,33 +59,25 @@ class CafeDetailInfo extends StatelessWidget {
   }
 
   Widget _buildCafeDetailInfo(BuildContext context) {
-    final hoursData = getCafeMetadataHours(cafe.metadata!.hours) ?? '';
-    final addressData =
-        getCafeMetadataPlainText(cafe.metadata!.location!.address) ?? '';
-    final lineData =
-        getCafeMetadataPlainText(cafe.metadata!.location!.subway!.line) ?? [];
-    final stationData =
-        getCafeMetadataPlainText(cafe.metadata!.location!.subway!.station) ??
-            '';
-    final callData = getCafeMetadataPlainText(cafe.metadata!.call) ?? '';
+    final data = getCafeDetailInfo(cafe);
 
     return Column(
       children: [
-        if (hasCafeMetadata(hoursData))
+        if (hasCafeMetadata(data.hour))
           CafeDetailInfoItem(
-            text: hoursData,
+            text: data.hour,
             icon: Icons.access_time_rounded,
           ),
-        if (hasCafeMetadata(addressData))
+        if (hasCafeMetadata(data.address))
           CafeDetailInfoItem(
-            text: addressData,
+            text: data.address,
             icon: Icons.place_rounded,
           ),
-        if (hasCafeMetadata(lineData) && hasCafeMetadata(stationData))
-          CafeDetailSubwayLineItem(station: stationData, line: lineData),
-        if (hasCafeMetadata(callData))
+        if (hasCafeMetadata(data.line) && hasCafeMetadata(data.station))
+          CafeDetailSubwayLineItem(station: data.station, line: data.line),
+        if (hasCafeMetadata(data.call))
           CafeDetailInfoItem(
-            text: callData,
+            text: data.call,
             icon: Icons.call,
           ),
         CafeDetailInfoItem(
@@ -106,9 +98,16 @@ class CafeDetailInfo extends StatelessWidget {
   }
 }
 
-Widget buildCafeName(String cafeName) {
-  return Text(
-    cafeName,
-    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-  );
+class CafeName extends StatelessWidget {
+  final String name;
+
+  CafeName({required this.name});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      name,
+      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+    );
+  }
 }

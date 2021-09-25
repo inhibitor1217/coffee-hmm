@@ -155,3 +155,15 @@ Color getSubwayColor(String line) {
       return Colors.black;
   }
 }
+
+CafeDetailInfoModel getCafeDetailInfo(CafeModel cafe) {
+  return CafeDetailInfoModel(
+      hour: getCafeMetadataHours(cafe.metadata?.hours) ?? '',
+      address: getCafeMetadataPlainText(cafe.metadata?.location?.address) ?? '',
+      line:
+          getCafeMetadataPlainText(cafe.metadata?.location?.subway?.line) ?? [],
+      station:
+          getCafeMetadataPlainText(cafe.metadata?.location?.subway?.station) ??
+              '',
+      call: getCafeMetadataPlainText(cafe.metadata?.call) ?? '');
+}

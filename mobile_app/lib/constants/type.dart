@@ -296,3 +296,33 @@ class PlaceModel {
     );
   }
 }
+
+@immutable
+class CafeDetailInfoModel {
+  final String hour;
+  final String address;
+  final List<String> line;
+  final String station;
+  final String call;
+
+  CafeDetailInfoModel({
+    required this.hour,
+    required this.address,
+    required this.line,
+    required this.station,
+    required this.call,
+  });
+
+  factory CafeDetailInfoModel.fromJson(Map<String, dynamic> json) {
+    final listFromJson = json['line'] as List;
+    final List<String> line = List.unmodifiable(listFromJson
+        .map((element) => CafeDetailInfoModel.fromJson(element))
+        .toList());
+    return CafeDetailInfoModel(
+        hour: json['hour'],
+        address: json['address'],
+        line: line,
+        station: json['station'],
+        call: json['call']);
+  }
+}
