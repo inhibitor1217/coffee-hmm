@@ -53,22 +53,24 @@ class MainTableCafeList extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-    return ListView.builder(
-        controller: scrollController,
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: cafeList.length,
-        itemBuilder: (context, index) {
-          return Column(children: [
-            MainTableCafeElement(cafe: cafeList[index]),
-            if (index < cafeList.length - 1)
-              Container(
-                height: 8,
-                decoration:
-                    BoxDecoration(color: Color.fromRGBO(242, 242, 242, 1)),
-              )
-          ]);
-        });
+    return ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+        child: ListView.builder(
+            controller: scrollController,
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: cafeList.length,
+            itemBuilder: (context, index) {
+              return Column(children: [
+                MainTableCafeElement(cafe: cafeList[index]),
+                if (index < cafeList.length - 1)
+                  Container(
+                    height: 8,
+                    decoration:
+                        BoxDecoration(color: Color.fromRGBO(242, 242, 242, 1)),
+                  )
+              ]);
+            }));
   }
 }
 

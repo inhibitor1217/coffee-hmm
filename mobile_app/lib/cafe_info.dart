@@ -16,7 +16,11 @@ class CafeDetailInfoItem extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 8),
       child: Row(
         children: [
-          Icon(icon, size: 14.0),
+          Icon(
+            icon,
+            size: 14.0,
+            color: Colors.black45,
+          ),
           SizedBox(width: 6),
           TextInfo(text: text, onPressed: onPressed),
           if (subIcon != null)
@@ -63,7 +67,7 @@ class CafeDetailSubwayLineItem extends StatelessWidget {
                 line[index],
                 style: TextStyle(fontSize: 8, color: Colors.white),
               )),
-            padding: EdgeInsets.symmetric(horizontal: 4),
+              padding: EdgeInsets.symmetric(horizontal: 4),
               margin: EdgeInsets.only(right: index == line.length - 1 ? 0 : 2),
               decoration: BoxDecoration(
                   color: getSubwayColor(line[index]),

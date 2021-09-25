@@ -51,7 +51,7 @@ class _CafeDetailScreenState extends State<CafeDetailScreen> {
 
   Widget _buildContent(BuildContext context, {required CafeModel cafe}) {
     return Scaffold(
-      appBar: BaseHeader(),
+      appBar: DetailHeader(title: cafe.name),
       body: SafeArea(
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -105,22 +105,25 @@ class _DetailBodyState extends State<DetailBody> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        ListView(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          children: [
-            CafeImageSlider(
-              pageController: _controller,
-              imageList: cafe.image.list,
-              onSlide: handleImageSlide,
-            ),
-            ImageIndexBullet(
-              totalCount: cafe.image.count,
-              currentIndex: currentIndex ?? 0,
-            ),
-            CafeDetailInfo(cafe: cafe),
-            SizedBox(height: 50),
-          ],
+        ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            children: [
+              CafeImageSlider(
+                pageController: _controller,
+                imageList: cafe.image.list,
+                onSlide: handleImageSlide,
+              ),
+              ImageIndexBullet(
+                totalCount: cafe.image.count,
+                currentIndex: currentIndex ?? 0,
+              ),
+              CafeDetailInfo(cafe: cafe),
+              SizedBox(height: 60),
+            ],
+          ),
         ),
         Positioned(
           bottom: 0,
@@ -138,6 +141,7 @@ class _DetailBodyState extends State<DetailBody> {
       width: MediaQuery.of(context).size.width,
       height: 50,
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      margin: EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(color: _backgroundColor),
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(

@@ -4,11 +4,11 @@ import 'package:mobile_app/util/app_stage.dart';
 import 'package:mobile_app/util/environment.dart';
 
 mixin _HeaderSpec on StatelessWidget {
-  final _logoTitle = Text('coffee hmm',
+  final _logo = Text('coffee hmm',
       textAlign: TextAlign.center,
-      style: TextStyle(fontSize: 13, color: Colors.black));
-
-  final _iconColor = Colors.black54;
+      style: TextStyle(fontSize: 13, color: Colors.black87));
+  final _iconColor = Colors.black45;
+  final _titleColor = Colors.black87;
 
   bool get _showMoreAction {
     return Environment.appStage == AppStage.development;
@@ -46,7 +46,7 @@ class MainHeader extends StatelessWidget with PreferredSizeWidget, _HeaderSpec {
       backgroundColor: isTableViewMode ? Colors.white : Colors.transparent,
       elevation: 0,
       iconTheme: IconThemeData(color: _iconColor),
-      title: _logoTitle,
+      title: _logo,
       centerTitle: true,
       actions: [
         IconButton(
@@ -68,7 +68,7 @@ class BaseHeader extends StatelessWidget with PreferredSizeWidget, _HeaderSpec {
       backgroundColor: Colors.transparent,
       elevation: 0,
       iconTheme: IconThemeData(color: _iconColor),
-      title: _logoTitle,
+      title: _logo,
       centerTitle: true,
       actions: [
         if (_showMoreAction) _MoreActionButton(),
@@ -94,17 +94,15 @@ class DetailHeader extends StatelessWidget
         leading: IconButton(
           color: _iconColor,
           icon: Icon(
-            Icons.arrow_back_ios_rounded,
-            size: 18.0,
+            Icons.arrow_back_rounded,
+            size: 20.0,
           ),
           onPressed: () => {Navigator.pop(context, true)},
         ),
         title: Text(title,
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: 13,
-                color: Colors.black87,
-                fontWeight: FontWeight.bold)),
+                fontSize: 13, color: _titleColor, fontWeight: FontWeight.bold)),
         centerTitle: true);
   }
 }
