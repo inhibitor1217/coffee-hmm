@@ -3,6 +3,7 @@ import 'package:mobile_app/api/api.dart';
 import 'package:mobile_app/cafe.dart';
 import 'package:mobile_app/cafe_image_slider.dart';
 import 'package:mobile_app/constants/type.dart';
+import 'package:mobile_app/constants/util.dart';
 import 'package:mobile_app/detail_button.dart';
 import 'package:mobile_app/header.dart';
 
@@ -15,7 +16,13 @@ class CafeDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: BaseHeader(), body: DetailBody(cafeId: cafeId));
+    return Scaffold(
+      appBar: BaseHeader(),
+      body: SafeArea(
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [Expanded(child: DetailBody(cafeId: cafeId))])),
+    );
   }
 }
 
@@ -73,20 +80,55 @@ class _DetailBodyState extends State<DetailBody> {
   }
 
   Widget _buildContent(BuildContext context, {required CafeModel cafe}) {
-    return Column(
+    return Stack(
       children: [
-        CafeImageSlider(
-          pageController: _controller,
-          imageList: cafe.image.list,
-          onSlide: handleImageSlide,
+        ListView(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          children: [
+            CafeImageSlider(
+              pageController: _controller,
+              imageList: cafe.image.list,
+              onSlide: handleImageSlide,
+            ),
+            ImageIndexBullet(
+              totalCount: cafe.image.count,
+              currentIndex: currentIndex ?? 0,
+            ),
+            CafeMinimumInfo(cafe: cafe),
+            DetailButtonSet(cafe: cafe),
+            SizedBox(height: 50),
+          ],
         ),
-        ImageIndexBullet(
-          totalCount: cafe.image.count,
-          currentIndex: currentIndex ?? 0,
-        ),
-        CafeMinimumInfo(cafe: cafe),
-        DetailButtonSet(cafe: cafe),
+        Positioned(
+          bottom: 0,
+          left: 0,
+          child: _buildFloatingShareButton(cafe.id),
+        )
       ],
+    );
+  }
+
+  Widget _buildFloatingShareButton(String cafeId) {
+    const _highlightedColor = Color.fromRGBO(242, 196, 109, 1);
+    const _backgroundColor = Color.fromRGBO(255, 255, 255, 0.9);
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 50,
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      decoration: BoxDecoration(color: _backgroundColor),
+      child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: _highlightedColor,
+            onPrimary: Colors.white,
+            shadowColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+          child: Text('카페 공유하기'),
+          onPressed: () =>
+              handleLinkShareClick('https://www.coffeehmm.com/cafe/$cafeId')),
     );
   }
 
