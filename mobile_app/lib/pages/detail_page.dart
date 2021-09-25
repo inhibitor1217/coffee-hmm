@@ -105,9 +105,6 @@ class _DetailBodyState extends State<DetailBody> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-    children:[ ListView(
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
       children: [
         ListView(
           scrollDirection: Axis.vertical,
@@ -122,7 +119,7 @@ class _DetailBodyState extends State<DetailBody> {
               totalCount: cafe.image.count,
               currentIndex: currentIndex ?? 0,
             ),
-               CafeDetailInfo(cafe: cafe),
+            CafeDetailInfo(cafe: cafe),
             DetailButtonSet(cafe: cafe),
             SizedBox(height: 50),
           ],
@@ -133,7 +130,7 @@ class _DetailBodyState extends State<DetailBody> {
           child: _buildFloatingShareButton(cafe.id),
         )
       ],
-    )]);
+    );
   }
 
   Widget _buildFloatingShareButton(String cafeId) {
