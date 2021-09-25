@@ -30,7 +30,6 @@ class _MainTableState extends State<MainTable> {
       ..removeWhere((cafe) => cafe.image.count < 3);
 
     return Container(
-        margin: EdgeInsets.only(bottom: 48),
         child: FutureBuilder<CafeListResponse>(
             future: widget.cafeListResponses[widget.currentPlace.id],
             builder: (context, snapshot) {
