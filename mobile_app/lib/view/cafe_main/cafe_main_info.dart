@@ -23,7 +23,6 @@ class CafeMainInfo extends StatelessWidget {
             if (hasCafeMetadata(data.hour))
               CafeInfoItem(
                 text: data.hour,
-                fontSize: 13,
                 icon: Icons.access_time_rounded,
                 margin: EdgeInsets.only(bottom: 4),
               ),

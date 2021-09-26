@@ -22,7 +22,7 @@ class CafeInfoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _iconSize = (fontSize ?? 12) + 2;
+    final _iconSize = (fontSize ?? 13) + 2;
     return Container(
         margin: margin,
         child: Row(

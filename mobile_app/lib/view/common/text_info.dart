@@ -13,7 +13,7 @@ class TextInfo extends StatelessWidget {
       child: Text(text,
           style: TextStyle(
             color: Colors.black,
-            fontSize: fontSize ?? 12,
+            fontSize: fontSize ?? 13,
             height: 1.2,
           )),
       onTap: onPressed,

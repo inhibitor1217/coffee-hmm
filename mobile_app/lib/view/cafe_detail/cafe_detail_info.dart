@@ -36,13 +36,13 @@ class CafeDetailInfo extends StatelessWidget {
           CafeInfoItem(
             text: data.hour,
             icon: Icons.access_time_rounded,
-            margin: EdgeInsets.only(bottom: 8),
+            margin: EdgeInsets.only(bottom: 12),
           ),
         if (hasCafeMetadata(data.address))
           CafeInfoItem(
             text: data.address,
             icon: Icons.place_rounded,
-            margin: EdgeInsets.only(bottom: 8),
+            margin: EdgeInsets.only(bottom: 12),
           ),
         if (hasCafeMetadata(data.line) && hasCafeMetadata(data.station))
           CafeDetailSubwayLineItem(station: data.station, line: data.line),
@@ -50,7 +50,7 @@ class CafeDetailInfo extends StatelessWidget {
           CafeInfoItem(
             text: data.call,
             icon: Icons.call,
-            margin: EdgeInsets.only(bottom: 8),
+            margin: EdgeInsets.only(bottom: 12),
           ),
         CafeInfoItem(
           text: '네이버 통합검색 바로가기',
@@ -58,7 +58,7 @@ class CafeDetailInfo extends StatelessWidget {
           subIcon: Icons.launch_rounded,
           onPressed: () =>
               handleNaverClick(cafe.name + ' ' + cafe.place.name, context),
-          margin: EdgeInsets.only(bottom: 8),
+          margin: EdgeInsets.only(bottom: 12),
         ),
         CafeInfoItem(
           text: '인스타그램 태그검색 바로가기',
