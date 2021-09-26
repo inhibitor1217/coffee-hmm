@@ -5,6 +5,7 @@ import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/util/common.dart';
 import 'package:mobile_app/view/cafe_detail/cafe_detail_info.dart';
 import 'package:mobile_app/view/common/cafe_image_slider.dart';
+import 'package:mobile_app/view/common/floating_button.dart';
 import 'package:mobile_app/view/common/header.dart';
 import 'package:mobile_app/view/common/image_index_bullet.dart';
 
@@ -130,31 +131,13 @@ class _DetailBodyState extends State<DetailBody> {
         Positioned(
           bottom: 0,
           left: 0,
-          child: _buildFloatingShareButton(cafe.id),
+          child: FloatingButton(
+            title: '카페 공유하기',
+            onPressed: () => handleLinkShareClick(
+                'https://www.coffeehmm.com/cafe/${cafe.id}'),
+          ),
         )
       ],
-    );
-  }
-
-  Widget _buildFloatingShareButton(String cafeId) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 50,
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      margin: EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(color: Palette.whiteTransparentBG),
-      child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Palette.highlightedColor,
-            onPrimary: Colors.white,
-            shadowColor: Colors.transparent,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4),
-            ),
-          ),
-          child: Text('카페 공유하기'),
-          onPressed: () =>
-              handleLinkShareClick('https://www.coffeehmm.com/cafe/$cafeId')),
     );
   }
 }
