@@ -19,15 +19,42 @@ class CafeDetailScreen extends StatefulWidget {
 }
 
 class _CafeDetailScreenState extends State<CafeDetailScreen> {
-  late Future<SingleCafeResponse> _cafeResponse;
-  late CafeModel _cafe;
+  late Future<SingleCafeResponse>? _cafeResponse;
+
+  @override
+  void initState() {
+    super.initState();
+    _cafeResponse = fetchCafe(widget.cafeId);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: DetailHeader(cafeResponse: _cafeResponse),
+      body: DetailBody(
+        cafeResponse: _cafeResponse,
+      ),
+    );
+  }
+}
+
+class DetailBody extends StatefulWidget {
+  late final Future<SingleCafeResponse>? cafeResponse;
+
+  DetailBody({required this.cafeResponse});
+
+  @override
+  _DetailBodyState createState() => _DetailBodyState();
+}
+
+class _DetailBodyState extends State<DetailBody> {
+  CafeModel? _cafe;
 
   @override
   void initState() {
     super.initState();
 
-    _cafeResponse = fetchCafe(widget.cafeId);
-    _cafeResponse.then((data) {
+    widget.cafeResponse?.then((data) {
       setState(() {
         _cafe = data.cafe;
       });
@@ -36,40 +63,23 @@ class _CafeDetailScreenState extends State<CafeDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(48),
-          child: FutureBuilder(
-              future: _cafeResponse,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return DetailHeader(title: _cafe.name);
-                }
-                if (snapshot.hasError) {
-                  return _buildError(context);
-                }
-                return BaseHeader();
-              })),
-      body: FutureBuilder(
-          future: _cafeResponse,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return _buildBody(context, cafe: _cafe);
-            }
-            if (snapshot.hasError) {
-              return _buildError(context);
-            }
-            return Center(
-                child: CircularProgressIndicator(color: Palette.lightGray));
-          }),
-    );
-  }
-
-  Widget _buildBody(BuildContext context, {required CafeModel cafe}) {
-    return SafeArea(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [Expanded(child: DetailBody(cafe: cafe))]));
+    return FutureBuilder(
+        future: widget.cafeResponse,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return SafeArea(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                  Expanded(child: DetailBodyContent(cafe: _cafe!))
+                ]));
+          }
+          if (snapshot.hasError) {
+            return _buildError(context);
+          }
+          return Center(
+              child: CircularProgressIndicator(color: Palette.lightGray));
+        });
   }
 
   Widget _buildError(BuildContext context) {
@@ -90,23 +100,23 @@ class _CafeDetailScreenState extends State<CafeDetailScreen> {
   }
 }
 
-class DetailBody extends StatefulWidget {
+class DetailBodyContent extends StatefulWidget {
   final CafeModel cafe;
 
-  DetailBody({
+  DetailBodyContent({
     required this.cafe,
   });
 
   @override
-  _DetailBodyState createState() => _DetailBodyState(cafe: cafe);
+  _DetailBodyContentState createState() => _DetailBodyContentState(cafe: cafe);
 }
 
-class _DetailBodyState extends State<DetailBody> {
+class _DetailBodyContentState extends State<DetailBodyContent> {
   final CafeModel cafe;
   final PageController _controller = PageController();
   int? currentIndex;
 
-  _DetailBodyState({required this.cafe});
+  _DetailBodyContentState({required this.cafe});
 
   void handleImageSlide(int index) {
     setState(() {
