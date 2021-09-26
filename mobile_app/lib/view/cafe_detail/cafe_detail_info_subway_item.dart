@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/constants/color.dart';
 import 'package:mobile_app/view/common/text_info.dart';
 
 class CafeDetailSubwayLineItem extends StatelessWidget {
@@ -10,12 +11,17 @@ class CafeDetailSubwayLineItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 8),
+      margin: EdgeInsets.only(bottom: 12),
       child: Row(
         children: [
+          Icon(Icons.directions_subway, size: 15, color: Palette.gray),
+          SizedBox(width: 6),
           _buildSubwayTag(line, context),
           SizedBox(width: 6),
-          TextInfo(text: '$station역'),
+          TextInfo(
+            text: '$station역',
+            fontSize: 13,
+          ),
         ],
       ),
     );
@@ -23,7 +29,8 @@ class CafeDetailSubwayLineItem extends StatelessWidget {
 
   Widget _buildSubwayTag(List<String> line, BuildContext context) {
     return Container(
-        height: 14,
+        height: 15,
+        margin: EdgeInsets.only(bottom: 1),
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
@@ -35,6 +42,7 @@ class CafeDetailSubwayLineItem extends StatelessWidget {
                 line[index],
                 style: TextStyle(fontSize: 8, color: Colors.white),
               )),
+              constraints: BoxConstraints(minHeight: 15, minWidth: 15),
               padding: EdgeInsets.symmetric(horizontal: 4),
               margin: EdgeInsets.only(right: index == line.length - 1 ? 0 : 2),
               decoration: BoxDecoration(
