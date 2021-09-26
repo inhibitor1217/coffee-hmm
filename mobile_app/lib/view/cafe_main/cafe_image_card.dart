@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/constants/color.dart';
 import 'package:mobile_app/constants/type.dart';
-
-import '../common/cafe_image.dart';
+import 'package:mobile_app/view/common/cafe_image.dart';
 
 class CafeImageCard extends StatelessWidget {
   final CafeModel cafe;
