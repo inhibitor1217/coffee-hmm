@@ -1,29 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/cafe_image.dart';
+import 'package:mobile_app/cafe_info.dart';
 import 'package:mobile_app/constants/type.dart';
+import 'package:mobile_app/constants/util.dart';
 
-class Cafe extends StatelessWidget {
+class CafeMainInfo extends StatelessWidget {
   final CafeModel cafe;
 
-  Cafe({required this.cafe});
-
-  @override
-  Widget build(BuildContext context) {
-    double size = MediaQuery.of(context).size.width;
-    return Column(
-      children: <Widget>[
-        CafeInfo(cafe: cafe),
-        CafeImage(image: cafe.image.mainImage, size: size),
-      ],
-    );
-  }
-}
-
-/* 메인 페이지 */
-class CafeInfo extends StatelessWidget {
-  final CafeModel cafe;
-
-  CafeInfo({required this.cafe});
+  CafeMainInfo({required this.cafe});
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +15,10 @@ class CafeInfo extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              cafe.name,
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            ),
+            CafeName(name: cafe.name),
             SizedBox(height: 4),
             Text(
-              '${cafe.place.name} OPEN ${cafe.metadata.hour}',
+              '${cafe.place.name} OPEN ${cafe.metadata?.hour ?? ''}',
               style: TextStyle(fontSize: 14),
             ),
             SizedBox(
@@ -47,7 +27,7 @@ class CafeInfo extends StatelessWidget {
             Container(
               alignment: Alignment.centerRight,
               child: Text(
-                "${cafe.metadata.creator ?? 'jyuunnii'} 님이 올려주신 ${cafe.name}",
+                "${cafe.metadata?.creator ?? 'jyuunnii'} 님이 올려주신 ${cafe.name}",
                 style: TextStyle(
                   fontSize: 11,
                 ),
@@ -58,11 +38,10 @@ class CafeInfo extends StatelessWidget {
   }
 }
 
-/* 디테일 페이지 */
-class CafeMinimumInfo extends StatelessWidget {
+class CafeDetailInfo extends StatelessWidget {
   final CafeModel cafe;
 
-  CafeMinimumInfo({required this.cafe});
+  CafeDetailInfo({required this.cafe});
 
   @override
   Widget build(BuildContext context) {
@@ -72,18 +51,63 @@ class CafeMinimumInfo extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              cafe.name,
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 4),
-            Text(
-              '${cafe.place.name} OPEN ${cafe.metadata.hour}',
-              style: TextStyle(
-                fontSize: 14,
-              ),
-            ),
+            CafeName(name: cafe.name),
+            SizedBox(height: 8),
+            _buildCafeDetailInfo(context),
           ],
         ));
+  }
+
+  Widget _buildCafeDetailInfo(BuildContext context) {
+    final data = getCafeDetailInfo(cafe);
+
+    return Column(
+      children: [
+        if (hasCafeMetadata(data.hour))
+          CafeDetailInfoItem(
+            text: data.hour,
+            icon: Icons.access_time_rounded,
+          ),
+        if (hasCafeMetadata(data.address))
+          CafeDetailInfoItem(
+            text: data.address,
+            icon: Icons.place_rounded,
+          ),
+        if (hasCafeMetadata(data.line) && hasCafeMetadata(data.station))
+          CafeDetailSubwayLineItem(station: data.station, line: data.line),
+        if (hasCafeMetadata(data.call))
+          CafeDetailInfoItem(
+            text: data.call,
+            icon: Icons.call,
+          ),
+        CafeDetailInfoItem(
+          text: '네이버 통합검색 바로가기',
+          icon: Icons.search_rounded,
+          subIcon: Icons.launch_rounded,
+          onPressed: () =>
+              handleNaverClick(cafe.name + ' ' + cafe.place.name, context),
+        ),
+        CafeDetailInfoItem(
+          text: '인스타그램 태그검색 바로가기',
+          icon: Icons.search_rounded,
+          subIcon: Icons.launch_rounded,
+          onPressed: () => handleInstagramClick(cafe.name, context),
+        )
+      ],
+    );
+  }
+}
+
+class CafeName extends StatelessWidget {
+  final String name;
+
+  CafeName({required this.name});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      name,
+      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+    );
   }
 }

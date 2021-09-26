@@ -30,7 +30,6 @@ class _MainTableState extends State<MainTable> {
       ..removeWhere((cafe) => cafe.image.count < 3);
 
     return Container(
-        margin: EdgeInsets.only(bottom: 48),
         child: FutureBuilder<CafeListResponse>(
             future: widget.cafeListResponses[widget.currentPlace.id],
             builder: (context, snapshot) {
@@ -54,22 +53,24 @@ class MainTableCafeList extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-    return ListView.builder(
-        controller: scrollController,
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: cafeList.length,
-        itemBuilder: (context, index) {
-          return Column(children: [
-            MainTableCafeElement(cafe: cafeList[index]),
-            if (index < cafeList.length - 1)
-              Container(
-                height: 8,
-                decoration:
-                    BoxDecoration(color: Color.fromRGBO(242, 242, 242, 1)),
-              )
-          ]);
-        });
+    return ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+        child: ListView.builder(
+            controller: scrollController,
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: cafeList.length,
+            itemBuilder: (context, index) {
+              return Column(children: [
+                MainTableCafeElement(cafe: cafeList[index]),
+                if (index < cafeList.length - 1)
+                  Container(
+                    height: 8,
+                    decoration:
+                        BoxDecoration(color: Color.fromRGBO(242, 242, 242, 1)),
+                  )
+              ]);
+            }));
   }
 }
 
@@ -118,10 +119,11 @@ class _MainTableCafeElementState extends State<MainTableCafeElement>
                     ),
                     Container(
                         margin: EdgeInsets.only(top: 4, bottom: 2),
-                        child: Text('OPEN ' + widget.cafe.metadata.hour,
-                            style: TextStyle(
-                              fontSize: 13,
-                            )))
+                        child:
+                            Text('OPEN ' + (widget.cafe.metadata?.hour ?? ''),
+                                style: TextStyle(
+                                  fontSize: 13,
+                                )))
                   ],
                 ),
                 /* 테이블 뷰 모드에서는 등록된 이미지가 3개 이상인 카페만 표시 */

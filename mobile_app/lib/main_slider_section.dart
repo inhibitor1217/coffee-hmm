@@ -36,7 +36,7 @@ class _MainSliderState extends State<MainSlider> with EnterCafeDetailMixin {
             return GestureDetector(
               child: Column(
                 children: [
-                  CafeInfo(cafe: widget.currentCafe),
+                  CafeMainInfo(cafe: widget.currentCafe),
                   CafeImageSlider(
                     pageController: widget.pageController,
                     imageList: widget.cafeList
