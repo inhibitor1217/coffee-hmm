@@ -36,30 +36,40 @@ class _CafeDetailScreenState extends State<CafeDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: _cafeResponse,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return _buildContent(context, cafe: _cafe);
-          }
-
-          if (snapshot.hasError) {
-            return _buildError(context);
-          }
-
-          return Center(
-              child: CircularProgressIndicator(color: Palette.lightGray));
-        });
+    return Scaffold(
+      appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(48),
+          child: FutureBuilder(
+              future: _cafeResponse,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return DetailHeader(title: _cafe.name);
+                }
+                if (snapshot.hasError) {
+                  return _buildError(context);
+                }
+                return BaseHeader();
+              })),
+      body: FutureBuilder(
+          future: _cafeResponse,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return _buildBody(context, cafe: _cafe);
+            }
+            if (snapshot.hasError) {
+              return _buildError(context);
+            }
+            return Center(
+                child: CircularProgressIndicator(color: Palette.lightGray));
+          }),
+    );
   }
 
-  Widget _buildContent(BuildContext context, {required CafeModel cafe}) {
-    return Scaffold(
-      appBar: DetailHeader(title: cafe.name),
-      body: SafeArea(
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [Expanded(child: DetailBody(cafe: cafe))])),
-    );
+  Widget _buildBody(BuildContext context, {required CafeModel cafe}) {
+    return SafeArea(
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [Expanded(child: DetailBody(cafe: cafe))]));
   }
 
   Widget _buildError(BuildContext context) {
