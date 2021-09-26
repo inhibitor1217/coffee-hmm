@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/cafe.dart';
-import 'package:mobile_app/cafe_image_slider.dart';
 import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/router/mixins/enter_cafe_detail_mixin.dart';
-import 'package:mobile_app/skeleton.dart';
+import 'package:mobile_app/view/common/cafe_image_slider.dart';
+import 'package:mobile_app/view/common/skeleton.dart';
+
+import 'cafe_main_info.dart';
 
 class MainSlider extends StatefulWidget {
   final PageController pageController;
