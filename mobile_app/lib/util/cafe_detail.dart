@@ -19,10 +19,10 @@ String? getCafeMetadataHours(CafeMetaHoursModel? hours) {
     return '평일/주말 $weekday';
   }
 
-  final _weekday = hasCafeMetadata(weekday) ? '평일 $weekday' : '';
+  final _weekday = hasCafeMetadata(weekday) ? '평일 $weekday ' : '';
   final _weekend = hasCafeMetadata(weekend) ? '주말 $weekend' : '';
 
-  return '$_weekday $_weekend';
+  return '$_weekday$_weekend';
 }
 
 CafeDetailInfoModel getCafeDetailInfo(CafeModel cafe) {
