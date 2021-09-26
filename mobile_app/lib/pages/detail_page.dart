@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/api/api.dart';
-import 'package:mobile_app/cafe.dart';
-import 'package:mobile_app/cafe_image_slider.dart';
 import 'package:mobile_app/constants/color.dart';
 import 'package:mobile_app/constants/type.dart';
-import 'package:mobile_app/constants/util.dart';
-import 'package:mobile_app/header.dart';
+import 'package:mobile_app/util/common.dart';
+import 'package:mobile_app/view/cafe_detail/cafe_detail_info.dart';
+import 'package:mobile_app/view/common/cafe_image_slider.dart';
+import 'package:mobile_app/view/common/header.dart';
+import 'package:mobile_app/view/common/image_index_bullet.dart';
 
 class CafeDetailScreen extends StatefulWidget {
   final String cafeId;

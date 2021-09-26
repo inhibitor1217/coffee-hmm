@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/cafe_image.dart';
 import 'package:mobile_app/constants/color.dart';
 import 'package:mobile_app/constants/type.dart';
-import 'package:mobile_app/constants/util.dart';
 import 'package:mobile_app/router/mixins/enter_cafe_detail_mixin.dart';
-import 'package:mobile_app/skeleton.dart';
+import 'package:mobile_app/util/common.dart';
+import 'package:mobile_app/view/common/cafe_image.dart';
+import 'package:mobile_app/view/common/skeleton.dart';
 
 class MainTable extends StatefulWidget {
   final ScrollController scrollController;

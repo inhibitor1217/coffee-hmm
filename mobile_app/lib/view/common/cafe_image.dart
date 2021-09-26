@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/constants/type.dart';
-import 'package:mobile_app/image.dart';
 import 'package:mobile_app/util/environment.dart';
+import 'package:mobile_app/util/image.dart';
 import 'package:mobile_app/widgets/delayed_widget.dart';
 import 'package:mobile_app/widgets/image_progress_indicator.dart';
 
