@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/cafe.dart';
-import 'package:mobile_app/cafe_image_slider.dart';
+import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/router/mixins/enter_cafe_detail_mixin.dart';
-import 'package:mobile_app/skeleton.dart';
-import 'package:mobile_app/type.dart';
+import 'package:mobile_app/view/cafe_main/cafe_main_info.dart';
+import 'package:mobile_app/view/common/cafe_image_slider.dart';
+import 'package:mobile_app/view/common/skeleton.dart';
 
 class MainSlider extends StatefulWidget {
   final PageController pageController;
@@ -36,7 +36,7 @@ class _MainSliderState extends State<MainSlider> with EnterCafeDetailMixin {
             return GestureDetector(
               child: Column(
                 children: [
-                  CafeInfo(cafe: widget.currentCafe),
+                  CafeMainInfo(cafe: widget.currentCafe),
                   CafeImageSlider(
                     pageController: widget.pageController,
                     imageList: widget.cafeList

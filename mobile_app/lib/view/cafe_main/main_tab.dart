@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/type.dart';
+import 'package:mobile_app/constants/color.dart';
+import 'package:mobile_app/constants/type.dart';
 
 class PlaceTab extends StatelessWidget {
   final List<PlaceModel> placeList;
@@ -41,19 +42,17 @@ class PlaceTabElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const _activeTabColor = Color.fromRGBO(242, 196, 109, 1);
-    const _idleTabColor = Colors.black12;
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
           padding: EdgeInsets.all(0),
-          primary: isSelected ? _activeTabColor : Colors.transparent,
+          primary: isSelected ? Palette.highlightedColor : Colors.transparent,
           shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
           side: BorderSide(
               width: 1,
-              color: isSelected ? Colors.transparent : _idleTabColor,
+              color: isSelected ? Colors.transparent : Palette.lightGray,
               style: BorderStyle.solid),
           textStyle: TextStyle(
             fontSize: 12,

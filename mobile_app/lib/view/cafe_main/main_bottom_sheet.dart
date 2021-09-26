@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/api.dart';
-import 'package:mobile_app/cafe_image.dart';
+import 'package:mobile_app/api/api.dart';
+import 'package:mobile_app/constants/color.dart';
+import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/router/mixins/enter_cafe_detail_mixin.dart';
-import 'package:mobile_app/type.dart';
+
+import 'cafe_image_card.dart';
 
 class MainBottomSheet extends StatefulWidget {
   final List<CafeModel> hotCafeList;
@@ -37,7 +39,6 @@ class _MainBottomSheetState extends State<MainBottomSheet>
 
   @override
   Widget build(BuildContext context) {
-    const _highlightedColor = Color.fromRGBO(242, 196, 109, 1);
     return Container(
         decoration: BoxDecoration(
             color: Colors.white,
@@ -59,7 +60,7 @@ class _MainBottomSheetState extends State<MainBottomSheet>
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: _highlightedColor)),
+                                color: Palette.highlightedColor)),
                         Text(
                           '핫플레이스 추천',
                           style: TextStyle(fontSize: 14),
@@ -77,23 +78,26 @@ class _MainBottomSheetState extends State<MainBottomSheet>
                   ])),
               Container(
                 height: 180,
-                child: SingleChildScrollView(
-                    controller: _scrollController,
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                        children: List.generate(
-                            10,
-                            (index) => Container(
-                                margin: EdgeInsets.only(
-                                    right: index == 9 ? 20 : 4,
-                                    left: index == 0 ? 20 : 0),
-                                child: GestureDetector(
-                                  child: RepresentativeCafe(
-                                      cafe: (_hotCafeList ??
+                child: ScrollConfiguration(
+                    behavior: ScrollConfiguration.of(context)
+                        .copyWith(scrollbars: false),
+                    child: SingleChildScrollView(
+                        controller: _scrollController,
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                            children: List.generate(
+                                10,
+                                (index) => Container(
+                                    margin: EdgeInsets.only(
+                                        right: index == 9 ? 20 : 4,
+                                        left: index == 0 ? 20 : 0),
+                                    child: GestureDetector(
+                                      child: CafeImageCard(
+                                          cafe: (_hotCafeList ??
+                                              widget.hotCafeList)[index]),
+                                      onTap: enterDetail((_hotCafeList ??
                                           widget.hotCafeList)[index]),
-                                  onTap: enterDetail((_hotCafeList ??
-                                      widget.hotCafeList)[index]),
-                                ))))),
+                                    )))))),
               ),
             ]),
             Positioned(
@@ -101,7 +105,7 @@ class _MainBottomSheetState extends State<MainBottomSheet>
               top: 0,
               child: IconButton(
                 icon: Icon(Icons.close),
-                color: Colors.black12,
+                color: Palette.lightGray,
                 onPressed: widget.onClose,
               ),
             ),
@@ -110,7 +114,7 @@ class _MainBottomSheetState extends State<MainBottomSheet>
                 bottom: 16,
                 child: TextButton(
                   style: TextButton.styleFrom(
-                      primary: Colors.black87,
+                      primary: Palette.darkGray,
                       padding: EdgeInsets.symmetric(vertical: 20)),
                   child: SizedBox(
                       width: MediaQuery.of(context).size.width,
@@ -120,14 +124,14 @@ class _MainBottomSheetState extends State<MainBottomSheet>
                         children: [
                           IconButton(
                             icon: Icon(Icons.refresh_rounded),
-                            color: _highlightedColor,
+                            color: Palette.highlightedColor,
                             iconSize: 18,
                             onPressed: () {},
                           ),
                           Text(
                             '새로고침',
-                            style:
-                                TextStyle(fontSize: 13, color: Colors.black87),
+                            style: TextStyle(
+                                fontSize: 13, color: Palette.darkGray),
                             textAlign: TextAlign.center,
                           ),
                           SizedBox(width: 40, height: 40)
@@ -139,41 +143,5 @@ class _MainBottomSheetState extends State<MainBottomSheet>
                 ))
           ],
         ));
-  }
-}
-
-class RepresentativeCafe extends StatelessWidget {
-  final CafeModel cafe;
-
-  RepresentativeCafe({required this.cafe});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Card(
-            clipBehavior: Clip.antiAlias,
-            elevation: 0,
-            margin: EdgeInsets.only(right: 3),
-            child: Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  color: Color.fromRGBO(242, 242, 242, 1)),
-              child: CafeImage(image: cafe.image.mainImage, size: 100),
-            )),
-        Container(
-            width: 100,
-            margin: EdgeInsets.only(top: 8),
-            child: Text(cafe.name,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 12))),
-        SizedBox(height: 2),
-        Text(cafe.place.name,
-            style: TextStyle(fontSize: 11, color: Colors.black54))
-      ],
-    );
   }
 }

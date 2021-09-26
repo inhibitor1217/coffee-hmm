@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:mobile_app/type.dart';
+import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/util/environment.dart';
 
 Future<PlaceListResponse> fetchPlaceList() async {

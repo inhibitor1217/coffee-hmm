@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/cafe_image.dart';
+import 'package:mobile_app/constants/color.dart';
+import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/router/mixins/enter_cafe_detail_mixin.dart';
-import 'package:mobile_app/skeleton.dart';
-import 'package:mobile_app/type.dart';
-import 'package:mobile_app/util.dart';
+import 'package:mobile_app/util/cafe_detail.dart';
+import 'package:mobile_app/util/common.dart';
+import 'package:mobile_app/view/common/cafe_image.dart';
+import 'package:mobile_app/view/common/cafe_info_item.dart';
+import 'package:mobile_app/view/common/cafe_name.dart';
+import 'package:mobile_app/view/common/skeleton.dart';
 
 class MainTable extends StatefulWidget {
   final ScrollController scrollController;
@@ -30,7 +34,6 @@ class _MainTableState extends State<MainTable> {
       ..removeWhere((cafe) => cafe.image.count < 3);
 
     return Container(
-        margin: EdgeInsets.only(bottom: 48),
         child: FutureBuilder<CafeListResponse>(
             future: widget.cafeListResponses[widget.currentPlace.id],
             builder: (context, snapshot) {
@@ -54,22 +57,23 @@ class MainTableCafeList extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-    return ListView.builder(
-        controller: scrollController,
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: cafeList.length,
-        itemBuilder: (context, index) {
-          return Column(children: [
-            MainTableCafeElement(cafe: cafeList[index]),
-            if (index < cafeList.length - 1)
-              Container(
-                height: 8,
-                decoration:
-                    BoxDecoration(color: Color.fromRGBO(242, 242, 242, 1)),
-              )
-          ]);
-        });
+    return ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+        child: ListView.builder(
+            controller: scrollController,
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: cafeList.length,
+            itemBuilder: (context, index) {
+              return Column(children: [
+                MainTableCafeElement(cafe: cafeList[index]),
+                if (index < cafeList.length - 1)
+                  Container(
+                    height: 8,
+                    decoration: BoxDecoration(color: Palette.grayBG),
+                  )
+              ]);
+            }));
   }
 }
 
@@ -86,7 +90,8 @@ class _MainTableCafeElementState extends State<MainTableCafeElement>
     with EnterCafeDetailMixin {
   @override
   Widget build(BuildContext context) {
-    const _highlightedColor = Color.fromRGBO(242, 196, 109, 1);
+    final data = getCafeDetailInfo(widget.cafe);
+
     return Container(
         height: 200,
         padding: EdgeInsets.symmetric(horizontal: 20),
@@ -102,26 +107,25 @@ class _MainTableCafeElementState extends State<MainTableCafeElement>
                   children: [
                     Row(
                       children: [
-                        Text(widget.cafe.name,
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold)),
+                        CafeName(name: widget.cafe.name),
                         Spacer(),
                         if (widget.cafe.image.count > 8)
                           Text(
                             '추천',
                             style: TextStyle(
-                                color: _highlightedColor,
+                                color: Palette.highlightedColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 12),
                           )
                       ],
                     ),
-                    Container(
+                    if (hasCafeMetadata(data.hour))
+                      CafeInfoItem(
+                        text: data.hour,
+                        fontSize: 13,
+                        icon: Icons.access_time_rounded,
                         margin: EdgeInsets.only(top: 4, bottom: 2),
-                        child: Text('OPEN ' + widget.cafe.metadata.hour,
-                            style: TextStyle(
-                              fontSize: 13,
-                            )))
+                      )
                   ],
                 ),
                 /* 테이블 뷰 모드에서는 등록된 이미지가 3개 이상인 카페만 표시 */
