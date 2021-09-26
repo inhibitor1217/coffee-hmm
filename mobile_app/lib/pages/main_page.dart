@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/api/api.dart';
 import 'package:mobile_app/cafe_image_slider.dart';
+import 'package:mobile_app/constants/color.dart';
 import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/header.dart';
 import 'package:mobile_app/main_button.dart';
@@ -113,7 +114,6 @@ class _MainBodyState extends State<MainBody> {
 
   @override
   Widget build(BuildContext context) {
-    const _highlightedColor = Color.fromRGBO(242, 196, 109, 1);
     if (_currentPlace != null &&
         _cafeList != null &&
         _currentCafe != null &&
@@ -169,7 +169,7 @@ class _MainBodyState extends State<MainBody> {
               child: CircularProgressIndicator(
                 semanticsLabel: 'Linear progress indicator',
                 strokeWidth: 4,
-                color: _highlightedColor,
+                color: Palette.highlightedColor,
               ),
             ),
           ],

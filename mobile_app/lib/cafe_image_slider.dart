@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/cafe_image.dart';
+import 'package:mobile_app/constants/color.dart';
 import 'package:mobile_app/constants/type.dart';
 
 class CafeImageSlider extends StatefulWidget {
@@ -79,7 +80,7 @@ class Bullet extends StatelessWidget {
       width: 6,
       height: 6,
       decoration: BoxDecoration(
-        color: isHighlight ? Colors.black45 : Colors.black12,
+        color: isHighlight ? Palette.gray : Palette.lightGray,
         borderRadius: BorderRadius.circular(50),
       ),
     );

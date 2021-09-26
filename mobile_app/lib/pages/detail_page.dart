@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/api/api.dart';
 import 'package:mobile_app/cafe.dart';
 import 'package:mobile_app/cafe_image_slider.dart';
+import 'package:mobile_app/constants/color.dart';
 import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/constants/util.dart';
 import 'package:mobile_app/header.dart';
@@ -45,7 +46,7 @@ class _CafeDetailScreenState extends State<CafeDetailScreen> {
           }
 
           return Center(
-              child: CircularProgressIndicator(color: Colors.black12));
+              child: CircularProgressIndicator(color: Palette.lightGray));
         });
   }
 
@@ -62,10 +63,10 @@ class _CafeDetailScreenState extends State<CafeDetailScreen> {
   Widget _buildError(BuildContext context) {
     return Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Icon(Icons.error_rounded, color: Colors.black26, size: 48),
+      Icon(Icons.error_rounded, color: Palette.lightGray, size: 48),
       SizedBox(height: 8),
       Text('카페를 찾을 수 없습니다.',
-          style: const TextStyle(color: Colors.black38, fontSize: 14)),
+          style: TextStyle(color: Palette.gray, fontSize: 14)),
       SizedBox(height: 16),
       ElevatedButton(
         child: Text('돌아가기'),
@@ -135,17 +136,15 @@ class _DetailBodyState extends State<DetailBody> {
   }
 
   Widget _buildFloatingShareButton(String cafeId) {
-    const _highlightedColor = Color.fromRGBO(242, 196, 109, 1);
-    const _backgroundColor = Color.fromRGBO(255, 255, 255, 0.9);
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 50,
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       margin: EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(color: _backgroundColor),
+      decoration: BoxDecoration(color: Palette.whiteTransparentBG),
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary: _highlightedColor,
+            primary: Palette.highlightedColor,
             onPrimary: Colors.white,
             shadowColor: Colors.transparent,
             shape: RoundedRectangleBorder(
