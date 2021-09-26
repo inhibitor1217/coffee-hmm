@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'cafe_detail_info_item.dart';
+import 'package:mobile_app/view/common/text_info.dart';
 
 class CafeDetailSubwayLineItem extends StatelessWidget {
   final String station;

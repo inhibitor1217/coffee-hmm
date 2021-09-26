@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/constants/color.dart';
 import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/router/mixins/enter_cafe_detail_mixin.dart';
+import 'package:mobile_app/util/cafe_detail.dart';
 import 'package:mobile_app/util/common.dart';
 import 'package:mobile_app/view/common/cafe_image.dart';
+import 'package:mobile_app/view/common/cafe_info_item.dart';
+import 'package:mobile_app/view/common/cafe_name.dart';
 import 'package:mobile_app/view/common/skeleton.dart';
 
 class MainTable extends StatefulWidget {
@@ -87,6 +90,8 @@ class _MainTableCafeElementState extends State<MainTableCafeElement>
     with EnterCafeDetailMixin {
   @override
   Widget build(BuildContext context) {
+    final data = getCafeDetailInfo(widget.cafe);
+
     return Container(
         height: 200,
         padding: EdgeInsets.symmetric(horizontal: 20),
@@ -102,9 +107,7 @@ class _MainTableCafeElementState extends State<MainTableCafeElement>
                   children: [
                     Row(
                       children: [
-                        Text(widget.cafe.name,
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold)),
+                        CafeName(name: widget.cafe.name),
                         Spacer(),
                         if (widget.cafe.image.count > 8)
                           Text(
@@ -116,13 +119,13 @@ class _MainTableCafeElementState extends State<MainTableCafeElement>
                           )
                       ],
                     ),
-                    Container(
+                    if (hasCafeMetadata(data.hour))
+                      CafeInfoItem(
+                        text: data.hour,
+                        fontSize: 13,
+                        icon: Icons.access_time_rounded,
                         margin: EdgeInsets.only(top: 4, bottom: 2),
-                        child:
-                            Text('OPEN ' + (widget.cafe.metadata?.hour ?? ''),
-                                style: TextStyle(
-                                  fontSize: 13,
-                                )))
+                      )
                   ],
                 ),
                 /* 테이블 뷰 모드에서는 등록된 이미지가 3개 이상인 카페만 표시 */

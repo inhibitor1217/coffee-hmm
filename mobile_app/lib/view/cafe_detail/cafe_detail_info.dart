@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/util/cafe_detail.dart';
 import 'package:mobile_app/util/common.dart';
+import 'package:mobile_app/view/common/cafe_info_item.dart';
 import 'package:mobile_app/view/common/cafe_name.dart';
 
-import 'cafe_detail_info_item.dart';
 import 'cafe_detail_info_subway_item.dart';
 
 class CafeDetailInfo extends StatelessWidget {
@@ -33,30 +33,34 @@ class CafeDetailInfo extends StatelessWidget {
     return Column(
       children: [
         if (hasCafeMetadata(data.hour))
-          CafeDetailInfoItem(
+          CafeInfoItem(
             text: data.hour,
             icon: Icons.access_time_rounded,
+            margin: EdgeInsets.only(bottom: 12),
           ),
         if (hasCafeMetadata(data.address))
-          CafeDetailInfoItem(
+          CafeInfoItem(
             text: data.address,
             icon: Icons.place_rounded,
+            margin: EdgeInsets.only(bottom: 12),
           ),
         if (hasCafeMetadata(data.line) && hasCafeMetadata(data.station))
           CafeDetailSubwayLineItem(station: data.station, line: data.line),
         if (hasCafeMetadata(data.call))
-          CafeDetailInfoItem(
+          CafeInfoItem(
             text: data.call,
             icon: Icons.call,
+            margin: EdgeInsets.only(bottom: 12),
           ),
-        CafeDetailInfoItem(
+        CafeInfoItem(
           text: '네이버 통합검색 바로가기',
           icon: Icons.search_rounded,
           subIcon: Icons.launch_rounded,
           onPressed: () =>
               handleNaverClick(cafe.name + ' ' + cafe.place.name, context),
+          margin: EdgeInsets.only(bottom: 12),
         ),
-        CafeDetailInfoItem(
+        CafeInfoItem(
           text: '인스타그램 태그검색 바로가기',
           icon: Icons.search_rounded,
           subIcon: Icons.launch_rounded,
