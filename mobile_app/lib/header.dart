@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/constants/color.dart';
 import 'package:mobile_app/router/page_configuration.dart';
 import 'package:mobile_app/util/app_stage.dart';
 import 'package:mobile_app/util/environment.dart';
@@ -6,9 +7,7 @@ import 'package:mobile_app/util/environment.dart';
 mixin _HeaderSpec on StatelessWidget {
   final _logo = Text('coffee hmm',
       textAlign: TextAlign.center,
-      style: TextStyle(fontSize: 13, color: Colors.black87));
-  final _iconColor = Colors.black45;
-  final _titleColor = Colors.black87;
+      style: TextStyle(fontSize: 13, color: Palette.darkGray));
 
   bool get _showMoreAction {
     return Environment.appStage == AppStage.development;
@@ -45,7 +44,7 @@ class MainHeader extends StatelessWidget with PreferredSizeWidget, _HeaderSpec {
     return AppBar(
       backgroundColor: isTableViewMode ? Colors.white : Colors.transparent,
       elevation: 0,
-      iconTheme: IconThemeData(color: _iconColor),
+      iconTheme: IconThemeData(color: Palette.gray),
       title: _logo,
       centerTitle: true,
       actions: [
@@ -67,7 +66,7 @@ class BaseHeader extends StatelessWidget with PreferredSizeWidget, _HeaderSpec {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
-      iconTheme: IconThemeData(color: _iconColor),
+      iconTheme: IconThemeData(color: Palette.gray),
       title: _logo,
       centerTitle: true,
       actions: [
@@ -92,7 +91,7 @@ class DetailHeader extends StatelessWidget
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          color: _iconColor,
+          color: Palette.gray,
           icon: Icon(
             Icons.arrow_back_rounded,
             size: 20.0,
@@ -102,7 +101,9 @@ class DetailHeader extends StatelessWidget
         title: Text(title,
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: 13, color: _titleColor, fontWeight: FontWeight.bold)),
+                fontSize: 13,
+                color: Palette.darkGray,
+                fontWeight: FontWeight.bold)),
         centerTitle: true);
   }
 }

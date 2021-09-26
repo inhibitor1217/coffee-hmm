@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/constants/color.dart';
 import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/constants/util.dart';
 import 'package:mobile_app/main_bottom_sheet.dart';
@@ -37,7 +38,7 @@ class MainButtonSetOfSlider extends StatelessWidget {
                     ),
                     side: BorderSide(
                         width: 1,
-                        color: Colors.black12,
+                        color: Palette.lightGray,
                         style: BorderStyle.solid),
                   ),
                   child: Text(

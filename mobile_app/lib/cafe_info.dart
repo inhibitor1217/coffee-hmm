@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/constants/color.dart';
 import 'package:mobile_app/constants/type.dart';
 
 class CafeDetailInfoItem extends StatelessWidget {
@@ -19,7 +20,7 @@ class CafeDetailInfoItem extends StatelessWidget {
           Icon(
             icon,
             size: 14.0,
-            color: Colors.black45,
+            color: Palette.gray,
           ),
           SizedBox(width: 6),
           TextInfo(text: text, onPressed: onPressed),

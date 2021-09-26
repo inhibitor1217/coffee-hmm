@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/cafe_image.dart';
+import 'package:mobile_app/constants/color.dart';
 import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/constants/util.dart';
 import 'package:mobile_app/router/mixins/enter_cafe_detail_mixin.dart';
@@ -66,8 +67,7 @@ class MainTableCafeList extends StatelessWidget {
                 if (index < cafeList.length - 1)
                   Container(
                     height: 8,
-                    decoration:
-                        BoxDecoration(color: Color.fromRGBO(242, 242, 242, 1)),
+                    decoration: BoxDecoration(color: Palette.grayBG),
                   )
               ]);
             }));
@@ -87,7 +87,6 @@ class _MainTableCafeElementState extends State<MainTableCafeElement>
     with EnterCafeDetailMixin {
   @override
   Widget build(BuildContext context) {
-    const _highlightedColor = Color.fromRGBO(242, 196, 109, 1);
     return Container(
         height: 200,
         padding: EdgeInsets.symmetric(horizontal: 20),
@@ -111,7 +110,7 @@ class _MainTableCafeElementState extends State<MainTableCafeElement>
                           Text(
                             '추천',
                             style: TextStyle(
-                                color: _highlightedColor,
+                                color: Palette.highlightedColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 12),
                           )
