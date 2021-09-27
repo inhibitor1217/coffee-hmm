@@ -5,6 +5,7 @@ import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/util/common.dart';
 import 'package:mobile_app/view/cafe_detail/cafe_detail_info.dart';
 import 'package:mobile_app/view/common/cafe_image_slider.dart';
+import 'package:mobile_app/view/common/error.dart';
 import 'package:mobile_app/view/common/floating_button.dart';
 import 'package:mobile_app/view/common/header.dart';
 import 'package:mobile_app/view/common/image_index_bullet.dart';
@@ -20,14 +21,41 @@ class CafeDetailScreen extends StatefulWidget {
 
 class _CafeDetailScreenState extends State<CafeDetailScreen> {
   late Future<SingleCafeResponse> _cafeResponse;
-  late CafeModel _cafe;
+
+  @override
+  void initState() {
+    super.initState();
+    _cafeResponse = fetchCafe(widget.cafeId);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: DetailHeader(cafeResponse: _cafeResponse),
+      body: DetailBody(
+        cafeResponse: _cafeResponse,
+      ),
+    );
+  }
+}
+
+class DetailBody extends StatefulWidget {
+  final Future<SingleCafeResponse> cafeResponse;
+
+  DetailBody({required this.cafeResponse});
+
+  @override
+  _DetailBodyState createState() => _DetailBodyState();
+}
+
+class _DetailBodyState extends State<DetailBody> {
+  late CafeModel? _cafe;
 
   @override
   void initState() {
     super.initState();
 
-    _cafeResponse = fetchCafe(widget.cafeId);
-    _cafeResponse.then((data) {
+    widget.cafeResponse.then((data) {
       setState(() {
         _cafe = data.cafe;
       });
@@ -37,66 +65,42 @@ class _CafeDetailScreenState extends State<CafeDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: _cafeResponse,
+        future: widget.cafeResponse,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return _buildContent(context, cafe: _cafe);
+            return SafeArea(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                  Expanded(child: DetailBodyContent(cafe: _cafe!))
+                ]));
           }
-
           if (snapshot.hasError) {
-            return _buildError(context);
+            return Error(title: '카페를 찾을 수 없습니다.');
           }
-
           return Center(
               child: CircularProgressIndicator(color: Palette.lightGray));
         });
   }
-
-  Widget _buildContent(BuildContext context, {required CafeModel cafe}) {
-    return Scaffold(
-      appBar: DetailHeader(title: cafe.name),
-      body: SafeArea(
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [Expanded(child: DetailBody(cafe: cafe))])),
-    );
-  }
-
-  Widget _buildError(BuildContext context) {
-    return Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Icon(Icons.error_rounded, color: Palette.lightGray, size: 48),
-      SizedBox(height: 8),
-      Text('카페를 찾을 수 없습니다.',
-          style: TextStyle(color: Palette.gray, fontSize: 14)),
-      SizedBox(height: 16),
-      ElevatedButton(
-        child: Text('돌아가기'),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
-    ]));
-  }
 }
 
-class DetailBody extends StatefulWidget {
+class DetailBodyContent extends StatefulWidget {
   final CafeModel cafe;
 
-  DetailBody({
+  DetailBodyContent({
     required this.cafe,
   });
 
   @override
-  _DetailBodyState createState() => _DetailBodyState(cafe: cafe);
+  _DetailBodyContentState createState() => _DetailBodyContentState(cafe: cafe);
 }
 
-class _DetailBodyState extends State<DetailBody> {
+class _DetailBodyContentState extends State<DetailBodyContent> {
   final CafeModel cafe;
   final PageController _controller = PageController();
   int? currentIndex;
 
-  _DetailBodyState({required this.cafe});
+  _DetailBodyContentState({required this.cafe});
 
   void handleImageSlide(int index) {
     setState(() {
