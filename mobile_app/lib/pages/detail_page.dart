@@ -19,7 +19,7 @@ class CafeDetailScreen extends StatefulWidget {
 }
 
 class _CafeDetailScreenState extends State<CafeDetailScreen> {
-  late Future<SingleCafeResponse>? _cafeResponse;
+  late Future<SingleCafeResponse> _cafeResponse;
 
   @override
   void initState() {
@@ -39,7 +39,7 @@ class _CafeDetailScreenState extends State<CafeDetailScreen> {
 }
 
 class DetailBody extends StatefulWidget {
-  late final Future<SingleCafeResponse>? cafeResponse;
+  final Future<SingleCafeResponse> cafeResponse;
 
   DetailBody({required this.cafeResponse});
 
@@ -48,13 +48,13 @@ class DetailBody extends StatefulWidget {
 }
 
 class _DetailBodyState extends State<DetailBody> {
-  CafeModel? _cafe;
+  late CafeModel? _cafe;
 
   @override
   void initState() {
     super.initState();
 
-    widget.cafeResponse?.then((data) {
+    widget.cafeResponse.then((data) {
       setState(() {
         _cafe = data.cafe;
       });
