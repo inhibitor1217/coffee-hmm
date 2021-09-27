@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/constants/color.dart';
+import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/router/page_configuration.dart';
 import 'package:mobile_app/util/app_stage.dart';
 import 'package:mobile_app/util/environment.dart';
@@ -76,14 +77,31 @@ class BaseHeader extends StatelessWidget with PreferredSizeWidget, _HeaderSpec {
   }
 }
 
-class DetailHeader extends StatelessWidget
-    with PreferredSizeWidget, _HeaderSpec {
-  final String title;
+class DetailHeader extends StatefulWidget implements PreferredSizeWidget {
+  final Future<SingleCafeResponse> cafeResponse;
 
-  DetailHeader({required this.title});
+  DetailHeader({required this.cafeResponse});
 
   @override
   Size get preferredSize => Size.fromHeight(48);
+
+  @override
+  _DetailHeaderState createState() => _DetailHeaderState();
+}
+
+class _DetailHeaderState extends State<DetailHeader> {
+  late String? _cafeName;
+
+  @override
+  void initState() {
+    super.initState();
+
+    widget.cafeResponse?.then((data) {
+      setState(() {
+        _cafeName = data.cafe.name;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,12 +116,19 @@ class DetailHeader extends StatelessWidget
           ),
           onPressed: () => {Navigator.pop(context, true)},
         ),
-        title: Text(title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 13,
-                color: Palette.darkGray,
-                fontWeight: FontWeight.bold)),
+        title: FutureBuilder(
+            future: widget.cafeResponse,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Text(_cafeName ?? 'coffeehmm',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 13,
+                        color: Palette.darkGray,
+                        fontWeight: FontWeight.bold));
+              }
+              return Text('coffeehmm');
+            }),
         centerTitle: true);
   }
 }
