@@ -5,6 +5,7 @@ import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/util/common.dart';
 import 'package:mobile_app/view/cafe_detail/cafe_detail_info.dart';
 import 'package:mobile_app/view/common/cafe_image_slider.dart';
+import 'package:mobile_app/view/common/error.dart';
 import 'package:mobile_app/view/common/floating_button.dart';
 import 'package:mobile_app/view/common/header.dart';
 import 'package:mobile_app/view/common/image_index_bullet.dart';
@@ -75,28 +76,11 @@ class _DetailBodyState extends State<DetailBody> {
                 ]));
           }
           if (snapshot.hasError) {
-            return _buildError(context);
+            return Error(title: '카페를 찾을 수 없습니다.');
           }
           return Center(
               child: CircularProgressIndicator(color: Palette.lightGray));
         });
-  }
-
-  Widget _buildError(BuildContext context) {
-    return Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Icon(Icons.error_rounded, color: Palette.lightGray, size: 48),
-      SizedBox(height: 8),
-      Text('카페를 찾을 수 없습니다.',
-          style: TextStyle(color: Palette.gray, fontSize: 14)),
-      SizedBox(height: 16),
-      ElevatedButton(
-        child: Text('돌아가기'),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
-    ]));
   }
 }
 
