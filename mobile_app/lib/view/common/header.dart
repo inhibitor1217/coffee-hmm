@@ -78,7 +78,7 @@ class BaseHeader extends StatelessWidget with PreferredSizeWidget, _HeaderSpec {
 }
 
 class DetailHeader extends StatefulWidget implements PreferredSizeWidget {
-  late final Future<SingleCafeResponse>? cafeResponse;
+  final Future<SingleCafeResponse> cafeResponse;
 
   DetailHeader({required this.cafeResponse});
 
@@ -90,7 +90,7 @@ class DetailHeader extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _DetailHeaderState extends State<DetailHeader> {
-  String _cafeName = 'coffeehmm';
+  late String? _cafeName;
 
   @override
   void initState() {
@@ -120,7 +120,7 @@ class _DetailHeaderState extends State<DetailHeader> {
             future: widget.cafeResponse,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return Text(_cafeName,
+                return Text(_cafeName ?? 'coffeehmm',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 13,
