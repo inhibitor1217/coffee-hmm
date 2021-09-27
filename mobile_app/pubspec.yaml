@@ -27,6 +27,7 @@ dependencies:
   webview_flutter: ^2.0.12
   flutter_launcher_icons: ^0.9.1
   flutter_svg: ^0.22.0
+  google_maps_flutter: ^2.0.10
 dev_dependencies:
   flutter_test:
     sdk: flutter

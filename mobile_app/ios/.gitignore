@@ -38,3 +38,5 @@ Firebase/
 # Generated files in Pre-build script.
 Flutter/AppStage.xcconfig
 Runner/*.lproj/InfoPlist.strings
+
+/Secrets.xcconfig

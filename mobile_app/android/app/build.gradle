@@ -37,6 +37,11 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
+
+def apiKeyPropertiesFile = rootProject.file("Secrets.properties")
+def apiKeyProperties = new Properties()
+apiKeyProperties.load(new FileInputStream(apiKeyPropertiesFile))
+
 android {
     compileSdkVersion 30
 
@@ -51,12 +56,14 @@ android {
     defaultConfig {
         applicationId "com.coffeehmm.mobile_app"
         applicationIdSuffix (appStage != 'release' ? '.' + appStage : '')
-        minSdkVersion 19
+        minSdkVersion 20
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         versionNameSuffix "-" + appStage
         manifestPlaceholders = [appStage: appStage]
+        resValue "string", "GOOGLE_MAP_KEY_ANDROID", apiKeyProperties['GOOGLE_MAP_KEY_ANDROID']
+        buildConfigField("String", "GOOGLE_MAP_KEY_ANDROID", apiKeyProperties['GOOGLE_MAP_KEY_ANDROID'])
     }
 
     signingConfigs {
