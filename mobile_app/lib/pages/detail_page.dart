@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobile_app/api/api.dart';
 import 'package:mobile_app/constants/color.dart';
 import 'package:mobile_app/constants/type.dart';
+import 'package:mobile_app/util/cafe_detail.dart';
 import 'package:mobile_app/util/common.dart';
 import 'package:mobile_app/view/cafe_detail/cafe_detail_info.dart';
 import 'package:mobile_app/view/common/cafe_image_slider.dart';
@@ -9,6 +11,7 @@ import 'package:mobile_app/view/common/error.dart';
 import 'package:mobile_app/view/common/floating_button.dart';
 import 'package:mobile_app/view/common/header.dart';
 import 'package:mobile_app/view/common/image_index_bullet.dart';
+import 'package:mobile_app/view/common/map.dart';
 
 class CafeDetailScreen extends StatefulWidget {
   final String cafeId;
@@ -128,6 +131,15 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
                 currentIndex: currentIndex ?? 0,
               ),
               CafeDetailInfo(cafe: cafe),
+              SizedBox(height: 20),
+              if (hasCafeMetadata(cafe.metadata?.location?.lat) &&
+                  hasCafeMetadata(cafe.metadata?.location?.lng))
+                Map(
+                    location: LatLng(
+                        stringToDouble(cafe.metadata!.location!.lat!),
+                        stringToDouble(cafe.metadata!.location!.lng!)),
+                    title: cafe.name,
+                    height: 200),
               SizedBox(height: 60),
             ],
           ),
