@@ -155,6 +155,7 @@ To clarify:
 Retrieves a list of cafe as a feed, which is selected randomly (for now), among the list of cafes.
 
 - The list of cafes is **fixed** per user, and per day. Unsigned users will retrieve different result per request.
+- Only images with `isMain: true` will be supplied with this endpoint. `cafe.list[i].image.count` will contain total number of active images of cafe. However, `cafe.list[i].image.list` will contain **at most one image**.
 
 **Query Parameters**
 
@@ -208,19 +209,6 @@ Retrieves a list of cafe as a feed, which is selected randomly (for now), among 
                 "tag": "입구",
                 "width": 1024,
                 "height": 1920
-              }
-              "relativeUri": "/images/11111111-1111-1111-1111-111111111111",
-              "state": "active"
-            },
-            {
-              "id": "11111111-1111-1111-1111-111111111111",
-              "createdAt": "2020-01-01T00:00:00.000Z",
-              "updatedAt": "2020-01-01T00:00:00.000Z",
-              "cafeId": "11111111-1111-1111-1111-111111111111",
-              "index": 1,
-              "isMain": false,
-              "metadata": {
-                "tag": "메뉴"
               }
               "relativeUri": "/images/11111111-1111-1111-1111-111111111111",
               "state": "active"
@@ -302,6 +290,8 @@ Retrieve the number of cafes.
 
 Retrieve a list of cafes.
 
+- Only images with `isMain: true` will be supplied with this endpoint. `cafe.list[i].image.count` will contain total number of images of cafe (including number of hidden cafe images, depending on `showHiddenImages` query parameter). However, `cafe.list[i].image.list` will contain **at most one image**.
+
 **Query Parameters**
 
 | **Name**           | **Type**                                                     | **Required?**                 | **Description**                                                                                                                                                                                                                     |
@@ -357,19 +347,6 @@ Retrieve a list of cafes.
                 "tag": "입구",
                 "width": 1024,
                 "height": 1920
-              }
-              "relativeUri": "/images/11111111-1111-1111-1111-111111111111",
-              "state": "active"
-            },
-            {
-              "id": "11111111-1111-1111-1111-111111111111",
-              "createdAt": "2020-01-01T00:00:00.000Z",
-              "updatedAt": "2020-01-01T00:00:00.000Z",
-              "cafeId": "11111111-1111-1111-1111-111111111111",
-              "index": 1,
-              "isMain": false,
-              "metadata": {
-                "tag": "메뉴"
               }
               "relativeUri": "/images/11111111-1111-1111-1111-111111111111",
               "state": "active"
