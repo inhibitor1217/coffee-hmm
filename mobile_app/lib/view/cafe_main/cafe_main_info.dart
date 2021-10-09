@@ -18,7 +18,7 @@ class CafeMainInfo extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CafeName(name: cafe.name),
+            CafeName(name: cafe.name, customStyle: CafeNameStyles.mainStyle,),
             SizedBox(height: 4),
             if (hasCafeMetadata(data.hour))
               CafeInfoItem(

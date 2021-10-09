@@ -20,8 +20,8 @@ class CafeDetailInfo extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CafeName(name: cafe.name),
-            SizedBox(height: 8),
+            CafeName(name: cafe.name, customStyle: CafeNameStyles.detailStyle,),
+            SizedBox(height: 16),
             _buildCafeDetailInfo(context),
           ],
         ));
