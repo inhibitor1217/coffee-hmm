@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/constants/color.dart';
+import 'package:mobile_app/view/common/badge.dart';
 import 'package:mobile_app/view/common/text_info.dart';
 
 class CafeDetailSubwayLineItem extends StatelessWidget {
@@ -36,19 +37,9 @@ class CafeDetailSubwayLineItem extends StatelessWidget {
           shrinkWrap: true,
           itemCount: line.length,
           itemBuilder: (context, index) {
-            return Container(
-              child: Center(
-                  child: Text(
-                line[index],
-                style: TextStyle(fontSize: 8, color: Colors.white),
-              )),
-              constraints: BoxConstraints(minHeight: 15, minWidth: 15),
-              padding: EdgeInsets.symmetric(horizontal: 4),
-              margin: EdgeInsets.only(right: index == line.length - 1 ? 0 : 2),
-              decoration: BoxDecoration(
-                  color: getSubwayColor(line[index]),
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
-            );
+            return  Badge(text: line[index], decoration: BoxDecoration(
+                color: getSubwayColor(line[index]),
+                borderRadius: BorderRadius.all(Radius.circular(10)))) ;
           },
         ));
   }
