@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name_dev">커피흠 [dev]</string>
+    <string name="app_name_beta">커피흠 [beta]</string>
+    <string name="app_name_release">커피흠</string>
+</resources>

@@ -23,10 +23,10 @@
   Still wander to find a nice cafe on instagram? And be tired of getting repetitive places already seen.<br>
   Coffee-Hmm gives you sufficient information to make decisions, not much, even not repetitive. You can directly access Instagram #cafe_hashtag and Naver as well.:wink: <br><br>
 
-**Available for mobile web**
+**Available for ios & android & mobile web**
 
 <p align="center">
-  <img src="https://github.com/jyuunnii/coffee-hmm/blob/master/public/images/coffee_hmm_UI.png">
+  <img src="https://coffee-hmm-image.s3.ap-northeast-2.amazonaws.com/coffeehmm_service.png">
 </p>
 <br>
 <br>
@@ -42,6 +42,7 @@ A list of the things you can do in Coffee Hmm :
 <br>
 
 ## Built With
+* [`Flutter`](https://www.flutter.dev/)
 * [`React`](https://reactjs.org/)
 * [`Node.js`](https://nodejs.org/)
 

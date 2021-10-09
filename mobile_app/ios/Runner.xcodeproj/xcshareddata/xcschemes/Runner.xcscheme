@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scheme
+   LastUpgradeVersion = "1250"
+   version = "1.7">
+   <BuildAction
+      parallelizeBuildables = "YES"
+      buildImplicitDependencies = "YES">
+      <PreActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Run Script"
+               scriptText = "## Parse APP_STAGE from --dart-define option ##&#10;&#10;function entry_decode() { echo &quot;${*}&quot; | base64 --decode; }&#10;&#10;IFS=&apos;,&apos; read -r -a define_items &lt;&lt;&lt; &quot;$DART_DEFINES&quot;&#10;&#10;&#10;for index in &quot;${!define_items[@]}&quot;&#10;do&#10;    define_items[$index]=$(entry_decode &quot;${define_items[$index]}&quot;);&#10;done&#10;&#10;APP_STAGE=&quot;&quot;&#10;&#10;for VAR in ${define_items[@]}; do&#10;    IFS=&apos;=&apos; read -r -a SYMBOLS &lt;&lt;&lt; &quot;$VAR&quot;&#10;    if [ &quot;${SYMBOLS[0]}&quot; == &quot;APP_STAGE&quot; ]; then&#10;        APP_STAGE=&quot;${SYMBOLS[1]}&quot;&#10;    fi&#10;done&#10;&#10;if [ -z &quot;$APP_STAGE&quot; ]; then&#10;    APP_STAGE=&quot;dev&quot;&#10;fi&#10;&#10;# Add suffix variables using APP_STAGE&#10;&#10;OUT_FILE=&quot;${SRCROOT}/Flutter/AppStage.xcconfig&quot;&#10;&#10;BUNDLE_NAME_SUFFIX=&quot;&quot;&#10;if [ &quot;${APP_STAGE}&quot; != &quot;release&quot; ]; then&#10;    BUNDLE_NAME_SUFFIX=&quot; [${APP_STAGE}]&quot;&#10;fi&#10;&#10;BUNDLE_IDENTIFIER_SUFFIX=&quot;&quot;&#10;if [ &quot;${APP_STAGE}&quot; != &quot;release&quot; ]; then&#10;    BUNDLE_IDENTIFIER_SUFFIX=&quot;.${APP_STAGE}&quot;&#10;fi&#10;&#10;BUNDLE_VERSION_SUFFIX=&quot;&quot;&#10;if [ &quot;${APP_STAGE}&quot; != &quot;release&quot; ]; then&#10;    BUNDLE_VERSION_SUFFIX=&quot;-${APP_STAGE}&quot;&#10;fi&#10;&#10;printf &quot;%s\n&quot; &quot;APP_STAGE=${APP_STAGE}&quot; &gt; ${OUT_FILE}&#10;printf &quot;%s\n&quot; &quot;BUNDLE_NAME_SUFFIX=${BUNDLE_NAME_SUFFIX}&quot; &gt;&gt; ${OUT_FILE}&#10;printf &quot;%s\n&quot; &quot;BUNDLE_IDENTIFIER_SUFFIX=${BUNDLE_IDENTIFIER_SUFFIX}&quot; &gt;&gt; ${OUT_FILE}&#10;printf &quot;%s\n&quot; &quot;BUNDLE_VERSION_SUFFIX=${BUNDLE_VERSION_SUFFIX}&quot; &gt;&gt; ${OUT_FILE}&#10;">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "97C146ED1CF9000F007C117D"
+                     BuildableName = "Runner.app"
+                     BlueprintName = "Runner"
+                     ReferencedContainer = "container:Runner.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PreActions>
+      <BuildActionEntries>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "97C146ED1CF9000F007C117D"
+               BuildableName = "Runner.app"
+               BlueprintName = "Runner"
+               ReferencedContainer = "container:Runner.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+      </BuildActionEntries>
+   </BuildAction>
+   <TestAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      shouldUseLaunchSchemeArgsEnv = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "97C146ED1CF9000F007C117D"
+            BuildableName = "Runner.app"
+            BlueprintName = "Runner"
+            ReferencedContainer = "container:Runner.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
+      <Testables>
+      </Testables>
+   </TestAction>
+   <LaunchAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      launchStyle = "0"
+      useCustomWorkingDirectory = "NO"
+      ignoresPersistentStateOnLaunch = "NO"
+      debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
+      allowLocationSimulation = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "97C146ED1CF9000F007C117D"
+            BuildableName = "Runner.app"
+            BlueprintName = "Runner"
+            ReferencedContainer = "container:Runner.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+   </LaunchAction>
+   <ProfileAction
+      buildConfiguration = "Profile"
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      savedToolIdentifier = ""
+      useCustomWorkingDirectory = "NO"
+      debugDocumentVersioning = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "97C146ED1CF9000F007C117D"
+            BuildableName = "Runner.app"
+            BlueprintName = "Runner"
+            ReferencedContainer = "container:Runner.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+   </ProfileAction>
+   <AnalyzeAction
+      buildConfiguration = "Debug">
+   </AnalyzeAction>
+   <ArchiveAction
+      buildConfiguration = "Release"
+      revealArchiveInOrganizer = "YES">
+   </ArchiveAction>
+</Scheme>
