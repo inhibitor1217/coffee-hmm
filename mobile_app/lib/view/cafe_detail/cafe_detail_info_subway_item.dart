@@ -37,9 +37,12 @@ class CafeDetailSubwayLineItem extends StatelessWidget {
           shrinkWrap: true,
           itemCount: line.length,
           itemBuilder: (context, index) {
-            return  Badge(text: line[index], decoration: BoxDecoration(
-                color: getSubwayColor(line[index]),
-                borderRadius: BorderRadius.all(Radius.circular(10)))) ;
+            return  Container(
+              margin: EdgeInsets.only(right: index == line.length - 1 ? 0 : 2),
+              child: Badge(text: line[index], decoration: BoxDecoration(
+                  color: getSubwayColor(line[index]),
+                  borderRadius: BorderRadius.all(Radius.circular(10)))),
+            );
           },
         ));
   }
