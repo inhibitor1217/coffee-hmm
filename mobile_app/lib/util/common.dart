@@ -37,7 +37,3 @@ class ListUtils {
       iterable.fold(Iterable<T>.empty(),
           (p, v) => p.isEmpty ? [...p, v] : [...p, separator, v]);
 }
-
-double stringToDouble(String data) {
-  return double.parse(data);
-}
