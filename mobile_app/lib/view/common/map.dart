@@ -16,7 +16,8 @@ class Map extends StatefulWidget {
 }
 
 class _MapState extends State<Map> {
-  static const duration = 500;
+  static const mapLoadingDuration = 450;
+  static const opacityDuration = 500;
   final Completer<GoogleMapController> _controller = Completer();
   bool isMapLoading = false;
 
@@ -28,7 +29,7 @@ class _MapState extends State<Map> {
         child: AnimatedOpacity(
           curve: Curves.fastOutSlowIn,
           opacity: isMapLoading ? 1.0 : 0,
-          duration: Duration(milliseconds: duration),
+          duration: Duration(milliseconds: opacityDuration),
           child: GoogleMap(
             mapType: MapType.normal,
             markers: _createMarkers(location: widget.location, title: widget.title),
@@ -37,7 +38,7 @@ class _MapState extends State<Map> {
             onMapCreated: (GoogleMapController controller) {
               _controller.complete(controller);
               Future.delayed(
-                  Duration(milliseconds: duration - 50),
+                  Duration(milliseconds: mapLoadingDuration),
                       () => setState(() {
                     isMapLoading = true;
                   }));
