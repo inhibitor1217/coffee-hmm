@@ -882,4 +882,8 @@ describe('Cafe - GET /cafe/list', () => {
       .query({ limit: 10, placeId: placeIds[0], placeName: '판교' })
       .expect(HTTP_BAD_REQUEST);
   });
+
+  test('Should specify limit parameter', async () => {
+    await request.get('/cafe/list').expect(HTTP_BAD_REQUEST);
+  });
 });
