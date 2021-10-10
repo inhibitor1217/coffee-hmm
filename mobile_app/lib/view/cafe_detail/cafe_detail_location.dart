@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobile_app/constants/color.dart';
 import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/view/common/badge.dart';
@@ -20,11 +19,9 @@ class CafeDetailLocation extends StatelessWidget {
             SizedBox(height: 20),
             CafeDetailLocationTitle(),
             Map(
-                location: LatLng(
-                    double.parse(cafe.metadata!.location!.lat!),
-                    double.parse(cafe.metadata!.location!.lng!)),
-                title: cafe.name,
-                height: 240)
+              isOpenPage: true,
+              cafe: cafe,
+              height: 240),
           ],
        )
     );
