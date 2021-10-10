@@ -32,26 +32,24 @@ class MapBody extends StatefulWidget {
 class _MapBodyState extends State<MapBody> {
 @override
   Widget build(BuildContext context){
-  return SafeArea(
-      child: Stack(
-        children: [
-          Map(
-              isOpenPage: false,
-             cafe: widget.cafe,
-          ),
-          Positioned(
-            top: 0,
-            left: 0,
-            child: IconButton(
-              icon: Icon(
-                Icons.arrow_back_rounded,
-                size: 20.0,
+  return  Stack(
+            children: [
+              Map(
+                  isOpenPage: false,
+                 cafe: widget.cafe,
               ),
-              onPressed: () => Navigator.pop(context),
-            )
-          )
-        ],
-      ),
-  );
+              Positioned(
+                top: 30,
+                left: 0,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back_rounded,
+                    size: 20.0,
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                )
+              )
+            ],
+      );
 }
 }
