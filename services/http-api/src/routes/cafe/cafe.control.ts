@@ -565,7 +565,7 @@ export const getList = handler<
       query: joi
         .object()
         .keys({
-          limit: joi.number().integer().min(1).max(64),
+          limit: joi.number().integer().min(1).max(64).required(),
           cursor: joi.string(),
           orderBy: joi.string().valid(...enumKeyStrings(CafeListOrder)),
           order: joi.string().valid(...enumKeyStrings(SortOrder)),
