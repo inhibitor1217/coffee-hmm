@@ -206,6 +206,7 @@ export const getFeed = handler<
       .select()
       .where({
         fkCafeId: In(cafes.map((cafe) => cafe.id)),
+        isMain: true,
         state: Not(In([CafeImageState.hidden, CafeImageState.deleted])),
       })
       .orderBy({ index: 'ASC' })
@@ -537,6 +538,7 @@ export const getList = handler<
       .select()
       .where({
         fkCafeId: In(cafes.map((cafe) => cafe.id)),
+        isMain: true,
         state: Not(
           In([
             ...(showHiddenImages ? [] : [CafeImageState.hidden]),
