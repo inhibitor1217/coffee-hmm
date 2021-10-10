@@ -17,7 +17,7 @@ class CafeDetailSubwayLineItem extends StatelessWidget {
         children: [
           Icon(Icons.directions_subway, size: 15, color: Palette.gray),
           SizedBox(width: 6),
-          _buildSubwayTag(line, context),
+          _buildSubwayBadge(line, context),
           SizedBox(width: 6),
           TextInfo(
             text: '$station역',
@@ -28,7 +28,7 @@ class CafeDetailSubwayLineItem extends StatelessWidget {
     );
   }
 
-  Widget _buildSubwayTag(List<String> line, BuildContext context) {
+  Widget _buildSubwayBadge(List<String> line, BuildContext context) {
     return Container(
         height: 15,
         margin: EdgeInsets.only(bottom: 1),
