@@ -21,6 +21,7 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+// Parse `--dart-define` environment variables
 def dartEnvironmentVariables = [:]
 if (project.hasProperty('dart-defines')) {
     dartEnvironmentVariables = project.property('dart-defines')
@@ -38,7 +39,7 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 
-def apiKeyPropertiesFile = rootProject.file("Secrets.properties")
+def apiKeyPropertiesFile = rootProject.file("Secrets-"+appStage+".properties")
 def apiKeyProperties = new Properties()
 apiKeyProperties.load(new FileInputStream(apiKeyPropertiesFile))
 
