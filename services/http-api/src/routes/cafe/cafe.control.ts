@@ -18,12 +18,13 @@ import { getManager, getRepository, In, Not } from 'typeorm';
 import * as uuid from 'uuid';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
 import { createCafeWithImagesLoader } from '../../entities/cafe';
+import { getMessageQueue } from '../../services/mq';
 import { SortOrder, SortOrderStrings } from '../../types';
 import {
   TransformedSchemaTypes,
   TransformedVariablesMap,
 } from '../../types/koa';
-import { enumKeyStrings } from '../../util';
+import { buildString, enumKeyStrings } from '../../util';
 import handler from '../handler';
 
 export const getOne = handler<
@@ -623,6 +624,7 @@ export const create = handler<
       throw new Exception(ExceptionCode.badRequest);
     }
 
+    const { uid } = ctx.state;
     const { name, placeId, metadata, state = 'hidden' } = ctx.request.body;
 
     const connection = await ctx.state.connection();
@@ -681,6 +683,14 @@ export const create = handler<
         .execute();
 
       return createCafeWithImagesLoader(ctx.state, { manager }).load(cafe.id);
+    });
+
+    await getMessageQueue().publish('cafe', 'create', {
+      entityName: 'cafe',
+      entityId: created.id,
+      publishSource: buildString(),
+      actorType: 'user',
+      actorId: uid ?? null,
     });
 
     ctx.status = HTTP_CREATED;
