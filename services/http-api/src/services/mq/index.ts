@@ -1,3 +1,5 @@
+import SnsMessageQueue from './sns';
+
 export default interface MessageQueue {
   /**
    * Publishes a message using the implementation class (i.e. AWS SNS).
@@ -11,7 +13,12 @@ export default interface MessageQueue {
 }
 
 export const getMessageQueue: () => MessageQueue = (() => {
+  let instance: MessageQueue | undefined;
+
   return () => {
-    throw new Error('not implemented');
+    if (!instance) {
+      instance = new SnsMessageQueue();
+    }
+    return instance;
   };
 })();
