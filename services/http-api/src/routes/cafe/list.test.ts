@@ -84,6 +84,7 @@ const setupCafes = async (
             placeId: places[i % NUM_PLACES].id,
             state: i % 2 === 0 ? CafeState.active : CafeState.hidden,
             images: generateImages && generateImages(i),
+            mainImageIndex: 0,
           }).then(({ cafe }) => cafe.id)
       )
       .map((task) => throttle(task))
@@ -124,6 +125,7 @@ type SimpleCafe = {
       index: number;
       state: CafeImageStateStrings;
       relativeUri: string;
+      isMain: boolean;
     }[];
   };
 };
@@ -438,10 +440,10 @@ describe('Cafe - GET /cafe/feed', () => {
       expect(index).toBeLessThan(NUM_TEST_CAFES);
 
       expect(count).toBe(Math.ceil((index % 5) * 0.5));
-      expect(imageList.length).toBe(count);
-      imageList.forEach((image, imageIndex) => {
-        expect(image.index).toBe(imageIndex);
+      expect(imageList.length).toBeLessThanOrEqual(1);
+      imageList.forEach((image) => {
         expect(image.state).toBe('active');
+        expect(image.isMain).toBe(true);
         expect(image.relativeUri).toBe(`/image/${index}/${2 * image.index}`);
       });
     });
@@ -774,7 +776,7 @@ describe('Cafe - GET /cafe/list', () => {
     });
   });
 
-  test('Cafe item contains its images', async () => {
+  test('Cafe item contains its main image', async () => {
     const response = await request
       .get('/cafe/list')
       .query({ limit: 10 })
@@ -795,16 +797,16 @@ describe('Cafe - GET /cafe/list', () => {
       expect(index).toBeLessThan(NUM_TEST_CAFES);
 
       expect(count).toBe(Math.ceil((index % 5) * 0.5));
-      expect(imageList.length).toBe(count);
-      imageList.forEach((image, imageIndex) => {
-        expect(image.index).toBe(imageIndex);
+      expect(imageList.length).toBeLessThanOrEqual(1);
+      imageList.forEach((image) => {
         expect(image.state).toBe('active');
+        expect(image.isMain).toBe(true);
         expect(image.relativeUri).toBe(`/image/${index}/${2 * image.index}`);
       });
     });
   });
 
-  test('showHiddenImages=true retrieves hidden images', async () => {
+  test('showHiddenImages=true counts hidden images', async () => {
     const response = await request
       .get('/cafe/list')
       .query({ limit: 10, showHiddenImages: true })
@@ -829,11 +831,10 @@ describe('Cafe - GET /cafe/list', () => {
       expect(index).toBeLessThan(NUM_TEST_CAFES);
 
       expect(count).toBe(index % 5);
-      expect(imageList.length).toBe(count);
-      imageList.forEach((image, imageIndex) => {
-        expect(image.index).toBe(imageIndex);
+      imageList.forEach((image) => {
         expect(image.relativeUri).toBe(`/image/${index}/${image.index}`);
-        if (imageIndex % 2 === 0) {
+        expect(image.isMain).toBe(true);
+        if (image.index % 2 === 0) {
           expect(image.state).toBe('active');
         } else {
           expect(image.state).toBe('hidden');
