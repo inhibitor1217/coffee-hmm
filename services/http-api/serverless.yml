@@ -18,7 +18,7 @@ plugins:
 
 custom:
   stage: ${env:APP_STAGE, 'beta'}
-  version: 0.1.6
+  version: 0.1.7
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules:
