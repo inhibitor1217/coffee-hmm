@@ -1,6 +1,7 @@
-export const handler = (event: any) => {
-  return Promise.resolve({
-    statusCode: 200,
-    body: event.Records[0].body,
-  });
-};
+import { buildString } from '../util';
+import sqsEventHandler from '../util/handler/sqsEventHandler';
+
+export const handler = sqsEventHandler({
+  name: 'cafeCreateSlackNotification',
+  buildString: buildString(),
+});
