@@ -18,7 +18,7 @@ import { getManager, getRepository, In, Not } from 'typeorm';
 import * as uuid from 'uuid';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
 import { createCafeWithImagesLoader } from '../../entities/cafe';
-import { getMessageQueue } from '../../services/mq';
+import services from '../../services';
 import { SortOrder, SortOrderStrings } from '../../types';
 import {
   TransformedSchemaTypes,
@@ -685,13 +685,15 @@ export const create = handler<
       return createCafeWithImagesLoader(ctx.state, { manager }).load(cafe.id);
     });
 
-    await getMessageQueue().publish('cafe', 'create', {
-      entityName: 'cafe',
-      entityId: created.id,
-      publishSource: buildString(),
-      actorType: 'user',
-      actorId: uid ?? null,
-    });
+    await services()
+      .mq()
+      .publish('cafe', 'create', {
+        entityName: 'cafe',
+        entityId: created.id,
+        publishSource: buildString(),
+        actorType: 'user',
+        actorId: uid ?? null,
+      });
 
     ctx.status = HTTP_CREATED;
     ctx.body = {
