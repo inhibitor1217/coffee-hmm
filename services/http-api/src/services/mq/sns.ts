@@ -18,10 +18,7 @@ export default class SnsMessageQueue implements MessageQueue {
   ): Promise<string> {
     const params: SNS.Types.PublishInput = {
       TopicArn: await SnsMessageQueue.getTopicResourceId(topic),
-      Message: name,
-      MessageAttributes: {
-        content: SnsMessageQueue.mapJson(content),
-      },
+      Message: JSON.stringify({ name, content }),
       MessageGroupId: SnsMessageQueue.DEFAULT_MESSAGE_GROUP,
     };
 
@@ -42,17 +39,6 @@ export default class SnsMessageQueue implements MessageQueue {
         resolve(messageId);
       });
     });
-  }
-
-  /**
-   * NOTE: should implement this with smarter mechanism
-   * rather than stringifying whole content, `MessageAttributeMap` could be generated here
-   */
-  private static mapJson(json: AnyJson): SNS.Types.MessageAttributeValue {
-    return {
-      DataType: 'String',
-      StringValue: JSON.stringify(json),
-    };
   }
 
   private static getTopicResourceId(topic: string): Promise<string> {
