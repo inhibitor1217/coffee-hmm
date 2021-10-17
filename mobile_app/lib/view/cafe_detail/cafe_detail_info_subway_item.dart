@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/constants/color.dart';
+import 'package:mobile_app/view/common/badge.dart';
 import 'package:mobile_app/view/common/text_info.dart';
 
 class CafeDetailSubwayLineItem extends StatelessWidget {
@@ -16,7 +17,7 @@ class CafeDetailSubwayLineItem extends StatelessWidget {
         children: [
           Icon(Icons.directions_subway, size: 15, color: Palette.gray),
           SizedBox(width: 6),
-          _buildSubwayTag(line, context),
+          _buildSubwayBadge(line, context),
           SizedBox(width: 6),
           TextInfo(
             text: '$station역',
@@ -27,7 +28,7 @@ class CafeDetailSubwayLineItem extends StatelessWidget {
     );
   }
 
-  Widget _buildSubwayTag(List<String> line, BuildContext context) {
+  Widget _buildSubwayBadge(List<String> line, BuildContext context) {
     return Container(
         height: 15,
         margin: EdgeInsets.only(bottom: 1),
@@ -36,18 +37,11 @@ class CafeDetailSubwayLineItem extends StatelessWidget {
           shrinkWrap: true,
           itemCount: line.length,
           itemBuilder: (context, index) {
-            return Container(
-              child: Center(
-                  child: Text(
-                line[index],
-                style: TextStyle(fontSize: 8, color: Colors.white),
-              )),
-              constraints: BoxConstraints(minHeight: 15, minWidth: 15),
-              padding: EdgeInsets.symmetric(horizontal: 4),
+            return  Container(
               margin: EdgeInsets.only(right: index == line.length - 1 ? 0 : 2),
-              decoration: BoxDecoration(
+              child: Badge(text: line[index], decoration: BoxDecoration(
                   color: getSubwayColor(line[index]),
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
+                  borderRadius: BorderRadius.all(Radius.circular(10)))),
             );
           },
         ));

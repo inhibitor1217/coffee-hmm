@@ -96,7 +96,7 @@ class _DetailHeaderState extends State<DetailHeader> {
   void initState() {
     super.initState();
 
-    widget.cafeResponse?.then((data) {
+    widget.cafeResponse.then((data) {
       setState(() {
         _cafeName = data.cafe.name;
       });
