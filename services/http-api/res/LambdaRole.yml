@@ -63,7 +63,7 @@ Properties:
               # Topic: cafe
               - Fn::Join:
                   - ''
-                  - - 'arn:aws:ssm:'
+                  - - 'arn:aws:sns:'
                     - Ref: AWS::Region
                     - ':'
                     - Ref: AWS::AccountId
