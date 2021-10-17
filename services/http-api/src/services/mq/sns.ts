@@ -26,11 +26,20 @@ export default class SnsMessageQueue implements MessageQueue {
     };
 
     return new Promise<string>((resolve, reject) => {
-      this.sns.publish(params, (err, { MessageId: messageId }) => {
-        if (err) reject(err);
-        else if (!messageId)
+      this.sns.publish(params, (err, data) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        const { MessageId: messageId } = data ?? {};
+
+        if (!messageId) {
           reject(new TypeError('AWS SNS publish returned an empty messageId'));
-        else resolve(messageId);
+          return;
+        }
+
+        resolve(messageId);
       });
     });
   }
