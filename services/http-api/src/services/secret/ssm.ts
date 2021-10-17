@@ -6,7 +6,8 @@ function getValue(
   ssmParameterList: SSM.ParameterList | undefined,
   key: string
 ): string | undefined {
-  return ssmParameterList?.find(({ Name }) => Name === key)?.Value;
+  return ssmParameterList?.find(({ Name }) => Name?.endsWith(key) ?? false)
+    ?.Value;
 }
 
 export default class SsmSecretStorage implements SecretStorage {
