@@ -11,8 +11,8 @@ class FloatingButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 50,
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      height: 72,
+      padding: EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 20),
       decoration: BoxDecoration(color: Palette.whiteTransparentBG),
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(

@@ -136,7 +136,7 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
               CafeDetailInfo(cafe: cafe),
               if (hasLocation)
                 CafeDetailLocation(cafe: cafe),
-              SizedBox(height: 60),
+              SizedBox(height: 100),
             ],
           ),
         ),
