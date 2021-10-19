@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -31,6 +33,7 @@ class _MapState extends State<Map> {
           opacity: isMapLoading ? 1.0 : 0,
           duration: Duration(milliseconds: opacityDuration),
           child: GoogleMap(
+            gestureRecognizers:_createGestureRecognizers(),
             mapType: MapType.normal,
             markers: _createMarkers(location: widget.location, title: widget.title),
             initialCameraPosition:
@@ -47,6 +50,18 @@ class _MapState extends State<Map> {
         ),
     );
   }
+}
+
+Set<Factory<OneSequenceGestureRecognizer>> _createGestureRecognizers(){
+  final gestures = <Factory<OneSequenceGestureRecognizer>>[
+    Factory<PanGestureRecognizer>(() => PanGestureRecognizer()),
+    Factory<ScaleGestureRecognizer>(() => ScaleGestureRecognizer()),
+    Factory<TapGestureRecognizer>(() => TapGestureRecognizer()),
+    Factory<VerticalDragGestureRecognizer>(
+            () => VerticalDragGestureRecognizer()),
+  ];
+
+  return  gestures.toSet();
 }
 
 Set<Marker> _createMarkers({required LatLng location, required String title}) {
