@@ -17,14 +17,14 @@ class CafeDetailLocation extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 20),
+            SizedBox(height: 56),
             CafeDetailLocationTitle(),
             Map(
                 location: LatLng(
                     double.parse(cafe.metadata!.location!.lat!),
                     double.parse(cafe.metadata!.location!.lng!)),
                 title: cafe.name,
-                height: 240)
+                height: 220)
           ],
        )
     );

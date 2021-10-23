@@ -1,7 +1,11 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:mobile_app/view/common/map_option.dart';
+
 
 class Map extends StatefulWidget {
   final LatLng location;
@@ -16,8 +20,13 @@ class Map extends StatefulWidget {
 }
 
 class _MapState extends State<Map> {
-  static const mapLoadingDuration = 450;
-  static const opacityDuration = 500;
+  late final _mapOption;
+
+  void initState(){
+    super.initState();
+    _mapOption = MapOption(loadingDuration: Duration(milliseconds: 450), opacityDuration: Duration(milliseconds: 500), gestureRecognizerOption: _createGestureRecognizers(), markerOption: _createMarkers(location: widget.location, title: widget.title));
+  }
+
   final Completer<GoogleMapController> _controller = Completer();
   bool isMapLoading = false;
 
@@ -29,16 +38,17 @@ class _MapState extends State<Map> {
         child: AnimatedOpacity(
           curve: Curves.fastOutSlowIn,
           opacity: isMapLoading ? 1.0 : 0,
-          duration: Duration(milliseconds: opacityDuration),
+          duration:_mapOption.opacityDuration,
           child: GoogleMap(
+            gestureRecognizers: _mapOption.gestureRecognizerOption,
             mapType: MapType.normal,
-            markers: _createMarkers(location: widget.location, title: widget.title),
+            markers: _mapOption.markerOption,
             initialCameraPosition:
             CameraPosition(target: widget.location, zoom: 17),
             onMapCreated: (GoogleMapController controller) {
               _controller.complete(controller);
               Future.delayed(
-                  Duration(milliseconds: mapLoadingDuration),
+                  _mapOption.loadingDuration,
                       () => setState(() {
                     isMapLoading = true;
                   }));
@@ -47,6 +57,18 @@ class _MapState extends State<Map> {
         ),
     );
   }
+}
+
+Set<Factory<OneSequenceGestureRecognizer>> _createGestureRecognizers(){
+  final gestures = <Factory<OneSequenceGestureRecognizer>>[
+    Factory<PanGestureRecognizer>(() => PanGestureRecognizer()),
+    Factory<ScaleGestureRecognizer>(() => ScaleGestureRecognizer()),
+    Factory<TapGestureRecognizer>(() => TapGestureRecognizer()),
+    Factory<VerticalDragGestureRecognizer>(
+            () => VerticalDragGestureRecognizer()),
+  ];
+
+  return  gestures.toSet();
 }
 
 Set<Marker> _createMarkers({required LatLng location, required String title}) {
