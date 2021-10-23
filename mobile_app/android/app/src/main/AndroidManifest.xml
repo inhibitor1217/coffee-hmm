@@ -4,6 +4,8 @@
         android:label="@string/app_name_${appStage}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
+       <meta-data android:name="com.google.android.geo.API_KEY"
+           android:value="@string/GOOGLE_MAP_KEY_ANDROID"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -31,6 +33,18 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <!-- Deep linking -->
+            <meta-data android:name="flutter_deeplinking_enabled" android:value="true" />
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="coffeehmm.com" />
+                <data android:host="www.coffeehmm.com" />
+                <data android:host="coffee-hmm.inhibitor.io" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

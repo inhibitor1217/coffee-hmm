@@ -1,9 +1,9 @@
 name: mobile_app
 description: A new Flutter project.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.1.1+6
+version: 1.2.0+7
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.14.0 <3.0.0"
 flutter:
   uses-material-design: true
   assets:
@@ -27,6 +27,7 @@ dependencies:
   webview_flutter: ^2.0.12
   flutter_launcher_icons: ^0.9.1
   flutter_svg: ^0.22.0
+  google_maps_flutter: ^2.0.10
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -57,6 +57,11 @@ jobs:
           echo $FIREBASE_VALUES | base64 -d > android/app/google-services/beta/values/values.xml
         env:
           FIREBASE_VALUES: ${{ secrets.FIREBASE_VALUES_ANDROID_BETA }}
+      - name: Decode android external api settings.
+        run: |
+          echo $ANDROID_EXTERNAL_API_KEYS | base64 -d > android/Secrets-beta.properties
+        env:
+          ANDROID_EXTERNAL_API_KEYS: ${{ secrets.ANDROID_EXTERNAL_API_KEYS_BETA }}
       - name: Setup Java.
         uses: actions/setup-java@v2.2.0
         with:
@@ -65,7 +70,7 @@ jobs:
       - name: Setup Flutter.
         uses: subosito/flutter-action@4389e6cbc6cb8a4b18c628ff96ff90be0e926aa8
         with:
-          flutter-version: "2.2.3"
+          flutter-version: "2.5.2"
       - name: Install flutter package dependencies.
         run: flutter pub get
       - name: Build APK.

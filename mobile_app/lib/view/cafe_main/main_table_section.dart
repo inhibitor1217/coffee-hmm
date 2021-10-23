@@ -107,7 +107,7 @@ class _MainTableCafeElementState extends State<MainTableCafeElement>
                   children: [
                     Row(
                       children: [
-                        CafeName(name: widget.cafe.name),
+                        CafeName(name: widget.cafe.name, customStyle: CafeNameStyles.mainStyle,),
                         Spacer(),
                         if (widget.cafe.image.count > 8)
                           Text(
