@@ -1,6 +1,6 @@
 {
   "name": "coffee-hmm-jobs",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A collection of cron jobs in coffee-hmm project",
   "scripts": {
     "test": "jest --collectCoverage --maxWorkers=4"
