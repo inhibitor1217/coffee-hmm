@@ -5,6 +5,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import 'map_option.dart';
+
 class Map extends StatefulWidget {
   final LatLng location;
   final String title;
@@ -18,8 +20,13 @@ class Map extends StatefulWidget {
 }
 
 class _MapState extends State<Map> {
-  static const mapLoadingDuration = 450;
-  static const opacityDuration = 500;
+  MapOption? _mapOption;
+
+  void initState(){
+    super.initState();
+    _mapOption=MapOption(loadingDuration: 450, opacityDuration: 500, gestureRecognizerOption: _createGestureRecognizers(), markerOption: _createMarkers(location: widget.location, title: widget.title));
+  }
+
   final Completer<GoogleMapController> _controller = Completer();
   bool isMapLoading = false;
 
@@ -31,17 +38,17 @@ class _MapState extends State<Map> {
         child: AnimatedOpacity(
           curve: Curves.fastOutSlowIn,
           opacity: isMapLoading ? 1.0 : 0,
-          duration: Duration(milliseconds: opacityDuration),
+          duration: Duration(milliseconds: _mapOption!.opacityDuration),
           child: GoogleMap(
-            gestureRecognizers:_createGestureRecognizers(),
+            gestureRecognizers: _mapOption!.gestureRecognizerOption,
             mapType: MapType.normal,
-            markers: _createMarkers(location: widget.location, title: widget.title),
+            markers: _mapOption!.markerOption,
             initialCameraPosition:
             CameraPosition(target: widget.location, zoom: 17),
             onMapCreated: (GoogleMapController controller) {
               _controller.complete(controller);
               Future.delayed(
-                  Duration(milliseconds: mapLoadingDuration),
+                  Duration(milliseconds: _mapOption!.loadingDuration),
                       () => setState(() {
                     isMapLoading = true;
                   }));
