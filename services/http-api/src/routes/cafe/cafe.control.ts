@@ -18,12 +18,13 @@ import { getManager, getRepository, In, Not } from 'typeorm';
 import * as uuid from 'uuid';
 import { HTTP_CREATED, HTTP_OK } from '../../const';
 import { createCafeWithImagesLoader } from '../../entities/cafe';
+import services from '../../services';
 import { SortOrder, SortOrderStrings } from '../../types';
 import {
   TransformedSchemaTypes,
   TransformedVariablesMap,
 } from '../../types/koa';
-import { enumKeyStrings } from '../../util';
+import { buildString, enumKeyStrings } from '../../util';
 import handler from '../handler';
 
 export const getOne = handler<
@@ -565,7 +566,7 @@ export const getList = handler<
       query: joi
         .object()
         .keys({
-          limit: joi.number().integer().min(1).max(64),
+          limit: joi.number().integer().min(1).max(64).required(),
           cursor: joi.string(),
           orderBy: joi.string().valid(...enumKeyStrings(CafeListOrder)),
           order: joi.string().valid(...enumKeyStrings(SortOrder)),
@@ -623,6 +624,7 @@ export const create = handler<
       throw new Exception(ExceptionCode.badRequest);
     }
 
+    const { uid } = ctx.state;
     const { name, placeId, metadata, state = 'hidden' } = ctx.request.body;
 
     const connection = await ctx.state.connection();
@@ -682,6 +684,16 @@ export const create = handler<
 
       return createCafeWithImagesLoader(ctx.state, { manager }).load(cafe.id);
     });
+
+    await services()
+      .mq()
+      .publish('cafe', 'create', {
+        entityName: 'cafe',
+        entityId: created.id,
+        publishSource: buildString(),
+        actorType: 'user',
+        actorId: uid ?? null,
+      });
 
     ctx.status = HTTP_CREATED;
     ctx.body = {

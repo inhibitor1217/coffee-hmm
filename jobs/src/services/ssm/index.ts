@@ -1,5 +1,4 @@
 import { SSM } from 'aws-sdk';
-import SecretStorage from '.';
 import { env } from '../../util';
 
 function getValue(
@@ -10,7 +9,7 @@ function getValue(
     ?.Value;
 }
 
-export default class SsmSecretStorage implements SecretStorage {
+class SsmParameterStorage {
   private ssm: SSM;
 
   constructor() {
@@ -59,3 +58,5 @@ export default class SsmSecretStorage implements SecretStorage {
       .then(({ Parameters }) => Parameters);
   }
 }
+
+export default new SsmParameterStorage();

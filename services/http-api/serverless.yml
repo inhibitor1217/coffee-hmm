@@ -18,7 +18,9 @@ plugins:
 
 custom:
   stage: ${env:APP_STAGE, 'beta'}
-  version: 0.1.5
+  version: 0.2.0
+  secret:
+    globalVariablePrefix: coffee-hmm.GLOBAL
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules:
@@ -52,3 +54,4 @@ functions:
       LOG_LEVEL: info
       AUTH_SERVICE: https://${self:custom.stage}.auth.coffee-hmm.inhibitor.io
       ORMCONFIG_FILE: ormconfig.json
+      SECRET_GLOBAL_VARIABLE_PREFIX: ${self:custom.secret.globalVariablePrefix}
