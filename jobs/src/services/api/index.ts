@@ -85,6 +85,15 @@ class ApiService {
 
     return [list, nextCursor];
   }
+
+  async getCafe(id: string): Promise<CafeRecord> {
+    const response = await this.instance.get<{ cafe: CafeRecord }>(
+      `/cafe/${id}`
+    );
+
+    const { cafe } = response.data;
+    return cafe;
+  }
 }
 
 export default new ApiService();

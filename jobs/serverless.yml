@@ -10,6 +10,7 @@ provider:
 resources:
   Resources:
     GenerateSitemapRole: ${file(./res/GenerateSitemapRole.yml)}
+    CafeCreateSlackNotificationRole: ${file('./res/CafeCreateSlackNotificationRole.yml')}
 
 plugins:
   - serverless-webpack
@@ -32,6 +33,16 @@ custom:
     cloudfront:
       arn: arn:aws:cloudfront::871935403311:distribution/E31ON6KII3D5OF
       distributionId: E31ON6KII3D5OF
+  sqs:
+    cafe:
+      slackNotification:
+        Fn::Join:
+          - ''
+          - - 'arn:aws:sqs:'
+            - Ref: AWS::Region
+            - ':'
+            - Ref: AWS::AccountId
+            - ':coffee-hmm-cafe-slack-notification-${self:custom.stage}.fifo'
 
 functions:
   generateSitemap:
@@ -48,3 +59,16 @@ functions:
       BASE_APP_URL: ${self:custom.spa.url}
       SPA_CLOUDFRONT_DISTRIBUTION_ID: ${self:custom.spa.cloudfront.distributionId}
       SPA_S3_BUCKET_NAME: ${self:custom.spa.s3.name}
+
+  cafeCreateSlackNotification:
+    handler: src/job/cafeCreateSlackNotification.handler
+    role: CafeCreateSlackNotificationRole
+    events:
+      - sqs:
+          arn: ${self:custom.sqs.cafe.slackNotification}
+    environment:
+      APP_NAME: ${self:service}
+      APP_VERSION: ${self:custom.version}
+      APP_STAGE: ${self:custom.stage}
+      LOG_LEVEL: info
+      API_SERVICE: https://${self:custom.stage}.api.coffee-hmm.inhibitor.io
