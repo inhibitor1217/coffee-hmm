@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { TypeCafe } from "types";
-
-import { getCafeById } from "components/api";
-import CafeDetail from "components/others/CafeDetail";
+import { Cafe } from "types/common";
+import { getCafeById } from "api";
+import CafeDetail from "components/detail/CafeDetail";
 
 import "./index.css";
 
 const Detail: React.FC = () => {
   const { cafeId } = useParams<{ cafeId: string }>();
-  const [cafe, setCafe] = useState<TypeCafe | null>(null);
+  const [cafe, setCafe] = useState<Cafe | null>(null);
 
   useEffect(() => {
     async function fetchData() {

@@ -25,9 +25,9 @@ const StyledSpinner = styled.div<Partial<SpinnerProps>>`
     width: ${(props) => props.size}px;
     height: ${(props) => props.size}px;
   }
-  border: ${(props) => props.size! / 8}px solid
+  border: ${(props) => (props.size ?? 0) / 8}px solid
     ${(props) => (props.inverted ? "#ffffff" : props.pathColor || "#55AEF3")};
-  border-left: ${(props) => props.size! / 8}px solid
+  border-left: ${(props) => (props.size ?? 0) / 8}px solid
     ${(props) => (props.inverted ? "#ffffff" : "#fafafa")};
   animation: ${spinnerKeyframes} 1.1s infinite linear;
 `;

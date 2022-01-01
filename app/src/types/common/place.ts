@@ -1,4 +1,4 @@
-export type TypePlace = {
+export type Place = {
   id: string;
   createdAt: string;
   updatedAt: string;

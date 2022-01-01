@@ -6,15 +6,16 @@ import {
   SwipeablePanel,
 } from "@inhibitor1217/react-swipeablepanel";
 import { StyledCarouselImage } from "utils/styled";
-import { TypeCafe } from "types";
+import { Cafe } from "types/common";
+
+import PositionDotHorizontal from "components/common/PositionDotHorizontal";
 
 import CarouselDetailImage from "../CarouselDetailImage";
-import PositionDotHorizontal from "../PositionDotHorizontal";
 
 import "./index.css";
 
 type CafeDetailImageCarouselProps = {
-  cafe: TypeCafe | null;
+  cafe: Cafe | null;
 };
 
 const CafeDetailImageCarousel = ({ cafe }: CafeDetailImageCarouselProps) => {

@@ -1,4 +1,4 @@
-import { SERVER_URL } from "constants/url";
+import { SERVER_URL } from "constants/common";
 
 // Cafe
 export const getCafeListByPlace = async (place: string) => {
