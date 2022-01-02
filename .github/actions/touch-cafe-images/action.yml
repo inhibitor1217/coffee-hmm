@@ -2,4 +2,4 @@ name: 'Touch cloudfront hosted cafe images'
 description: 'Retrieve a list of cafe images and touches them to restore CF cache'
 runs:
   using: 'node16'
-  main: 'index.js'
+  main: 'dist/index.js'
