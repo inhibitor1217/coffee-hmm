@@ -28,6 +28,8 @@ jobs:
     steps:
       - name: Checkout source from branch.
         uses: actions/checkout@v2
+        with:
+          ref: refs/heads/chore/workflows/touch-cf-resources # temp
       - uses: ./actions/touch-cafe-images
   notify:
     needs: [touch-cloudfront]
