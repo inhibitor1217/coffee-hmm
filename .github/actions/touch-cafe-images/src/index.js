@@ -47,7 +47,7 @@ const emptyStat = () => ({
 
 const mergeStats = (stats) => stats.reduce(mergeStat, emptyStat())
 
-const statOf = (response) => {
+const statOf = (uri, response) => {
   if (isSuccess(response)) {
     if (isHit(response)) { return { touched: 1, hit: 1 } }
     else { return { touched: 1, miss: 1 } }
@@ -74,7 +74,7 @@ async function touchCafeImagesInPlace(place) {
           .map((image) => image.relativeUri)
           .map(toCloudfrontUrl)
           .map((uri) => withParam(uri, { d: CAFE_IMAGE_DIMENSION }))
-          .map((uri) => fetch(uri).then(statOf)),
+          .map((uri) => fetch(uri).then(response => statOf(uri, response))),
       )
         .then(mergeStats),
     ),
