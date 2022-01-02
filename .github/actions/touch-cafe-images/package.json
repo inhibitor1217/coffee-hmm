@@ -6,7 +6,6 @@
   "author": "inhibitor <inhibitor@kaist.ac.kr>",
   "license": "UNLICENSED",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "node src/index.js",
     "build": "webpack"

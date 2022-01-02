@@ -1,4 +1,4 @@
-import core from '@actions/core';
+import { setOutput } from '@actions/core';
 import nodeFetch from 'node-fetch';
 import pThrottle from 'p-throttle';
 import qs from 'qs';
@@ -83,8 +83,8 @@ async function touchCafeImagesInPlace(place) {
 }
 
 const placeOutputs = (places, placeCount) => {
-  core.setOutput('placeCount', placeCount);
-  core.setOutput('touchedPlaceCount', places.length);
+  setOutput('placeCount', placeCount);
+  setOutput('touchedPlaceCount', places.length);
 }
 
 const logPlaceOutputs = (places, placeCount) => {
@@ -92,10 +92,10 @@ const logPlaceOutputs = (places, placeCount) => {
 }
 
 const imageOutputs = (stat) => {
-  core.setOutput('touchedImageCount', stat.touched);
-  core.setOutput('hitImageCount', stat.hit);
-  core.setOutput('missImageCount', stat.miss);
-  core.setOutput('failedImageCount', stat.failed);
+  setOutput('touchedImageCount', stat.touched);
+  setOutput('hitImageCount', stat.hit);
+  setOutput('missImageCount', stat.miss);
+  setOutput('failedImageCount', stat.failed);
 }
 
 const logImageOutputs = (stat) => {
