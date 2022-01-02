@@ -1,0 +1,9 @@
+name: touch-cf-cafe-images
+on: workflow_dispatch
+
+jobs:
+  idle:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Do nothing.
+        run: echo "Hello, world"
