@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { Cafe, Place } from "types/common";
+import { Cafe, Place } from "types/common/model";
 import { RootState } from "store";
 import { DataAlreadyLoadedException } from "store/exception";
 import { getCafeListByPlace, getPlaceList } from "api";

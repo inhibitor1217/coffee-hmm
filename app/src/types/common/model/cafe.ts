@@ -1,6 +1,6 @@
 import { Place } from "./place";
 
-export interface Cafe {
+export type Cafe = {
   id: string;
   createdAt: string;
   updatedAt: string;
@@ -9,7 +9,7 @@ export interface Cafe {
   state: string;
   image: {
     count: number;
-    list: CafeImage[] | [];
+    list: CafeImage[];
   };
   views: {
     daily: number;
@@ -23,9 +23,9 @@ export interface Cafe {
     hour?: string;
     tag?: string[];
   };
-}
+};
 
-interface CafeImage {
+type CafeImage = {
   id: string;
   createdAt: string;
   updatedAt: string;
@@ -39,4 +39,4 @@ interface CafeImage {
     width: number;
     height: number;
   };
-}
+};

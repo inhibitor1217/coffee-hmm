@@ -6,7 +6,7 @@ import {
   SwipeablePanel,
 } from "@inhibitor1217/react-swipeablepanel";
 import { StyledCarouselImage } from "utils/styled";
-import { Cafe } from "types/common";
+import { Cafe } from "types/common/model";
 
 import PositionDotHorizontal from "components/common/PositionDotHorizontal";
 

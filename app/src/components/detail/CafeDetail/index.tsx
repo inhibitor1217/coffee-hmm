@@ -1,7 +1,7 @@
 import React from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 
-import { Cafe } from "types/common";
+import { Cafe } from "types/common/model";
 import { copyLink, openSearch } from "utils";
 import { StyledColumnFlex } from "utils/styled";
 

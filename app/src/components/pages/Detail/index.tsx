@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { Cafe } from "types/common";
+import { Cafe } from "types/common/model";
 import { getCafeById } from "api";
 import CafeDetail from "components/detail/CafeDetail";
 

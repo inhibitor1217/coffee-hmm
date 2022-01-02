@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Cafe } from "types/common";
+import { Cafe } from "types/common/model";
 import { useAppDispatch } from "store/hooks";
 import introNavSlice from "store/modules/intro-nav";
 import { onImageLoad } from "utils";

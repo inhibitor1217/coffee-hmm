@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 
-import { Place } from "types/common";
+import { Place } from "types/common/model";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import introNavSlice from "store/modules/intro-nav";
 
