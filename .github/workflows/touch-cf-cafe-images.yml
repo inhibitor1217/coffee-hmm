@@ -2,8 +2,40 @@ name: touch-cf-cafe-images
 on: workflow_dispatch
 
 jobs:
-  idle:
+  init:
     runs-on: ubuntu-18.04
     steps:
-      - name: Do nothing.
-        run: echo "Hello, world"
+      - name: Notify action start message.
+        uses: 8398a7/action-slack@e74cd4e48f4452e8158dc4f8bcfc780ae6203364
+        with:
+          status: custom
+          fields: commit,author,ref,workflow
+          custom_payload: |
+            {
+              text: `Start workflow run ${process.env.AS_WORKFLOW}`,
+              attachments: [
+                {
+                  color: 'good',
+                  text: `Start workflow run ${process.env.AS_WORKFLOW}\n${process.env.AS_REF}(${process.env.AS_COMMIT}) by ${process.env.AS_AUTHOR}`,
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+  touch-cloudfront:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout source from branch.
+        uses: actions/checkout@v2
+      - uses: ./actions/touch-cafe-images
+  notify:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Notify action complete message.
+        uses: 8398a7/action-slack@e74cd4e48f4452e8158dc4f8bcfc780ae6203364
+        with:
+          status: ${{ job.status }}
+          fields: repo,job,ref,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+        if: always()
