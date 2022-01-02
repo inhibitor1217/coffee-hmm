@@ -23,12 +23,14 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
   touch-cloudfront:
+    needs: [init]
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout source from branch.
         uses: actions/checkout@v2
       - uses: ./actions/touch-cafe-images
   notify:
+    needs: [touch-cloudfront]
     runs-on: ubuntu-18.04
     steps:
       - name: Notify action complete message.
