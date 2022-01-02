@@ -4,11 +4,11 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import { fetchPlaces } from "store/modules/cafe";
 import { StyledColumnFlex, StyledMainScale } from "utils/styled";
 
-import PlaceSlide from "components/others/PlaceSlide";
-import CafeByPlace from "components/others/CafeByPlace";
-import InitialLoading from "components/others/InitialLoading";
+import PlaceSlide from "components/main/PlaceSlide";
+import CafeByPlace from "components/main/CafeByPlace";
+import InitialLoading from "components/common/InitialLoading";
 
-const Intro = () => {
+const Main = () => {
   const dispatch = useAppDispatch();
   const places = useAppSelector((state) => state.cafe.place?.list);
   const isInitialCafeImageReady = useAppSelector(
@@ -37,4 +37,4 @@ const Intro = () => {
   );
 };
 
-export default Intro;
+export default Main;
