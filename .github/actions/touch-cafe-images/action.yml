@@ -1,5 +1,18 @@
 name: 'Touch cloudfront hosted cafe images'
 description: 'Retrieve a list of cafe images and touches them to restore CF cache'
+outputs:
+  placeCount:
+    description: 'Number of all places'
+  touchedPlaceCount:
+    description: 'Number of places that are touched from this action'
+  touchedImageCount:
+    description: 'Number of images that are touched from this action'
+  hitImageCount:
+    description: 'Number of images that are already hit'
+  missImageCount:
+    description: 'Number of images that are newly hit from this action'
+  failedImageCount:
+    description: 'Number of images that are not available'
 runs:
   using: 'node16'
   main: 'dist/index.js'

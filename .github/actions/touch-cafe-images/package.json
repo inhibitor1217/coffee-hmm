@@ -6,11 +6,16 @@
   "author": "inhibitor <inhibitor@kaist.ac.kr>",
   "license": "UNLICENSED",
   "private": true,
+  "type": "module",
   "scripts": {
+    "dev": "node src/index.js",
     "build": "webpack"
   },
   "dependencies": {
-    "node-fetch": "^3.1.0"
+    "@actions/core": "^1.6.0",
+    "node-fetch": "^3.1.0",
+    "p-throttle": "^5.0.0",
+    "qs": "^6.10.2"
   },
   "devDependencies": {
     "webpack": "^5.65.0",
