@@ -67,11 +67,6 @@ class MainTableCafeList extends StatelessWidget {
             itemBuilder: (context, index) {
               return Column(children: [
                 MainTableCafeElement(cafe: cafeList[index]),
-                if (index < cafeList.length - 1)
-                  Container(
-                    height: 8,
-                    decoration: BoxDecoration(color: Palette.grayBG),
-                  )
               ]);
             }));
   }
@@ -94,7 +89,7 @@ class _MainTableCafeElementState extends State<MainTableCafeElement>
 
     return Container(
         height: 200,
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.symmetric(horizontal: 10),
         alignment: Alignment.centerLeft,
         child: GestureDetector(
             behavior: HitTestBehavior.opaque,
