@@ -26,24 +26,20 @@ class MainButtonSetOfSlider extends StatelessWidget {
               onTapped: () => handleInstagramClick(cafe.name, context)),
           Spacer(),
           Container(
-              width: 100,
-              height: 29,
+              alignment: Alignment.center,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    primary: Palette.lightGray,
                     onPrimary: Colors.black,
                     shadowColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    side: BorderSide(
-                        width: 1,
-                        color: Palette.lightGray,
-                        style: BorderStyle.solid),
                   ),
                   child: Text(
-                    '핫플레이스 ',
-                    style: TextStyle(fontSize: 11),
+                    '핫플레이스',
+                    style: TextStyle(fontSize: 12, color: Palette.darkGray),
                   ),
                   onPressed: () {
                     showModalBottomSheet<void>(
