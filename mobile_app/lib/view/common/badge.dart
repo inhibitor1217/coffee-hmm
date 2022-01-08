@@ -46,7 +46,7 @@ mixin _BadgeSize {
 
 class _BadgeSpec{
   final double fontSize;
-  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry padding;
 
   _BadgeSpec({required this.fontSize, required this.padding});
 }
