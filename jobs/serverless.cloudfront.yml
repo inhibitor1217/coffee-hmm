@@ -39,7 +39,8 @@ custom:
       arn: arn:aws:s3:::coffee-hmm-image
       name: coffee-hmm-image
   distribution:
-    id: ${env:CF_DISTRIBUTION_ID}
+    app: ${env:CF_APP_DISTRIBUTION_ID}
+    image: ${env:CF_IMAGE_DISTRIBUTION_ID}
 
 # NOTE: environment variables are not allowed for Lambda@Edge handlers
 functions:
@@ -48,7 +49,7 @@ functions:
     role: BaseLambdaEdgeRole
     events:
       - preExistingCloudFront:
-          distributionId: ${self:custom.distribution.id}
+          distributionId: ${self:custom.distribution.image}
           eventType: viewer-request
           pathPattern: '*'
           includeBody: false
@@ -58,7 +59,27 @@ functions:
     role: OriginResponseLambdaEdgeRole
     events:
       - preExistingCloudFront:
-          distributionId: ${self:custom.distribution.id}
+          distributionId: ${self:custom.distribution.image}
           eventType: origin-response
           pathPattern: '*'
+          includeBody: false
+
+  appOpenGraph__viewerRequest:
+    handler: src/job/appOpenGraph/viewerRequest.handler
+    role: BaseLambdaEdgeRole
+    events:
+      - preExistingCloudFront:
+          distributionId: ${self:custom.distribution.app}
+          eventType: viewer-request
+          pathPattern: 'cafe/*'
+          includeBody: false
+
+  appOpenGraph__originResponse:
+    handler: src/job/appOpenGraph/originResponse.handler
+    role: BaseLambdaEdgeRole
+    events:
+      - preExistingCloudFront:
+          distributionId: ${self:custom.distribution.app}
+          eventType: origin-response
+          pathPattern: 'cafe/*'
           includeBody: false
