@@ -160,6 +160,7 @@ class CafeMetadataModel {
   final String? call;
   final CafeMetaHoursModel? hours;
   final CafeMetaLocationModel? location;
+  final CafeMetaMenuModel? menu;
 
   CafeMetadataModel(
       {this.creator,
@@ -167,7 +168,8 @@ class CafeMetadataModel {
       this.tag,
       this.call,
       this.hours,
-      this.location});
+      this.location,
+      this.menu});
 
   factory CafeMetadataModel.fromJson(Map<String, dynamic>? json) {
     final listFromJson = json?['tag'];
@@ -179,7 +181,46 @@ class CafeMetadataModel {
         tag: tag,
         call: json?['call'],
         hours: CafeMetaHoursModel.fromJson(json?['hours']),
-        location: CafeMetaLocationModel.fromJson(json?['location']));
+        location: CafeMetaLocationModel.fromJson(json?['location']),
+        menu: CafeMetaMenuModel.fromJson(json?['menu']));
+  }
+}
+
+enum CafeMenuCategory { coffee, non_coffee, dessert }
+
+@immutable
+class CafeMetaMenuModel {
+  final CafeMenuCategory category;
+  final String name;
+  final CafeMetaPriceModel price;
+  final bool? decaffeinated;
+  final bool? seasonal;
+
+  CafeMetaMenuModel({ required this.category, required this.name, required this.price, this.decaffeinated, this.seasonal});
+
+  factory CafeMetaMenuModel.fromJson(Map<String, dynamic>? json){
+    return CafeMetaMenuModel(
+      category: json?['category'],
+      name: json?['name'],
+      price: CafeMetaPriceModel.fromJson(json?['price']),
+      decaffeinated: json?['decaffeinated'],
+      seasonal: json?['seasonal']
+    );
+  }
+}
+
+@immutable
+class CafeMetaPriceModel {
+  final int hot;
+  final int iced;
+
+  CafeMetaPriceModel({ required this.hot, required this.iced});
+
+  factory CafeMetaPriceModel.fromJson(Map<String, dynamic>? json){
+    return CafeMetaPriceModel(
+      hot: json?['hot'],
+      iced: json?['icd']
+    );
   }
 }
 
