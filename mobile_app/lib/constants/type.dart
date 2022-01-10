@@ -186,23 +186,25 @@ class CafeMetadataModel {
   }
 }
 
-enum CafeMenuCategory { coffee, non_coffee, dessert }
+enum CafeMenuCategory { coffee, nonCoffee, dessert }
 
 @immutable
 class CafeMetaMenuModel {
-  final CafeMenuCategory category;
-  final String name;
-  final CafeMetaPriceModel price;
+  final CafeMenuCategory? category;
+  final String? name;
+  final int? price;
+  final CafeMetaPriceOptionModel? priceOption;
   final bool? decaffeinated;
   final bool? seasonal;
 
-  CafeMetaMenuModel({ required this.category, required this.name, required this.price, this.decaffeinated, this.seasonal});
+  CafeMetaMenuModel({ this.category, this.name, this.price, this.priceOption, this.decaffeinated, this.seasonal});
 
   factory CafeMetaMenuModel.fromJson(Map<String, dynamic>? json){
     return CafeMetaMenuModel(
       category: json?['category'],
       name: json?['name'],
-      price: CafeMetaPriceModel.fromJson(json?['price']),
+      price: json?['price'],
+      priceOption: CafeMetaPriceOptionModel.fromJson(json?['priceOption']),
       decaffeinated: json?['decaffeinated'],
       seasonal: json?['seasonal']
     );
@@ -210,16 +212,14 @@ class CafeMetaMenuModel {
 }
 
 @immutable
-class CafeMetaPriceModel {
-  final int hot;
-  final int iced;
+class CafeMetaPriceOptionModel {
+  final int? iced;
 
-  CafeMetaPriceModel({ required this.hot, required this.iced});
+  CafeMetaPriceOptionModel({ this.iced });
 
-  factory CafeMetaPriceModel.fromJson(Map<String, dynamic>? json){
-    return CafeMetaPriceModel(
-      hot: json?['hot'],
-      iced: json?['icd']
+  factory CafeMetaPriceOptionModel.fromJson(Map<String, dynamic>? json){
+    return CafeMetaPriceOptionModel(
+      iced: json?['iced']
     );
   }
 }
