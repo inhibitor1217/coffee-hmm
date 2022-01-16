@@ -1,12 +1,12 @@
 import { createSelector } from "reselect";
 import { RootState } from "store";
-import { TypeCafe, TypePlace } from "types";
+import { Cafe, Place } from "types/common";
 
 export const currentIntroPlaceSelector = createSelector<
   RootState,
-  TypePlace[] | undefined,
+  Place[] | undefined,
   number,
-  TypePlace | undefined
+  Place | undefined
 >(
   (state) => state.cafe.place?.list,
   (state) => state.introNav.currentPlaceIndex,
@@ -17,9 +17,9 @@ export const currentIntroPlaceSelector = createSelector<
 
 export const currentIntroCafeListSelector = createSelector<
   RootState,
-  TypePlace | undefined,
-  { [placeId: string]: { list: TypeCafe[] } },
-  TypeCafe[] | undefined
+  Place | undefined,
+  { [placeId: string]: { list: Cafe[] } },
+  Cafe[] | undefined
 >(
   currentIntroPlaceSelector,
   (state) => state.cafe.cafeMap,
@@ -34,9 +34,9 @@ export const currentIntroCafeListSelector = createSelector<
 
 export const currentIntroCafeSelector = createSelector<
   RootState,
-  TypeCafe[] | undefined,
+  Cafe[] | undefined,
   number,
-  TypeCafe | undefined
+  Cafe | undefined
 >(
   currentIntroCafeListSelector,
   (state) => state.introNav.currentCafeIndex,

@@ -3,7 +3,7 @@ import { useHistory } from "react-router";
 import firebase from "firebase/app";
 import "firebase/analytics";
 
-import { AppStage } from "constants/enums/appStage";
+import { AppStage } from "constants/common";
 import { appStage } from "utils";
 
 const appNames: { [key: string]: string } = {

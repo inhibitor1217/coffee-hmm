@@ -1,7 +1,7 @@
 import React from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 
-import { TypeCafe } from "types";
+import { Cafe } from "types/common/model";
 import { copyLink, openSearch } from "utils";
 import { StyledColumnFlex } from "utils/styled";
 
@@ -10,8 +10,8 @@ import CafeDetailImageCarousel from "../CafeDetailImageCarousel";
 import "./index.css";
 
 type CafeDetailProps = {
-  cafe: TypeCafe | null;
-  setCafe: (cafe: TypeCafe | null) => void;
+  cafe: Cafe | null;
+  setCafe: (cafe: Cafe | null) => void;
 };
 
 const CafeDetail = ({ cafe }: CafeDetailProps) => {

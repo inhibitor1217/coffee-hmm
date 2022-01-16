@@ -1,18 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { TypeCafe, TypePlace } from "types";
+import { Cafe, Place } from "types/common/model";
 import { RootState } from "store";
 import { DataAlreadyLoadedException } from "store/exception";
-
-import { getCafeListByPlace, getPlaceList } from "components/api";
+import { getCafeListByPlace, getPlaceList } from "api";
 
 type CafeState = {
   place?: {
-    list: TypePlace[];
+    list: Place[];
   };
   cafeMap: {
     [placeId: string]: {
-      list: TypeCafe[];
+      list: Cafe[];
     };
   };
 };
@@ -22,7 +21,7 @@ const initialState: CafeState = {
 };
 
 export const fetchPlaces = createAsyncThunk<
-  TypePlace[],
+  Place[],
   void,
   { state: RootState }
 >("cafe/fetchPlaces", async (_, { getState }) => {
@@ -35,10 +34,10 @@ export const fetchPlaces = createAsyncThunk<
 });
 
 export const fetchCafesByPlace = createAsyncThunk<
-  { placeId: string; list: TypeCafe[] },
-  TypePlace,
+  { placeId: string; list: Cafe[] },
+  Place,
   { state: RootState }
->("cafe/fetchCafesByPlace", async (place: TypePlace, { getState }) => {
+>("cafe/fetchCafesByPlace", async (place: Place, { getState }) => {
   const cafeRecord = getState().cafe.cafeMap[place.id];
   if (cafeRecord) {
     throw new DataAlreadyLoadedException();

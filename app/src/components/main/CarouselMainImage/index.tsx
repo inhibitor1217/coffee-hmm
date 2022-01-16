@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { TypeCafe } from "types";
+import { Cafe } from "types/common/model";
 import { useAppDispatch } from "store/hooks";
 import introNavSlice from "store/modules/intro-nav";
 import { onImageLoad } from "utils";
@@ -11,7 +11,7 @@ import Spinner from "components/common/Spinner";
 import "./index.css";
 
 type CarouselMainImageProps = {
-  cafe: TypeCafe;
+  cafe: Cafe;
   index: number;
 };
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { COFFEEHMM_MAIN_URL, COFFEEHMM_REPORT_URL } from "constants/url";
+import { COFFEEHMM_MAIN_URL, COFFEEHMM_REPORT_URL } from "constants/common";
 
 import "./index.css";
 

@@ -4,6 +4,7 @@ import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/router/mixins/enter_cafe_detail_mixin.dart';
 import 'package:mobile_app/util/cafe_detail.dart';
 import 'package:mobile_app/util/common.dart';
+import 'package:mobile_app/view/common/badge.dart';
 import 'package:mobile_app/view/common/cafe_image.dart';
 import 'package:mobile_app/view/common/cafe_info_item.dart';
 import 'package:mobile_app/view/common/cafe_name.dart';
@@ -67,11 +68,6 @@ class MainTableCafeList extends StatelessWidget {
             itemBuilder: (context, index) {
               return Column(children: [
                 MainTableCafeElement(cafe: cafeList[index]),
-                if (index < cafeList.length - 1)
-                  Container(
-                    height: 8,
-                    decoration: BoxDecoration(color: Palette.grayBG),
-                  )
               ]);
             }));
   }
@@ -94,7 +90,7 @@ class _MainTableCafeElementState extends State<MainTableCafeElement>
 
     return Container(
         height: 200,
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.symmetric(horizontal: 10),
         alignment: Alignment.centerLeft,
         child: GestureDetector(
             behavior: HitTestBehavior.opaque,
@@ -110,19 +106,16 @@ class _MainTableCafeElementState extends State<MainTableCafeElement>
                         CafeName(name: widget.cafe.name, customStyle: CafeNameStyles.mainStyle,),
                         Spacer(),
                         if (widget.cafe.image.count > 8)
-                          Text(
-                            '추천',
-                            style: TextStyle(
-                                color: Palette.highlightedColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12),
+                          Badge(
+                            text: '추천해요',
+                            size: BadgeSize.big,
+                            customSpec: BadgeCustomSpec(backgroundColor: Palette.lightBlue, textColor: Palette.blue)
                           )
                       ],
                     ),
                     if (hasCafeMetadata(data.hour))
                       CafeInfoItem(
                         text: data.hour,
-                        fontSize: 13,
                         icon: Icons.access_time_rounded,
                         margin: EdgeInsets.only(top: 4, bottom: 2),
                       )
