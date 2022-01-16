@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mobile_app/router/app_route_information_parser.dart';
 import 'package:mobile_app/router/app_router_delegate.dart';
 
@@ -17,6 +18,14 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final _routerDelegate = AppRouterDelegate();
   final _routeInformationParser = AppRouteInformationParser();
+
+  @override
+  void initState(){
+    super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+  }
 
   @override
   Widget build(BuildContext context) {
