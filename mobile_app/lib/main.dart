@@ -20,11 +20,15 @@ class _MyAppState extends State<MyApp> {
   final _routeInformationParser = AppRouteInformationParser();
 
   @override
-  Widget build(BuildContext context) {
+  void initState(){
+    super.initState();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp.router(
         title: '카페 추천은, 커피흠',
         theme: new ThemeData(
