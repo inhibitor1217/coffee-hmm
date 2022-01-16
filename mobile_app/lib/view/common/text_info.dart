@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/constants/color.dart';
 
 class TextInfo extends StatelessWidget {
   final String text;
@@ -12,7 +13,7 @@ class TextInfo extends StatelessWidget {
     return GestureDetector(
       child: Text(text,
           style: TextStyle(
-            color: Colors.black,
+            color: Palette.darkGray,
             fontSize: fontSize ?? 13,
             height: 1.2,
           )),

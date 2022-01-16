@@ -30,7 +30,7 @@ class CafeInfoItem extends StatelessWidget {
             Icon(
               icon,
               size: _iconSize,
-              color: Palette.gray,
+              color: Palette.highlightedColor,
             ),
             SizedBox(width: 6),
             TextInfo(text: text, fontSize: fontSize, onPressed: onPressed),

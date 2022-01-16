@@ -4,6 +4,7 @@ import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/router/mixins/enter_cafe_detail_mixin.dart';
 import 'package:mobile_app/util/cafe_detail.dart';
 import 'package:mobile_app/util/common.dart';
+import 'package:mobile_app/view/common/badge.dart';
 import 'package:mobile_app/view/common/cafe_image.dart';
 import 'package:mobile_app/view/common/cafe_info_item.dart';
 import 'package:mobile_app/view/common/cafe_name.dart';
@@ -105,19 +106,16 @@ class _MainTableCafeElementState extends State<MainTableCafeElement>
                         CafeName(name: widget.cafe.name, customStyle: CafeNameStyles.mainStyle,),
                         Spacer(),
                         if (widget.cafe.image.count > 8)
-                          Text(
-                            '추천',
-                            style: TextStyle(
-                                color: Palette.highlightedColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12),
+                          Badge(
+                            text: '추천해요',
+                            size: BadgeSize.big,
+                            customSpec: BadgeCustomSpec(backgroundColor: Palette.lightBlue, textColor: Palette.blue)
                           )
                       ],
                     ),
                     if (hasCafeMetadata(data.hour))
                       CafeInfoItem(
                         text: data.hour,
-                        fontSize: 13,
                         icon: Icons.access_time_rounded,
                         margin: EdgeInsets.only(top: 4, bottom: 2),
                       )

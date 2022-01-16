@@ -38,9 +38,12 @@ class CafeDetailLocationTitle extends StatelessWidget {
       margin: EdgeInsets.only(left: 20, right: 20, bottom: 16),
       child:  Row(
         children: [
-          Text('카페 가는 길', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text('카페 가는 길', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           SizedBox(width: 4),
-          Badge(text: 'NEW', decoration: BoxDecoration(color: Palette.lightRed, borderRadius: BorderRadius.all(Radius.circular(4))))
+          Badge(text: 'NEW',
+              size: BadgeSize.small,
+              customSpec: BadgeCustomSpec(backgroundColor: Palette.lightRed, textColor: Colors.white)
+          ),
     ]));
 
   }
