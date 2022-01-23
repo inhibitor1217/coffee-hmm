@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:mobile_app/util/type_trasnformer.dart';
 
 import 'enum.dart';
 
@@ -156,33 +157,37 @@ class CafeImageMetadataModel {
 class CafeMetadataModel {
   final String? creator;
   final String? hour;
-  final List<String>? tag;
+  final List<String>? tags;
   final String? call;
   final CafeMetaHoursModel? hours;
   final CafeMetaLocationModel? location;
-  final CafeMetaMenuModel? menu;
+  final List<CafeMetaMenuModel>? menus;
 
   CafeMetadataModel(
       {this.creator,
       this.hour,
-      this.tag,
+      this.tags,
       this.call,
       this.hours,
       this.location,
-      this.menu});
+      this.menus});
 
   factory CafeMetadataModel.fromJson(Map<String, dynamic>? json) {
-    final listFromJson = json?['tag'];
-    final List<String> tag =
-        List.unmodifiable(new List<String>.from(listFromJson));
+    final tagsFromJson = json?['tag'] ?? [];
+    final List<String> tags =
+        List.unmodifiable(new List<String>.from(tagsFromJson));
+    final menusFromJson =  json?['menu'] ?? [];
+    final List<CafeMetaMenuModel> menus = List.unmodifiable(
+        menusFromJson.map((menu) => CafeMetaMenuModel.fromJson(menu)).toList());
+
     return CafeMetadataModel(
         creator: json?['creator'],
         hour: json?['hour'],
-        tag: tag,
+        tags: tags,
         call: json?['call'],
         hours: CafeMetaHoursModel.fromJson(json?['hours']),
         location: CafeMetaLocationModel.fromJson(json?['location']),
-        menu: CafeMetaMenuModel.fromJson(json?['menu']));
+        menus: menus);
   }
 }
 
@@ -200,8 +205,10 @@ class CafeMetaMenuModel {
   CafeMetaMenuModel({ this.category, this.name, this.price, this.priceOption, this.decaffeinated, this.seasonal});
 
   factory CafeMetaMenuModel.fromJson(Map<String, dynamic>? json){
+    final category = CafeMenuCategory.values.stringToEnum(json?['category'], CafeMenuCategory.coffee);
+
     return CafeMetaMenuModel(
-      category: json?['category'],
+      category: category,
       name: json?['name'],
       price: json?['price'],
       priceOption: CafeMetaPriceOptionModel.fromJson(json?['priceOption']),
@@ -219,7 +226,7 @@ class CafeMetaPriceOptionModel {
 
   factory CafeMetaPriceOptionModel.fromJson(Map<String, dynamic>? json){
     return CafeMetaPriceOptionModel(
-      iced: json?['iced']
+      iced: json?['iced'],
     );
   }
 }
