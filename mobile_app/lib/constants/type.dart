@@ -191,8 +191,6 @@ class CafeMetadataModel {
   }
 }
 
-enum CafeMenuCategory { coffee, nonCoffee, dessert }
-
 @immutable
 class CafeMetaMenuModel {
   final CafeMenuCategory? category;

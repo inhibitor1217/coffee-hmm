@@ -6,6 +6,7 @@ import 'package:mobile_app/util/cafe_detail.dart';
 import 'package:mobile_app/util/common.dart';
 import 'package:mobile_app/view/cafe_detail/cafe_detail_info.dart';
 import 'package:mobile_app/view/cafe_detail/cafe_detail_location.dart';
+import 'package:mobile_app/view/cafe_detail/cafe_detail_menu.dart';
 import 'package:mobile_app/view/common/cafe_image_slider.dart';
 import 'package:mobile_app/view/common/error.dart';
 import 'package:mobile_app/view/common/floating_button.dart';
@@ -115,6 +116,7 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
   Widget build(BuildContext context) {
     final bool hasLocation = hasCafeMetadata(cafe.metadata?.location?.lat) &&
         hasCafeMetadata(cafe.metadata?.location?.lng);
+    final bool hasMenus = (cafe.metadata?.menus ?? []).length > 0;
 
     return Stack(
       children: [
@@ -136,6 +138,8 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
               CafeDetailInfo(cafe: cafe),
               if (hasLocation)
                 CafeDetailLocation(cafe: cafe),
+              if(hasMenus)
+                CafeDetailMenus(menus: cafe.metadata!.menus!),
               SizedBox(height: 100),
             ],
           ),

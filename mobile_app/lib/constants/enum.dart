@@ -16,3 +16,5 @@ extension GetCafeImageState on CafeImageState {
         orElse: () => CafeImageState.hidden);
   }
 }
+
+enum CafeMenuCategory { coffee, nonCoffee, dessert }
