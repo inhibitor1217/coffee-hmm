@@ -116,7 +116,7 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
   Widget build(BuildContext context) {
     final bool hasLocation = hasCafeMetadata(cafe.metadata?.location?.lat) &&
         hasCafeMetadata(cafe.metadata?.location?.lng);
-    final bool hasMenus = (cafe.metadata?.menus ?? []).length > 0;
+    final bool hasMenus = (cafe.metadata?.mainMenus ?? []).length > 0;
 
     return Stack(
       children: [
@@ -139,7 +139,7 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
               if (hasLocation)
                 CafeDetailLocation(cafe: cafe),
               if(hasMenus)
-                CafeDetailMenus(menus: cafe.metadata!.menus!),
+                CafeDetailMenus(menus: cafe.metadata!.mainMenus!),
               SizedBox(height: 100),
             ],
           ),

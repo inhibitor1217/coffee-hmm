@@ -162,6 +162,7 @@ class CafeMetadataModel {
   final CafeMetaHoursModel? hours;
   final CafeMetaLocationModel? location;
   final List<CafeMetaMenuModel>? menus;
+  final List<CafeMetaMenuModel>? mainMenus;
 
   CafeMetadataModel(
       {this.creator,
@@ -170,7 +171,8 @@ class CafeMetadataModel {
       this.call,
       this.hours,
       this.location,
-      this.menus});
+      this.menus,
+      this.mainMenus});
 
   factory CafeMetadataModel.fromJson(Map<String, dynamic>? json) {
     final tagsFromJson = json?['tag'] ?? [];
@@ -179,6 +181,7 @@ class CafeMetadataModel {
     final menusFromJson =  json?['menu'] ?? [];
     final List<CafeMetaMenuModel> menus = List.unmodifiable(
         menusFromJson.map((menu) => CafeMetaMenuModel.fromJson(menu)).toList());
+    final List<CafeMetaMenuModel> mainMenus = menus.where((menu) => menu.isMain ?? false ).toList();
 
     return CafeMetadataModel(
         creator: json?['creator'],
@@ -187,7 +190,8 @@ class CafeMetadataModel {
         call: json?['call'],
         hours: CafeMetaHoursModel.fromJson(json?['hours']),
         location: CafeMetaLocationModel.fromJson(json?['location']),
-        menus: menus);
+        menus: menus,
+        mainMenus: mainMenus);
   }
 }
 
@@ -197,10 +201,11 @@ class CafeMetaMenuModel {
   final String? name;
   final int? price;
   final CafeMetaPriceOptionModel? priceOption;
+  final bool? isMain;
   final bool? decaffeinated;
   final bool? seasonal;
 
-  CafeMetaMenuModel({ this.category, this.name, this.price, this.priceOption, this.decaffeinated, this.seasonal});
+  CafeMetaMenuModel({ this.category, this.name, this.price, this.priceOption, this.isMain, this.decaffeinated, this.seasonal});
 
   factory CafeMetaMenuModel.fromJson(Map<String, dynamic>? json){
     final category = CafeMenuCategory.values.stringToEnum(json?['category'], CafeMenuCategory.coffee);
@@ -210,6 +215,7 @@ class CafeMetaMenuModel {
       name: json?['name'],
       price: json?['price'],
       priceOption: CafeMetaPriceOptionModel.fromJson(json?['priceOption']),
+      isMain: json?['isMain'] ?? false,
       decaffeinated: json?['decaffeinated'],
       seasonal: json?['seasonal']
     );
