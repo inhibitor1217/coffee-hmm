@@ -57,7 +57,7 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
   void handleMapScroll(){
     handleScroll(mapKey);
   }
-  void handleOffset(double scrollDelta, double offset){
+  void handleFooterOffset(double scrollDelta, double offset){
     setState(() {
       if(scrollDelta < 0){ // scroll to up
         if(offset < FOOTER_HEIGHT){
@@ -81,7 +81,7 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
           child: NotificationListener<ScrollUpdateNotification>(
             onNotification: (notification) {
               if(notification.metrics.axis == Axis.vertical){
-                handleOffset(notification.scrollDelta ?? 0, notification.metrics.pixels);
+                handleFooterOffset(notification.scrollDelta ?? 0, notification.metrics.pixels);
               }
               return true;
             },
