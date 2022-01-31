@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:mobile_app/util/type_trasnformer.dart';
+import 'package:mobile_app/util/type_transformer.dart';
 
 import 'enum.dart';
 
@@ -162,7 +162,6 @@ class CafeMetadataModel {
   final CafeMetaHoursModel? hours;
   final CafeMetaLocationModel? location;
   final List<CafeMetaMenuModel>? menus;
-  final List<CafeMetaMenuModel>? mainMenus;
 
   CafeMetadataModel(
       {this.creator,
@@ -172,7 +171,9 @@ class CafeMetadataModel {
       this.hours,
       this.location,
       this.menus,
-      this.mainMenus});
+      });
+
+  List<CafeMetaMenuModel>? get mainMenus => menus?.where((menu) => menu.isMain ?? false ).toList();
 
   factory CafeMetadataModel.fromJson(Map<String, dynamic>? json) {
     final tagsFromJson = json?['tag'] ?? [];
@@ -181,7 +182,6 @@ class CafeMetadataModel {
     final menusFromJson =  json?['menu'] ?? [];
     final List<CafeMetaMenuModel> menus = List.unmodifiable(
         menusFromJson.map((menu) => CafeMetaMenuModel.fromJson(menu)).toList());
-    final List<CafeMetaMenuModel> mainMenus = menus.where((menu) => menu.isMain ?? false ).toList();
 
     return CafeMetadataModel(
         creator: json?['creator'],
@@ -191,7 +191,7 @@ class CafeMetadataModel {
         hours: CafeMetaHoursModel.fromJson(json?['hours']),
         location: CafeMetaLocationModel.fromJson(json?['location']),
         menus: menus,
-        mainMenus: mainMenus);
+    );
   }
 }
 

@@ -4,7 +4,7 @@ import 'package:mobile_app/view/common/badge.dart';
 
 class CafeDetailSectionTitle extends StatelessWidget {
   final String title;
-  final bool? showBadge;
+  final bool showBadge;
 
   CafeDetailSectionTitle({required this.title, this.showBadge = false});
 
@@ -16,7 +16,7 @@ class CafeDetailSectionTitle extends StatelessWidget {
             children: [
               Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               SizedBox(width: 4),
-              if(showBadge!)
+              if(showBadge)
                 Badge(text: 'NEW',
                     size: BadgeSize.small,
                     customSpec: BadgeCustomSpec(backgroundColor: Palette.lightRed, textColor: Colors.white)
