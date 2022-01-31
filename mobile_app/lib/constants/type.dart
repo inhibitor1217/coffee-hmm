@@ -208,7 +208,9 @@ class CafeMetaMenuModel {
   CafeMetaMenuModel({ this.category, this.name, this.price, this.priceOption, this.isMain, this.decaffeinated, this.seasonal});
 
   factory CafeMetaMenuModel.fromJson(Map<String, dynamic>? json){
-    final category = CafeMenuCategory.values.stringToEnum(json?['category'], CafeMenuCategory.coffee);
+    const cafeMenuEnums = CafeMenuCategory.values;
+    final String jsonCategory = json?['category'];
+    final category = jsonCategory.stringToEnum<CafeMenuCategory>(cafeMenuEnums, CafeMenuCategory.coffee);
 
     return CafeMetaMenuModel(
       category: category,
