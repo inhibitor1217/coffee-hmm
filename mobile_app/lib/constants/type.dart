@@ -179,7 +179,7 @@ class CafeMetadataModel {
     final tagsFromJson = json?['tag'] ?? [];
     final List<String> tags =
         List.unmodifiable(new List<String>.from(tagsFromJson));
-    final menusFromJson =  json?['menu'] ?? [];
+    final menusFromJson =  json?['menus'] ?? [];
     final List<CafeMetaMenuModel> menus = List.unmodifiable(
         menusFromJson.map((menu) => CafeMetaMenuModel.fromJson(menu)).toList());
 
