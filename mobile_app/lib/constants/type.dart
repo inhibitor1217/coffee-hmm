@@ -162,7 +162,6 @@ class CafeMetadataModel {
   final CafeMetaHoursModel? hours;
   final CafeMetaLocationModel? location;
   final List<CafeMetaMenuModel>? menus;
-  final List<CafeMetaMenuModel>? mainMenus;
 
   CafeMetadataModel(
       {this.creator,
@@ -183,7 +182,6 @@ class CafeMetadataModel {
     final menusFromJson =  json?['menus'] ?? [];
     final List<CafeMetaMenuModel> menus = List.unmodifiable(
         menusFromJson.map((menu) => CafeMetaMenuModel.fromJson(menu)).toList());
-    final List<CafeMetaMenuModel> mainMenus = menus.where((menu) => menu.isMain ?? false ).toList();
 
     return CafeMetadataModel(
         creator: json?['creator'],
