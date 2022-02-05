@@ -1,10 +1,12 @@
 extension EnumTransform on String {
   String enumToString<T>(List<T> list, T value){
-    if(value == null || (list.isEmpty)) return '';
+    final defaultValue = this;
+
+    if(value == null || (list.isEmpty)) return defaultValue;
 
     final T? target = list.firstWhere((_enum) => _enum.toString() == value.toString());
 
-    if(target == null) return '';
+    if(target == null) return defaultValue;
 
     return target.toString().split('.').last;
   }
