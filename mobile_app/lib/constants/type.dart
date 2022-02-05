@@ -199,13 +199,12 @@ class CafeMetadataModel {
 class CafeMetaMenuModel {
   final CafeMenuCategory? category;
   final String? name;
+  final String? engName;
   final int? price;
   final CafeMetaPriceOptionModel? priceOption;
   final bool? isMain;
-  final bool? decaffeinated;
-  final bool? seasonal;
 
-  CafeMetaMenuModel({ this.category, this.name, this.price, this.priceOption, this.isMain, this.decaffeinated, this.seasonal});
+  CafeMetaMenuModel({ this.category, this.name, this.engName, this.price, this.priceOption, this.isMain });
 
   factory CafeMetaMenuModel.fromJson(Map<String, dynamic>? json){
     const cafeMenuEnums = CafeMenuCategory.values;
@@ -215,11 +214,10 @@ class CafeMetaMenuModel {
     return CafeMetaMenuModel(
       category: category,
       name: json?['name'],
+      engName: json?['engName'],
       price: json?['price'],
       priceOption: CafeMetaPriceOptionModel.fromJson(json?['priceOption']),
-      isMain: json?['isMain'] ?? false,
-      decaffeinated: json?['decaffeinated'],
-      seasonal: json?['seasonal']
+      isMain: json?['isMain'] ?? false
     );
   }
 }
@@ -227,12 +225,20 @@ class CafeMetaMenuModel {
 @immutable
 class CafeMetaPriceOptionModel {
   final int? iced;
+  final int? shot;
+  final int? spread;
+  final int? topping;
+  final int? decaffeinated;
 
-  CafeMetaPriceOptionModel({ this.iced });
+  CafeMetaPriceOptionModel({ this.iced, this.shot, this.spread, this.topping, this.decaffeinated });
 
   factory CafeMetaPriceOptionModel.fromJson(Map<String, dynamic>? json){
     return CafeMetaPriceOptionModel(
       iced: json?['iced'],
+      shot: json?['shot'],
+      spread: json?['spread'],
+      topping: json?['topping'],
+      decaffeinated: json?['decaffeinated']
     );
   }
 }
