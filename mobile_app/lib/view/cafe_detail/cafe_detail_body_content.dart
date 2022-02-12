@@ -38,12 +38,12 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
     footerOffset = (_hasLocation || _hasMenus) ? -_footerHeight : 0;
   }
 
-  void handleImageSlide(int index) {
+  void _handleImageSlide(int index) {
     setState(() {
       _currentIndex = index % cafe.image.count;
     });
   }
-  void handleScroll(GlobalKey targetKey) {
+  void _handleScroll(GlobalKey targetKey) {
     final context = targetKey.currentContext;
     if (context == null) return;
 
@@ -52,13 +52,13 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
         curve: Curves.easeInOut
     );
   }
-  void handleMenuScroll(){
-    handleScroll(menuKey);
+  void _handleMenuScroll(){
+    _handleScroll(menuKey);
   }
-  void handleMapScroll(){
-    handleScroll(mapKey);
+  void _handleMapScroll(){
+    _handleScroll(mapKey);
   }
-  void handleFooterOffset(double scrollDelta, double offset){
+  void _handleFooterOffset(double scrollDelta, double offset){
     setState(() {
         if(offset < _footerHeight){
           footerOffset = offset - _footerHeight;
@@ -76,7 +76,7 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
           child: NotificationListener<ScrollUpdateNotification>(
             onNotification: (notification) {
               if(notification.metrics.axis == Axis.vertical){
-                handleFooterOffset(notification.scrollDelta ?? 0, notification.metrics.pixels);
+                _handleFooterOffset(notification.scrollDelta ?? 0, notification.metrics.pixels);
               }
               return true;
             },
@@ -87,7 +87,7 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
                 CafeImageSlider(
                   pageController: _controller,
                   imageList: cafe.image.list,
-                  onSlide: handleImageSlide,
+                  onSlide: _handleImageSlide,
                 ),
                 ImageIndexBullet(
                   totalCount: cafe.image.count,
@@ -114,8 +114,8 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
           left: 0,
           child: CafeDetailFooter(
             cafeId: cafe.id,
-            onMenuScroll: _hasMenus ? handleMenuScroll : null,
-            onMapScroll: _hasLocation ? handleMapScroll : null,
+            onMenuScroll: _hasMenus ? _handleMenuScroll : null,
+            onMapScroll: _hasLocation ? _handleMapScroll : null,
           ),
         )
       ],
