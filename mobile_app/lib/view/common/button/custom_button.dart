@@ -1,30 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/constants/color.dart';
+import 'package:mobile_app/view/common/button/button_size.dart';
 
-class FloatingButton extends StatelessWidget {
-  final String title;
+class CustomButton extends StatelessWidget {
+  final ButtonSize size;
+  final Widget child;
   final Function() onPressed;
 
-  FloatingButton({required this.title, required this.onPressed});
+  CustomButton({required this.size, required this.child, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 72,
-      padding: EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 20),
-      decoration: BoxDecoration(color: Palette.whiteTransparentBG),
+      height: size.height,
+      padding: size.padding,
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             primary: Palette.highlightedColor,
             onPrimary: Colors.white,
             shadowColor: Colors.transparent,
+            splashFactory: null,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4),
             ),
           ),
-          child: Text(title),
+          child: child,
           onPressed: onPressed),
     );
   }
 }
+

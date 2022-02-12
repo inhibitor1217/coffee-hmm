@@ -2,16 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/api/api.dart';
 import 'package:mobile_app/constants/color.dart';
 import 'package:mobile_app/constants/type.dart';
-import 'package:mobile_app/util/cafe_detail.dart';
-import 'package:mobile_app/util/common.dart';
-import 'package:mobile_app/view/cafe_detail/cafe_detail_info.dart';
-import 'package:mobile_app/view/cafe_detail/cafe_detail_location.dart';
-import 'package:mobile_app/view/common/cafe_image_slider.dart';
+import 'package:mobile_app/view/cafe_detail/cafe_detail_body_content.dart';
 import 'package:mobile_app/view/common/error.dart';
-import 'package:mobile_app/view/common/floating_button.dart';
 import 'package:mobile_app/view/common/header.dart';
-import 'package:mobile_app/view/common/image_index_bullet.dart';
-
 
 class CafeDetailScreen extends StatefulWidget {
   final String cafeId;
@@ -75,7 +68,9 @@ class _DetailBodyState extends State<DetailBody> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                  Expanded(child: DetailBodyContent(cafe: _cafe!))
+                  Expanded(
+                    child: DetailBodyContent(cafe: _cafe!)
+                  )
                 ]));
           }
           if (snapshot.hasError) {
@@ -87,69 +82,3 @@ class _DetailBodyState extends State<DetailBody> {
   }
 }
 
-class DetailBodyContent extends StatefulWidget {
-  final CafeModel cafe;
-
-  DetailBodyContent({
-    required this.cafe,
-  });
-
-  @override
-  _DetailBodyContentState createState() => _DetailBodyContentState(cafe: cafe);
-}
-
-class _DetailBodyContentState extends State<DetailBodyContent> {
-  final CafeModel cafe;
-  final PageController _controller = PageController();
-  int? currentIndex;
-
-  _DetailBodyContentState({required this.cafe});
-
-  void handleImageSlide(int index) {
-    setState(() {
-      currentIndex = index % cafe.image.count;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final bool hasLocation = hasCafeMetadata(cafe.metadata?.location?.lat) &&
-        hasCafeMetadata(cafe.metadata?.location?.lng);
-
-    return Stack(
-      children: [
-        ScrollConfiguration(
-          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            children: [
-              CafeImageSlider(
-                pageController: _controller,
-                imageList: cafe.image.list,
-                onSlide: handleImageSlide,
-              ),
-              ImageIndexBullet(
-                totalCount: cafe.image.count,
-                currentIndex: currentIndex ?? 0,
-              ),
-              CafeDetailInfo(cafe: cafe),
-              if (hasLocation)
-                CafeDetailLocation(cafe: cafe),
-              SizedBox(height: 100),
-            ],
-          ),
-        ),
-        Positioned(
-          bottom: 0,
-          left: 0,
-          child: FloatingButton(
-            title: '카페 공유하기',
-            onPressed: () => handleLinkShareClick(
-                'https://www.coffeehmm.com/cafe/${cafe.id}'),
-          ),
-        )
-      ],
-    );
-  }
-}

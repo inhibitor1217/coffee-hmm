@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:mobile_app/util/type_transformer.dart';
 
 import 'enum.dart';
 
@@ -156,30 +157,89 @@ class CafeImageMetadataModel {
 class CafeMetadataModel {
   final String? creator;
   final String? hour;
-  final List<String>? tag;
+  final List<String>? tags;
   final String? call;
   final CafeMetaHoursModel? hours;
   final CafeMetaLocationModel? location;
+  final List<CafeMetaMenuModel>? menus;
 
   CafeMetadataModel(
       {this.creator,
       this.hour,
-      this.tag,
+      this.tags,
       this.call,
       this.hours,
-      this.location});
+      this.location,
+      this.menus,
+      });
+
+  List<CafeMetaMenuModel>? get mainMenus => menus?.where((menu) => menu.isMain ?? false ).toList();
 
   factory CafeMetadataModel.fromJson(Map<String, dynamic>? json) {
-    final listFromJson = json?['tag'];
-    final List<String> tag =
-        List.unmodifiable(new List<String>.from(listFromJson));
+    final tagsFromJson = json?['tag'] ?? [];
+    final List<String> tags =
+        List.unmodifiable(new List<String>.from(tagsFromJson));
+    final menusFromJson =  json?['menus'] ?? [];
+    final List<CafeMetaMenuModel> menus = List.unmodifiable(
+        menusFromJson.map((menu) => CafeMetaMenuModel.fromJson(menu)).toList());
+
     return CafeMetadataModel(
         creator: json?['creator'],
         hour: json?['hour'],
-        tag: tag,
+        tags: tags,
         call: json?['call'],
         hours: CafeMetaHoursModel.fromJson(json?['hours']),
-        location: CafeMetaLocationModel.fromJson(json?['location']));
+        location: CafeMetaLocationModel.fromJson(json?['location']),
+        menus: menus,
+    );
+  }
+}
+
+@immutable
+class CafeMetaMenuModel {
+  final CafeMenuCategory? category;
+  final String? name;
+  final String? engName;
+  final int? price;
+  final CafeMetaPriceOptionModel? priceOption;
+  final bool? isMain;
+
+  CafeMetaMenuModel({ this.category, this.name, this.engName, this.price, this.priceOption, this.isMain });
+
+  factory CafeMetaMenuModel.fromJson(Map<String, dynamic>? json){
+    const cafeMenuEnums = CafeMenuCategory.values;
+    final String jsonCategory = json?['category'];
+    final category = jsonCategory.stringToEnum<CafeMenuCategory>(cafeMenuEnums, CafeMenuCategory.coffee);
+
+    return CafeMetaMenuModel(
+      category: category,
+      name: json?['name'],
+      engName: json?['engName'],
+      price: json?['price'],
+      priceOption: CafeMetaPriceOptionModel.fromJson(json?['priceOption']),
+      isMain: json?['isMain'] ?? false
+    );
+  }
+}
+
+@immutable
+class CafeMetaPriceOptionModel {
+  final int? iced;
+  final int? shot;
+  final int? spread;
+  final int? topping;
+  final int? decaffeinated;
+
+  CafeMetaPriceOptionModel({ this.iced, this.shot, this.spread, this.topping, this.decaffeinated });
+
+  factory CafeMetaPriceOptionModel.fromJson(Map<String, dynamic>? json){
+    return CafeMetaPriceOptionModel(
+      iced: json?['iced'],
+      shot: json?['shot'],
+      spread: json?['spread'],
+      topping: json?['topping'],
+      decaffeinated: json?['decaffeinated']
+    );
   }
 }
 
