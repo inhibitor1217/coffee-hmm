@@ -21,19 +21,19 @@ class CafeDetailFooter extends StatelessWidget {
         children: [
           if(onMenuScroll != null)
             CustomIconButton(
-              size: iconButtonSize,
+              size: _iconButtonSize,
               content: IconButtonContent(text: '메뉴', icon: Icons.coffee_rounded),
               onPressed: onMenuScroll!,
             ),
           if(onMapScroll != null)
             CustomIconButton(
-              size: iconButtonSize,
+              size: _iconButtonSize,
               content: IconButtonContent(text: '지도', icon: Icons.map_outlined),
               onPressed: onMapScroll!,
             ),
          Expanded(
            child: CustomButton(
-             size: buttonSize,
+             size: _buttonSize,
              child: Text('카페 공유하기'),
              onPressed: () => handleLinkShareClick(
                  'https://www.coffeehmm.com/cafe/$cafeId'),
@@ -45,11 +45,11 @@ class CafeDetailFooter extends StatelessWidget {
   }
 }
 
-final iconButtonSize = ButtonSize(
+final _iconButtonSize = ButtonSize(
     height: 72,
     padding: EdgeInsets.only(left: 10, right: 10, top: 12, bottom: 0)
 );
-final buttonSize = ButtonSize(
+final _buttonSize = ButtonSize(
     height: 72,
     padding: EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 20)
 );

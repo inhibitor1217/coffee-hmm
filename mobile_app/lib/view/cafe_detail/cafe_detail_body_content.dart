@@ -8,7 +8,7 @@ import 'package:mobile_app/view/cafe_detail/cafe_detail_menu.dart';
 import 'package:mobile_app/view/common/cafe_image_slider.dart';
 import 'package:mobile_app/view/common/image_index_bullet.dart';
 
-const double FOOTER_HEIGHT = 72;
+const double _footerHeight = 72;
 
 class DetailBodyContent extends StatefulWidget {
   final CafeModel cafe;
@@ -24,29 +24,30 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
   final PageController _controller = PageController();
   final GlobalKey menuKey = new GlobalKey();
   final GlobalKey mapKey = new GlobalKey();
-  bool hasLocation = false;
-  bool hasMenus = false;
+  bool get _hasLocation => hasCafeMetadata(cafe.metadata?.location?.lat) &&
+  hasCafeMetadata(cafe.metadata?.location?.lng);
+  bool get _hasMenus => (cafe.metadata?.mainMenus ?? []).length > 0;
   double footerOffset = 0;
-  int? currentIndex;
+  int? _currentIndex;
 
   _DetailBodyContentState({required this.cafe});
 
   @override
   void initState(){
     super.initState();
-    hasLocation = hasCafeMetadata(cafe.metadata?.location?.lat) &&
-        hasCafeMetadata(cafe.metadata?.location?.lng);
-    hasMenus =  (cafe.metadata?.menus ?? []).length > 0;
-    footerOffset = (hasLocation || hasMenus) ? -FOOTER_HEIGHT : 0;
+    footerOffset = (_hasLocation || _hasMenus) ? -_footerHeight : 0;
   }
 
   void handleImageSlide(int index) {
     setState(() {
-      currentIndex = index % cafe.image.count;
+      _currentIndex = index % cafe.image.count;
     });
   }
   void handleScroll(GlobalKey targetKey) {
-    Scrollable.ensureVisible(targetKey.currentContext!,
+    final context = targetKey.currentContext;
+    if (context == null) return;
+
+    Scrollable.ensureVisible(context,
         duration: Duration(milliseconds: 500),
         curve: Curves.easeInOut
     );
@@ -60,12 +61,12 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
   void handleFooterOffset(double scrollDelta, double offset){
     setState(() {
       if(scrollDelta < 0){ // scroll to up
-        if(offset < FOOTER_HEIGHT){
-          footerOffset = offset - FOOTER_HEIGHT; // footer disappear
+        if(offset < _footerHeight){
+          footerOffset = offset - _footerHeight; // footer disappear
         }
       }else { // scroll to down
-        if(offset < FOOTER_HEIGHT){
-          footerOffset = offset - FOOTER_HEIGHT; // footer appear
+        if(offset < _footerHeight){
+          footerOffset = offset - _footerHeight; // footer appear
         }
       }
     });
@@ -96,18 +97,18 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
                 ),
                 ImageIndexBullet(
                   totalCount: cafe.image.count,
-                  currentIndex: currentIndex ?? 0,
+                  currentIndex: _currentIndex ?? 0,
                 ),
                 CafeDetailInfo(cafe: cafe),
-                if (hasLocation)
+                if (_hasLocation)
                   Container(
                     key: mapKey,
                     child: CafeDetailLocation(cafe: cafe),
                   ),
-                if (hasMenus)
+                if (_hasMenus)
                   Container(
                     key: menuKey,
-                    child: CafeDetailMenus(menus: cafe.metadata!.menus!),
+                    child: CafeDetailMenus(menus: cafe.metadata!.mainMenus!),
                   ),
                 SizedBox(height: 100),
               ],
@@ -119,8 +120,8 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
           left: 0,
           child: CafeDetailFooter(
             cafeId: cafe.id,
-            onMenuScroll: hasMenus ? handleMenuScroll : null,
-            onMapScroll: hasLocation ? handleMapScroll : null,
+            onMenuScroll: _hasMenus ? handleMenuScroll : null,
+            onMapScroll: _hasLocation ? handleMapScroll : null,
           ),
         )
       ],
