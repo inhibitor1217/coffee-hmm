@@ -60,15 +60,9 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
   }
   void handleFooterOffset(double scrollDelta, double offset){
     setState(() {
-      if(scrollDelta < 0){ // scroll to up
         if(offset < _footerHeight){
-          footerOffset = offset - _footerHeight; // footer disappear
+          footerOffset = offset - _footerHeight;
         }
-      }else { // scroll to down
-        if(offset < _footerHeight){
-          footerOffset = offset - _footerHeight; // footer appear
-        }
-      }
     });
   }
 
