@@ -16,7 +16,7 @@ class CustomIconButton extends StatelessWidget {
       padding: size.padding,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: Colors.white,
+          primary: Colors.transparent,
           shadowColor: Colors.transparent,
           splashFactory: null,
         ),
