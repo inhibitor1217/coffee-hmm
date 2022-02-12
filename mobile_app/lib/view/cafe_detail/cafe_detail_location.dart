@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:mobile_app/constants/color.dart';
 import 'package:mobile_app/constants/type.dart';
-import 'package:mobile_app/view/common/badge.dart';
+import 'package:mobile_app/view/cafe_detail/cafe_detail_section_title.dart';
 import 'package:mobile_app/view/common/map.dart';
 
 class CafeDetailLocation extends StatelessWidget {
@@ -18,7 +17,7 @@ class CafeDetailLocation extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 56),
-            CafeDetailLocationTitle(),
+            CafeDetailSectionTitle(title: '카페 가는 길'),
             Map(
                 location: LatLng(
                     double.parse(cafe.metadata!.location!.lat!),
@@ -28,23 +27,5 @@ class CafeDetailLocation extends StatelessWidget {
           ],
        )
     );
-  }
-}
-
-class CafeDetailLocationTitle extends StatelessWidget {
-  @override
-  Widget build(BuildContext context){
-    return   Container(
-      margin: EdgeInsets.only(left: 20, right: 20, bottom: 16),
-      child:  Row(
-        children: [
-          Text('카페 가는 길', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          SizedBox(width: 4),
-          Badge(text: 'NEW',
-              size: BadgeSize.small,
-              customSpec: BadgeCustomSpec(backgroundColor: Palette.lightRed, textColor: Colors.white)
-          ),
-    ]));
-
   }
 }
