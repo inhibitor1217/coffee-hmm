@@ -16,7 +16,15 @@ class CafeDetailFooter extends StatelessWidget {
   Widget build(BuildContext context){
     return Container(
       width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(color: Palette.whiteTransparentBG),
+      decoration: BoxDecoration(
+          color: Palette.whiteTransparentBG,
+          boxShadow:  [BoxShadow(
+            color: Palette.lightGray,
+            spreadRadius: 4,
+            blurRadius: 6,
+            offset: Offset(0, 2),
+          )],
+      ),
       child: Row(
         children: [
           if(onMenuScroll != null)
