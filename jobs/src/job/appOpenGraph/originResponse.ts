@@ -55,9 +55,17 @@ export const originResponse = async (
       });
       const cafe = await api
         .get<{ cafe: CafeRecord }>(`/cafe/${cafeId}`)
-        .then((res) => res.data.cafe);
+        .then((res) => res.data.cafe)
+        .catch(() => null);
 
       response.status = '200';
+
+      if (!cafe) {
+        return {
+          result: response,
+          body: null,
+        };
+      }
 
       response.headers['content-type'] = [
         {
@@ -65,7 +73,6 @@ export const originResponse = async (
           value: 'text/html',
         },
       ];
-
       response.headers['cache-control'] = [
         {
           key: 'cache-control',
