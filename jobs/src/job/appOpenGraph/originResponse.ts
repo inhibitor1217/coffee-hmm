@@ -2,6 +2,7 @@ import axios from 'axios';
 import type { CloudFrontResponseEvent } from 'aws-lambda';
 import type { CafeRecord } from '../../services/api';
 import { cloudfrontResponseEventHandler } from '../../util/handler/cloudfrontEventHandler';
+import { ILogger } from '../../util/logger';
 import { CAFE_DETAIL_PAGE_URL_REGEX } from './const';
 
 const constructHtml = (uri: string, cafe: CafeRecord): string => {
@@ -30,7 +31,10 @@ const constructHtml = (uri: string, cafe: CafeRecord): string => {
 </html>`;
 };
 
-export const originResponse = async (event: CloudFrontResponseEvent) => {
+export const originResponse = async (
+  event: CloudFrontResponseEvent,
+  logger: ILogger
+) => {
   const {
     Records: [
       {
@@ -39,8 +43,13 @@ export const originResponse = async (event: CloudFrontResponseEvent) => {
     ],
   } = event;
   const { headers, uri } = request;
+  logger.info(uri);
+  logger.info(JSON.stringify(headers, null, 2));
 
-  if (headers['is-crawler'] && headers['is-crawler'][0].value === 'true') {
+  const isCrawler = headers['is-crawler']?.[0].value === 'true';
+  logger.info(`isCrawler = ${isCrawler ? 'true' : 'false'}`);
+
+  if (isCrawler) {
     const [, cafeId] = CAFE_DETAIL_PAGE_URL_REGEX.exec(uri) ?? [];
     if (cafeId) {
       const api = axios.create({
@@ -66,10 +75,13 @@ export const originResponse = async (event: CloudFrontResponseEvent) => {
         },
       ];
 
+      const html = constructHtml(uri, cafe);
+      logger.info(html);
+
       return {
         result: {
           ...response,
-          body: constructHtml(uri, cafe),
+          body: html,
         },
         body: null,
       };
@@ -83,7 +95,7 @@ export const originResponse = async (event: CloudFrontResponseEvent) => {
 };
 
 export const handler = cloudfrontResponseEventHandler(
-  ({ event }) => originResponse(event),
+  ({ event, logger }) => originResponse(event, logger),
   {
     name: 'appOpenGraph/originResponse',
   }

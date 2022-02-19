@@ -1,8 +1,12 @@
 import type { CloudFrontRequestEvent } from 'aws-lambda';
 import { cloudfrontRequestEventHandler } from '../../util/handler/cloudfrontEventHandler';
+import { ILogger } from '../../util/logger';
 import { USER_AGENT_BOT_REGEX } from './const';
 
-export const viewerRequest = (event: CloudFrontRequestEvent) => {
+export const viewerRequest = (
+  event: CloudFrontRequestEvent,
+  logger: ILogger
+) => {
   const {
     Records: [
       {
@@ -10,13 +14,18 @@ export const viewerRequest = (event: CloudFrontRequestEvent) => {
       },
     ],
   } = event;
-  const userAgent = request.headers['user-agent'][0].value.toLowerCase();
+  logger.info(request.uri);
 
-  if (userAgent && USER_AGENT_BOT_REGEX.test(userAgent)) {
+  const userAgent = request.headers['user-agent'][0].value.toLowerCase();
+  logger.info(`userAgent = ${userAgent}`);
+
+  if (userAgent) {
+    const isCrawler = USER_AGENT_BOT_REGEX.test(userAgent);
+    logger.info(`isCrawler = ${isCrawler ? 'true' : 'false'}`);
     request.headers['is-crawler'] = [
       {
         key: 'is-crawler',
-        value: 'true',
+        value: isCrawler ? 'true' : 'false',
       },
     ];
   }
@@ -25,7 +34,7 @@ export const viewerRequest = (event: CloudFrontRequestEvent) => {
 };
 
 export const handler = cloudfrontRequestEventHandler(
-  ({ event }) => viewerRequest(event),
+  ({ event, logger }) => viewerRequest(event, logger),
   {
     name: 'appOpenGraph/viewerRequest',
   }
