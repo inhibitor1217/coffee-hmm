@@ -13,7 +13,7 @@ const constructHtml = (uri: string, cafe: CafeRecord): string => {
     .replace(/(http:\/\/|https:\/\/)/g, '')
     .split('/')
     .map((r, i) => (i > 0 ? r : 'https://resource.coffeehmm.com'))
-    .join('/')}?d=720x720`;
+    .join('/')}`;
 
   return `<html>
   <head>
@@ -24,8 +24,6 @@ const constructHtml = (uri: string, cafe: CafeRecord): string => {
     <meta property="og:description" content="커피 흠: 친구와, 연인과, 혼자 갈 만한 카페를 찾고있다면? 연남동 성수동 한남동 유명한 카페거리의 예쁜 카페를 카페 추천앱, 커피흠에서 바로 찾아보세요!"/>
     <meta property="og:image" content="${imageUri}" />
     <meta property="og:image:type" content="image/jpeg" />
-    <meta property="og:image:width" content="720" />
-    <meta property="og:image:height" content="720" />
     <title>${title}</title>
   </head>
 </html>`;
