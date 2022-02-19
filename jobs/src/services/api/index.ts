@@ -1,9 +1,12 @@
 import axios, { AxiosInstance } from 'axios';
-import { CafeImageStateStrings, CafeStateStrings } from '@coffee-hmm/common';
+import type {
+  CafeImageStateStrings,
+  CafeStateStrings,
+} from '@coffee-hmm/common';
 import { env, logLevel } from '../../util';
 import { Logger } from '../../util/logger';
 
-type CafeRecord = {
+export type CafeRecord = {
   id: string;
   createdAt: string;
   updatedAt: string;
