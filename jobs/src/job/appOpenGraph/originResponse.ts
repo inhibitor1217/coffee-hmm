@@ -41,11 +41,10 @@ export const originResponse = async (
     ],
   } = event;
   const { headers, uri } = request;
-  logger.info(uri);
-  logger.info(JSON.stringify(headers, null, 2));
+  logger.info({ 'request.uri': uri });
 
   const isCrawler = headers['is-crawler']?.[0].value === 'true';
-  logger.info(`isCrawler = ${isCrawler ? 'true' : 'false'}`);
+  logger.info({ isCrawler });
 
   if (isCrawler) {
     const [, cafeId] = CAFE_DETAIL_PAGE_URL_REGEX.exec(uri) ?? [];
@@ -81,7 +80,6 @@ export const originResponse = async (
       ];
 
       const html = constructHtml(uri, cafe);
-      logger.info(html);
 
       return {
         result: {

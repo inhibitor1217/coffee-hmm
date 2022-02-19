@@ -14,14 +14,14 @@ export const viewerRequest = (
       },
     ],
   } = event;
-  logger.info(request.uri);
+  logger.info({ 'request.uri': request.uri });
 
   const userAgent = request.headers['user-agent'][0].value.toLowerCase();
-  logger.info(`userAgent = ${userAgent}`);
+  logger.info({ userAgent });
 
   if (userAgent) {
     const isCrawler = USER_AGENT_BOT_REGEX.test(userAgent);
-    logger.info(`isCrawler = ${isCrawler ? 'true' : 'false'}`);
+    logger.info({ isCrawler });
     request.headers['is-crawler'] = [
       {
         key: 'is-crawler',
