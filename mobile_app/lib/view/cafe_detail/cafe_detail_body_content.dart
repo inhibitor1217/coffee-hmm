@@ -4,11 +4,12 @@ import 'package:mobile_app/util/cafe_detail.dart';
 import 'package:mobile_app/view/cafe_detail/cafe_detail_footer.dart';
 import 'package:mobile_app/view/cafe_detail/cafe_detail_info.dart';
 import 'package:mobile_app/view/cafe_detail/cafe_detail_location.dart';
+import 'package:mobile_app/view/cafe_detail/cafe_detail_media_search.dart';
 import 'package:mobile_app/view/cafe_detail/cafe_detail_menu.dart';
 import 'package:mobile_app/view/common/cafe_image_slider.dart';
 import 'package:mobile_app/view/common/image_index_bullet.dart';
 
-const double _footerHeight = 72;
+const double _footerHeight = 80;
 
 class DetailBodyContent extends StatefulWidget {
   final CafeModel cafe;
@@ -27,6 +28,7 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
   bool get _hasLocation => hasCafeMetadata(cafe.metadata?.location?.lat) &&
   hasCafeMetadata(cafe.metadata?.location?.lng);
   bool get _hasMenus => (cafe.metadata?.mainMenus ?? []).length > 0;
+  bool get _hasMetadata => _hasLocation || _hasMenus;
   double footerOffset = 0;
   int? _currentIndex;
 
@@ -35,7 +37,7 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
   @override
   void initState(){
     super.initState();
-    footerOffset = (_hasLocation || _hasMenus) ? -_footerHeight : 0;
+    footerOffset = _hasMetadata ? -_footerHeight : -2;
   }
 
   void _handleImageSlide(int index) {
@@ -59,6 +61,8 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
     _handleScroll(mapKey);
   }
   void _handleFooterOffset(double scrollDelta, double offset){
+    if(!_hasMetadata) return;
+
     setState(() {
         if(offset < _footerHeight){
           footerOffset = offset - _footerHeight;
