@@ -108,6 +108,7 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
                     key: menuKey,
                     child: CafeDetailMenus(menus: cafe.metadata!.mainMenus!),
                   ),
+                CafeDetailMediaSearch(cafeName: cafe.name),
                 SizedBox(height: 100),
               ],
             ),
