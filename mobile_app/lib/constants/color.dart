@@ -23,6 +23,7 @@ class Palette {
   static const lightBlue = Color.fromRGBO(222, 237, 255, 1.0);
 
   /*Green*/
+  static const green = Color.fromRGBO(56, 122, 63, 1);
   static const lightGreen = Color.fromRGBO(201, 242, 215, 1);
   
   /*Purple*/
