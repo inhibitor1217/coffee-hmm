@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/util/cafe_detail.dart';
-import 'package:mobile_app/util/common.dart';
+import 'package:mobile_app/view/cafe_detail/cafe_detail_info_time_item.dart';
 import 'package:mobile_app/view/common/cafe_info_item.dart';
 import 'package:mobile_app/view/common/cafe_name.dart';
 
@@ -28,49 +28,33 @@ class CafeDetailInfo extends StatelessWidget {
   }
 
   Widget _buildCafeDetailInfo(BuildContext context) {
-    final data = getCafeDetailInfo(cafe);
+    final _data = getCafeDetailInfo(cafe);
+    final _hasMetadata = hasCafeMetadata(_data.hour)
+    || (hasCafeMetadata(_data.line) && hasCafeMetadata(_data.station))
+    || hasCafeMetadata(_data.call)
+    || hasCafeMetadata(_data.address);
 
     return Column(
       children: [
-        if (hasCafeMetadata(data.hour))
+        if (hasCafeMetadata(_data.hour))
+          CafeDetailInfoTimeItem(displayTime: _data.hour, hours: cafe.metadata!.hours!),
+        if (hasCafeMetadata(_data.line) && hasCafeMetadata(_data.station))
+          CafeDetailSubwayLineItem(station: _data.station, line: _data.line),
+        if (hasCafeMetadata(_data.call))
           CafeInfoItem(
-            text: data.hour,
-            fontSize: 14,
-            icon: Icons.access_time_rounded,
-            margin: EdgeInsets.only(bottom: 18),
-          ),
-        if (hasCafeMetadata(data.address))
-          CafeInfoItem(
-            text: data.address,
-            fontSize: 14,
-            icon: Icons.place_rounded,
-            margin: EdgeInsets.only(bottom: 18),
-          ),
-        if (hasCafeMetadata(data.line) && hasCafeMetadata(data.station))
-          CafeDetailSubwayLineItem(station: data.station, line: data.line),
-        if (hasCafeMetadata(data.call))
-          CafeInfoItem(
-            text: data.call,
+            text: _data.call,
             fontSize: 14,
             icon: Icons.call,
             margin: EdgeInsets.only(bottom: 18),
           ),
-        CafeInfoItem(
-          text: '네이버 통합검색 바로가기',
-          icon: Icons.search_rounded,
-          fontSize: 14,
-          subIcon: Icons.launch_rounded,
-          onPressed: () =>
-              handleNaverClick(cafe.name + ' ' + cafe.place.name, context),
-          margin: EdgeInsets.only(bottom: 18),
-        ),
-        CafeInfoItem(
-          text: '인스타그램 태그검색 바로가기',
-          fontSize: 14,
-          icon: Icons.search_rounded,
-          subIcon: Icons.launch_rounded,
-          onPressed: () => handleInstagramClick(cafe.name, context),
-        )
+        if (hasCafeMetadata(_data.address))
+          CafeInfoItem(
+            text: _data.address,
+            fontSize: 14,
+            icon: Icons.place_rounded,
+          ),
+        if(!_hasMetadata)
+          Text('곧 업데이트 됩니다 !')
       ],
     );
   }
