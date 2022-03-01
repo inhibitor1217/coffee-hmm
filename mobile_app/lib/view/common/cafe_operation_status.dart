@@ -13,7 +13,9 @@ mixin CafeOperationStatus {
       return close;
     }else if(_now.hour == hours.close.hour && _now.minute > hours.close.minute){
       return close;
-    }else {
+    }else if(_now.hour == hours.open.hour && _now.minute < hours.open.minute){
+      return close;
+    } else {
       return open;
     }
   }
