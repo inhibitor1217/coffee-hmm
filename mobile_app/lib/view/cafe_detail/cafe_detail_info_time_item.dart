@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/constants/color.dart';
 import 'package:mobile_app/constants/type.dart';
-import 'package:mobile_app/view/common/cafe_info_item.dart';
 import 'package:mobile_app/view/common/cafe_operation_status.dart';
 
 class CafeDetailInfoTimeItem extends StatelessWidget with CafeOperationStatus {
@@ -29,7 +28,7 @@ class CafeDetailInfoTimeItem extends StatelessWidget with CafeOperationStatus {
           if(_operationStatus != null )
             Row(
               children: [
-                Text(_operationStatus ?? '',
+                Text(_operationStatus,
                     style: TextStyle(
                       fontSize: 13,
                       color: _operationStatus == open ? Palette.green : Palette.gray,
