@@ -13,7 +13,7 @@ class CafeDetailInfoTimeItem extends StatelessWidget with CafeOperationStatus {
   @override
   Widget build(BuildContext context){
     final int _today = DateTime.now().weekday;
-    final String? _operationHours = _today < 6 ?  hours.weekday : hours.weekend;
+    final CafeMetaOperationHoursModel? _operationHours = _today < 6 ?  hours.weekday : hours.weekend;
     final String? _operationStatus = getCafeOperationStatus(_operationHours);
     
     return  Container(
