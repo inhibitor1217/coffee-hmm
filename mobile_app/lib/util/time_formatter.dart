@@ -7,12 +7,12 @@ extension TimeFormatter on String {
     if(_operationHours.length < 2 ) return null;
 
     return CafeMetaOperationHoursModel(
-      open: stringToDateTime(_operationHours[0]),
-      close: stringToDateTime(_operationHours[1]),
+      open: _operationHours[0].stringToDateTime(),
+      close: _operationHours[1].stringToDateTime(),
     );
   }
 
-  DateTime stringToDateTime(String value){
-    return DateTime.parse('0000-00-00T' + value);
+  DateTime stringToDateTime(){
+    return DateTime.parse('0000-00-00T' + this);
   }
 }
