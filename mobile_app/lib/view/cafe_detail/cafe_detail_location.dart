@@ -23,7 +23,7 @@ class CafeDetailLocation extends StatelessWidget {
                     double.parse(cafe.metadata!.location!.lat!),
                     double.parse(cafe.metadata!.location!.lng!)),
                 title: cafe.name,
-                height: 220)
+                height: 300)
           ],
        )
     );

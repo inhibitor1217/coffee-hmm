@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:mobile_app/util/type_transformer.dart';
+import 'package:mobile_app/util/time_formatter.dart';
 
 import 'enum.dart';
 
@@ -142,13 +143,13 @@ class CafeImageModel {
 
 @immutable
 class CafeImageMetadataModel {
-  final String tag;
+  final String? tag;
 
-  CafeImageMetadataModel({required this.tag});
+  CafeImageMetadataModel({this.tag});
 
-  factory CafeImageMetadataModel.fromJson(Map<String, dynamic> json) {
+  factory CafeImageMetadataModel.fromJson(Map<String, dynamic>? json) {
     return CafeImageMetadataModel(
-      tag: json['tag'],
+      tag: json?['tag'],
     );
   }
 }
@@ -286,15 +287,32 @@ class CafeMetaSubwayModel {
 }
 
 @immutable
-class CafeMetaHoursModel {
-  final String? weekday;
-  final String? weekend;
+class CafeMetaOperationHoursModel {
+  final DateTime open;
+  final DateTime close;
 
-  CafeMetaHoursModel({this.weekday, this.weekend});
+  CafeMetaOperationHoursModel({required this.open, required this.close});
+}
+
+@immutable
+class CafeMetaHoursModel {
+  final CafeMetaOperationHoursModel? weekday;
+  final CafeMetaOperationHoursModel? weekend;
+  final String? weekdayStr;
+  final String? weekendStr;
+
+  CafeMetaHoursModel({this.weekday, this.weekend, this.weekdayStr, this.weekendStr});
 
   factory CafeMetaHoursModel.fromJson(Map<String, dynamic>? json) {
+    final String? jsonWeekday = json?['weekday'];
+    final String? jsonWeekend = json?['weekend'];
+
     return CafeMetaHoursModel(
-        weekday: json?['weekday'], weekend: json?['weekend']);
+      weekday: jsonWeekday?.createOperationHours(),
+      weekend: jsonWeekend?.createOperationHours(),
+      weekdayStr: jsonWeekday,
+      weekendStr: jsonWeekend,
+    );
   }
 }
 

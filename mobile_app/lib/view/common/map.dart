@@ -24,7 +24,12 @@ class _MapState extends State<Map> {
 
   void initState(){
     super.initState();
-    _mapOption = MapOption(loadingDuration: Duration(milliseconds: 450), opacityDuration: Duration(milliseconds: 500), gestureRecognizerOption: _createGestureRecognizers(), markerOption: _createMarkers(location: widget.location, title: widget.title));
+    _mapOption = MapOption(
+        loadingDuration: Duration(milliseconds: 450),
+        opacityDuration: Duration(milliseconds: 500),
+        gestureRecognizerOption: _createGestureRecognizers(),
+        markerOption: _createMarkers(location: widget.location, title: widget.title),
+    );
   }
 
   final Completer<GoogleMapController> _controller = Completer();
@@ -44,7 +49,7 @@ class _MapState extends State<Map> {
             mapType: MapType.normal,
             markers: _mapOption.markerOption,
             initialCameraPosition:
-            CameraPosition(target: widget.location, zoom: 17),
+            CameraPosition(target: widget.location, zoom: 16),
             onMapCreated: (GoogleMapController controller) {
               _controller.complete(controller);
               Future.delayed(

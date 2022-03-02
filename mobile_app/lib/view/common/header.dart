@@ -43,7 +43,7 @@ class MainHeader extends StatelessWidget with PreferredSizeWidget, _HeaderSpec {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: isTableViewMode ? Colors.white : Colors.transparent,
+      backgroundColor: Colors.white,
       elevation: 0,
       iconTheme: IconThemeData(color: Palette.gray),
       title: _logo,
@@ -65,7 +65,7 @@ class BaseHeader extends StatelessWidget with PreferredSizeWidget, _HeaderSpec {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       elevation: 0,
       iconTheme: IconThemeData(color: Palette.gray),
       title: _logo,
@@ -106,7 +106,7 @@ class _DetailHeaderState extends State<DetailHeader> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           color: Palette.gray,

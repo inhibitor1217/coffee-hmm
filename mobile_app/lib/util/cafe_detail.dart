@@ -10,19 +10,21 @@ dynamic getCafeMetadataPlainText(dynamic data) {
 }
 
 String? getCafeMetadataHours(CafeMetaHoursModel? hours) {
-  final weekday = hours?.weekday;
-  final weekend = hours?.weekend;
+  final _weekday = hours?.weekday;
+  final _weekend = hours?.weekend;
+  final _weekdayStr = hours?.weekdayStr;
+  final _weekendStr = hours?.weekendStr;
 
-  if (weekday == null && weekend == null) return null;
+  if (_weekday == null && _weekend == null) return null;
 
-  if (weekday == weekend) {
-    return '평일/주말 $weekday';
+  if (_weekday?.close == _weekend?.close && _weekday?.open == _weekend?.open) {
+    return '평일/주말 $_weekdayStr';
   }
 
-  final _weekday = hasCafeMetadata(weekday) ? '평일 $weekday ' : '';
-  final _weekend = hasCafeMetadata(weekend) ? '주말 $weekend' : '';
+  final _weekdayMeta = hasCafeMetadata(_weekdayStr) ? '평일 $_weekdayStr ' : '';
+  final _weekendMeta = hasCafeMetadata(_weekendStr) ? '주말 $_weekendStr' : '';
 
-  return '$_weekday$_weekend';
+  return '$_weekdayMeta$_weekendMeta';
 }
 
 CafeDetailInfoModel getCafeDetailInfo(CafeModel cafe) {
