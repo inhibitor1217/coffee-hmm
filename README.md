@@ -1,7 +1,9 @@
 <h2 align="center">카페의 발견 &nbsp; 커피흠</h2>
 <p align="center">
   <a href="https://coffeehmm.com/">
-    <img alt="logo" src="https://coffee-hmm-image.s3.ap-northeast-2.amazonaws.com/logo/coffee_hmm_logo.png" width="150" />
+    <kbd>
+      <img alt="logo" src="https://coffee-hmm-image.s3.ap-northeast-2.amazonaws.com/logo/coffee_hmm_logo.png#logo" width="150" />
+    </kbd>
   </a>
 </p>
 <h4 align="center" >커피흠 helps you find a cool & nice:sparkles: cafe :coffee: </h4><br>
