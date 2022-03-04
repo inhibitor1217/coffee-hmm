@@ -51,11 +51,13 @@ class _DetailBodyState extends State<DetailBody> {
   void initState() {
     super.initState();
 
-    widget.cafeResponse.then((data) {
-      setState(() {
-        _cafe = data.cafe;
+    if(this.mounted){
+      widget.cafeResponse.then((data) {
+        setState(() {
+          _cafe = data.cafe;
+        });
       });
-    });
+    }
   }
 
   @override
