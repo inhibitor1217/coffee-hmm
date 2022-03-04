@@ -22,7 +22,7 @@ class _MainFeedContent extends State<MainFeedContent> with EnterCafeDetailMixin 
         controller: widget.scrollController,
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
-        crossAxisCount: 2,
+        crossAxisCount: 3,
         children: List.generate(widget.imageSets.length, (index){
           return GestureDetector(
               behavior: HitTestBehavior.opaque,
