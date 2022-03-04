@@ -131,10 +131,7 @@ class _MainBodyState extends State<MainBody> {
 
     setState(() {
       _currentPlace = place;
-      _fetchCafeListResponseOfPlace(place).then((data) {
-        _updateCafesInfo(data.cafe);
-        _updateFeedElements(place, data.cafe);
-      });
+      _updateCafeListResponse(place);
     });
   }
 
