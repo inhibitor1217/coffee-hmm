@@ -27,15 +27,13 @@ class _MainFeedContent extends State<MainFeedContent> with EnterCafeDetailMixin 
           return GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: enterDetail(widget.imageSets[index].cafe),
-              child: Center(
-                child: Container(
-                  padding: EdgeInsets.only(left: index%2 == 0 ? 0 : 1, bottom: 1),
+              child: Container(
+                  padding: EdgeInsets.only(right: index%3 == 2 ? 0 : 1, bottom: 1),
                   child: CafeImage(
                     image: widget.imageSets[index].image,
                     size: 200,
                   ),
                 )
-            )
           );
         }),
       ),
