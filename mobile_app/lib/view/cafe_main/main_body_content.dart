@@ -40,11 +40,17 @@ class _MainBodyState extends State<MainBody> {
       _updateCafeListResponse(data.place.list[0]);
     });
   }
+  @override
+  void didUpdateWidget(covariant MainBody oldWidget){
+    super.didUpdateWidget(oldWidget);
+    if(_currentCafe != null){
+      _pageController = PageController(initialPage: _currentCafeList.indexOf(_currentCafe!));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     if (_currentPlace != null && _currentCafe != null) {
-      _pageController = PageController(initialPage: _currentCafeList.indexOf(_currentCafe!));
       return Column(
           children: [
             PlaceTab(
