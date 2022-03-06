@@ -150,15 +150,9 @@ class _MainBodyState extends State<MainBody> {
 }
 
 List<CafeImageSetModel> _createFeedElements(PlaceModel place, List<CafeModel> cafeList){
-  List<CafeImageSetModel> _elements = [];
-  for(final _cafe in cafeList){
-    for(final _image in _cafe.image.basicImages){
-      _elements.add(new CafeImageSetModel(cafe: _cafe, image: _image));
-    }
-  }
+  final _elements = cafeList
+      .map((_cafe) => _cafe.image.basicImages.map((_image) => CafeImageSetModel(cafe: _cafe, image: _image)))
+      .fold<List<CafeImageSetModel>>([], (prev, element) => prev..addAll(element))..shuffle();
 
-  if(_elements.isNotEmpty){
-    _elements.shuffle();
-  }
   return _elements;
 }
