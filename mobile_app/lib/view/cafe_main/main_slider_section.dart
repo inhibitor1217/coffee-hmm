@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/constants/size.dart';
 import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/router/mixins/enter_cafe_detail_mixin.dart';
 import 'package:mobile_app/view/cafe_main/cafe_main_info.dart';
@@ -47,7 +48,7 @@ class _MainSliderState extends State<MainSlider> with EnterCafeDetailMixin {
                         .map((cafe) => cafe.image.mainImage)
                         .toList(),
                     onSlide: widget.onSlide,
-                    size: _displayHeight < 668 ? _displayWidth : _displayWidth * 4/3,
+                    size: _displayHeight < LengthwiseDisplayMinimum ? _displayWidth : _displayWidth * 4/3,
                   ),
                 ],
               ),
