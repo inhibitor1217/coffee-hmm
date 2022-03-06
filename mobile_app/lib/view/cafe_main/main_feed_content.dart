@@ -6,8 +6,13 @@ import 'package:mobile_app/view/common/cafe_image.dart';
 class MainFeedContent extends StatefulWidget {
   final ScrollController scrollController;
   final List<CafeImageSetModel> imageSets;
+  final Function(CafeModel) updateCurrentCafe;
 
-  MainFeedContent({required this.scrollController, required this.imageSets});
+  MainFeedContent({
+    required this.scrollController,
+    required this.imageSets,
+    required this.updateCurrentCafe
+  });
 
   @override
   _MainFeedContent createState() => _MainFeedContent();
@@ -26,7 +31,7 @@ class _MainFeedContent extends State<MainFeedContent> with EnterCafeDetailMixin 
         children: List.generate(widget.imageSets.length, (index){
           return GestureDetector(
               behavior: HitTestBehavior.opaque,
-              onTap: enterDetail(widget.imageSets[index].cafe),
+              onTap: enterDetail(widget.imageSets[index].cafe, widget.updateCurrentCafe),
               child: Container(
                   padding: EdgeInsets.only(right: index%3 == 2 ? 0 : 1, bottom: 1),
                   child: CafeImage(

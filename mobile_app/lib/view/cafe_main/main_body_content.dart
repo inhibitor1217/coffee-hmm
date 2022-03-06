@@ -66,16 +66,17 @@ class _MainBodyState extends State<MainBody> {
                         cafeList: _currentCafeList,
                         currentPlace: _currentPlace!,
                         imageSets: _imageSets,
+                        updateCurrentCafe: _updateCurrentCafe,
                       )
                     : Column(
                         children: [
                           MainSlider(
                             pageController: _pageController,
                             cafeListResponses: _cafeListResponses,
-                            cafeList: _currentCafeList,
+                            currentCafeList: _currentCafeList,
                             currentCafe: _currentCafe!,
                             currentPlace: _currentPlace!,
-                            onSlide: _handleCafeSlide,
+                            updateCurrentCafe: _updateCurrentCafe,
                           ),
                           ImageIndexBullet(
                               totalCount: _currentCafeList.length,
@@ -107,8 +108,8 @@ class _MainBodyState extends State<MainBody> {
   void _updateCafesInfo (CafeListModel cafe){
     setState(() {
       _currentCafeList = cafe.list;
-      _currentCafe = cafe.list[0];
     });
+    _updateCurrentCafe(cafe.list[0]);
   }
 
   void _updatePlacesInfo(PlaceListResponse data){
@@ -141,12 +142,11 @@ class _MainBodyState extends State<MainBody> {
     });
   }
 
-  void _handleCafeSlide(int index) {
+  void _updateCurrentCafe(CafeModel cafe) {
     setState(() {
-      _currentCafe = _currentCafeList[index % _currentCafeList.length];
+      _currentCafe = cafe;
     });
   }
-
 }
 
 List<CafeImageSetModel> _createFeedElements(PlaceModel place, List<CafeModel> cafeList){
