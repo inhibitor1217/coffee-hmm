@@ -317,6 +317,14 @@ class CafeMetaHoursModel {
 }
 
 @immutable
+class CafeImageSetModel {
+  final CafeModel cafe;
+  final CafeImageModel image;
+
+  CafeImageSetModel({required this.cafe, required this.image});
+}
+
+@immutable
 class PlaceListResponse {
   final PlaceListModel place;
 
