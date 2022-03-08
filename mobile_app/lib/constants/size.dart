@@ -1,1 +1,1 @@
-const LengthwiseDisplayMinimum = 668;
+const LengthwiseDisplayMinimum = 737;
