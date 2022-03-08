@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/constants/size.dart';
 import 'package:mobile_app/constants/type.dart';
 import 'package:mobile_app/router/mixins/enter_cafe_detail_mixin.dart';
 import 'package:mobile_app/view/cafe_main/cafe_main_info.dart';
@@ -29,6 +30,10 @@ class MainSlider extends StatefulWidget {
 class _MainSliderState extends State<MainSlider> with EnterCafeDetailMixin {
   @override
   Widget build(BuildContext context) {
+    final _displayWidth = MediaQuery.of(context).size.width;
+    final _displayHeight = MediaQuery.of(context).size.height;
+
+
     return FutureBuilder<CafeListResponse>(
         future: widget.cafeListResponses[widget.currentPlace.id],
         builder: (context, snapshot) {
@@ -43,6 +48,7 @@ class _MainSliderState extends State<MainSlider> with EnterCafeDetailMixin {
                         .map((cafe) => cafe.image.mainImage)
                         .toList(),
                     onSlide: widget.onSlide,
+                    size: _displayHeight < LengthwiseDisplayMinimum ? _displayWidth : _displayWidth * 4/3,
                   ),
                 ],
               ),

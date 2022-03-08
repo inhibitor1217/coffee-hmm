@@ -6,11 +6,13 @@ class CafeImageSlider extends StatefulWidget {
   final PageController pageController;
   final List<CafeImageModel> imageList;
   final ValueChanged<int> onSlide;
+  final double? size;
 
   CafeImageSlider({
     required this.pageController,
     required this.imageList,
     required this.onSlide,
+    this.size,
   });
 
   @override
@@ -25,10 +27,10 @@ class _CafeImageSliderState extends State<CafeImageSlider> {
 
   @override
   Widget build(BuildContext context) {
-    double size = MediaQuery.of(context).size.width;
+    final _size = widget.size ?? MediaQuery.of(context).size.width;
 
     return Container(
-      height: size,
+      height: _size,
       child: Stack(
         children: [
           PageView.builder(
@@ -37,7 +39,7 @@ class _CafeImageSliderState extends State<CafeImageSlider> {
             itemBuilder: (BuildContext context, int index) {
               return CafeImage(
                   image: widget.imageList[index % widget.imageList.length],
-                  size: size);
+                  size: _size);
             },
             onPageChanged: (index) {
               widget.onSlide(index);
