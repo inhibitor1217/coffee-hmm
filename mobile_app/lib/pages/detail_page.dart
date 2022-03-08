@@ -50,7 +50,6 @@ class _DetailBodyState extends State<DetailBody> {
   @override
   void initState() {
     super.initState();
-
     widget.cafeResponse.then((data) {
       setState(() {
         _cafe = data.cafe;

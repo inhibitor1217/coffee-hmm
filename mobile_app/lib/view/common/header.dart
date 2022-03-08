@@ -33,9 +33,9 @@ class _MoreActionButton extends StatelessWidget {
 
 class MainHeader extends StatelessWidget with PreferredSizeWidget, _HeaderSpec {
   final void Function()? onChangeViewMode;
-  final bool isTableViewMode;
+  final bool isFeedViewMode;
 
-  MainHeader({this.onChangeViewMode, required this.isTableViewMode});
+  MainHeader({this.onChangeViewMode, required this.isFeedViewMode});
 
   @override
   Size get preferredSize => Size.fromHeight(48);
@@ -51,7 +51,7 @@ class MainHeader extends StatelessWidget with PreferredSizeWidget, _HeaderSpec {
       actions: [
         IconButton(
             onPressed: onChangeViewMode,
-            icon: Icon(isTableViewMode ? Icons.grid_view_sharp : Icons.list)),
+            icon: Icon(isFeedViewMode ? Icons.grid_view_sharp : Icons.list)),
         if (_showMoreAction) _MoreActionButton(),
       ],
     );
