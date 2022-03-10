@@ -28,6 +28,7 @@ dependencies:
   flutter_launcher_icons: ^0.9.1
   flutter_svg: ^1.0.3
   google_maps_flutter: ^2.0.10
+  shared_preferences: ^2.0.13
 dev_dependencies:
   flutter_test:
     sdk: flutter
