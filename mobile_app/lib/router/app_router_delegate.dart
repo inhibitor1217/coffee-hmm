@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/pages/detail_page.dart';
 import 'package:mobile_app/pages/main_page.dart';
+import 'package:mobile_app/pages/saved_page.dart';
 import 'package:mobile_app/pages/settings_page.dart';
 import 'package:mobile_app/router/app_state.dart';
 import 'package:mobile_app/router/page_configuration.dart';
@@ -30,7 +31,12 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
         MaterialPage(
           child: SettingsScreen(),
           arguments: PageConfiguration.settings,
-        )
+        ),
+      if (_state.isOnSaved)
+        MaterialPage(
+          child: SavedScreen(),
+          arguments: PageConfiguration.saved
+        ),
     ]);
   }
 
@@ -59,6 +65,8 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
     if (_state.isOnSettings) {
       _state.exitSettings();
+    } else if (_state.isOnSaved) {
+      _state.exitSaved();
     } else if (_state.isOnDetailPage) {
       _state.exitCafeDetails();
     } else {
@@ -75,6 +83,10 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     switch (configuration.type) {
       case Pages.cafeDetail:
         _state.enterCafeDetails(configuration.get<String>('cafeId'));
+        notifyListeners();
+        break;
+      case Pages.saved:
+        _state.enterSaved();
         notifyListeners();
         break;
       case Pages.settings:
