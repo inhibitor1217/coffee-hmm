@@ -42,7 +42,7 @@ class CustomIconButton extends StatelessWidget {
 }
 class IconButtonContent {
   final String text;
-  final IconData icon;
+  final Icon icon;
 
   IconButtonContent({required this.text, required this.icon});
 }
