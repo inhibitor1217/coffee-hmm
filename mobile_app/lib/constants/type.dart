@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:mobile_app/util/type_transformer.dart';
