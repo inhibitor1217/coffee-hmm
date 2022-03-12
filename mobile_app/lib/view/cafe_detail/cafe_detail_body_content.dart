@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/constants/type.dart';
+import 'package:mobile_app/storage/cafe.dart';
 import 'package:mobile_app/util/cafe_detail.dart';
 import 'package:mobile_app/view/cafe_detail/cafe_detail_footer.dart';
 import 'package:mobile_app/view/cafe_detail/cafe_detail_info.dart';
@@ -20,7 +21,7 @@ class DetailBodyContent extends StatefulWidget {
   _DetailBodyContentState createState() => _DetailBodyContentState(cafe: cafe);
 }
 
-class _DetailBodyContentState extends State<DetailBodyContent> {
+class _DetailBodyContentState extends State<DetailBodyContent> with SavedCafe {
   final CafeModel cafe;
   final PageController _controller = PageController();
   final GlobalKey menuKey = new GlobalKey();
@@ -31,6 +32,7 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
   bool get _hasMetadata => _hasLocation || _hasMenus;
   double footerOffset = 0;
   int? _currentIndex;
+  bool _isSaved = false;
 
   _DetailBodyContentState({required this.cafe});
 
@@ -38,6 +40,23 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
   void initState(){
     super.initState();
     footerOffset = _hasMetadata ? -_footerHeight : -2;
+    getSavedCafeIds().then((data) => {
+      setState((){
+        _isSaved = data.contains(widget.cafe.id);
+      })
+    });
+  }
+
+  void _handleSaveCafe(){
+    setState(() {
+      _isSaved = !_isSaved;
+
+      if(_isSaved){
+        saveCafe(widget.cafe);
+      }else {
+        removeCafe(widget.cafe.id);
+      }
+    });
   }
 
   void _handleImageSlide(int index) {
