@@ -40,7 +40,7 @@ class _DetailBodyContentState extends State<DetailBodyContent> with SavedCafe {
   void initState(){
     super.initState();
     footerOffset = _hasMetadata ? -_footerHeight : -2;
-    getSavedCafeIds().then((data) => {
+    getSavedCafes().then((data) => {
       setState((){
         _isSaved = data.contains(widget.cafe.id);
       })
@@ -52,7 +52,7 @@ class _DetailBodyContentState extends State<DetailBodyContent> with SavedCafe {
       _isSaved = !_isSaved;
 
       if(_isSaved){
-        saveCafe(widget.cafe);
+        saveCafe(widget.cafe.id);
       }else {
         removeCafe(widget.cafe.id);
       }
