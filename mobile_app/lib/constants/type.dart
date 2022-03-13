@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:mobile_app/util/type_transformer.dart';
@@ -85,7 +83,7 @@ class CafeModel {
       'name': cafe.name,
       'place': PlaceModel.toJson(cafe.place),
       'image' :CafeImageListModel.toJson(cafe.image),
-      'state': cafe.state.toString(),
+      'state': cafe.state.toString().split('.').last,
     };
   }
 }
@@ -172,7 +170,7 @@ class CafeImageModel {
       'index': image.index,
       'isMain': image.isMain,
       'relativeUri': image.relativeUri,
-      'state': image.state.toString(),
+      'state': image.state.toString().split('.').last,
     };
   }
 }
