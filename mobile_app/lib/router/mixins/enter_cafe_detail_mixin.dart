@@ -7,7 +7,7 @@ mixin EnterCafeDetailMixin<T extends StatefulWidget> on State<T> {
     return () {
       return Router.of(context)
           .routerDelegate
-          .setNewRoutePath(PageConfiguration.cafeDetail(cafeId: cafe.id));
+          .setNewRoutePath(PageConfiguration.cafeDetail(cafeId: cafeId));
     };
   }
 }

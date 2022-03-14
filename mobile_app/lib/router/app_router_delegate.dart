@@ -21,6 +21,11 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   List<MaterialPage> get pages {
     return List.unmodifiable([
       MaterialPage(child: MainScreen(), arguments: PageConfiguration.home),
+      if (_state.isOnSaved)
+        MaterialPage(
+            child: SavedScreen(),
+            arguments: PageConfiguration.saved
+        ),
       if (_state.isOnDetailPage)
         MaterialPage(
           child: CafeDetailScreen(cafeId: _state.selectedCafeId!),
@@ -31,11 +36,6 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
         MaterialPage(
           child: SettingsScreen(),
           arguments: PageConfiguration.settings,
-        ),
-      if (_state.isOnSaved)
-        MaterialPage(
-          child: SavedScreen(),
-          arguments: PageConfiguration.saved
         ),
     ]);
   }
@@ -62,12 +62,13 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     if (!route.didPop(result)) {
       return false;
     }
+    final current = currentConfiguration;
 
     if (_state.isOnSettings) {
       _state.exitSettings();
-    } else if (_state.isOnSaved) {
+    } else if (current?.type == Pages.saved && _state.isOnSaved) {
       _state.exitSaved();
-    } else if (_state.isOnDetailPage) {
+    } else if (current?.type == Pages.cafeDetail && _state.isOnDetailPage) {
       _state.exitCafeDetails();
     } else {
       return false;
