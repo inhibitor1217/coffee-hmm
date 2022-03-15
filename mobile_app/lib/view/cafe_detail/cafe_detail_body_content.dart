@@ -121,7 +121,11 @@ class _DetailBodyContentState extends State<DetailBodyContent> with SavedCafe {
                   totalCount: cafe.image.count,
                   currentIndex: _currentIndex ?? 0,
                 ),
-                CafeDetailInfo(cafe: cafe),
+                CafeDetailInfo(
+                  cafe: cafe,
+                  isSaved: _isSaved,
+                  onSaveCafe: _handleSaveCafe
+                ),
                 if (_hasLocation)
                   Container(
                     key: mapKey,
@@ -144,6 +148,8 @@ class _DetailBodyContentState extends State<DetailBodyContent> with SavedCafe {
           duration: Duration(milliseconds: 150),
           child: CafeDetailFooter(
             cafeId: cafe.id,
+            isSaved: _isSaved,
+            onSaveCafe: _handleSaveCafe,
             onMenuScroll: _hasMenus ? _handleMenuScroll : null,
             onMapScroll: _hasLocation ? _handleMapScroll : null,
           ),
