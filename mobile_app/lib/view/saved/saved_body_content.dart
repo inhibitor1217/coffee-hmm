@@ -13,6 +13,7 @@ class SavedBodyContent extends StatefulWidget {
 class _SavedBodyContentState extends State<SavedBodyContent> with SavedCafe, EnterCafeDetailMixin{
   final ScrollController _scrollController = ScrollController();
   List<String> _savedCafeIds = [];
+  bool _didUpdate = false;
 
   @override
   void initState() {
@@ -22,14 +23,22 @@ class _SavedBodyContentState extends State<SavedBodyContent> with SavedCafe, Ent
   @override
   void didUpdateWidget(covariant SavedBodyContent oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _savedCafeIds.clear();
-    _updateSavedCafeIds();
+    if(mounted){
+      _beforeUpdate();
+      _updateSavedCafeIds();
+    }
   }
-
+  void _beforeUpdate(){
+    setState(() {
+      _didUpdate = false;
+    });
+    _savedCafeIds.clear();
+  }
   void _updateSavedCafeIds() {
     getAllSavedCafeIds().then((data) => {
       setState(() {
-        _savedCafeIds = data.cast<String>();
+        _savedCafeIds = data.cast<String>();;
+        _didUpdate = true;
       })
     });
   }
@@ -48,8 +57,8 @@ class _SavedBodyContentState extends State<SavedBodyContent> with SavedCafe, Ent
           ),
         )).toList(),
       );
-    }else {
-      Text('empty');
+    } else if(_didUpdate && _savedCafeIds.length == 0){
+      return  Center(child: Text('카페를 추가해주세요 :)'));
     }
     return Center(child: CircularProgressIndicator(color: Palette.lightGray));
   }
