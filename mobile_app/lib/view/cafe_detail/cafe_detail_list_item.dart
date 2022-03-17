@@ -23,6 +23,7 @@ class CafeDetailListItem extends StatelessWidget {
           primary: Colors.transparent,
           shadowColor: Colors.transparent,
           padding: EdgeInsets.all(0),
+          elevation: 0,
         ),
         onPressed: onPressed,
         child: Container(
