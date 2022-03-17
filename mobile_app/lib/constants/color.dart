@@ -21,6 +21,7 @@ class Palette {
   static const darkBlue = Color.fromRGBO(2, 21, 38, 1.0);
   static const blue =  Color.fromRGBO(40, 110, 240, 1.0);
   static const lightBlue = Color.fromRGBO(222, 237, 255, 1.0);
+  static const lightBlue30 = Color.fromRGBO(222, 237, 255, 0.3);
 
   /*Green*/
   static const green = Color.fromRGBO(56, 122, 63, 1);
