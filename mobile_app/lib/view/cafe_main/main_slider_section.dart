@@ -52,7 +52,7 @@ class _MainSliderState extends State<MainSlider> with EnterCafeDetailMixin {
                   ),
                 ],
               ),
-              onTap: enterDetail(widget.currentCafe, widget.updateCurrentCafe),
+              onTap: () => enterDetail(widget.currentCafe)().then((_) => widget.updateCurrentCafe(widget.currentCafe)),
             );
           } else if (!snapshot.hasData) {
             return Container(
