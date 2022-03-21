@@ -9,18 +9,18 @@ import 'package:mobile_app/view/common/skeleton.dart';
 class MainSlider extends StatefulWidget {
   final PageController pageController;
   final Map<String, Future<CafeListResponse>> cafeListResponses;
-  final List<CafeModel> cafeList;
+  final List<CafeModel> currentCafeList;
   final CafeModel currentCafe;
   final PlaceModel currentPlace;
-  final void Function(int) onSlide;
+  final void Function(CafeModel) updateCurrentCafe;
 
   MainSlider({
     required this.pageController,
     required this.cafeListResponses,
-    required this.cafeList,
+    required this.currentCafeList,
     required this.currentCafe,
     required this.currentPlace,
-    required this.onSlide,
+    required this.updateCurrentCafe,
   });
 
   @override
@@ -44,15 +44,15 @@ class _MainSliderState extends State<MainSlider> with EnterCafeDetailMixin {
                   CafeMainInfo(cafe: widget.currentCafe),
                   CafeImageSlider(
                     pageController: widget.pageController,
-                    imageList: widget.cafeList
+                    imageList: widget.currentCafeList
                         .map((cafe) => cafe.image.mainImage)
                         .toList(),
-                    onSlide: widget.onSlide,
+                    onSlide: _handleCafeSlide,
                     size: _displayHeight < LengthwiseDisplayMinimum ? _displayWidth : _displayWidth * 4/3,
                   ),
                 ],
               ),
-              onTap: enterDetail(widget.currentCafe),
+              onTap: () => enterDetail(widget.currentCafe)().then((_) => widget.updateCurrentCafe(widget.currentCafe)),
             );
           } else if (!snapshot.hasData) {
             return Container(
@@ -62,6 +62,11 @@ class _MainSliderState extends State<MainSlider> with EnterCafeDetailMixin {
             return Text("${snapshot.error}");
           }
           return Skeleton();
-        });
-  }
+        }
+      );
+    }
+
+  void _handleCafeSlide(int index) {
+    widget.updateCurrentCafe(widget.currentCafeList[index % widget.currentCafeList.length]);
+  } 
 }

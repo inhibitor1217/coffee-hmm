@@ -9,6 +9,7 @@ class MainFeed extends StatefulWidget {
   final List<CafeModel> cafeList;
   final PlaceModel currentPlace;
   final List<CafeImageSetModel> imageSets;
+  final Function(CafeModel) updateCurrentCafe;
 
   MainFeed({
     required this.scrollController,
@@ -16,6 +17,7 @@ class MainFeed extends StatefulWidget {
     required this.cafeList,
     required this.currentPlace,
     required this.imageSets,
+    required this.updateCurrentCafe,
   });
 
   @override
@@ -32,7 +34,8 @@ class _MainFeedState extends State<MainFeed> {
               if (snapshot.hasData) {
                 return MainFeedContent(
                     imageSets: widget.imageSets,
-                    scrollController: widget.scrollController
+                    scrollController: widget.scrollController,
+                    updateCurrentCafe: widget.updateCurrentCafe,
                 );
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
