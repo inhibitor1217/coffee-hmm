@@ -15,9 +15,9 @@ class _SavedBodyContentState extends State<SavedBodyContent> with SavedCafe, Ent
   @override
   void initState() {
     super.initState();
-    getSavedCafes().then((data) => {
+    getSavedCafes(currentVersion).then((data) => {
       setState(() {
-        _savedCafeIds = data;
+        _savedCafeIds = data.cast<String>();
       })
     });
   }
