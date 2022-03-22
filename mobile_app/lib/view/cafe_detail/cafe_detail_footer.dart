@@ -39,20 +39,20 @@ class CafeDetailFooter extends StatelessWidget {
             size: _iconButtonSize,
             content: IconButtonContent(
               text: '저장',
-              icon: Icon(Icons.bookmark, color: isSaved? Palette.lightBlue : Palette.gray),
+              icon: Icon(Icons.bookmark, color: isSaved? Palette.lightBlue : Palette.gray, size: 20),
             ),
             onPressed: onSaveCafe,
           ),
           if(onMenuScroll != null)
             CustomIconButton(
               size: _iconButtonSize,
-              content: IconButtonContent(text: '메뉴', icon: Icon(Icons.coffee_rounded, color: Palette.gray)),
+              content: IconButtonContent(text: '메뉴', icon: Icon(Icons.coffee_rounded, color: Palette.gray, size: 20)),
               onPressed: onMenuScroll!,
             ),
           if(onMapScroll != null)
             CustomIconButton(
               size: _iconButtonSize,
-              content: IconButtonContent(text: '지도', icon: Icon(Icons.map_outlined, color: Palette.gray)),
+              content: IconButtonContent(text: '지도', icon: Icon(Icons.map_outlined, color: Palette.gray, size: 20)),
               onPressed: onMapScroll!,
             ),
          Expanded(

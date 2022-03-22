@@ -30,7 +30,7 @@ class CustomIconButton extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Icon(content.icon, size: 20, color: Palette.highlightedColor),
+              content.icon,
               Text(content.text, style: TextStyle(color: Palette.darkGray, fontSize: 12))
             ],
           ),
