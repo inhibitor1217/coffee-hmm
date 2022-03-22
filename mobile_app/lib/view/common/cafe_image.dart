@@ -17,12 +17,12 @@ class CafeImage extends StatelessWidget {
     final path = Environment.imageBaseUrl;
     final group = '/cafes/';
     final uri = parseRelativeUri(image.relativeUri, group);
-    final query = '?d=' + (size > 319 ? '720x720' : '240x240');
+    final query = '?d=240x240';
 
     return Container(
       height: size,
       child: CachedNetworkImage(
-        imageUrl: '$path$group$uri$query',
+        imageUrl: '$path$group$uri${size > 319 ? '' : query}',
         fit: BoxFit.cover,
         progressIndicatorBuilder: (context, url, downloadProgress) => Center(
             child: DelayedWidget(
