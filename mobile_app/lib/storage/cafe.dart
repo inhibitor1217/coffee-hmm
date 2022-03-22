@@ -32,11 +32,10 @@ mixin SavedCafe {
         return _cafeIds..add(newCafe as String);
       }
 
-
       return [];
     };
 
-    _updatedData(version, _updateCafes());
+    _updateData(version, _updateCafes());
   }
 
   void removeCafe(String version, String cafeId) async {
@@ -52,7 +51,7 @@ mixin SavedCafe {
       return [];
     };
 
-    _updatedData(version, _updateCafes());
+    _updateData(version, _updateCafes());
   }
 
   Future<void> resetSavedCafes() async {
@@ -61,7 +60,7 @@ mixin SavedCafe {
     await prefs.remove(_key);
   }
 
-  void _updatedData(String version, List<dynamic> newCafes) async {
+  void _updateData(String version, List<dynamic> newCafes) async {
     final SharedPreferences prefs = await _prefs;
     String? _data = prefs.getString(_key);
 
