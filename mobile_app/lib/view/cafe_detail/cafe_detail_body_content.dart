@@ -52,9 +52,9 @@ class _DetailBodyContentState extends State<DetailBodyContent> with SavedCafe {
       _isSaved = !_isSaved;
 
       if(_isSaved){
-        saveCafe(currentVersion, widget.cafe.id);
+        saveCafe(widget.cafe.id);
       }else {
-        removeCafe(currentVersion, widget.cafe.id);
+        removeCafe(widget.cafe.id);
       }
     });
   }
