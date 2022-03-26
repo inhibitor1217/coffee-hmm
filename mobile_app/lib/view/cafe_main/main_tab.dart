@@ -47,6 +47,7 @@ class PlaceTabElement extends StatelessWidget {
           padding: EdgeInsets.all(0),
           primary: isSelected ? Palette.highlightedColor : Colors.transparent,
           shadowColor: Colors.transparent,
+          elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
