@@ -44,7 +44,7 @@ class _CafeDetailInfoState extends State<CafeDetailInfo> {
         IconButton(
           alignment: Alignment.centerRight,
           icon: Icon(widget.isSaved ? Icons.bookmark : Icons.bookmark_border_rounded),
-          color: widget.isSaved ? Palette.lightBlue : Palette.gray,
+          color: widget.isSaved ? Palette.highlightedColor : Palette.gray,
           iconSize: 28,
           onPressed: widget.onSaveCafe,
         ),

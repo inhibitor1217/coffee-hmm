@@ -39,7 +39,7 @@ class CafeDetailFooter extends StatelessWidget {
             size: _iconButtonSize,
             content: IconButtonContent(
               text: '저장',
-              icon: Icon(Icons.bookmark, color: isSaved? Palette.lightBlue : Palette.gray, size: 20),
+              icon: Icon(Icons.bookmark, color: isSaved? Palette.highlightedColor : Palette.gray, size: 20),
             ),
             onPressed: onSaveCafe,
           ),
