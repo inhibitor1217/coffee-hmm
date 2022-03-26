@@ -16,6 +16,7 @@ class CustomIconButton extends StatelessWidget {
       height: size.height,
       padding: size.padding,
       child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 10),
         constraints: BoxConstraints(maxHeight: 40, maxWidth: 40),
         child: ElevatedButton(
           style: ButtonStyle(
