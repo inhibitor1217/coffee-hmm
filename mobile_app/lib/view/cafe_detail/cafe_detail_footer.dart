@@ -19,10 +19,10 @@ class CafeDetailFooter extends StatelessWidget {
       decoration: BoxDecoration(
           color: Palette.whiteTransparentBG,
           boxShadow:  [BoxShadow(
-            color: Palette.lightGray,
-            spreadRadius: 4,
-            blurRadius: 6,
-            offset: Offset(0, 2),
+            color: Palette.lightGray50,
+            spreadRadius: 1,
+            blurRadius: 2,
+            offset: Offset(0, -4),
           )],
       ),
       child: Row(
