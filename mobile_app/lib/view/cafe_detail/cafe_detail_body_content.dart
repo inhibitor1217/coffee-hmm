@@ -62,10 +62,15 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
   }
   void _handleFooterOffset(double scrollDelta, double offset){
     if(!_hasMetadata) return;
+    final isScrollingToDown = scrollDelta > 0;
+    final isScrollingToUp =  scrollDelta < 0;
 
     setState(() {
-        if(offset < _footerHeight){
-          footerOffset = offset - _footerHeight;
+        if(0 < offset && offset < _footerHeight && isScrollingToDown){
+          footerOffset = 0;
+        }
+        if(offset <= 0 && isScrollingToUp){
+          footerOffset = - _footerHeight;
         }
     });
   }
@@ -114,9 +119,10 @@ class _DetailBodyContentState extends State<DetailBodyContent> {
             ),
           ),
         ),
-        Positioned(
+        AnimatedPositioned(
           bottom: footerOffset,
           left: 0,
+          duration: Duration(milliseconds: 150),
           child: CafeDetailFooter(
             cafeId: cafe.id,
             onMenuScroll: _hasMenus ? _handleMenuScroll : null,
