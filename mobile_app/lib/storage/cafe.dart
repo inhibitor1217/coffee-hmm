@@ -16,7 +16,7 @@ mixin SavedCafe {
     /* migrate all data from version 1 to version before latest
     * latest version : 1
     */
-    final _migratedToV2 = _jsonList
+    final _migratedData= _jsonList
         .map(jsonDecode)
         .map((json) {
           final version = json['version'] as String;
@@ -33,7 +33,7 @@ mixin SavedCafe {
 
     final _latestIndex = int.parse(_latestVersion) - 1;
     _jsonList..add('');
-    _jsonList[_latestIndex] = jsonEncode(SavedCafeModelV2(cafes: _migratedToV2).toJsonObject());
+    _jsonList[_latestIndex] = jsonEncode(SavedCafeModelV2(cafes: _migratedData).toJsonObject());
     await prefs.setStringList(_key, _jsonList);
   }
 
