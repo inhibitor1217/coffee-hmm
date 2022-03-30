@@ -435,10 +435,7 @@ packages:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "0.27.3"
-=======
-    version: "0.27.1"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -495,7 +492,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
->>>>>>> feat: install shared_preferences
   sky_engine:
     dependency: transitive
     description: flutter
