@@ -37,7 +37,7 @@ class _SavedBodyContentState extends State<SavedBodyContent> with SavedCafe, Ent
   void _updateSavedCafeIds() {
     getAllSavedCafeIds().then((data) => {
       setState(() {
-        _savedCafeIds = data.cast<String>();;
+        _savedCafeIds = data.cast<String>();
         _didUpdate = true;
       })
     });
