@@ -31,7 +31,7 @@ class _MainFeedContent extends State<MainFeedContent> with EnterCafeDetailMixin 
         children: List.generate(widget.imageSets.length, (index){
           return GestureDetector(
               behavior: HitTestBehavior.opaque,
-              onTap: () => enterDetail(widget.imageSets[index].cafe)().then((_) => widget.updateCurrentCafe(widget.imageSets[index].cafe)),
+              onTap: () => enterDetail(widget.imageSets[index].cafe.id)().then((_) => widget.updateCurrentCafe(widget.imageSets[index].cafe)),
               child: Container(
                   padding: EdgeInsets.only(right: index%3 == 2 ? 0 : 1, bottom: 1),
                   child: CafeImage(
