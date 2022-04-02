@@ -22,11 +22,9 @@ class _SavedElementState extends State<SavedElement> {
     super.initState();
     _cafeResponse = fetchCafe(widget.cafeId);
     _cafeResponse.then((data){
-      if(mounted){
-        setState(() {
-          _cafe = data.cafe;
-        });
-      }
+      setState(() {
+        _cafe = data.cafe;
+      });
     });
   }
 
