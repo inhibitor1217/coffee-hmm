@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/api/api.dart';
-import 'package:mobile_app/constants/color.dart';
 import 'package:mobile_app/constants/type.dart';
+import 'package:mobile_app/view/common/cafe_image.dart';
+import 'package:mobile_app/view/common/skeleton.dart';
 
 class SavedElement extends StatefulWidget {
   final String cafeId;
@@ -14,7 +15,7 @@ class SavedElement extends StatefulWidget {
 
 class _SavedElementState extends State<SavedElement> {
   late Future<SingleCafeResponse> _cafeResponse;
-  late CafeModel? _cafe;
+  late CafeModel _cafe;
 
   @override
   void initState(){
@@ -29,14 +30,18 @@ class _SavedElementState extends State<SavedElement> {
 
   @override
   Widget build(BuildContext context) {
-    // FIXME : 예시
     return FutureBuilder(
       future: _cafeResponse,
       builder: (context, snapshot){
         if(snapshot.hasData){
-          return Text(_cafe?.name ?? '');
+          return Container(
+            child: CafeImage(
+              image: _cafe.image.mainImage,
+              size: 200,
+            ),
+          );
         }
-        return Center(child: CircularProgressIndicator(color: Palette.lightGray));
+        return Skeleton();
       },
     );
   }
