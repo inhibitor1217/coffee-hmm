@@ -96,7 +96,7 @@ class _MainBottomSheetState extends State<MainBottomSheet>
                                           cafe: (_hotCafeList ??
                                               widget.hotCafeList)[index]),
                                       onTap: enterDetail((_hotCafeList ??
-                                          widget.hotCafeList)[index]),
+                                          widget.hotCafeList)[index].id),
                                     )))))),
               ),
             ]),

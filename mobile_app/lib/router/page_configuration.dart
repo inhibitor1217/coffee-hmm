@@ -19,6 +19,8 @@ class PageConfiguration {
       case Pages.cafeDetail:
         final cafeId = get<String>('cafeId');
         return '/cafe/$cafeId';
+      case Pages.saved:
+        return '/saved';
       case Pages.settings:
         return '/settings';
     }
@@ -30,6 +32,8 @@ class PageConfiguration {
     return PageConfiguration(
         type: Pages.cafeDetail, params: {'cafeId': cafeId});
   }
+
+  static final saved = PageConfiguration(type: Pages.saved);
 
   static final settings = PageConfiguration(type: Pages.settings);
 }
