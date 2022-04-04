@@ -7,18 +7,10 @@ import 'package:mobile_app/view/common/button/custom_button.dart';
 
 class CafeDetailFooter extends StatelessWidget {
   final String cafeId;
-  final bool isSaved;
-  final Function() onSaveCafe;
   final Function()? onMenuScroll;
   final Function()? onMapScroll;
 
-  CafeDetailFooter({
-    required this.cafeId,
-    required this.isSaved,
-    required this.onSaveCafe,
-    required this.onMenuScroll,
-    required this.onMapScroll
-  });
+  CafeDetailFooter({required this.cafeId, required this.onMenuScroll, required this.onMapScroll});
 
   @override
   Widget build(BuildContext context){
@@ -35,24 +27,16 @@ class CafeDetailFooter extends StatelessWidget {
       ),
       child: Row(
         children: [
-          CustomIconButton(
-            size: _iconButtonSize,
-            content: IconButtonContent(
-              text: '저장',
-              icon: Icon(Icons.bookmark, color: isSaved? Palette.highlightedColor : Palette.gray, size: 20),
-            ),
-            onPressed: onSaveCafe,
-          ),
           if(onMenuScroll != null)
             CustomIconButton(
               size: _iconButtonSize,
-              content: IconButtonContent(text: '메뉴', icon: Icon(Icons.coffee_rounded, color: Palette.gray, size: 20)),
+              content: IconButtonContent(text: '메뉴', icon: Icons.coffee_rounded),
               onPressed: onMenuScroll!,
             ),
           if(onMapScroll != null)
             CustomIconButton(
               size: _iconButtonSize,
-              content: IconButtonContent(text: '지도', icon: Icon(Icons.map_outlined, color: Palette.gray, size: 20)),
+              content: IconButtonContent(text: '지도', icon: Icons.map_outlined),
               onPressed: onMapScroll!,
             ),
          Expanded(
@@ -71,9 +55,9 @@ class CafeDetailFooter extends StatelessWidget {
 
 final _iconButtonSize = ButtonSize(
     height: 72,
-    padding: EdgeInsets.only(left: 0, right: 0, top: 12, bottom: 0),
+    padding: EdgeInsets.only(left: 10, right: 10, top: 12, bottom: 0)
 );
 final _buttonSize = ButtonSize(
     height: 72,
-    padding: EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 20)
+    padding: EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 20)
 );

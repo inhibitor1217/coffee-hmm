@@ -20,8 +20,6 @@ class AppRouteInformationParser
 
         final cafeId = uri.pathSegments[1];
         return PageConfiguration.cafeDetail(cafeId: cafeId);
-      case 'saved':
-        return PageConfiguration.saved;
       case 'settings':
         return PageConfiguration.settings;
       default:
