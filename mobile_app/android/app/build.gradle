@@ -44,7 +44,7 @@ def apiKeyProperties = new Properties()
 apiKeyProperties.load(new FileInputStream(apiKeyPropertiesFile))
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -58,7 +58,7 @@ android {
         applicationId "com.coffeehmm.mobile_app"
         applicationIdSuffix (appStage != 'release' ? '.' + appStage : '')
         minSdkVersion 20
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         versionNameSuffix "-" + appStage

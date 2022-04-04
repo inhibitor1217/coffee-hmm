@@ -30,7 +30,7 @@ class CustomIconButton extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Icon(content.icon, size: 20, color: Palette.highlightedColor),
+              content.icon,
               Text(content.text, style: TextStyle(color: Palette.darkGray, fontSize: 12))
             ],
           ),
@@ -42,7 +42,7 @@ class CustomIconButton extends StatelessWidget {
 }
 class IconButtonContent {
   final String text;
-  final IconData icon;
+  final Icon icon;
 
   IconButtonContent({required this.text, required this.icon});
 }
