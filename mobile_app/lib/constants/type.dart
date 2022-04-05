@@ -74,6 +74,18 @@ class CafeModel {
         image: CafeImageListModel.fromJson(json['image']),
         state: GetCafeState.parse(json['state']));
   }
+
+  static Map<String, dynamic> toJson(CafeModel cafe){
+    return {
+      'id': cafe.id,
+      'createdAt': cafe.createdAt.toIso8601String(),
+      'updatedAt': cafe.updatedAt.toIso8601String(),
+      'name': cafe.name,
+      'place': PlaceModel.toJson(cafe.place),
+      'image' :CafeImageListModel.toJson(cafe.image),
+      'state': cafe.state.toString().split('.').last,
+    };
+  }
 }
 
 @immutable
@@ -101,6 +113,15 @@ class CafeImageListModel {
         list: list,
         mainImage: mainImage,
         basicImages: basicImages);
+  }
+
+  static Map<String, dynamic> toJson(CafeImageListModel images) {
+    return {
+      'count': images.count,
+      'list': List.unmodifiable(images.list.map((image) => CafeImageModel.toJson(image))),
+      'mainImage': CafeImageModel.toJson(images.mainImage),
+      'basicImages':  List.unmodifiable(images.basicImages.map((image) => CafeImageModel.toJson(image))),
+    };
   }
 }
 
@@ -138,6 +159,19 @@ class CafeImageModel {
         metadata: CafeImageMetadataModel.fromJson(json['metadata']),
         relativeUri: json['relativeUri'],
         state: GetCafeImageState.parse(json['state']));
+  }
+
+  static Map<String, dynamic> toJson(CafeImageModel image){
+    return {
+      'id': image.id,
+      'createdAt': image.createdAt,
+      'updatedAt': image.updatedAt,
+      'cafeId': image.cafeId,
+      'index': image.index,
+      'isMain': image.isMain,
+      'relativeUri': image.relativeUri,
+      'state': image.state.toString().split('.').last,
+    };
   }
 }
 
@@ -380,6 +414,16 @@ class PlaceModel {
       pinned: json['pinned'],
       cafeCount: json['cafeCount'],
     );
+  }
+
+  static Map<String,dynamic> toJson(PlaceModel place){
+    return {
+      'id': place.id,
+      'createdAt': place.createdAt.toIso8601String(),
+      'updatedAt': place.updatedAt.toIso8601String(),
+      'name': place.name,
+      'pinned': place.pinned,
+    };
   }
 }
 
