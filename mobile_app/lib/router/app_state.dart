@@ -1,15 +1,18 @@
 class AppState {
   String? _selectedCafeId;
   bool _isOnSettings;
+  bool _isOnSaved;
 
   String? get selectedCafeId => _selectedCafeId;
 
   bool get isOnDetailPage => _selectedCafeId != null;
   bool get isOnSettings => _isOnSettings;
+  bool get isOnSaved => _isOnSaved;
 
   AppState({
     bool? isOnSettings,
-  }) : _isOnSettings = isOnSettings ?? false;
+    bool? isOnSaved,
+  }) : _isOnSettings = isOnSettings ?? false, _isOnSaved = isOnSaved ?? false;
 
   static final initial = AppState();
 
@@ -19,6 +22,14 @@ class AppState {
 
   void exitCafeDetails() {
     _selectedCafeId = null;
+  }
+
+  void enterSaved(){
+    _isOnSaved = true;
+  }
+
+  void exitSaved(){
+    _isOnSaved = false;
   }
 
   void enterSettings() {
