@@ -3,3 +3,4 @@ export { default as copyLink } from "./copyLink";
 export { default as getOrder } from "./getOrder";
 export { default as onImageLoad } from "./onImageLoad";
 export { default as openSearch } from "./openSearch";
+export { default as detectMobilePlatform } from "./detectMobilePlatform";
