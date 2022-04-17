@@ -12,6 +12,8 @@ export default function usePopup({ onClose }: Props) {
     if (contentRef.current) {
       document.addEventListener("touchstart", handleClick, { passive: false });
     }
+
+    return () => document.removeEventListener("touchstart", handleClick, false);
   }, []);
 
   const closePopup = useCallback(() => {
