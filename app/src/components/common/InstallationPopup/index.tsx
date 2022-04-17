@@ -17,8 +17,6 @@ import Icon from "../Icon";
 const InstallationPopup = () => {
   const isHidden = getSessionStorage(SessionStorage.appInstallGuidePopup);
 
-  if (isHidden) return null;
-
   const lottieRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -37,6 +35,8 @@ const InstallationPopup = () => {
       appInstallGuidePopup.true,
     );
   }
+
+  if (isHidden) return null;
 
   return (
     <Popup
