@@ -7,6 +7,8 @@ import { StyledColumnFlex, StyledMainScale } from "utils/styled";
 import PlaceSlide from "components/main/PlaceSlide";
 import CafeByPlace from "components/main/CafeByPlace";
 import InitialLoading from "components/common/InitialLoading";
+import InstallationPopup from "components/common/InstallationPopup";
+import InstallationBanner from "components/common/InstallationBanner";
 
 const Main = () => {
   const dispatch = useAppDispatch();
@@ -25,6 +27,8 @@ const Main = () => {
 
   return (
     <StyledMainScale>
+      {!isInitialLoading && <InstallationPopup />}
+      {!isInitialLoading && <InstallationBanner />}
       {isInitialLoading && <InitialLoading />}
       <StyledColumnFlex
         className="intro"
